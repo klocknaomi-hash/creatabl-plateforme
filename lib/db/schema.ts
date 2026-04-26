@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, jsonb, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, jsonb, boolean, pgEnum, integer } from 'drizzle-orm/pg-core';
 
 export const planEnum = pgEnum('plan', ['free', 'pro', 'agency']);
 export const platformEnum = pgEnum('platform', ['instagram', 'youtube', 'tiktok', 'facebook', 'linkedin', 'pinterest', 'discord', 'twitter', 'slack']);
@@ -49,6 +49,11 @@ export const postPlatformResults = pgTable('post_platform_results', {
   status: platformResultStatusEnum('status').default('pending').notNull(),
   errorMessage: text('error_message'),
   publishedAt: timestamp('published_at'),
+  likes: integer('likes').default(0).notNull(),
+  comments: integer('comments').default(0).notNull(),
+  shares: integer('shares').default(0).notNull(),
+  reach: integer('reach').default(0).notNull(),
+  impressions: integer('impressions').default(0).notNull(),
 });
 
 export const autoReplyRules = pgTable('auto_reply_rules', {
@@ -57,9 +62,35 @@ export const autoReplyRules = pgTable('auto_reply_rules', {
   socialAccountId: uuid('social_account_id').references(() => socialAccounts.id).notNull(),
   triggerType: triggerTypeEnum('trigger_type').notNull(),
   keywords: jsonb('keywords'),
+  replyTemplate: text('reply_template'),
+  useAi: boolean('use_ai').default(false).notNull(),
+  aiContext: text('ai_context'),
   tone: text('tone').notNull(),
   approvalMode: approvalModeEnum('approval_mode').default('manual').notNull(),
   isActive: boolean('is_active').default(true).notNull(),
+});
+
+export const autoReplyLogs = pgTable('auto_reply_logs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  ruleId: uuid('rule_id').references(() => autoReplyRules.id).notNull(),
+  platform: platformEnum('platform').notNull(),
+  commentId: text('comment_id').notNull(),
+  commentText: text('comment_text').notNull(),
+  replyText: text('reply_text').notNull(),
+  isAi: boolean('is_ai').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const mediaAssets = pgTable('media_assets', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  url: text('url').notNull(),
+  fileId: text('file_id').unique().notNull(),
+  name: text('name').notNull(),
+  size: text('size'),
+  mimeType: text('mime_type'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 export const replyQueue = pgTable('reply_queue', {
@@ -71,3 +102,98 @@ export const replyQueue = pgTable('reply_queue', {
   status: replyStatusEnum('status').default('pending').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+export const userSettings = pgTable('user_settings', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).unique().notNull(),
+  
+  // Notification Settings
+  emailNotifications: boolean('email_notifications').default(true).notNull(),
+  notificationFrequency: text('notification_frequency').default('real-time').notNull(), // real-time, daily, weekly
+  notifyNewComments: boolean('notify_new_comments').default(true).notNull(),
+  notifyNewFollowers: boolean('notify_new_followers').default(true).notNull(),
+  notifyPostPerformance: boolean('notify_post_performance').default(true).notNull(),
+  notifyScheduledPosts: boolean('notify_scheduled_posts').default(true).notNull(),
+  
+  // Content & Posting
+  timezone: text('timezone').default('UTC').notNull(),
+  defaultPostingTimes: jsonb('default_posting_times').default({}).notNull(),
+  autoSaveFrequency: integer('auto_save_frequency').default(30).notNull(), // seconds
+  enableAutoReplies: boolean('enable_auto_replies').default(true).notNull(),
+  
+  // Integration Settings
+  apiKeys: jsonb('api_keys').default({}).notNull(),
+  webhookSettings: jsonb('webhook_settings').default({}).notNull(),
+  
+  // Analytics & Data
+  analyticsReportFrequency: text('analytics_report_frequency').default('weekly').notNull(), // weekly, monthly
+  privacySettings: jsonb('privacy_settings').default({}).notNull(),
+  
+  // Workspace
+  workspaceName: text('workspace_name'),
+  workspaceBranding: jsonb('workspace_branding').default({}).notNull(),
+  language: text('language').default('en').notNull(),
+  locale: text('locale').default('en-US').notNull(),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+import { relations } from 'drizzle-orm';
+
+export const usersRelations = relations(users, ({ many, one }) => ({
+  posts: many(posts),
+  socialAccounts: many(socialAccounts),
+  settings: one(userSettings, {
+    fields: [users.id],
+    references: [userSettings.userId],
+  }),
+}));
+
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(users, {
+    fields: [userSettings.userId],
+    references: [users.id],
+  }),
+}));
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  user: one(users, {
+    fields: [posts.userId],
+    references: [users.id],
+  }),
+  platformResults: many(postPlatformResults),
+}));
+
+export const postPlatformResultsRelations = relations(postPlatformResults, ({ one }) => ({
+  post: one(posts, {
+    fields: [postPlatformResults.postId],
+    references: [posts.id],
+  }),
+}));
+
+export const socialAccountsRelations = relations(socialAccounts, ({ one }) => ({
+  user: one(users, {
+    fields: [socialAccounts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const autoReplyRulesRelations = relations(autoReplyRules, ({ one, many }) => ({
+  user: one(users, {
+    fields: [autoReplyRules.userId],
+    references: [users.id],
+  }),
+  socialAccount: one(socialAccounts, {
+    fields: [autoReplyRules.socialAccountId],
+    references: [socialAccounts.id],
+  }),
+  logs: many(autoReplyLogs),
+}));
+
+export const autoReplyLogsRelations = relations(autoReplyLogs, ({ one }) => ({
+  rule: one(autoReplyRules, {
+    fields: [autoReplyLogs.ruleId],
+    references: [autoReplyRules.id],
+  }),
+}));
+

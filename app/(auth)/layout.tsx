@@ -21,8 +21,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-100">
-            Welcome to Creatabl
+          <h2 className="flex items-baseline gap-0 text-3xl font-bold tracking-tight text-zinc-100">
+            Welcome to Creatabl.
+            <span
+              className="font-normal italic text-indigo-400"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              ia
+            </span>
           </h2>
           <p className="mt-2 text-sm text-zinc-400">
             Your Social Media Copilot

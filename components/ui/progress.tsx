@@ -69,6 +69,7 @@ function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
         className
       )}
       data-slot="progress-value"
+      suppressHydrationWarning
       {...props}
     />
   )

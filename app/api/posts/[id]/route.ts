@@ -1,0 +1,109 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@/lib/db';
+import { posts, users } from '@/lib/db/schema';
+import { eq, and } from 'drizzle-orm';
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const userRecord = await db.query.users.findFirst({
+    where: eq(users.clerkId, clerkId),
+  });
+  if (!userRecord) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+
+  const { id } = await params;
+
+  try {
+    const post = await db.query.posts.findFirst({
+      where: and(eq(posts.id, id), eq(posts.userId, userRecord.id)),
+      with: {
+        platformResults: true,
+      },
+    });
+
+    if (!post) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ post });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const userRecord = await db.query.users.findFirst({
+    where: eq(users.clerkId, clerkId),
+  });
+  if (!userRecord) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+
+  const { id } = await params;
+
+  try {
+    const body = await request.json();
+    const { content, mediaUrls, platforms, scheduledAt, status } = body;
+
+    const [updatedPost] = await db.update(posts)
+      .set({
+        content,
+        mediaUrls,
+        platforms,
+        scheduledAt: scheduledAt ? new Date(scheduledAt) : undefined,
+        status,
+      })
+      .where(and(eq(posts.id, id), eq(posts.userId, userRecord.id)))
+      .returning();
+
+    if (!updatedPost) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedPost);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const userRecord = await db.query.users.findFirst({
+    where: eq(users.clerkId, clerkId),
+  });
+  if (!userRecord) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+
+  const { id } = await params;
+
+  try {
+    const [deletedPost] = await db.delete(posts)
+      .where(and(eq(posts.id, id), eq(posts.userId, userRecord.id)))
+      .returning();
+
+    if (!deletedPost) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    // Note: If using Inngest, we might want to cancel the run if possible.
+    // For now, the Inngest function checks if the post exists before publishing.
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

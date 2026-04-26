@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'dummy_key');
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
 
 export const generateHashtags = async (caption: string): Promise<string[]> => {
   const prompt = `Generate 5-10 relevant hashtags for the following social media caption. Return ONLY a comma-separated list of hashtags without the # symbol.\n\nCaption: ${caption}`;
