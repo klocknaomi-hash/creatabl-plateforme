@@ -1,0 +1,65 @@
+export type Language = "en" | "es" | "fr";
+
+export const translations = {
+  en: {
+    dashboard: "Dashboard",
+    compose: "Compose",
+    posts: "Posts",
+    calendar: "Calendar",
+    analytics: "Analytics",
+    accounts: "Connected Accounts",
+    billing: "Billing",
+    settings: "Settings",
+    newPost: "New Post",
+    totalReach: "Total Reach",
+    engagement: "Engagement",
+    scheduled: "Scheduled",
+    drafts: "Drafts",
+    activeChannels: "Active Channels",
+    manageAccounts: "Manage Accounts",
+    myContentDashboard: "My content dashboard",
+    trackGrowth: "Track growth and optimise your posting strategy in real time.",
+  },
+  es: {
+    dashboard: "Panel",
+    compose: "Redactar",
+    posts: "Publicaciones",
+    calendar: "Calendario",
+    analytics: "Análisis",
+    accounts: "Cuentas Conectadas",
+    billing: "Facturación",
+    settings: "Ajustes",
+    newPost: "Nueva Publicación",
+    totalReach: "Alcance Total",
+    engagement: "Interacción",
+    scheduled: "Programado",
+    drafts: "Borradores",
+    activeChannels: "Canales Activos",
+    manageAccounts: "Gestionar Cuentas",
+    myContentDashboard: "Mi panel de contenido",
+    trackGrowth: "Rastree el crecimiento y optimice su estrategia de publicación en tiempo real.",
+  },
+  fr: {
+    dashboard: "Tableau de bord",
+    compose: "Composer",
+    posts: "Publications",
+    calendar: "Calendrier",
+    analytics: "Analytique",
+    accounts: "Comptes Connectés",
+    billing: "Facturation",
+    settings: "Paramètres",
+    newPost: "Nouvelle Publication",
+    totalReach: "Portée Totale",
+    engagement: "Engagement",
+    scheduled: "Programmé",
+    drafts: "Brouillons",
+    activeChannels: "Chaînes Actives",
+    manageAccounts: "Gérer les comptes",
+    myContentDashboard: "Mon tableau de bord",
+    trackGrowth: "Suivez la croissance et optimisez votre stratégie de publication en temps réel.",
+  }
+};
+
+export function getTranslation(lang: string = "en") {
+  return translations[lang as Language] || translations.en;
+}

@@ -102,10 +102,22 @@ export const replyQueue = pgTable('reply_queue', {
   status: replyStatusEnum('status').default('pending').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const aiLogs = pgTable("ai_logs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  action: text("action").notNull(),
+  platform: text("platform"),
+  tone: text("tone"),
+  provider: text("provider").notNull(),
+  tokensUsed: integer("tokens_used"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const userSettings = pgTable('user_settings', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id).unique().notNull(),
-  
+
   // Notification Settings
   emailNotifications: boolean('email_notifications').default(true).notNull(),
   notificationFrequency: text('notification_frequency').default('real-time').notNull(), // real-time, daily, weekly
@@ -113,27 +125,27 @@ export const userSettings = pgTable('user_settings', {
   notifyNewFollowers: boolean('notify_new_followers').default(true).notNull(),
   notifyPostPerformance: boolean('notify_post_performance').default(true).notNull(),
   notifyScheduledPosts: boolean('notify_scheduled_posts').default(true).notNull(),
-  
+
   // Content & Posting
   timezone: text('timezone').default('UTC').notNull(),
   defaultPostingTimes: jsonb('default_posting_times').default({}).notNull(),
   autoSaveFrequency: integer('auto_save_frequency').default(30).notNull(), // seconds
   enableAutoReplies: boolean('enable_auto_replies').default(true).notNull(),
-  
+
   // Integration Settings
   apiKeys: jsonb('api_keys').default({}).notNull(),
   webhookSettings: jsonb('webhook_settings').default({}).notNull(),
-  
+
   // Analytics & Data
   analyticsReportFrequency: text('analytics_report_frequency').default('weekly').notNull(), // weekly, monthly
   privacySettings: jsonb('privacy_settings').default({}).notNull(),
-  
+
   // Workspace
   workspaceName: text('workspace_name'),
   workspaceBranding: jsonb('workspace_branding').default({}).notNull(),
   language: text('language').default('en').notNull(),
   locale: text('locale').default('en-US').notNull(),
-  
+
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

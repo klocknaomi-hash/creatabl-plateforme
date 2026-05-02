@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { AIToolbar } from "@/components/AIToolbar";
+import { PostPlatform } from "@/lib/ai-provider";
 
 interface CaptionEditorProps {
   content: string;
@@ -89,6 +91,15 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             </div>
           )}
         </div>
+      </div>
+
+      {/* AI Toolbar for Quick Actions */}
+      <div className="px-1">
+        <AIToolbar 
+          content={content}
+          platform={selectedPlatforms[0] as PostPlatform | undefined}
+          onResult={(improved) => onChange(improved)}
+        />
       </div>
 
       {/* AI Prompt Block */}

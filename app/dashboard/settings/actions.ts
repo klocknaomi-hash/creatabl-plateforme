@@ -26,7 +26,6 @@ export async function saveSettingsAction(formData: any) {
     if (formData.notifyScheduledPosts !== undefined) updateData.notifyScheduledPosts = !!formData.notifyScheduledPosts;
     if (formData.timezone !== undefined) updateData.timezone = formData.timezone;
     if (formData.autoSaveFrequency !== undefined) updateData.autoSaveFrequency = parseInt(formData.autoSaveFrequency) || 30;
-    if (formData.enableAutoReplies !== undefined) updateData.enableAutoReplies = !!formData.enableAutoReplies;
     if (formData.analyticsReportFrequency !== undefined) updateData.analyticsReportFrequency = formData.analyticsReportFrequency;
     if (formData.workspaceName !== undefined) updateData.workspaceName = formData.workspaceName;
     if (formData.language !== undefined) updateData.language = formData.language;

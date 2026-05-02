@@ -23,12 +23,14 @@ import { cn } from "@/lib/utils";
 interface SettingsFormProps {
   initialSettings: any;
   user: any;
+  hasData?: boolean;
 }
 
-export function SettingsForm({ initialSettings, user }: SettingsFormProps) {
+export function SettingsForm({ initialSettings, user, hasData }: SettingsFormProps) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [settings, setSettings] = useState(initialSettings);
 
   const handleToggle = (key: string) => {
@@ -56,6 +58,18 @@ export function SettingsForm({ initialSettings, user }: SettingsFormProps) {
     }
   };
 
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      window.location.href = "/api/settings/export";
+      toast.success("Data export started");
+    } catch (error) {
+      toast.error("Failed to export data");
+    } finally {
+      setTimeout(() => setExporting(false), 2000);
+    }
+  };
+
   const emailEnabled = settings.emailNotifications;
 
   return (
@@ -80,7 +94,7 @@ export function SettingsForm({ initialSettings, user }: SettingsFormProps) {
         </Button>
       </div>
 
-      <div className="grid gap-8">
+      <div className="grid gap-8 pb-20">
         {/* NOTIFICATIONS SECTION */}
         <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
@@ -240,6 +254,35 @@ export function SettingsForm({ initialSettings, user }: SettingsFormProps) {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* DATA MANAGEMENT SECTION */}
+        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-destructive/10">
+          <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-destructive/10 p-2.5 rounded-xl">
+                <Save className="size-4 text-destructive" />
+              </div>
+              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Data Management</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-8 space-y-6">
+            <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-[24px] border border-destructive/10">
+              <div className="space-y-1">
+                <Label className="text-sm font-bold text-destructive">Export Your Personal Data</Label>
+                <p className="text-xs text-muted-foreground font-medium max-w-md">Download a complete archive of your posts, analytics, and account settings in JSON format.</p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={!hasData || exporting}
+                onClick={handleExport}
+                className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all font-bold px-5"
+              >
+                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Export Data"}
+              </Button>
             </div>
           </CardContent>
         </Card>

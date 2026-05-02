@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { posts, postPlatformResults, autoReplyLogs, socialAccounts } from "@/lib/db/schema";
+import { posts, postPlatformResults, socialAccounts } from "@/lib/db/schema";
 import { eq, and, gte, lte, sql, desc, inArray } from "drizzle-orm";
 
 export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
@@ -21,7 +21,6 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
         totalLikes: 0,
         totalComments: 0,
         totalShares: 0,
-        totalAutoReplies: 0,
         avgEngagementRate: 0,
       },
       timeSeries: [],
@@ -58,15 +57,6 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
     .innerJoin(postPlatformResults, eq(posts.id, postPlatformResults.postId))
     .where(and(...whereConditions));
 
-  // 1b. Auto-Reply Count
-  const autoReplyConditions = [eq(autoReplyLogs.userId, userId)];
-  if (from) autoReplyConditions.push(gte(autoReplyLogs.createdAt, from));
-  if (to) autoReplyConditions.push(lte(autoReplyLogs.createdAt, to));
-
-  const autoReplies = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(autoReplyLogs)
-    .where(and(...autoReplyConditions));
 
   const stats = summary[0] || {
     totalPosts: 0,
@@ -77,7 +67,7 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
     totalShares: 0,
   };
 
-  const totalAutoReplies = Number(autoReplies[0]?.count || 0);
+
   const totalEngagement = Number(stats.totalLikes) + Number(stats.totalComments) + Number(stats.totalShares);
   const avgEngagementRate = Number(stats.totalImpressions) > 0 
     ? (totalEngagement / Number(stats.totalImpressions)) * 100 
@@ -190,7 +180,6 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
     connectedPlatforms,
     summary: {
       ...stats,
-      totalAutoReplies,
       avgEngagementRate,
     },
     timeSeries,

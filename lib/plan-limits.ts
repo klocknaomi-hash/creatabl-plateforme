@@ -1,12 +1,11 @@
 import { db } from "@/lib/db";
-import { users, posts, socialAccounts, autoReplyRules } from "@/lib/db/schema";
+import { users, posts, socialAccounts } from "@/lib/db/schema";
 import { eq, count, and, gte } from "drizzle-orm";
 
 export const PLAN_LIMITS = {
   free: {
     socialAccounts: 3,
     postsPerMonth: 30,
-    autoReplyRules: 0,
     recurringPosts: false,
     analyticsDays: 7,
     storageLimit: 100, // 100MB
@@ -14,7 +13,6 @@ export const PLAN_LIMITS = {
   pro: {
     socialAccounts: 15,
     postsPerMonth: 500,
-    autoReplyRules: 20,
     recurringPosts: true,
     analyticsDays: 90,
     storageLimit: 5120, // 5GB
@@ -22,7 +20,6 @@ export const PLAN_LIMITS = {
   agency: {
     socialAccounts: 50,
     postsPerMonth: 2000,
-    autoReplyRules: 100,
     recurringPosts: true,
     analyticsDays: 365,
     storageLimit: 20480, // 20GB
@@ -70,15 +67,7 @@ export async function checkPlanLimit(clerkId: string, feature: keyof typeof PLAN
     };
   }
 
-  if (feature === 'autoReplyRules') {
-    const currentCount = await db.select({ value: count() }).from(autoReplyRules).where(eq(autoReplyRules.userId, user.id));
-    const total = currentCount[0].value;
-    return {
-      allowed: total < limits.autoReplyRules,
-      current: total,
-      limit: limits.autoReplyRules,
-    };
-  }
+
 
   if (feature === 'storageLimit') {
     const assets = await db.query.mediaAssets.findMany({

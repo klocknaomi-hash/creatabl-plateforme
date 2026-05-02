@@ -16,8 +16,6 @@ const routeTitles: Record<string, string> = {
   "/dashboard/posts": "Posts",
   "/dashboard/compose": "Compose",
   "/dashboard/calendar": "Calendar",
-  "/dashboard/auto-reply": "Auto-Reply",
-  "/dashboard/media": "Media Library",
   "/dashboard/analytics": "Analytics",
   "/dashboard/accounts": "Connected Accounts",
   "/dashboard/billing": "Billing",

@@ -85,7 +85,7 @@ export default async function AnalyticsPage(props: {
   if (selectedPlatform && data.platformStats[selectedPlatform]) {
     const stats = data.platformStats[selectedPlatform];
     displaySummary = {
-      ...data.summary, // keep totalAutoReplies for now as we don't have per-platform auto-reply stats in the summary yet
+      ...data.summary,
       totalPosts: stats.posts,
       totalReach: stats.reach,
       totalImpressions: stats.impressions,
@@ -145,7 +145,9 @@ export default async function AnalyticsPage(props: {
           <AlertTitle className="font-bold">Pro Feature</AlertTitle>
           <AlertDescription className="flex items-center justify-between">
             <span className="text-sm">Free plan is limited to the last 7 days of analytics. Upgrade to Pro for full historical data.</span>
-            <Button size="sm" className="ml-4 font-bold rounded-full">Upgrade Now</Button>
+            <Link href="/dashboard/billing">
+              <Button size="sm" className="ml-4 font-bold rounded-full">Upgrade Now</Button>
+            </Link>
           </AlertDescription>
         </Alert>
       )}
@@ -174,16 +176,7 @@ export default async function AnalyticsPage(props: {
             <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Unique users reached</p>
           </CardContent>
         </Card>
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Auto-Replies</CardTitle>
-            <MessageSquare className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight">{displaySummary.totalAutoReplies}</div>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">AI responses sent</p>
-          </CardContent>
-        </Card>
+
         <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Engagement</CardTitle>

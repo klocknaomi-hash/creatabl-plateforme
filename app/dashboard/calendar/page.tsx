@@ -680,11 +680,15 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
           const hasPosts = dayPosts.length > 0;
           
           return (
-            <div key={i} className={cn(
-              "min-h-[140px] p-2 border-r border-b last:border-r-0 relative transition-all group",
-              !isSelectedMonth ? "bg-muted/5 opacity-40" : "bg-card hover:bg-primary/[0.01]",
-              isToday(day) && "bg-primary/[0.02] ring-2 ring-inset ring-primary/20"
-            )}>
+            <div 
+              key={i} 
+              className={cn(
+                "min-h-[140px] p-2 border-r border-b last:border-r-0 relative transition-all group cursor-pointer",
+                !isSelectedMonth ? "bg-muted/5 opacity-40" : "bg-card hover:bg-primary/[0.01]",
+                isToday(day) && "bg-primary/[0.02] ring-2 ring-inset ring-primary/20"
+              )}
+              onClick={() => !isPast && isSelectedMonth && (window.location.href = `/dashboard/compose?date=${day.toISOString()}`)}
+            >
               <div className="flex items-center justify-between mb-2">
                 <span className={cn(
                   "text-xs font-black size-7 flex items-center justify-center rounded-xl", 
@@ -716,7 +720,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
                         "p-1.5 rounded-lg bg-background border text-[10px] font-bold truncate cursor-pointer hover:border-primary/50 shadow-sm transition-all flex items-center gap-1.5",
                         brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
                       )} 
-                      onClick={() => onPostClick(p)}
+                      onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
                     >
                       <PlatformIcon className={cn("size-3 shrink-0", brand?.color === 'text-foreground' ? "text-white" : brand?.color || "text-foreground")} />
                       <span className="truncate">{p.content}</span>
@@ -789,7 +793,11 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
                 const intensity = showHeatmap ? getBestTimePercentage(selectedPlatform!, dIdx, h) : 0;
                 const dayPosts = posts.filter((p: any) => isSameDay(new Date(p.scheduledAt), day) && isSameHour(new Date(p.scheduledAt), setHours(day, h)));
                 return (
-                  <div key={h} className={cn("h-[60px] border-b border-border/40 relative group p-0.5", getHeatmapColor(intensity))}>
+                  <div 
+                    key={h} 
+                    className={cn("h-[60px] border-b border-border/40 relative group p-0.5 cursor-pointer hover:bg-primary/[0.02] transition-colors", getHeatmapColor(intensity))}
+                    onClick={() => !isBefore(startOfDay(day), startOfDay(new Date())) && (window.location.href=`/dashboard/compose?date=${setHours(day, h).toISOString()}`)}
+                  >
                     {intensity > 0 && (
                       <span className="absolute top-1 right-1 text-[8px] font-black text-primary/60">{intensity}%</span>
                     )}
@@ -804,7 +812,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
                             "p-1 rounded-md bg-card border shadow-sm text-[9px] font-bold truncate cursor-pointer z-10 relative hover:border-primary/50 flex items-center gap-1 transition-all",
                             brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
                           )} 
-                          onClick={() => onPostClick(p)}
+                          onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
                         >
                           <PlatformIcon className={cn("size-2.5 shrink-0", brand?.color === 'text-foreground' ? "text-white" : brand?.color || "text-foreground")} />
                           <span className="truncate">{p.content}</span>
@@ -875,7 +883,11 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
               const intensity = showHeatmap ? getBestTimePercentage(selectedPlatform!, currentDate.getDay(), h) : 0;
               const hourPosts = posts.filter((p: any) => isSameDay(new Date(p.scheduledAt), currentDate) && isSameHour(new Date(p.scheduledAt), setHours(currentDate, h)));
               return (
-                <div key={h} className={cn("h-[70px] border-b border-border/40 p-3 flex gap-3 group relative transition-colors", getHeatmapColor(intensity))}>
+                <div 
+                  key={h} 
+                  className={cn("h-[70px] border-b border-border/40 p-3 flex gap-3 group relative transition-colors cursor-pointer hover:bg-primary/[0.02]", getHeatmapColor(intensity))}
+                  onClick={() => !isBefore(startOfDay(currentDate), startOfDay(new Date())) && (window.location.href=`/dashboard/compose?date=${setHours(currentDate, h).toISOString()}`)}
+                >
                   {intensity > 0 && (
                     <span className="absolute top-1 right-2 text-[8px] font-black text-primary/60">{intensity}% Engagement Signal</span>
                   )}
@@ -890,7 +902,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
                           "min-w-[140px] max-w-[300px] p-2 rounded-xl bg-card border shadow-sm text-xs font-bold cursor-pointer z-10 hover:border-primary/50 flex items-center gap-2 transition-all",
                           brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
                         )} 
-                        onClick={() => onPostClick(p)}
+                        onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
                       >
                         <PlatformIcon className={cn("size-4 shrink-0", brand?.color === 'text-foreground' ? "text-white" : brand?.color || "text-foreground")} />
                         <span className="truncate">{p.content}</span>

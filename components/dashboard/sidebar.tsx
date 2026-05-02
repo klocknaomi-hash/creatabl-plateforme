@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   PenLine,
   CalendarDays,
-  MessageSquareReply,
   ImageIcon,
   BarChart2,
   Link2,
@@ -37,30 +36,32 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const navMain = [
-  { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "Compose", href: "/dashboard/compose", icon: PenLine },
-  { title: "Posts", href: "/dashboard/posts", icon: FileText },
-  { title: "Calendar", href: "/dashboard/calendar", icon: CalendarDays },
-];
-
-const navAutomation = [
-  { title: "Auto-Reply", href: "/dashboard/auto-reply", icon: MessageSquareReply },
-];
-
-const navContent = [
-  { title: "Media Library", href: "/dashboard/media", icon: ImageIcon },
-  { title: "Analytics", href: "/dashboard/analytics", icon: BarChart2 },
-];
-
-const navSettings = [
-  { title: "Connected Accounts", href: "/dashboard/accounts", icon: Link2 },
-  { title: "Billing", href: "/dashboard/billing", icon: CreditCard },
-];
+import { useSettings } from "@/lib/settings-context";
+import { getTranslation } from "@/lib/i18n";
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useUser();
+  const { language } = useSettings();
+  const t = getTranslation(language);
+
+  const navMain = [
+    { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
+    { title: t.compose, href: "/dashboard/compose", icon: PenLine },
+    { title: t.posts, href: "/dashboard/posts", icon: FileText },
+    { title: t.calendar, href: "/dashboard/calendar", icon: CalendarDays },
+  ];
+
+
+
+  const navContent = [
+    { title: t.analytics, href: "/dashboard/analytics", icon: BarChart2 },
+  ];
+
+  const navSettings = [
+    { title: t.accounts, href: "/dashboard/accounts", icon: Link2 },
+    { title: t.billing, href: "/dashboard/billing", icon: CreditCard },
+  ];
 
   function isActive(href: string) {
     if (href === "/dashboard") return pathname === "/dashboard";
@@ -109,7 +110,7 @@ export function AppSidebar() {
           size="sm"
         >
           <PenSquare className="size-4 shrink-0" />
-          <span className="group-data-[collapsible=icon]:hidden">New Post</span>
+          <span className="group-data-[collapsible=icon]:hidden">{t.newPost}</span>
         </Button>
       </div>
 
@@ -123,27 +124,6 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navMain.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    render={<Link href={item.href} />}
-                    isActive={isActive(item.href)}
-                    tooltip={item.title}
-                  >
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Automation */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Automation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navAutomation.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     render={<Link href={item.href} />}

@@ -1,4 +1,5 @@
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { DashboardProviders } from "@/components/dashboard/providers";
+import { SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/sidebar";
 import { Topbar } from "@/components/dashboard/topbar";
 
@@ -8,7 +9,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <DashboardProviders>
       <AppSidebar />
       <SidebarInset>
         <Topbar />
@@ -16,6 +17,6 @@ export default function DashboardLayout({
           {children}
         </main>
       </SidebarInset>
-    </SidebarProvider>
+    </DashboardProviders>
   );
 }

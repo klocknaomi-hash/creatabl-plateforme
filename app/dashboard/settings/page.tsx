@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { userSettings } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { userSettings, posts } from "@/lib/db/schema";
+import { eq, sql } from "drizzle-orm";
 import { SettingsForm } from "./settings-form";
 
 export const metadata: Metadata = {
@@ -36,9 +36,18 @@ export default async function SettingsPage() {
   }
 
 
+  const postsCount = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(posts)
+    .where(eq(posts.userId, user.id));
+
   return (
     <main className="min-h-screen bg-background/50">
-      <SettingsForm initialSettings={settings} user={user} />
+      <SettingsForm 
+        initialSettings={settings} 
+        user={user} 
+        hasData={Number(postsCount[0]?.count || 0) > 0} 
+      />
     </main>
   );
 }

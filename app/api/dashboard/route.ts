@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { users, posts, postPlatformResults, socialAccounts } from "@/lib/db/schema";
+import { users, posts, postPlatformResults, socialAccounts, userSettings } from "@/lib/db/schema";
 import { eq, and, desc, gte, sql } from "drizzle-orm";
 import { getAnalyticsData } from "@/lib/analytics";
 import { subDays } from "date-fns";
@@ -81,6 +81,11 @@ export async function GET() {
     where: eq(socialAccounts.userId, user.id),
   });
 
+  // 7. Get User Settings
+  const settings = await db.query.userSettings.findFirst({
+    where: eq(userSettings.userId, user.id),
+  });
+
   return NextResponse.json({
     summary: {
       ...analytics.summary,
@@ -92,5 +97,6 @@ export async function GET() {
     recentDrafts,
     platformStats: analytics.platformStats,
     accounts,
+    settings,
   });
 }

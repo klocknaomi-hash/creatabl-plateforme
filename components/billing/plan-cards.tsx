@@ -20,7 +20,6 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
       features: [
         "3 Social Accounts",
         "30 Posts / month",
-        "1 Auto-Reply Rule",
         "7 Days Analytics",
         "Community Support",
       ],
@@ -36,7 +35,6 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
       features: [
         "15 Social Accounts",
         "Unlimited Posts",
-        "20 Auto-Reply Rules",
         "90 Days Analytics",
         "Recurring Posts",
         "AI Caption Generation",
@@ -54,7 +52,6 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
       features: [
         "50 Social Accounts",
         "Unlimited everything",
-        "100 Auto-Reply Rules",
         "365 Days Analytics",
         "Team Collaboration",
         "White-label Reports",
