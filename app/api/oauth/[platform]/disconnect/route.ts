@@ -6,7 +6,7 @@ import { and, eq } from 'drizzle-orm';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { platform: string } }
+  { params }: { params: Promise<{ platform: string }> }
 ) {
   const { platform } = await params;
   const user = await getCurrentUser();

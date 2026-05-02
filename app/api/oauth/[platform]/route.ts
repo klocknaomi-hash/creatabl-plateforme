@@ -5,7 +5,7 @@ import crypto from 'crypto';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { platform: string } }
+  { params }: { params: Promise<{ platform: string }> }
 ) {
   const { platform } = await params;
   
@@ -54,7 +54,7 @@ export async function GET(
         }
       }
     } else {
-      const authResult = client.getAuthorizationUrl({ state });
+      const authResult = await client.getAuthorizationUrl({ state });
       url = typeof authResult === 'string' ? authResult : authResult.url;
     }
     

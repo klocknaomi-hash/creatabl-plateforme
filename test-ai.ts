@@ -10,7 +10,7 @@ async function test() {
       provider: "gemini"
     });
     console.log("Success:", res);
-  } catch (err) {
+  } catch (err: any) {
     console.error("Failed:", err.message);
   }
 }
