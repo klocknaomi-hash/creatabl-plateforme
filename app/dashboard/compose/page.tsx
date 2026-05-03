@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
   Sparkles,
@@ -50,7 +50,7 @@ const TONES = [
   { value: "conversationnel", label: "Conversationnel", icon: "💬" },
 ];
 
-export default function ComposePage() {
+function ComposePageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const idParam = searchParams.get("id");
@@ -359,6 +359,7 @@ export default function ComposePage() {
               selectedPlatforms={selectedPlatforms} 
               onOpenAiDialog={() => setIsAiDialogOpen(true)}
               tone={selectedTone as any}
+              postId={postId}
             />
           </div>
 
@@ -461,5 +462,13 @@ export default function ComposePage() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+export default function ComposePage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" /></div>}>
+      <ComposePageInner />
+    </Suspense>
   );
 }

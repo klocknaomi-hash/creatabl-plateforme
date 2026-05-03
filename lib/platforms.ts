@@ -27,3 +27,23 @@ export function getPlatformBranding(platform: string) {
     glow: "shadow-none" 
   };
 }
+
+export function getPlatformClient(platform: string, token?: string): any {
+  return {
+    getTokens: async (code: string, codeVerifier?: string) => {
+      throw new Error(`OAuth not implemented for: ${platform}`);
+    },
+    getAuthorizationUrl: async (state: string, codeVerifier?: string) => {
+      throw new Error(`OAuth not implemented for: ${platform}`);
+    },
+    refreshToken: async (refreshToken: string) => {
+      throw new Error(`Token refresh not implemented for: ${platform}`);
+    },
+    publishPost: async (account: any, content: string, mediaUrls: string[]) => {
+      throw new Error(`Publishing not implemented for: ${platform}`);
+    },
+    fetchMetrics: async (account: any, platformPostId: string) => {
+      throw new Error(`Metrics not implemented for: ${platform}`);
+    },
+  };
+}

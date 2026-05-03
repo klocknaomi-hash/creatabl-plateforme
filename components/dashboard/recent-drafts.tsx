@@ -30,7 +30,7 @@ export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {
           </div>
           Drafts
         </CardTitle>
-        <Button variant="ghost" size="icon" className="rounded-full hover:bg-violet-600/10 hover:text-violet-600" asChild>
+        <Button variant="ghost" size="icon" className="rounded-full hover:bg-violet-600/10 hover:text-violet-600">
           <a href="/dashboard/compose">
             <Plus className="size-5" />
           </a>
@@ -68,7 +68,7 @@ export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {
         ) : (
           <div className="p-12 text-center flex flex-col items-center gap-3">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">No drafts found</p>
-            <Button variant="link" size="sm" className="text-sm font-bold text-violet-600 p-0 h-auto" asChild>
+            <Button variant="link" size="sm" className="text-sm font-bold text-violet-600 p-0 h-auto">
               <a href="/dashboard/compose">Create a draft</a>
             </Button>
           </div>

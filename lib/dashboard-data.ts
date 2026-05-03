@@ -3,12 +3,10 @@ import { users, posts, postPlatformResults, socialAccounts, userSettings } from 
 import { eq, and, desc, sql } from "drizzle-orm";
 import { getAnalyticsData } from "@/lib/analytics";
 import { subDays, format } from "date-fns";
-import { cacheLife } from "next/dist/server/use-cache/cache-life";
 
 export async function getDashboardData(userId: string) {
   // Use cache for the core data fetching if needed, 
   // but for a dashboard, we usually want fresh data or very short-lived cache.
-  // However, we can use 'use cache' for specific sub-functions.
 
   const user = await db.query.users.findFirst({
     where: eq(users.clerkId, userId),
@@ -199,10 +197,7 @@ export async function getEngagementData(userId: string) {
   })).slice(-7);
 }
 
-// Example of using 'use cache' for semi-static data
 export async function getCachedUserSettings(userId: string) {
-  'use cache';
-  cacheLife('minutes'); // Cache for a few minutes
   
   const user = await db.query.users.findFirst({
     where: eq(users.clerkId, userId),
@@ -216,8 +211,6 @@ export async function getCachedUserSettings(userId: string) {
 }
 
 export async function getCachedAccounts(userId: string) {
-  'use cache';
-  cacheLife('minutes');
   
   const user = await db.query.users.findFirst({
     where: eq(users.clerkId, userId),

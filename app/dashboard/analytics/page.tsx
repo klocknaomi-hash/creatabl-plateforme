@@ -79,8 +79,8 @@ export default async function AnalyticsPage(props: {
   let filteredTimeSeries = data.timeSeries;
   let filteredPerformanceTable = data.performanceTable;
 
-  if (selectedPlatform && data.platformStats[selectedPlatform]) {
-    const stats = data.platformStats[selectedPlatform];
+  if (selectedPlatform && (data.platformStats as any)[selectedPlatform]) {
+    const stats = (data.platformStats as any)[selectedPlatform];
     displaySummary = {
       ...data.summary,
       totalPosts: stats.posts,
@@ -191,7 +191,7 @@ export default async function AnalyticsPage(props: {
             <Sparkles className="h-3.5 w-3.5 text-violet-500/40 group-hover:text-violet-500 transition-colors fill-violet-500/10" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-violet-600">{displaySummary.aiActions || 0}</div>
+            <div className="text-2xl font-bold tracking-tight text-violet-600">{(displaySummary as any).aiActions || 0}</div>
             <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Content generations</p>
           </CardContent>
         </Card>

@@ -16,8 +16,6 @@ import { UpcomingSchedule } from "@/components/dashboard/upcoming-schedule";
 import { RecentDrafts } from "@/components/dashboard/recent-drafts";
 import { TopContent } from "@/components/dashboard/top-content";
 
-// Enable Instant Navigation validation
-export const unstable_instant = { prefetch: 'static' };
 
 export default async function DashboardPage() {
   return (
@@ -41,27 +39,9 @@ export default async function DashboardPage() {
       <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
         {/* Left Column: Analytics */}
         <div className="space-y-12">
-          <Card className="rounded-[2.5rem] border-none bg-background shadow-xl shadow-muted/20 ring-1 ring-border/50 overflow-hidden">
-            <CardHeader className="p-10 pb-6 flex flex-row items-center justify-between">
-              <div className="space-y-1.5">
-                <CardTitle className="text-xl font-bold flex items-center gap-2">
-                  <BarChart3 className="size-5 text-violet-600" />
-                  Audience activity
-                </CardTitle>
-                <CardDescription className="text-sm font-medium">Daily engagement and growth performance</CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="rounded-full text-xs border-violet-600/20 bg-violet-600/5 text-violet-600 font-bold px-4 py-1">
-                  Last 7 Days
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="px-10 pb-10">
-              <Suspense fallback={<Skeleton className="h-[350px] w-full rounded-xl" />}>
-                <AudienceActivity />
-              </Suspense>
-            </CardContent>
-          </Card>
+          <Suspense fallback={<Skeleton className="h-[450px] w-full rounded-[2.5rem]" />}>
+            <AudienceActivity />
+          </Suspense>
         </div>
 
         {/* Right Column: Schedule & Drafts */}

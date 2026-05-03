@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { AIToolbar } from "@/components/AIToolbar";
-import { PostPlatform } from "@/lib/ai-provider";
 
 import { PostPlatform, PostTone } from "@/lib/ai-provider";
 
@@ -20,6 +19,7 @@ interface CaptionEditorProps {
   selectedPlatforms: string[];
   onOpenAiDialog: () => void;
   tone?: PostTone;
+  postId?: string | null;
 }
 
 const PLATFORM_LIMITS: Record<string, number> = {
@@ -29,7 +29,7 @@ const PLATFORM_LIMITS: Record<string, number> = {
   facebook: 63206,
 };
 
-export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDialog, tone }: CaptionEditorProps) {
+export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDialog, tone, postId }: CaptionEditorProps) {
   const [aiPrompt, setAiPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
 
@@ -105,6 +105,8 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       <div className="px-1">
         <AIToolbar 
           content={content}
+          postId={postId}
+          tone={tone}
           platform={selectedPlatforms[0] as PostPlatform | undefined}
           onResult={(improved) => onChange(improved)}
         />

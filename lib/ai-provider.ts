@@ -19,7 +19,7 @@ export type PostPlatform =
   | "slack" 
   | "twitter";
 
-export type GenerateAction = "ameliorer" | "reformuler" | "changer_ton" | "optimiser_plateforme" | "generer";
+export type GenerateAction = "ameliorer" | "reformuler" | "changer_ton" | "optimiser_plateforme" | "generer" | "raccourcir" | "allonger";
 
 export interface GeneratePostOptions {
   content: string;
@@ -64,6 +64,8 @@ function buildSystemPrompt(action: GenerateAction, platform?: PostPlatform, tone
     changer_ton: `Réécris ce post en adoptant strictement le ton suivant : ${tone ? toneGuide[tone] : "professionnel"}. Ajuste le vocabulaire et la ponctuation en conséquence.`,
     optimiser_plateforme: `Réécris et formate ce post spécifiquement pour ${platform ? platform.toUpperCase() : "LinkedIn"} en respectant les codes culturels et techniques de la plateforme : ${platform ? platformGuide[platform] : platformGuide.linkedin}.`,
     generer: "Crée un post complet, engageant et prêt à être publié à partir de ce sujet. Inclus une accroche, un corps de texte structuré et un appel à l'action.",
+    raccourcir: "Rends ce contenu plus concis et percutant. Supprime les répétitions et les mots inutiles tout en gardant l'essence du message. Idéal pour les limites de caractères.",
+    allonger: "Développe ce contenu en ajoutant des détails pertinents, des exemples ou des nuances. Rends le texte plus riche et informatif sans faire de remplissage inutile.",
   };
 
   return `Tu es un expert en Social Media Management et Copywriting de classe mondiale.

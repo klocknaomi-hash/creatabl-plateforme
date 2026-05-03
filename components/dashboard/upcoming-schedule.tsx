@@ -62,13 +62,13 @@ export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {
         ) : (
           <div className="p-12 text-center flex flex-col items-center gap-3">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">Queue is empty</p>
-            <Button variant="link" size="sm" className="text-sm font-bold text-violet-600 p-0 h-auto" asChild>
+            <Button variant="link" size="sm" className="text-sm font-bold text-violet-600 p-0 h-auto">
               <a href="/dashboard/compose">Schedule a post</a>
             </Button>
           </div>
         )}
         <div className="p-4 bg-muted/20 border-t border-border/10">
-          <Button variant="ghost" size="sm" className="w-full text-xs font-bold text-muted-foreground hover:text-violet-600" asChild>
+          <Button variant="ghost" size="sm" className="w-full text-xs font-bold text-muted-foreground hover:text-violet-600">
             <a href="/dashboard/calendar">View full calendar</a>
           </Button>
         </div>

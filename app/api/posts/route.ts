@@ -37,8 +37,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { content, mediaUrls, platforms, scheduledAt, mediaFiles, status: requestedStatus } = body;
 
-    if (!content || !platforms || !platforms.length) {
-      return NextResponse.json({ error: 'Content and at least one platform are required' }, { status: 400 });
+    // Validate required fields (only if not a draft)
+    if (requestedStatus !== 'draft') {
+      if (!content || !platforms || !platforms.length) {
+        return NextResponse.json({ error: 'Content and at least one platform are required for publishing/scheduling' }, { status: 400 });
+      }
     }
 
     const scheduledDate = scheduledAt ? new Date(scheduledAt) : new Date();

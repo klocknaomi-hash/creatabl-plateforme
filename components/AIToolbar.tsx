@@ -15,7 +15,11 @@ import {
   Zap,
   RotateCcw,
   Languages,
-  ArrowRight
+  ArrowRight,
+  Minimize2,
+  Maximize2,
+  Save,
+  Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -31,7 +35,9 @@ import { toast } from "sonner";
 
 interface AIToolbarProps {
   content: string;
+  postId?: string | null;
   platform?: PostPlatform;
+  tone?: PostTone;
   onResult: (result: string) => void;
 }
 
@@ -43,7 +49,7 @@ const TONES: { value: PostTone; label: string; icon: string; description: string
   { value: "conversationnel", label: "Conversationnel", icon: "💬", description: "Naturel et proche" },
 ];
 
-export function AIToolbar({ content, platform, onResult }: AIToolbarProps) {
+export function AIToolbar({ content, platform, onResult, postId, tone: propTone }: AIToolbarProps) {
   const { generate, loading } = useGeneratePost({ 
     onSuccess: (res) => {
       onResult(res);
@@ -51,19 +57,47 @@ export function AIToolbar({ content, platform, onResult }: AIToolbarProps) {
     },
     onError: (err) => toast.error(err)
   });
-  const [activeTone, setActiveTone] = useState<PostTone | null>(null);
+  const [activeTone, setActiveTone] = useState<PostTone | null>(propTone || null);
   const [isHovered, setIsHovered] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  // Sync activeTone with propTone if it changes
+  useEffect(() => {
+    if (propTone) setActiveTone(propTone);
+  }, [propTone]);
 
   const disabled = loading || !content?.trim();
 
-  async function handleAction(action: string, tone?: PostTone) {
-    if (tone) setActiveTone(tone);
-    await generate({
+  async function handleAction(action: string, toneOverride?: PostTone) {
+    if (toneOverride) setActiveTone(toneOverride);
+    const result = await generate({
       content,
       action: action as any,
       platform,
-      tone,
+      tone: toneOverride || activeTone || undefined,
     });
+
+    if (result) {
+      onResult(result);
+      
+      // Database Autosave if postId is present
+      if (postId) {
+        setSaveStatus("saving");
+        try {
+          const res = await fetch(`/api/posts/${postId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: result }),
+          });
+          if (!res.ok) throw new Error("Save failed");
+          setSaveStatus("saved");
+          setTimeout(() => setSaveStatus("idle"), 2000);
+        } catch (err) {
+          setSaveStatus("error");
+          toast.error("Failed to autosave result to database");
+        }
+      }
+    }
   }
 
   return (
@@ -124,9 +158,25 @@ export function AIToolbar({ content, platform, onResult }: AIToolbarProps) {
             loading={loading}
           />
 
+          <TooltipButton
+            onClick={() => handleAction("raccourcir")}
+            disabled={disabled}
+            icon={<Minimize2 className="size-3.5 text-emerald-500" />}
+            label="Raccourcir"
+            loading={loading}
+          />
+
+          <TooltipButton
+            onClick={() => handleAction("allonger")}
+            disabled={disabled}
+            icon={<Maximize2 className="size-3.5 text-orange-500" />}
+            label="Allonger"
+            loading={loading}
+          />
+
           {/* Tone Selector */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button
                 variant="ghost"
                 size="sm"
@@ -190,6 +240,29 @@ export function AIToolbar({ content, platform, onResult }: AIToolbarProps) {
               </Button>
             </>
           )}
+
+          {/* Save Status Indicator */}
+          <AnimatePresence>
+            {saveStatus !== "idle" && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-muted/30 ml-1"
+              >
+                {saveStatus === "saving" ? (
+                  <Loader2 className="size-3 animate-spin text-muted-foreground" />
+                ) : saveStatus === "saved" ? (
+                  <Save className="size-3 text-emerald-500" />
+                ) : (
+                  <div className="size-1.5 rounded-full bg-destructive" />
+                )}
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                  {saveStatus === "saving" ? "Saving" : saveStatus === "saved" ? "Saved" : "Error"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>

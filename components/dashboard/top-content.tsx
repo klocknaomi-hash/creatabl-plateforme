@@ -44,7 +44,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
           <h2 className="text-2xl font-bold tracking-tight">Top Content</h2>
           <p className="text-sm font-medium text-muted-foreground/60">Your best performing posts across all social networks</p>
         </div>
-        <Button variant="ghost" size="sm" className="text-violet-600 font-bold" asChild>
+        <Button variant="ghost" size="sm" className="text-violet-600 font-bold">
           <Link href="/dashboard/analytics">
             View detailed analytics
           </Link>
