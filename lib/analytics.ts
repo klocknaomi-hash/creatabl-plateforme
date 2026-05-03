@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { posts, postPlatformResults, socialAccounts } from "@/lib/db/schema";
+import { posts, postPlatformResults, socialAccounts, aiLogs } from "@/lib/db/schema";
 import { eq, and, gte, lte, sql, desc, inArray } from "drizzle-orm";
 
 export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
@@ -176,11 +176,24 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
     .orderBy(desc(postPlatformResults.publishedAt))
     .limit(50);
 
+  // 7. AI Usage Stats
+  const aiUsage = await db
+    .select({
+      totalActions: sql<number>`count(*)`,
+      totalTokens: sql<number>`sum(${aiLogs.tokensUsed})`,
+    })
+    .from(aiLogs)
+    .where(eq(aiLogs.userId, userId));
+
+  const aiStats = aiUsage[0] || { totalActions: 0, totalTokens: 0 };
+
   return {
     connectedPlatforms,
     summary: {
       ...stats,
       avgEngagementRate,
+      aiActions: Number(aiStats.totalActions),
+      aiTokens: Number(aiStats.totalTokens || 0),
     },
     timeSeries,
     postsPerDay,

@@ -4,22 +4,17 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 import { SubscriptionCard } from "@/components/billing/subscription-card";
 import { PremiumBenefits } from "@/components/billing/premium-benefits";
 import { InvoiceHistory } from "@/components/billing/invoice-history";
 import { PlanType } from "@/lib/plan-limits";
 
 export default async function BillingPage() {
-  const { userId: clerkId } = await auth();
-  if (!clerkId) redirect("/sign-in");
+  const user = await getCurrentUser();
+  if (!user) redirect("/sign-in");
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.clerkId, clerkId),
-  });
-
-  if (!user) redirect("/onboarding");
-
-  const usageData = await getUsage(clerkId);
+  const usageData = await getUsage(user.clerkId);
 
   return (
     <div className="flex flex-col gap-10">

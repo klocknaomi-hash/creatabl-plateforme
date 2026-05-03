@@ -15,14 +15,15 @@ export async function GET(
     // Generate a secure random state
     const state = crypto.randomBytes(16).toString('hex');
     const cookieStore = await cookies();
+    const isSecure = process.env.NODE_ENV === 'production' || request.nextUrl.protocol === 'https:';
     
     // Store state in a cookie for verification on callback
     cookieStore.set(`${platform}_oauth_state`, state, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       maxAge: 600, // 10 minutes
       path: '/',
-      sameSite: 'lax',
+      sameSite: isSecure ? 'none' : 'lax',
     });
 
     let url = '';

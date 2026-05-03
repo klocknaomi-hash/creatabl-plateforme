@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: [
-    "dosage-popcorn-reply.ngrok-free.dev"
+    "localhost:3000"
   ],
 };
 

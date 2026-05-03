@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { getAnalyticsData } from "@/lib/analytics";
+import { getCurrentUser } from "@/lib/auth";
 import { subDays, differenceInDays } from "date-fns";
 import {
   Card,
@@ -36,7 +37,9 @@ import {
   MousePointer2, 
   MessageSquare, 
   Plus,
-  BarChart3
+  BarChart3,
+  Sparkles,
+  Zap
 } from "lucide-react";
 import { 
   InstagramIcon, 
@@ -54,14 +57,8 @@ import { AnalyticsNavigation } from "@/components/dashboard/analytics-navigation
 export default async function AnalyticsPage(props: {
   searchParams: Promise<{ from?: string; to?: string; platform?: string }>;
 }) {
-  const { userId: clerkId } = await auth();
-  if (!clerkId) redirect("/sign-in");
-
-  const user = await db.query.users.findFirst({
-    where: eq(users.clerkId, clerkId),
-  });
-
-  if (!user) redirect("/onboarding");
+  const user = await getCurrentUser();
+  if (!user) redirect("/sign-in");
 
   const searchParams = await props.searchParams;
   const fromDate = searchParams.from ? new Date(searchParams.from) : subDays(new Date(), 7);
@@ -185,6 +182,17 @@ export default async function AnalyticsPage(props: {
           <CardContent>
             <div className="text-2xl font-bold tracking-tight">{displaySummary.avgEngagementRate.toFixed(2)}%</div>
             <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Avg rate per impression</p>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-violet-500/20 transition-colors bg-violet-500/[0.02]">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-violet-500/50">AI Support</CardTitle>
+            <Sparkles className="h-3.5 w-3.5 text-violet-500/40 group-hover:text-violet-500 transition-colors fill-violet-500/10" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold tracking-tight text-violet-600">{displaySummary.aiActions || 0}</div>
+            <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Content generations</p>
           </CardContent>
         </Card>
       </div>

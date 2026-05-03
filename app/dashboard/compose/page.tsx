@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { 
   Sparkles,
   Send,
   Calendar,
   Save,
   Loader2,
-  Wand2
+  Wand2,
+  Clock,
+  CheckCircle2,
+  AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -30,6 +33,8 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface MediaFile {
   url: string;
@@ -37,8 +42,21 @@ interface MediaFile {
   name: string;
 }
 
+const TONES = [
+  { value: "professionnel", label: "Professionnel", icon: "💼" },
+  { value: "storytelling", label: "Storytelling", icon: "📖" },
+  { value: "viral", label: "Viral", icon: "🚀" },
+  { value: "educatif", label: "Éducatif", icon: "🎓" },
+  { value: "conversationnel", label: "Conversationnel", icon: "💬" },
+];
+
 export default function ComposePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const idParam = searchParams.get("id");
+  const dateParam = searchParams.get("date");
+
+  const [postId, setPostId] = useState<string | null>(idParam);
   const [content, setContent] = useState("");
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -46,18 +64,16 @@ export default function ComposePage() {
   const [loading, setLoading] = useState(false);
   const [isAiDialogOpen, setIsAiDialogOpen] = useState(false);
   const [aiPrompt, setAiPrompt] = useState("");
+  const [selectedTone, setSelectedTone] = useState("professionnel");
   const [generating, setGenerating] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const lastSavedRef = useRef<string>("");
 
-  // Handle Query Params
+  // Handle Initial Load
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const dateParam = params.get("date");
-    const idParam = params.get("id");
-
     if (dateParam) {
       const date = new Date(dateParam);
       if (!isNaN(date.getTime())) {
-        // Set time to a default (e.g., 9:00 AM) if it's just a date
         if (date.getHours() === 0 && date.getMinutes() === 0) {
           date.setHours(9, 0, 0, 0);
         }
@@ -65,55 +81,123 @@ export default function ComposePage() {
       }
     }
 
+    const fetchPost = async (id: string) => {
+      try {
+        const res = await fetch(`/api/posts/${id}`);
+        const data = await res.json();
+        if (data.post) {
+          setContent(data.post.content || "");
+          setSelectedPlatforms(data.post.platforms || []);
+          if (data.post.scheduledAt) {
+            setScheduledAt(new Date(data.post.scheduledAt));
+          }
+          if (data.post.mediaUrls) {
+            setMediaFiles(data.post.mediaUrls.map((url: string, i: number) => ({
+              url,
+              fileId: `existing-${i}`,
+              name: `Media ${i + 1}`
+            })));
+          }
+          lastSavedRef.current = JSON.stringify({ 
+            content: data.post.content, 
+            platforms: data.post.platforms, 
+            mediaUrls: data.post.mediaUrls 
+          });
+        }
+      } catch (err) {
+        toast.error("Failed to load post data");
+      }
+    };
+
     if (idParam) {
-      const fetchPost = async () => {
+      fetchPost(idParam);
+    } else {
+      // Fetch latest draft if it exists
+      const fetchLatestDraft = async () => {
         try {
-          const res = await fetch(`/api/posts/${idParam}`);
+          const res = await fetch("/api/posts?status=draft&limit=1");
           const data = await res.json();
-          if (data.post) {
-            setContent(data.post.content);
-            setSelectedPlatforms(data.post.platforms);
-            if (data.post.scheduledAt) {
-              setScheduledAt(new Date(data.post.scheduledAt));
-            }
-            if (data.post.mediaUrls) {
-              setMediaFiles(data.post.mediaUrls.map((url: string, i: number) => ({
-                url,
-                fileId: `existing-${i}`,
-                name: `Media ${i + 1}`
-              })));
+          if (data.posts && data.posts.length > 0) {
+            const draft = data.posts[0];
+            // Only auto-load if it's very recent (last 24h) or has content
+            if (draft.content) {
+              setPostId(draft.id);
+              setContent(draft.content);
+              setSelectedPlatforms(draft.platforms || []);
+              if (draft.mediaUrls) {
+                setMediaFiles(draft.mediaUrls.map((url: string, i: number) => ({
+                  url,
+                  fileId: `draft-media-${i}`,
+                  name: `Media ${i + 1}`
+                })));
+              }
             }
           }
         } catch (err) {
-          toast.error("Failed to load post data");
+          console.error("Failed to fetch latest draft", err);
         }
       };
-      fetchPost();
-    } else {
-      // Only restore from localStorage if not editing a specific post
-      const saved = localStorage.getItem("creatabl_compose_draft");
-      if (saved) {
-        try {
-          const { content: c, selectedPlatforms: sp, mediaFiles: mf } = JSON.parse(saved);
-          if (c) setContent(c);
-          if (sp) setSelectedPlatforms(sp);
-          if (mf) setMediaFiles(mf);
-        } catch (e) {}
-      }
+      fetchLatestDraft();
     }
-  }, []);
+  }, [idParam, dateParam]);
 
-  // Save to localStorage
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (!params.get("id")) {
-      localStorage.setItem("creatabl_compose_draft", JSON.stringify({
-        content,
-        selectedPlatforms,
-        mediaFiles
-      }));
+  // Autosave logic
+  const performAutosave = useCallback(async () => {
+    const currentData = { 
+      content, 
+      platforms: selectedPlatforms, 
+      mediaUrls: mediaFiles.map(f => f.url),
+      scheduledAt: scheduledAt?.toISOString(),
+      status: "draft"
+    };
+    
+    const currentDataStr = JSON.stringify({ 
+      content: currentData.content, 
+      platforms: currentData.platforms, 
+      mediaUrls: currentData.mediaUrls 
+    });
+
+    if (currentDataStr === lastSavedRef.current) return;
+    if (!content && mediaFiles.length === 0) return;
+
+    setSaveStatus("saving");
+    try {
+      const url = postId ? `/api/posts/${postId}` : "/api/posts";
+      const method = postId ? "PATCH" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Save failed");
+
+      if (!postId && data.postId) {
+        setPostId(data.postId);
+        // Update URL without refreshing
+        window.history.replaceState(null, "", `/dashboard/compose?id=${data.postId}`);
+      }
+
+      lastSavedRef.current = currentDataStr;
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } catch (err) {
+      console.error("Autosave error:", err);
+      setSaveStatus("error");
     }
-  }, [content, selectedPlatforms, mediaFiles]);
+  }, [content, selectedPlatforms, mediaFiles, scheduledAt, postId]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (content || mediaFiles.length > 0) {
+        performAutosave();
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [content, selectedPlatforms, mediaFiles, scheduledAt, performAutosave]);
 
   const handlePost = async (isDraft = false) => {
     if (!content && mediaFiles.length === 0) {
@@ -125,10 +209,8 @@ export default function ComposePage() {
 
     setLoading(true);
     try {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      const url = id ? `/api/posts/${id}` : "/api/posts";
-      const method = id ? "PATCH" : "POST";
+      const url = postId ? `/api/posts/${postId}` : "/api/posts";
+      const method = postId ? "PATCH" : "POST";
 
       const res = await fetch(url, {
         method,
@@ -146,8 +228,7 @@ export default function ComposePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save post");
 
-      toast.success(isDraft ? "Draft saved!" : (id ? "Post updated!" : "Post scheduled successfully!"));
-      localStorage.removeItem("creatabl_compose_draft");
+      toast.success(isDraft ? "Draft saved!" : (postId ? "Post updated!" : "Post scheduled successfully!"));
       router.push("/dashboard/posts");
     } catch (err: any) {
       toast.error(err.message);
@@ -160,14 +241,19 @@ export default function ComposePage() {
     if (!aiPrompt) return;
     setGenerating(true);
     try {
-      const res = await fetch("/api/ai/caption", {
+      const res = await fetch("/api/generate-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: aiPrompt, platforms: selectedPlatforms }),
+        body: JSON.stringify({ 
+          content: aiPrompt, 
+          action: "generer",
+          platform: selectedPlatforms[0],
+          tone: selectedTone 
+        }),
       });
       const data = await res.json();
-      if (data.generated) {
-        setContent(data.generated);
+      if (data.result) {
+        setContent(data.result);
         setIsAiDialogOpen(false);
         setAiPrompt("");
         toast.success("Post content generated!");
@@ -184,7 +270,24 @@ export default function ComposePage() {
       {/* Refined Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2">
         <div className="space-y-0.5">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Compose Post</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Compose Post</h1>
+            <AnimatePresence>
+              {saveStatus !== "idle" && (
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                >
+                  {saveStatus === "saving" && <Loader2 className="size-2.5 animate-spin" />}
+                  {saveStatus === "saved" && <CheckCircle2 className="size-2.5 text-emerald-500" />}
+                  {saveStatus === "error" && <AlertCircle className="size-2.5 text-destructive" />}
+                  {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved to DB" : "Error saving"}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <p className="text-sm text-muted-foreground">Create and schedule your social content</p>
         </div>
         <div className="flex items-center gap-2">
@@ -227,12 +330,35 @@ export default function ComposePage() {
 
           {/* Caption Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Caption</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Caption</h3>
+              
+              {/* Integrated Tone Selector */}
+              <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-lg border border-border/50">
+                {TONES.map((tone) => (
+                  <button
+                    key={tone.value}
+                    onClick={() => setSelectedTone(tone.value)}
+                    title={tone.label}
+                    className={cn(
+                      "p-1.5 rounded-md transition-all",
+                      selectedTone === tone.value 
+                        ? "bg-background shadow-sm text-foreground ring-1 ring-border" 
+                        : "text-muted-foreground/60 hover:text-foreground hover:bg-background/50"
+                    )}
+                  >
+                    <span className="text-sm">{tone.icon}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            
             <CaptionEditor 
               content={content} 
               onChange={setContent} 
               selectedPlatforms={selectedPlatforms} 
               onOpenAiDialog={() => setIsAiDialogOpen(true)}
+              tone={selectedTone as any}
             />
           </div>
 
@@ -266,7 +392,7 @@ export default function ComposePage() {
               className="rounded-lg font-bold px-10 h-10 shadow-sm bg-foreground text-background hover:bg-foreground/90 transition-all"
             >
               {loading ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
-              {scheduledAt ? "Scheduled" : "Post Now"}
+              {scheduledAt ? "Schedule Post" : "Post Now"}
             </Button>
           </div>
         </div>
@@ -293,13 +419,37 @@ export default function ComposePage() {
               Describe what you want to post about and Gemini will craft a perfect caption for you.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-2">
-            <Textarea 
-              placeholder="e.g. Write a post about our new AI feature launch..."
-              className="min-h-[100px] rounded-xl resize-none border focus-visible:ring-1 focus-visible:ring-foreground"
-              value={aiPrompt}
-              onChange={(e) => setAiPrompt(e.target.value)}
-            />
+          <div className="py-2 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Prompt</Label>
+              <Textarea 
+                placeholder="e.g. Write a post about our new AI feature launch..."
+                className="min-h-[100px] rounded-xl resize-none border focus-visible:ring-1 focus-visible:ring-foreground bg-muted/5"
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Desired Tone</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {TONES.map((tone) => (
+                  <button
+                    key={tone.value}
+                    onClick={() => setSelectedTone(tone.value)}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all text-left",
+                      selectedTone === tone.value 
+                        ? "bg-foreground text-background border-foreground shadow-sm" 
+                        : "bg-background border-border hover:border-foreground/30 text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    <span>{tone.icon}</span>
+                    {tone.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button variant="outline" size="sm" onClick={() => setIsAiDialogOpen(false)} className="rounded-lg text-xs">Cancel</Button>

@@ -12,11 +12,14 @@ import { Separator } from "@/components/ui/separator";
 import { AIToolbar } from "@/components/AIToolbar";
 import { PostPlatform } from "@/lib/ai-provider";
 
+import { PostPlatform, PostTone } from "@/lib/ai-provider";
+
 interface CaptionEditorProps {
   content: string;
   onChange: (content: string) => void;
   selectedPlatforms: string[];
   onOpenAiDialog: () => void;
+  tone?: PostTone;
 }
 
 const PLATFORM_LIMITS: Record<string, number> = {
@@ -26,7 +29,7 @@ const PLATFORM_LIMITS: Record<string, number> = {
   facebook: 63206,
 };
 
-export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDialog }: CaptionEditorProps) {
+export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDialog, tone }: CaptionEditorProps) {
   const [aiPrompt, setAiPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
 
@@ -38,15 +41,20 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
 
     setGenerating(true);
     try {
-      const res = await fetch("/api/ai/caption", {
+      const res = await fetch("/api/generate-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: aiPrompt, platforms: selectedPlatforms }),
+        body: JSON.stringify({ 
+          content: aiPrompt, 
+          action: "generer",
+          platform: selectedPlatforms[0] || "linkedin",
+          tone: tone || "professionnel"
+        }),
       });
 
       const data = await res.json();
-      if (data.generated) {
-        onChange(data.generated);
+      if (data.result) {
+        onChange(data.result);
         setAiPrompt("");
         toast.success("AI Caption generated!");
       } else {
@@ -106,7 +114,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       <div className="p-3.5 rounded-xl border border-dashed border-border bg-muted/5 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
-            AI Prompt <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+            AI Magic Box <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
           </span>
           <Button 
             variant="link" 
@@ -114,13 +122,13 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             onClick={onOpenAiDialog}
             className="h-auto p-0 text-[10px] font-semibold text-muted-foreground hover:text-foreground transition-colors"
           >
-            Options
+            Open Studio
           </Button>
         </div>
         
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Create professional post..."
+            placeholder="Describe your post idea..."
             className="h-9 text-sm rounded-lg border-border/40 bg-background shadow-none focus-visible:ring-1 focus-visible:ring-foreground"
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}
@@ -130,9 +138,9 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             size="sm" 
             onClick={handleGenerateAI} 
             disabled={generating || !aiPrompt}
-            className="rounded-lg px-4 h-9 font-bold bg-foreground text-background hover:bg-foreground/90 transition-all"
+            className="rounded-lg px-4 h-9 font-bold bg-foreground text-background hover:bg-foreground/90 transition-all shadow-sm"
           >
-            {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Generate"}
+            {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Magic"}
           </Button>
         </div>
       </div>

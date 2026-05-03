@@ -7,7 +7,17 @@ export type AIProvider = "gemini" | "claude" | "openai";
 
 export type PostTone = "professionnel" | "storytelling" | "viral" | "educatif" | "conversationnel";
 
-export type PostPlatform = "linkedin" | "instagram" | "x" | "tiktok";
+export type PostPlatform = 
+  | "linkedin" 
+  | "instagram" 
+  | "x" 
+  | "tiktok" 
+  | "facebook" 
+  | "youtube" 
+  | "pinterest" 
+  | "discord" 
+  | "slack" 
+  | "twitter";
 
 export type GenerateAction = "ameliorer" | "reformuler" | "changer_ton" | "optimiser_plateforme" | "generer";
 
@@ -28,40 +38,46 @@ export interface GeneratePostResult {
 // Construit le prompt système selon l'action
 function buildSystemPrompt(action: GenerateAction, platform?: PostPlatform, tone?: PostTone): string {
   const platformGuide: Record<PostPlatform, string> = {
-    linkedin: "LinkedIn : ton professionnel, phrases courtes, 1 idée forte par paragraphe, 3 à 5 paragraphes max, pas de hashtags excessifs (2-3 max)",
-    instagram: "Instagram : accroche forte en 1re ligne, emojis pertinents, hashtags en fin (10-15), ton authentique et personnel",
-    x: "X/Twitter : 280 caractères max par tweet, percutant, une seule idée, hook dès le 1er mot",
-    tiktok: "TikTok : script vidéo court, hook choc en 3 secondes, storytelling rapide, call-to-action clair",
+    linkedin: "LinkedIn : Ton professionnel et 'thought leadership'. Structure : Accroche percutante, développement avec listes à puces pour la lisibilité, conclusion avec une question ouverte. Max 3 hashtags pertinents. Pas d'emojis excessifs.",
+    instagram: "Instagram : Ton visuel et narratif. Structure : Première ligne captivante (hook), usage généreux d'emojis pour structurer, appel à l'action clair. Saut de lignes fréquents. 10-15 hashtags cachés en bas.",
+    x: "X (Twitter) : Ultra-concis (280 car.). Style 'Thread' ou 'Punchy'. Hook immédiat, pas de fioritures. 1-2 hashtags max. Langage direct et actuel.",
+    tiktok: "TikTok : Script court et dynamique. Structure : Hook (0-3s), Valeur/Story (3-15s), CTA (15-20s). Ton authentique, langage parlé, rythme rapide.",
+    facebook: "Facebook : Ton communautaire et chaleureux. Encourage le débat ou le partage d'expérience. Texte moyen à long accepté. Emojis bienveillants.",
+    youtube: "YouTube : Titre accrocheur (Click-worthy mais pas clickbait). Description : Hook, Résumé riche en mots-clés, Chapitres, Liens, CTA abonnement.",
+    pinterest: "Pinterest : Ton inspirant et orienté 'How-to'. Titre descriptif riche en mots-clés. Description axée sur le bénéfice utilisateur et l'esthétique.",
+    discord: "Discord : Ton informel, communautaire et direct. Utilisation de la syntaxe Markdown (gras, listes). Ping modéré, emojis de réaction.",
+    slack: "Slack : Professionnel, concis et actionnable. Utilisation de listes à puces. Résumé clair en haut si le message est long. Ton efficace.",
+    twitter: "X (Twitter) : Ultra-concis (280 car.). Style 'Punchy'. Hook immédiat, pas de fioritures. 1-2 hashtags max. Langage direct et actuel.",
   };
 
   const toneGuide: Record<PostTone, string> = {
-    professionnel: "Ton expert, autorité naturelle, données et insights concrets, pas de jargon inutile.",
-    storytelling: "Ton narratif, anecdote personnelle ou scénario, émotion, chute ou leçon en fin de post.",
-    viral: "Ton provocateur mais honnête, chiffre ou stat surprenante, contre-intuition, très partageable.",
-    educatif: "Ton pédagogique, structure claire (problème → explication → solution), exemples concrets.",
-    conversationnel: "Ton proche, naturel, comme si tu parlais à un ami, phrases courtes, questions rhétoriques.",
+    professionnel: "Expert, crédible et autoritaire. Utilise des faits, évite les superlatifs vides. Phrases structurées et vocabulaire précis.",
+    storytelling: "Narratif, émotionnel et vulnérable. Commence par un conflit ou une situation, développe l'apprentissage, finit par une transformation.",
+    viral: "Provocateur, contre-intuitif et ultra-partageable. Utilise des hooks puissants, des listes 'top X', ou des opinions tranchées mais sourcées.",
+    educatif: "Pédagogique, structuré (Pourquoi/Comment/Action). Utilise des analogies simples. L'objectif est que le lecteur apprenne quelque chose en 30 secondes.",
+    conversationnel: "Relatable, amical et détendu. Utilise le 'tu' ou le 'vous', pose des questions, utilise un langage naturel comme lors d'un café.",
   };
 
   const actionInstructions: Record<GenerateAction, string> = {
-    ameliorer: "Améliore ce post en le rendant plus engageant, plus clair et plus percutant. Garde le sens et le ton original.",
-    reformuler: "Reformule entièrement ce post en gardant le même message mais avec une approche et des mots différents.",
-    changer_ton: `Réécris ce post avec le ton suivant : ${tone ? toneGuide[tone] : "professionnel"}`,
-    optimiser_plateforme: `Optimise et adapte ce post pour ${platform ? platformGuide[platform] : "LinkedIn"}.`,
-    generer: "Génère un post complet et engageant à partir de cette idée ou de ce sujet.",
+    ameliorer: "Prends ce contenu et sublime-le. Renforce l'accroche, améliore le rythme des phrases, et assure-toi que le message principal ressorte avec force. Ne change pas l'intention.",
+    reformuler: "Réécris totalement ce post en explorant un nouvel angle narratif tout en conservant la substance originale. Varie le vocabulaire et la structure syntaxique.",
+    changer_ton: `Réécris ce post en adoptant strictement le ton suivant : ${tone ? toneGuide[tone] : "professionnel"}. Ajuste le vocabulaire et la ponctuation en conséquence.`,
+    optimiser_plateforme: `Réécris et formate ce post spécifiquement pour ${platform ? platform.toUpperCase() : "LinkedIn"} en respectant les codes culturels et techniques de la plateforme : ${platform ? platformGuide[platform] : platformGuide.linkedin}.`,
+    generer: "Crée un post complet, engageant et prêt à être publié à partir de ce sujet. Inclus une accroche, un corps de texte structuré et un appel à l'action.",
   };
 
-  return `Tu es un expert en création de contenu pour les réseaux sociaux, spécialisé dans la rédaction de posts performants en français.
+  return `Tu es un expert en Social Media Management et Copywriting de classe mondiale.
+Ta mission est de transformer des idées brutes en posts hautement performants qui génèrent de l'engagement et de la conversion.
 
-RÈGLES ABSOLUES :
-- Réponds UNIQUEMENT avec le post final, sans introduction ni explication
-- Ne dis jamais "Voici", "Bien sûr", "Je vais" ou toute phrase d'introduction
-- Ne mets pas le post entre guillemets
-- Pas de commentaires après le post
-- Écris uniquement en français
+RÈGLES D'OR :
+- RÉPONSE : Retourne UNIQUEMENT le texte du post final.
+- NO-NO : Jamais d'introduction (ex: "Voici le post..."), jamais de guillemets autour du post, jamais de conclusion.
+- LANGUE : Français impeccable (sauf si le texte source est dans une autre langue, garde la cohérence).
+- FORMAT : Utilise le saut de ligne pour aérer le texte.
 
 INSTRUCTION : ${actionInstructions[action]}
-${platform ? `\nFORMAT CIBLE : ${platformGuide[platform]}` : ""}
-${tone && action !== "changer_ton" ? `\nTON SOUHAITÉ : ${toneGuide[tone]}` : ""}`;
+${platform ? `\nCONTRAINTES PLATEFORME : ${platformGuide[platform]}` : ""}
+${tone && action !== "changer_ton" ? `\nNUANCE DE TON : ${toneGuide[tone]}` : ""}`;
 }
 
 // Gemini Flash

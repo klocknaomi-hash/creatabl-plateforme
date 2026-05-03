@@ -3,7 +3,10 @@ import { PlatformClient, SocialAccount } from './index';
 export class YouTubeClient implements PlatformClient {
   private clientId = process.env.GOOGLE_CLIENT_ID!;
   private clientSecret = process.env.GOOGLE_CLIENT_SECRET!;
-  private redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/youtube/callback`;
+  private get redirectUri() {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
+    return `${baseUrl}/api/oauth/youtube/callback`;
+  }
 
   getAuthorizationUrl(params?: { state?: string }): string {
     const scope = 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/userinfo.profile';

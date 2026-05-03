@@ -2,7 +2,10 @@ import { PlatformClient, SocialAccount } from './index';
 import { TwitterApi } from 'twitter-api-v2';
 
 export class TwitterClient implements PlatformClient {
-  private redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/twitter/callback`;
+  private get redirectUri() {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
+    return `${baseUrl}/api/oauth/twitter/callback`;
+  }
 
   private getCredentials() {
     const clientId = process.env.TWITTER_CLIENT_ID;

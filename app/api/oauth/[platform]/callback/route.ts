@@ -18,16 +18,16 @@ export async function GET(
   const error = searchParams.get('error');
 
   if (error) {
-    return NextResponse.redirect(new URL(`/dashboard/accounts?error=${error}`, process.env.NEXT_PUBLIC_APP_URL!));
+    return NextResponse.redirect(new URL(`/dashboard/accounts?error=${error}`, request.nextUrl.origin));
   }
 
   if (!code) {
-    return NextResponse.redirect(new URL('/dashboard/accounts?error=no_code', process.env.NEXT_PUBLIC_APP_URL!));
+    return NextResponse.redirect(new URL('/dashboard/accounts?error=no_code', request.nextUrl.origin));
   }
 
   const user = await getCurrentUser();
   if (!user) {
-    return NextResponse.redirect(new URL('/sign-in', process.env.NEXT_PUBLIC_APP_URL!));
+    return NextResponse.redirect(new URL('/sign-in', request.nextUrl.origin));
   }
 
   try {
@@ -39,13 +39,21 @@ export async function GET(
     const storedState = cookieStore.get(`${platform}_oauth_state`)?.value;
     
     if (state || storedState) {
-      // Clear state cookie
-      cookieStore.delete(`${platform}_oauth_state`);
-
       if (!storedState || state !== storedState) {
-        console.error(`Invalid state for ${platform}. Expected ${storedState}, got ${state}`);
-        return NextResponse.redirect(new URL(`/dashboard/accounts?error=invalid_state`, process.env.NEXT_PUBLIC_APP_URL!));
+        console.error(`[OAuth Debug] State Mismatch for ${platform}:`, {
+          receivedState: state,
+          storedState: storedState || 'MISSING',
+          allCookies: cookieStore.getAll().map(c => c.name),
+          url: request.url,
+          userAgent: request.headers.get('user-agent'),
+          protocol: request.headers.get('x-forwarded-proto') || 'http',
+        });
+        // Clear state cookie even on failure to prevent replay
+        cookieStore.delete(`${platform}_oauth_state`);
+        return NextResponse.redirect(new URL(`/dashboard/accounts?error=invalid_state&platform=${platform}`, request.nextUrl.origin));
       }
+      // Clear state cookie on success
+      cookieStore.delete(`${platform}_oauth_state`);
     }
 
     let tokens;
@@ -103,9 +111,9 @@ export async function GET(
       });
     }
 
-    return NextResponse.redirect(new URL('/dashboard/accounts?success=true', process.env.NEXT_PUBLIC_APP_URL!));
+    return NextResponse.redirect(new URL('/dashboard/accounts?success=true', request.nextUrl.origin));
   } catch (err: any) {
     console.error(`Callback error for ${platform}:`, err);
-    return NextResponse.redirect(new URL(`/dashboard/accounts?error=${encodeURIComponent(err.message)}`, process.env.NEXT_PUBLIC_APP_URL!));
+    return NextResponse.redirect(new URL(`/dashboard/accounts?error=${encodeURIComponent(err.message)}`, request.nextUrl.origin));
   }
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { geminiModel } from '@/lib/gemini/client';
+import { generatePost } from '@/lib/ai-provider';
+import { db } from '@/lib/db';
+import { aiLogs } from '@/lib/db/schema';
 
 export async function POST(request: NextRequest) {
   const { userId } = await auth();
@@ -9,27 +11,33 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { prompt, platforms } = await request.json();
+    const { prompt, platforms, tone } = await request.json();
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
     }
 
-    const platformContext = platforms?.length 
-      ? `targeting ${platforms.join(", ")}` 
-      : "for social media";
+    // Use the unified generatePost function
+    const result = await generatePost({
+      content: prompt,
+      action: "generer",
+      platform: platforms && platforms.length > 0 ? platforms[0] : undefined,
+      tone: tone || "professionnel",
+    });
 
-    const aiPrompt = `Write a compelling social media caption ${platformContext} based on this request: "${prompt}". 
-    Include relevant hashtags. Keep it engaging and tailored to the audience of these platforms.
-    Return ONLY the caption text.`;
+    // Log the AI usage
+    await db.insert(aiLogs).values({
+      userId,
+      action: "generer",
+      platform: platforms && platforms.length > 0 ? platforms[0] : null,
+      tone: tone || "professionnel",
+      provider: result.provider,
+      tokensUsed: result.tokensUsed ?? null,
+    });
 
-    const result = await geminiModel.generateContent(aiPrompt);
-    const response = await result.response;
-    const text = response.text();
-
-    return NextResponse.json({ generated: text });
+    return NextResponse.json({ generated: result.result, provider: result.provider });
   } catch (error: any) {
-    console.error('Gemini error:', error);
+    console.error('AI generation error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

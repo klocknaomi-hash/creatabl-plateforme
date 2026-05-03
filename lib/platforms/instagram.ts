@@ -3,10 +3,14 @@ import { PlatformClient, SocialAccount } from './index';
 export class InstagramClient implements PlatformClient {
   private clientId = process.env.FACEBOOK_CLIENT_ID!;
   private clientSecret = process.env.FACEBOOK_CLIENT_SECRET!;
-  private redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/instagram/callback`;
+  private get redirectUri() {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
+    return `${baseUrl}/api/oauth/instagram/callback`;
+  }
 
   getAuthorizationUrl(params?: { state?: string }): string {
     const scope = 'public_profile,email,instagram_basic,instagram_content_publish,instagram_manage_comments,pages_show_list,pages_read_engagement';
+    console.log('Instagram Redirect URI:', this.redirectUri);
     return `https://www.facebook.com/v18.0/dialog/oauth?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=code&state=${params?.state || ''}`;
   }
 
@@ -14,9 +18,17 @@ export class InstagramClient implements PlatformClient {
     const response = await fetch(`https://graph.facebook.com/v18.0/oauth/access_token?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&client_secret=${this.clientSecret}&code=${code}`);
     const data = await response.json();
 
+    if (!response.ok) {
+      throw new Error(`Instagram/Facebook OAuth error: ${data.error?.message || 'Failed to exchange code'}`);
+    }
+
     // Fetch the first Instagram Business Account linked to any Facebook Page
     const pagesRes = await fetch(`https://graph.facebook.com/me/accounts?fields=instagram_business_account{id,username,profile_picture_url}&access_token=${data.access_token}`);
     const pagesData = await pagesRes.json();
+    
+    if (!pagesRes.ok) {
+      throw new Error(`Facebook Pages error: ${pagesData.error?.message || 'Failed to fetch pages'}`);
+    }
     
     const igAccount = pagesData.data?.find((p: any) => p.instagram_business_account)?.instagram_business_account;
 

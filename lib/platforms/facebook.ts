@@ -3,10 +3,14 @@ import { PlatformClient, SocialAccount } from './index';
 export class FacebookClient implements PlatformClient {
   private clientId = process.env.FACEBOOK_CLIENT_ID!;
   private clientSecret = process.env.FACEBOOK_CLIENT_SECRET!;
-  private redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/facebook/callback`;
+  private get redirectUri() {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
+    return `${baseUrl}/api/oauth/facebook/callback`;
+  }
 
   getAuthorizationUrl(params?: { state?: string }): string {
     const scope = 'public_profile,email,pages_show_list,pages_read_engagement,pages_manage_posts';
+    console.log('Facebook Redirect URI:', this.redirectUri);
     return `https://www.facebook.com/v18.0/dialog/oauth?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=code&state=${params?.state || ''}`;
   }
 
@@ -14,9 +18,17 @@ export class FacebookClient implements PlatformClient {
     const response = await fetch(`https://graph.facebook.com/v18.0/oauth/access_token?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&client_secret=${this.clientSecret}&code=${code}`);
     const data = await response.json();
 
+    if (!response.ok) {
+      throw new Error(`Facebook OAuth error: ${data.error?.message || 'Failed to exchange code'}`);
+    }
+
     // Fetch user info
     const meRes = await fetch(`https://graph.facebook.com/me?fields=id,name,picture&access_token=${data.access_token}`);
     const me = await meRes.json();
+
+    if (!meRes.ok) {
+      throw new Error(`Facebook profile error: ${me.error?.message || 'Failed to fetch profile'}`);
+    }
 
     return {
       accessToken: data.access_token,
