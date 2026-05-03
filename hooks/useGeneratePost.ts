@@ -37,9 +37,13 @@ export function useGeneratePost(options?: UseGeneratePostOptions) {
         throw new Error(data.error || "Erreur lors de la génération");
       }
 
+      if (data.limitReached) {
+        return data;
+      }
+
       setResult(data.result);
       options?.onSuccess?.(data.result);
-      return data.result as string;
+      return data;
 
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erreur inconnue";

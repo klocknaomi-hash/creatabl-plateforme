@@ -2,13 +2,41 @@ import { NextRequest, NextResponse } from "next/server";
 import { generatePost, GeneratePostOptions } from "@/lib/ai-provider";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { aiLogs } from "@/lib/db/schema";
+import { aiLogs, users } from "@/lib/db/schema";
+import { eq, sql } from "drizzle-orm";
+
+const PLAN_AI_LIMITS: Record<string, number> = {
+  starter: 30,
+  pro: 120,
+  business: 500
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const { userId: clerkId } = await auth();
+    if (!clerkId) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
+
+    // Récupérer les infos de l'utilisateur
+    const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1);
+    
+    if (!user) {
+      return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
+    }
+
+    const plan = (user.selectedPlan || "starter") as keyof typeof PLAN_AI_LIMITS;
+    const limit = PLAN_AI_LIMITS[plan] || PLAN_AI_LIMITS.starter;
+    const currentCount = user.monthlyAiCount || 0;
+
+    // Vérifier la limite
+    if (currentCount >= limit) {
+      return NextResponse.json({
+        limitReached: true,
+        used: currentCount,
+        limit: limit,
+        plan: plan
+      }, { status: 200 }); // Status 200 comme demandé
     }
 
     const body: GeneratePostOptions = await req.json();
@@ -20,18 +48,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Générer normalement
     const result = await generatePost(body);
 
-    await db.insert(aiLogs).values({
-      userId,
-      action: body.action,
-      platform: body.platform ?? null,
-      tone: body.tone ?? null,
-      provider: result.provider,
-      tokensUsed: result.tokensUsed ?? null,
+    // Incrémenter le compteur et loguer l'action
+    await db.transaction(async (tx) => {
+      await tx.insert(aiLogs).values({
+        userId: clerkId,
+        action: body.action,
+        platform: body.platform ?? null,
+        tone: body.tone ?? null,
+        provider: result.provider,
+        tokensUsed: result.tokensUsed ?? null,
+      });
+
+      await tx.update(users)
+        .set({ monthlyAiCount: sql`${users.monthlyAiCount} + 1` })
+        .where(eq(users.clerkId, clerkId));
     });
 
-    return NextResponse.json({ result: result.result, provider: result.provider });
+    return NextResponse.json({ 
+      result: result.result, 
+      provider: result.provider,
+      used: currentCount + 1,
+      limit: limit,
+      plan: plan
+    });
 
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Erreur inconnue";

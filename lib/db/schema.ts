@@ -14,6 +14,8 @@ export const users = pgTable('users', {
   email: text('email').notNull(),
   name: text('name'),
   plan: planEnum('plan').default('free').notNull(),
+  monthlyAiCount: integer("monthly_ai_count").default(0),
+  selectedPlan: text("selected_plan").default("starter"),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
