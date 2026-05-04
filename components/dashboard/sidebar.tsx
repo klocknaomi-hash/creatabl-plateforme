@@ -209,9 +209,9 @@ export function AppSidebar() {
               </div>
               <Badge
                 variant="secondary"
-                className="shrink-0 text-[10px] group-data-[collapsible=icon]:hidden"
+                className="shrink-0 text-[10px] capitalize group-data-[collapsible=icon]:hidden"
               >
-                Gratuit
+                {(user?.publicMetadata?.plan as string) === 'pro' ? 'Pro' : (user?.publicMetadata?.plan as string) === 'business' ? 'Business' : 'Starter'}
               </Badge>
             </div>
           </SidebarMenuItem>

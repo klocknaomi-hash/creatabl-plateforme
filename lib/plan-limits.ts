@@ -30,6 +30,25 @@ export const PLAN_LIMITS = {
     recurringPosts: true,
     price: 199,
   },
+  // Aliases for compatibility
+  free: {
+    posts: 30,
+    ai: 30,
+    socialAccounts: 3,
+    storageLimit: 100,
+    analyticsDays: 7,
+    recurringPosts: false,
+    price: 0,
+  },
+  agency: {
+    posts: 500,
+    ai: 500,
+    socialAccounts: 50,
+    storageLimit: 20480,
+    analyticsDays: 365,
+    recurringPosts: true,
+    price: 199,
+  },
 } as const;
 
 export type PlanType = keyof typeof PLAN_LIMITS;

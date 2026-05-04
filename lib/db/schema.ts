@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, uuid, jsonb, boolean, pgEnum, integer } from 'drizzle-orm/pg-core';
 
-export const planEnum = pgEnum('plan', ['starter', 'pro', 'business']);
+export const planEnum = pgEnum('plan', ['free', 'starter', 'pro', 'agency', 'business']);
 export const platformEnum = pgEnum('platform', ['instagram', 'youtube', 'tiktok', 'facebook', 'linkedin', 'pinterest', 'discord', 'twitter', 'slack']);
 export const postStatusEnum = pgEnum('post_status', ['draft', 'scheduled', 'published', 'failed']);
 export const platformResultStatusEnum = pgEnum('platform_result_status', ['pending', 'success', 'failed']);
