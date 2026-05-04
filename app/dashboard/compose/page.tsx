@@ -266,9 +266,9 @@ function ComposePageInner() {
   };
 
   return (
-    <div className="flex flex-col gap-4 max-w-[1300px] mx-auto w-full pb-16">
+    <div className="flex flex-col gap-4 w-full max-w-full mx-auto pb-16 overflow-x-hidden">
       {/* Refined Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2 w-full">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">Créer un post</h1>
@@ -293,7 +293,7 @@ function ComposePageInner() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="rounded-xl shadow-sm text-sm" onClick={() => handlePost(true)} disabled={loading}>
-            <Save className="size-3.5 mr-1.5" /> Enregistrer le brouillon
+            <Save className="size-3.5 mr-1.5" /> Sauvegarder
           </Button>
           <Button 
             onClick={() => handlePost(false)} 
@@ -309,9 +309,9 @@ function ComposePageInner() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start w-full">
         {/* Left Column: Composition Sections */}
-        <div className="space-y-4">
+        <div className="min-w-0 flex-1 space-y-4">
           {/* Platforms Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
             <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Plateformes</h3>
@@ -389,7 +389,7 @@ function ComposePageInner() {
         </div>
 
         {/* Right Column: Live Preview */}
-        <aside className="sticky top-20 space-y-3">
+        <aside className="hidden lg:block w-80 flex-shrink-0 sticky top-20 space-y-3">
           <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest px-2">Preview</h3>
           <PostPreview 
             content={content} 

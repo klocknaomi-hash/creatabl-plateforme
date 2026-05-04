@@ -148,7 +148,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className={cn(
-          "flex items-center gap-1.5 p-1.5 rounded-2xl border transition-all duration-300",
+          "flex items-center gap-2 p-1.5 rounded-2xl border transition-all duration-300 overflow-x-auto flex-nowrap",
           "bg-background/80 backdrop-blur-md shadow-lg shadow-primary/5",
           isHovered ? "border-primary/30 ring-4 ring-primary/5" : "border-border/60"
         )}>

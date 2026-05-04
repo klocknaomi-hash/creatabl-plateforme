@@ -116,7 +116,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       <div className="p-3.5 rounded-xl border border-dashed border-border bg-muted/5 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
-            Boîte magique IA <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+            Générer avec l'IA <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
           </span>
           <Button 
             variant="link" 
@@ -130,7 +130,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
         
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Décrivez votre idée de post..."
+            placeholder="Décris ton idée de post..."
             className="h-9 text-sm rounded-lg border-border/40 bg-background shadow-none focus-visible:ring-1 focus-visible:ring-foreground"
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}
@@ -142,7 +142,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             disabled={generating || !aiPrompt}
             className="rounded-lg px-4 h-9 font-bold bg-foreground text-background hover:bg-foreground/90 transition-all shadow-sm"
           >
-            {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Magie"}
+            {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Générer"}
           </Button>
         </div>
       </div>
