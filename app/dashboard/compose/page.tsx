@@ -182,10 +182,10 @@ function ComposePageInner() {
 
       lastSavedRef.current = currentDataStr;
       setSaveStatus("saved");
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (err) {
-      console.error("Autosave error:", err);
       setSaveStatus("error");
+      toast.error("Échec de l'enregistrement automatique du résultat");
     }
   }, [content, selectedPlatforms, mediaFiles, scheduledAt, postId]);
 
@@ -228,7 +228,7 @@ function ComposePageInner() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save post");
 
-      toast.success(isDraft ? "Draft saved!" : (postId ? "Post updated!" : "Post scheduled successfully!"));
+      toast.success(isDraft ? "Brouillon enregistré !" : (postId ? "Post mis à jour !" : "Post programmé avec succès !"));
       router.push("/dashboard/posts");
     } catch (err: any) {
       toast.error(err.message);
@@ -256,10 +256,10 @@ function ComposePageInner() {
         setContent(data.result);
         setIsAiDialogOpen(false);
         setAiPrompt("");
-        toast.success("Post content generated!");
+        toast.success("Contenu du post généré !");
       }
     } catch (err) {
-      toast.error("AI generation failed");
+      toast.error("La génération IA a échoué");
     } finally {
       setGenerating(false);
     }

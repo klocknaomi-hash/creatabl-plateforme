@@ -131,7 +131,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             setTimeout(() => setSaveStatus("idle"), 2000);
           } catch (err) {
             setSaveStatus("error");
-            toast.error("Failed to autosave result to database");
+            toast.error("Échec de l'enregistrement automatique du résultat");
           }
         }
       }

@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <ClerkProvider localization={frFR}>
       <html
-        lang="en"
+        lang="fr"
         suppressHydrationWarning
         className={`${outfit.className} ${playfair.variable} h-full antialiased`}
       >
