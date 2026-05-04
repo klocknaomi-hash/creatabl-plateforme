@@ -16,7 +16,7 @@ import { ReactNode } from "react";
 
 interface PlanGateProps {
   children: ReactNode;
-  plan?: "pro" | "agency";
+  plan?: "pro" | "business";
   showUpgrade?: boolean;
 }
 
@@ -25,11 +25,11 @@ export function PlanGate({ children, plan = "pro", showUpgrade = true }: PlanGat
 
   if (!isLoaded) return null;
 
-  const currentPlan = (user?.publicMetadata?.plan as string) || "free";
+  const currentPlan = (user?.publicMetadata?.plan as string) || "starter";
   
   const hasAccess = 
-    (plan === "pro" && (currentPlan === "pro" || currentPlan === "agency")) ||
-    (plan === "agency" && currentPlan === "agency");
+    (plan === "pro" && (currentPlan === "pro" || currentPlan === "business")) ||
+    (plan === "business" && currentPlan === "business");
 
   if (hasAccess) {
     return <>{children}</>;

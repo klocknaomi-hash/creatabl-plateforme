@@ -27,7 +27,8 @@ export async function getCurrentUser() {
       clerkId: userId,
       email: email,
       name: name,
-      plan: 'free',
+      plan: 'starter',
+      selectedPlan: 'starter',
     }).returning();
     
     user = newUser;

@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, uuid, jsonb, boolean, pgEnum, integer } from 'drizzle-orm/pg-core';
 
-export const planEnum = pgEnum('plan', ['free', 'pro', 'agency']);
+export const planEnum = pgEnum('plan', ['starter', 'pro', 'business']);
 export const platformEnum = pgEnum('platform', ['instagram', 'youtube', 'tiktok', 'facebook', 'linkedin', 'pinterest', 'discord', 'twitter', 'slack']);
 export const postStatusEnum = pgEnum('post_status', ['draft', 'scheduled', 'published', 'failed']);
 export const platformResultStatusEnum = pgEnum('platform_result_status', ['pending', 'success', 'failed']);
@@ -13,9 +13,12 @@ export const users = pgTable('users', {
   clerkId: text('clerk_id').unique().notNull(),
   email: text('email').notNull(),
   name: text('name'),
-  plan: planEnum('plan').default('free').notNull(),
+  plan: planEnum('plan').default('starter').notNull(),
   monthlyAiCount: integer("monthly_ai_count").default(0),
+  monthlyPostCount: integer("monthly_post_count").default(0),
   selectedPlan: text("selected_plan").default("starter"),
+  trialEndsAt: timestamp("trial_ends_at"),
+  subscriptionId: text("subscription_id"),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 

@@ -13,52 +13,52 @@ interface PlanCardsProps {
 export function PlanCards({ currentPlan }: PlanCardsProps) {
   const plans = [
     {
-      id: "free",
-      name: "Free",
-      price: "$0",
-      description: "Perfect for getting started",
+      id: "starter",
+      name: "Starter",
+      price: "0€",
+      description: "Essai gratuit de 7 jours",
       features: [
-        "3 Social Accounts",
-        "30 Posts / month",
-        "7 Days Analytics",
-        "Community Support",
+        "30 Posts / mois",
+        "30 Générations IA",
+        "7 Jours Analytics",
+        "Support standard",
       ],
       icon: <Zap className="w-5 h-5 text-blue-500" />,
-      cta: "Current Plan",
+      cta: "Plan actuel",
       highlight: false,
     },
     {
       id: "pro",
       name: "Pro",
-      price: "$24",
-      description: "Everything you need to grow",
+      price: "99€",
+      description: "Pour booster ta croissance",
       features: [
-        "15 Social Accounts",
-        "Unlimited Posts",
-        "90 Days Analytics",
-        "Recurring Posts",
-        "AI Caption Generation",
-        "Priority Support",
+        "120 Posts / mois",
+        "120 Générations IA",
+        "90 Jours Analytics",
+        "Reformuler & Tons IA",
+        "Analytics avancés",
+        "Support prioritaire",
       ],
       icon: <Sparkles className="w-5 h-5 text-purple-500" />,
-      cta: "Upgrade to Pro",
+      cta: "Passer au Pro",
       highlight: true,
     },
     {
-      id: "agency",
-      name: "Agency",
-      price: "$99",
-      description: "Scale your social presence",
+      id: "business",
+      name: "Business",
+      price: "199€",
+      description: "Pour les agences et équipes",
       features: [
-        "50 Social Accounts",
-        "Unlimited everything",
-        "365 Days Analytics",
-        "Team Collaboration",
-        "White-label Reports",
-        "Dedicated Manager",
+        "500 Posts / mois (∞)",
+        "500 Générations IA (∞)",
+        "365 Jours Analytics",
+        "Multi-comptes équipe",
+        "Gestion clients",
+        "Manager dédié",
       ],
-      icon: <Building2 className="w-5 h-5 text-orange-500" />,
-      cta: "Contact Sales",
+      icon: <Building2 className="w-5 h-5 text-emerald-500" />,
+      cta: "Passer au Business",
       highlight: false,
     },
   ];
@@ -77,7 +77,7 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
           {plan.highlight && (
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
               <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold uppercase tracking-wider">
-                Most Popular
+                Le plus populaire
               </Badge>
             </div>
           )}
@@ -89,7 +89,7 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
             </div>
             <div className="flex items-baseline gap-1">
               <span className="text-4xl font-extrabold tracking-tight">{plan.price}</span>
-              <span className="text-muted-foreground font-medium">/month</span>
+              <span className="text-muted-foreground font-medium">/mois</span>
             </div>
             <CardDescription className="pt-2">{plan.description}</CardDescription>
           </CardHeader>
@@ -113,7 +113,7 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
               variant={plan.id === currentPlan ? "outline" : plan.highlight ? "default" : "secondary"}
               disabled={plan.id === currentPlan}
             >
-              {plan.id === currentPlan ? "Your Current Plan" : plan.cta}
+              {plan.id === currentPlan ? "Ton plan actuel" : plan.cta}
             </Button>
           </CardFooter>
         </Card>

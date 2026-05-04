@@ -65,7 +65,7 @@ export default async function AnalyticsPage(props: {
   const toDate = searchParams.to ? new Date(searchParams.to) : new Date();
 
   const diffDays = differenceInDays(toDate, fromDate);
-  const isLimited = user.plan === "free" && diffDays > 7;
+  const isLimited = user.plan === "starter" && diffDays > 7;
 
   // If limited, we still fetch data but maybe we only fetch the last 7 days or show a prompt
   const effectiveFrom = isLimited ? subDays(new Date(), 7) : fromDate;
@@ -141,7 +141,7 @@ export default async function AnalyticsPage(props: {
           <Lock className="h-4 w-4" />
           <AlertTitle className="font-bold">Fonctionnalité Pro</AlertTitle>
           <AlertDescription className="flex items-center justify-between">
-            <span className="text-sm">Le Plan gratuit est limité aux 7 derniers jours d'Analytics. Upgrade au Plan Pro pour l'historique complet.</span>
+            <span className="text-sm">Le Plan Starter est limité aux 7 derniers jours d'Analytics. Upgrade au Plan Pro pour l'historique complet.</span>
             <Link href="/dashboard/billing">
               <Button size="sm" className="ml-4 font-bold rounded-full">Upgrade</Button>
             </Link>

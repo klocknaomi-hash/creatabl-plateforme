@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { posts, postPlatformResults, mediaAssets } from '@/lib/db/schema';
 import { inngest } from '@/lib/inngest/client';
-import { eq, and, desc, gte, lte } from 'drizzle-orm';
+import { eq, and, desc, gte, lte, sql } from 'drizzle-orm';
 import { users as usersTable } from '@/lib/db/schema';
 import { checkPlanLimit } from '@/lib/plan-limits';
 
@@ -24,10 +24,10 @@ export async function POST(request: NextRequest) {
   // Check limits (if not a draft)
   const body = await request.clone().json();
   if (body.status !== 'draft') {
-    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'postsPerMonth');
+    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'posts');
     if (!allowed) {
       return NextResponse.json({ 
-        error: `Monthly post limit reached. You have used ${current} of ${limit} posts. Upgrade to Pro for more.`,
+        error: `Limite de posts mensuelle atteinte. Tu as utilisé ${current} sur ${limit} posts. Passe au plan Pro pour en avoir plus.`,
         limitReached: true
       }, { status: 403 });
     }
@@ -61,6 +61,13 @@ export async function POST(request: NextRequest) {
       status: finalStatus,
       scheduledAt: finalStatus === 'draft' ? null : scheduledDate,
     }).returning();
+
+    // 1.1 Increment post count if not a draft
+    if (finalStatus !== 'draft') {
+      await db.update(usersTable)
+        .set({ monthlyPostCount: sql`${usersTable.monthlyPostCount} + 1` })
+        .where(eq(usersTable.clerkId, clerkId));
+    }
 
     // 2. Initialize Platform Results (only if not a draft)
     if (finalStatus !== 'draft') {

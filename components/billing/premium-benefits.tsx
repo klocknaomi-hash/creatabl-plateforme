@@ -9,7 +9,7 @@ interface PremiumBenefitsProps {
 }
 
 export function PremiumBenefits({ plan }: PremiumBenefitsProps) {
-  const isPro = plan === 'pro' || plan === 'agency';
+  const isPro = plan === 'pro' || plan === 'business';
 
   const benefits = [
     "Unlimited Scheduled Posts",

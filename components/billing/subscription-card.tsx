@@ -11,8 +11,8 @@ interface SubscriptionCardProps {
 }
 
 export function SubscriptionCard({ usageData, plan }: SubscriptionCardProps) {
-  const planDisplayName = plan === 'free' ? 'Gratuit' : plan === 'pro' ? 'Pro' : 'Agency';
-  const planFullName = plan === 'free' ? 'Plan gratuit' : `Payant (${planDisplayName})`;
+  const planDisplayName = plan === 'starter' ? 'Starter' : plan === 'pro' ? 'Pro' : 'Business';
+  const planFullName = plan === 'starter' ? 'Plan Starter' : `Payant (${planDisplayName})`;
 
   return (
     <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden flex flex-col h-full">
@@ -25,7 +25,7 @@ export function SubscriptionCard({ usageData, plan }: SubscriptionCardProps) {
             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Plan actuel</span>
             <CardTitle className="text-2xl font-black">
               <span className="text-primary">{planFullName}</span>
-              {plan !== 'free' && <span className="ml-2 text-primary opacity-20">●</span>}
+              {plan !== 'starter' && <span className="ml-2 text-primary opacity-20">●</span>}
             </CardTitle>
           </div>
         </div>
