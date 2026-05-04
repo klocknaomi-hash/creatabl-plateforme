@@ -207,7 +207,7 @@ function MediaItem({
                     </div>
                     
                     <div className="flex flex-col items-center gap-1">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Fenêtre d'aperçu</p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Fenêtre de Preview</p>
                       <p className="text-[9px] text-muted-foreground/60 italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
                     </div>
                   </div>

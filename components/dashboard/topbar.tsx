@@ -12,14 +12,14 @@ import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const routeTitles: Record<string, string> = {
-  "/dashboard": "Tableau de bord",
+  "/dashboard": "Dashboard",
   "/dashboard/posts": "Posts",
-  "/dashboard/compose": "Créer un post",
+  "/dashboard/compose": "Créer un Post",
   "/dashboard/calendar": "Calendrier",
-  "/dashboard/analytics": "Statistiques",
+  "/dashboard/analytics": "Analytics",
   "/dashboard/accounts": "Comptes connectés",
-  "/dashboard/billing": "Facturation",
-  "/dashboard/settings": "Paramètres",
+  "/dashboard/billing": "Billing",
+  "/dashboard/settings": "Settings",
 };
 
 export function Topbar() {
@@ -60,7 +60,7 @@ export function Topbar() {
           className="hidden sm:inline-flex"
         >
           <PenSquare />
-          Créer un post
+          Créer un Post
         </Button>
 
         {/* New Post — icon only on mobile */}
@@ -70,7 +70,7 @@ export function Topbar() {
           variant="ghost"
           render={<Link href="/dashboard/compose" />}
           className="sm:hidden"
-          aria-label="Nouveau post"
+          aria-label="Nouveau Post"
         >
           <PenSquare />
         </Button>
@@ -97,7 +97,7 @@ export function Topbar() {
         >
           <UserButton.MenuItems>
             <UserButton.Link
-              label="Paramètres"
+              label="Settings"
               labelIcon={<Settings className="size-4" />}
               href="/dashboard/settings"
             />
