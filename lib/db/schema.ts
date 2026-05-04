@@ -17,8 +17,10 @@ export const users = pgTable('users', {
   monthlyAiCount: integer("monthly_ai_count").default(0),
   monthlyPostCount: integer("monthly_post_count").default(0),
   selectedPlan: text("selected_plan").default("starter"),
+  trialStartedAt: timestamp("trial_started_at"),
   trialEndsAt: timestamp("trial_ends_at"),
   subscriptionId: text("subscription_id"),
+  isSubscribed: boolean("is_subscribed").default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
