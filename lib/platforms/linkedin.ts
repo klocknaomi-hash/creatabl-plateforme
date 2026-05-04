@@ -13,7 +13,7 @@ export class LinkedInClient implements PlatformClient {
 
     if (!baseUrl) {
       console.warn('LinkedInClient: NEXT_PUBLIC_APP_URL is not configured. Falling back to localhost for development.');
-      baseUrl = 'http://localhost:3000';
+      baseUrl = 'https://app.creatabl-ia.com';
     }
 
     // Ensure it starts with http/https
