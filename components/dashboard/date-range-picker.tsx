@@ -41,9 +41,9 @@ export function DateRangePicker({
   };
 
   const presets = [
-    { label: "Last 7 days", days: 7 },
-    { label: "Last 30 days", days: 30 },
-    { label: "Last 90 days", days: 90 },
+    { label: "7 derniers jours", days: 7 },
+    { label: "30 derniers jours", days: 30 },
+    { label: "90 derniers jours", days: 90 },
   ];
 
   return (
@@ -72,7 +72,7 @@ export function DateRangePicker({
               format(date.from, "LLL dd, y")
             )
           ) : (
-            <span>Pick a date</span>
+            <span>Choisir une date</span>
           )}
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0 flex" align="start">

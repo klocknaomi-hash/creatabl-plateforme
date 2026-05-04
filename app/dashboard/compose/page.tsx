@@ -43,11 +43,11 @@ interface MediaFile {
 }
 
 const TONES = [
-  { value: "professional", label: "Professional", icon: "💼" },
+  { value: "professional", label: "Professionnel", icon: "💼" },
   { value: "storytelling", label: "Storytelling", icon: "📖" },
   { value: "viral", label: "Viral", icon: "🚀" },
-  { value: "educational", label: "Educational", icon: "🎓" },
-  { value: "conversational", label: "Conversational", icon: "💬" },
+  { value: "educational", label: "Éducatif", icon: "🎓" },
+  { value: "conversational", label: "Conversationnel", icon: "💬" },
 ];
 
 function ComposePageInner() {
@@ -271,7 +271,7 @@ function ComposePageInner() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Créer un Post</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Créer un post</h1>
             <AnimatePresence>
               {saveStatus !== "idle" && (
                 <motion.div 
@@ -293,7 +293,7 @@ function ComposePageInner() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="rounded-xl shadow-sm text-sm" onClick={() => handlePost(true)} disabled={loading}>
-            <Save className="size-3.5 mr-1.5" /> Enregistrer le Draft
+            <Save className="size-3.5 mr-1.5" /> Enregistrer le brouillon
           </Button>
           <Button 
             onClick={() => handlePost(false)} 
@@ -304,7 +304,7 @@ function ComposePageInner() {
             {loading ? <Loader2 className="size-3.5 mr-1.5 animate-spin" /> : (
               scheduledAt ? <Calendar className="size-3.5 mr-1.5" /> : <Send className="size-3.5 mr-1.5" />
             )}
-            {scheduledAt ? "Programmer le Post" : "Publier maintenant"}
+            {scheduledAt ? "Programmer" : "Publier maintenant"}
           </Button>
         </div>
       </div>
@@ -360,7 +360,7 @@ function ComposePageInner() {
 
           {/* Media Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Média</h3>
+            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Médias</h3>
             <MediaUploader 
               mediaFiles={mediaFiles} 
               selectedPlatforms={selectedPlatforms}
@@ -383,7 +383,7 @@ function ComposePageInner() {
           <div className="flex justify-end pt-2">
              <Button className="rounded-xl shadow-lg shadow-primary/20 text-sm font-bold bg-foreground text-background" onClick={() => handlePost(false)} disabled={loading || !content.trim()}>
             {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-            {scheduledAt ? "Programmer le Post" : "Publier maintenant"}
+            {scheduledAt ? "Programmer" : "Publier maintenant"}
           </Button>
           </div>
         </div>
@@ -404,7 +404,7 @@ function ComposePageInner() {
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
               <Wand2 className="w-5 h-5 text-foreground" />
-              Générateur de Post IA
+              Générateur de post IA
             </DialogTitle>
             <DialogDescription className="text-xs">
               Décrivez votre sujet et Gemini va générer une légende parfaite pour vous.
@@ -414,7 +414,7 @@ function ComposePageInner() {
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sujet</Label>
               <Textarea 
-                placeholder="ex. Écrire un Post sur le lancement de notre nouvelle fonctionnalité IA..."
+                placeholder="ex. Écrire un post sur le lancement de notre nouvelle fonctionnalité IA..."
                 className="min-h-[100px] rounded-xl resize-none border focus-visible:ring-1 focus-visible:ring-foreground bg-muted/5"
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
@@ -446,7 +446,7 @@ function ComposePageInner() {
             <Button variant="outline" size="sm" onClick={() => setIsAiDialogOpen(false)} className="rounded-lg text-xs">Annuler</Button>
             <Button onClick={handleGeneratePost} size="sm" disabled={generating || !aiPrompt} className="rounded-lg px-6 bg-foreground text-background text-xs">
               {generating ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
-              Générer le Post
+              Générer le post
             </Button>
           </DialogFooter>
         </DialogContent>

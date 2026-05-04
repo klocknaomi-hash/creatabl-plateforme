@@ -35,7 +35,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
 
   const handleGenerateAI = async () => {
     if (!aiPrompt) {
-      toast.error("Please enter a prompt for the AI");
+      toast.error("Veuillez entrer un prompt pour l'IA");
       return;
     }
 
@@ -56,7 +56,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       if (data.result) {
         onChange(data.result);
         setAiPrompt("");
-        toast.success("AI Caption generated!");
+        toast.success("Caption IA générée !");
       } else {
         throw new Error(data.error || "Failed to generate caption");
       }
@@ -71,7 +71,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
     <div className="space-y-4">
       <div className="relative group">
         <Textarea
-          placeholder="What's on your mind?..."
+          placeholder="Quoi de neuf ?..."
           className="min-h-[160px] text-base leading-relaxed resize-none p-4 pb-10 rounded-xl border border-border/60 focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground transition-all bg-muted/5"
           value={content}
           onChange={(e) => onChange(e.target.value)}
@@ -95,7 +95,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             })()
           ) : (
             <div className="text-[10px] font-medium text-muted-foreground/60 italic">
-              Select platform to see character limit
+              Sélectionnez une plateforme pour voir la limite de caractères
             </div>
           )}
         </div>
@@ -116,7 +116,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       <div className="p-3.5 rounded-xl border border-dashed border-border bg-muted/5 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
-            AI Magic Box <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+            Boîte magique IA <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
           </span>
           <Button 
             variant="link" 
@@ -124,13 +124,13 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             onClick={onOpenAiDialog}
             className="h-auto p-0 text-[10px] font-semibold text-muted-foreground hover:text-foreground transition-colors"
           >
-            Open Studio
+            Ouvrir le Studio
           </Button>
         </div>
         
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Describe your post idea..."
+            placeholder="Décrivez votre idée de post..."
             className="h-9 text-sm rounded-lg border-border/40 bg-background shadow-none focus-visible:ring-1 focus-visible:ring-foreground"
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}
@@ -142,7 +142,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             disabled={generating || !aiPrompt}
             className="rounded-lg px-4 h-9 font-bold bg-foreground text-background hover:bg-foreground/90 transition-all shadow-sm"
           >
-            {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Magic"}
+            {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Magie"}
           </Button>
         </div>
       </div>

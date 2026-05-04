@@ -20,7 +20,7 @@ export default async function BillingPage() {
     <div className="flex flex-col gap-10">
       {/* Page Header */}
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Billing & Plan</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Facturation</h1>
         <p className="text-muted-foreground text-sm font-medium">
           Gérez votre Plan et consultez vos limites de consommation.
         </p>

@@ -41,12 +41,12 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
     <section className="space-y-8 mt-12 pb-12">
       <div className="flex items-center justify-between px-1">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">Top Content</h2>
-          <p className="text-sm font-medium text-muted-foreground/60">Your best performing posts across all social networks</p>
+          <h2 className="text-2xl font-bold tracking-tight">Meilleurs posts</h2>
+          <p className="text-sm font-medium text-muted-foreground/60">Vos posts les plus performants sur tous les réseaux sociaux</p>
         </div>
         <Button variant="ghost" size="sm" className="text-violet-600 font-bold">
           <Link href="/dashboard/analytics">
-            View detailed analytics
+            Voir l'Analytics détaillé
           </Link>
         </Button>
       </div>
@@ -57,8 +57,8 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
             <TrendingUp className="size-12 text-muted-foreground/20" />
           </div>
           <div className="space-y-2">
-            <p className="text-xl font-bold">No performance data yet</p>
-            <p className="text-sm text-muted-foreground/40 max-w-sm mx-auto">Once you start posting, we'll showcase your most successful content here with detailed metrics.</p>
+            <p className="text-xl font-bold">Aucune donnée de performance pour le moment</p>
+            <p className="text-sm text-muted-foreground/40 max-w-sm mx-auto">Une fois que vous commencerez à publier, nous afficherons vos posts les plus réussis ici avec des métriques détaillées.</p>
           </div>
         </Card>
       ) : topPosts.length > 0 ? (
@@ -75,7 +75,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
                         <Icon className="size-6" />
                       </div>
                       <Badge variant="secondary" className="rounded-full bg-emerald-500/10 text-emerald-600 border-none font-bold text-[10px] px-3 py-1 uppercase tracking-wider">
-                        Best Performing
+                        Meilleure performance
                       </Badge>
                     </div>
                     
@@ -98,7 +98,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
                           <MessageCircle className="size-4" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest leading-none mb-1">Comments</p>
+                          <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest leading-none mb-1">Commentaires</p>
                           <p className="text-sm font-black leading-none">{post.comments?.toLocaleString() || "0"}</p>
                         </div>
                       </div>
@@ -107,7 +107,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
                           <Repeat2 className="size-4" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest leading-none mb-1">Shares</p>
+                          <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest leading-none mb-1">Partages</p>
                           <p className="text-sm font-black leading-none">{post.shares?.toLocaleString() || "0"}</p>
                         </div>
                       </div>
@@ -129,7 +129,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
         </div>
       ) : (
         <div className="rounded-[2.5rem] border border-dashed border-border/50 p-20 text-center bg-muted/5">
-          <p className="text-base font-bold text-muted-foreground/40 italic">Waiting for more data to highlight your top content</p>
+          <p className="text-base font-bold text-muted-foreground/40 italic">En attente de plus de données pour mettre en avant votre contenu</p>
         </div>
       )}
     </section>

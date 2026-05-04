@@ -62,7 +62,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
   const { generate, loading } = useGeneratePost({ 
     onSuccess: (res: string) => {
       onResult(res);
-      toast.success("Magic applied!");
+      toast.success("Magie appliquée !");
     },
     onError: (err: string) => toast.error(err)
   });
@@ -238,17 +238,17 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                   }
                 >
                   <Type className="size-3.5" />
-                  <span>Tone</span>
+                  <span>Ton</span>
                   <ChevronDown className="size-3 opacity-40" />
                 </TooltipTrigger>
-                <TooltipContent>Change post tone</TooltipContent>
+                <TooltipContent>Changer le ton du post</TooltipContent>
               </Tooltip>
               <DropdownMenuContent 
                 align="start" 
                 className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl bg-background/95"
               >
                 <div className="px-3 py-2 mb-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choose a voice</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choisissez une voix</p>
                 </div>
                 {TONES.map((t) => (
                   <DropdownMenuItem
@@ -292,10 +292,10 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                     }
                   >
                     <Smartphone className="size-3.5 transition-transform group-hover:scale-110" />
-                    <span className="capitalize">{platform} Ready</span>
+                    <span className="capitalize">{platform} Prêt</span>
                     <ArrowRight className="size-3 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                   </TooltipTrigger>
-                  <TooltipContent>Optimize specifically for {platform}</TooltipContent>
+                  <TooltipContent>Optimiser spécifiquement pour {platform}</TooltipContent>
                 </Tooltip>
               </>
             )}
@@ -317,7 +317,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                     <div className="size-1.5 rounded-full bg-destructive" />
                   )}
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
-                    {saveStatus === "saving" ? "Saving" : saveStatus === "saved" ? "Saved" : "Error"}
+                    {saveStatus === "saving" ? "Enregistrement" : saveStatus === "saved" ? "Enregistré" : "Erreur"}
                   </span>
                 </motion.div>
               )}

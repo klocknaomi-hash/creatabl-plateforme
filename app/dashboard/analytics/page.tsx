@@ -126,7 +126,7 @@ export default async function AnalyticsPage(props: {
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Analytics</h1>
           <p className="text-muted-foreground text-sm font-medium">
-            Aperçu personnalisé des performances
+            Vue d'ensemble
           </p>
         </div>
 
@@ -153,7 +153,7 @@ export default async function AnalyticsPage(props: {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Total des Posts</CardTitle>
+            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Total posts</CardTitle>
             <TrendingUp className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
@@ -165,7 +165,7 @@ export default async function AnalyticsPage(props: {
         </Card>
         <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Reach total</CardTitle>
+            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Portée totale</CardTitle>
             <Users className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
@@ -176,7 +176,7 @@ export default async function AnalyticsPage(props: {
 
         <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Engagement</CardTitle>
+            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Taux d'engagement</CardTitle>
             <MousePointer2 className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
@@ -203,7 +203,7 @@ export default async function AnalyticsPage(props: {
         {/* Line Chart: Reach over time */}
         <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
-            <CardTitle className="font-bold text-sm">Reach & Impressions</CardTitle>
+            <CardTitle className="font-bold text-sm">Performance</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
               {selectedPlatform ? `Performance de ${selectedPlatform}` : "Sur toutes les plateformes"}
             </CardDescription>
@@ -214,7 +214,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold uppercase tracking-widest">Pas de données pour cette période</p>
+                <p className="text-xs font-bold uppercase tracking-widest">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -223,7 +223,7 @@ export default async function AnalyticsPage(props: {
         {/* Donut Chart: Platform Distribution */}
         <Card className="col-span-3 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
-            <CardTitle className="font-bold text-sm">Distribution par plateforme</CardTitle>
+            <CardTitle className="font-bold text-sm">Réseaux</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Posts publiés par Plateforme</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px] pt-4">
@@ -232,7 +232,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold uppercase tracking-widest">Pas de données de plateforme</p>
+                <p className="text-xs font-bold uppercase tracking-widest">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -243,8 +243,8 @@ export default async function AnalyticsPage(props: {
         {/* Bar Chart: Posts per day */}
         <Card className="col-span-3 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
-            <CardTitle className="font-bold text-sm">Vitesse du contenu</CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Nombre de Posts publiés par jour</CardDescription>
+            <CardTitle className="font-bold text-sm">Croissance</CardTitle>
+            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Nombre de posts publiés par jour</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px] pt-4">
             {data.postsPerDay.length > 0 ? (
@@ -252,7 +252,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold uppercase tracking-widest">Aucune activité trouvée</p>
+                <p className="text-xs font-bold uppercase tracking-widest">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -261,15 +261,15 @@ export default async function AnalyticsPage(props: {
         {/* Post Performance Table */}
         <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
-            <CardTitle className="font-black text-lg">Performance des Posts</CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Détail de vos Posts récents</CardDescription>
+            <CardTitle className="font-black text-lg">Meilleurs posts</CardTitle>
+            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Détail de vos posts récents</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent border-border/50">
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Plateforme</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Légende</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Réseau</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Caption</TableHead>
                   <TableHead className="text-right text-[10px] font-black uppercase tracking-widest">Likes</TableHead>
                   <TableHead className="text-right text-[10px] font-black uppercase tracking-widest">Reach</TableHead>
                   <TableHead className="text-right text-[10px] font-black uppercase tracking-widest">ER%</TableHead>
@@ -310,7 +310,7 @@ export default async function AnalyticsPage(props: {
                 }) : (
                   <TableRow>
                     <TableCell colSpan={5} className="h-32 text-center opacity-40">
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em]">Aucun Post ne correspond aux critères</p>
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em]">Aucun post ne correspond aux critères</p>
                     </TableCell>
                   </TableRow>
                 )}

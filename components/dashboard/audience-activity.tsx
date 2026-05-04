@@ -24,13 +24,13 @@ export async function AudienceActivity() {
         <div className="space-y-1.5">
           <CardTitle className="text-xl font-bold flex items-center gap-2">
             <BarChart3 className="size-5 text-violet-600" />
-            Audience activity
+            Activité de l'audience
           </CardTitle>
-          <CardDescription className="text-sm font-medium">Daily engagement and growth performance</CardDescription>
+          <CardDescription className="text-sm font-medium">Performance quotidienne de l'engagement et de la croissance</CardDescription>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="rounded-full text-xs border-violet-600/20 bg-violet-600/5 text-violet-600 font-bold px-4 py-1">
-            Last 7 Days
+            7 derniers jours
           </Badge>
         </div>
       </CardHeader>

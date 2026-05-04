@@ -46,7 +46,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
     try {
       const result = await saveSettingsAction(settings);
       if (result.success) {
-        toast.success("Settings saved successfully");
+        toast.success("Paramètres enregistrés avec succès");
         router.refresh();
       } else {
         toast.error(result.error || "Failed to save settings");
@@ -78,10 +78,10 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-2 border-b border-border/40">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Settings
+            Paramètres
           </h1>
           <p className="text-muted-foreground text-sm font-medium">
-            Manage your notification preferences and application configurations.
+            Gérez vos préférences de notification et les configurations de l'application.
           </p>
         </div>
         <Button 
@@ -90,7 +90,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
           className="w-full sm:w-auto gap-2 h-10 px-6 font-semibold text-xs shadow-lg shadow-primary/20 transition-all active:scale-95 rounded-xl"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Save Changes
+          Enregistrer
         </Button>
       </div>
 
@@ -110,8 +110,8 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
           <CardContent className="p-8 space-y-10">
             <div className="flex items-center justify-between p-6 bg-muted/30 rounded-[24px] border border-border/20">
               <div className="space-y-1">
-                <Label className="text-sm font-semibold leading-none">Email Notifications</Label>
-                <p className="text-sm text-muted-foreground font-medium">Receive important account and platform updates via email.</p>
+                <Label className="text-sm font-semibold leading-none">Notifications par email</Label>
+                <p className="text-sm text-muted-foreground font-medium">Recevez des mises à jour importantes sur votre compte et la plateforme par email.</p>
               </div>
               <Switch 
                 checked={settings.emailNotifications} 
@@ -126,16 +126,16 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             )}>
               <div className="flex items-center gap-3 ml-2">
                 <div className="h-px bg-border flex-1" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 whitespace-nowrap">Linked Subscriptions</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 whitespace-nowrap">Abonnements liés</span>
                 <div className="h-px bg-border flex-1" />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 {[
-                  { id: 'notifyNewComments', label: 'New Comments', desc: 'Alerts for post interactions' },
-                  { id: 'notifyNewFollowers', label: 'New Followers', desc: 'Growth alerts across accounts' },
-                  { id: 'notifyPostPerformance', label: 'Post Performance', desc: 'Engagement & reach summaries' },
-                  { id: 'notifyScheduledPosts', label: 'Scheduled Reminders', desc: 'Alerts before posts go live' },
+                  { id: 'notifyNewComments', label: 'Nouveaux commentaires', desc: 'Alertes pour les interactions sur les posts' },
+                  { id: 'notifyNewFollowers', label: 'Nouveaux abonnés', desc: 'Alertes de croissance sur vos comptes' },
+                  { id: 'notifyPostPerformance', label: 'Performance des posts', desc: 'Résumés de l\'engagement et du reach' },
+                  { id: 'notifyScheduledPosts', label: 'Rappels de programmation', desc: 'Alertes avant que les posts ne soient publiés' },
                 ].map((item) => (
                   <div 
                     key={item.id} 
@@ -168,19 +168,19 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
               <div className="bg-primary/10 p-2.5 rounded-xl">
                 <Settings2 className="size-4 text-primary" />
               </div>
-              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Preferences</CardTitle>
+              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Préférences</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-12">
             {/* Timezone */}
             <div className="space-y-4">
               <div className="space-y-1">
-                <Label className="text-sm font-semibold">Timezone</Label>
-                <p className="text-sm text-muted-foreground font-medium">Used for post scheduling and analytics reporting</p>
+                <Label className="text-sm font-semibold">Fuseau horaire</Label>
+                <p className="text-sm text-muted-foreground font-medium">Utilisé pour la programmation des posts et les rapports d'analytics</p>
               </div>
               <Select value={settings.timezone} onValueChange={(v) => handleSelect('timezone', v)}>
                 <SelectTrigger className="max-w-md h-12 bg-muted/20 border-border/40 rounded-xl px-4 font-bold text-sm">
-                  <SelectValue placeholder="Select timezone" />
+                  <SelectValue placeholder="Sélectionner un fuseau horaire" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="UTC">UTC (Coordinated Universal Time)</SelectItem>
@@ -194,8 +194,8 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             {/* Appearance */}
             <div className="space-y-5 pt-10 border-t border-border/40">
               <div className="space-y-1">
-                <Label className="text-sm font-semibold">Appearance</Label>
-                <p className="text-sm text-muted-foreground font-medium">Choose between light and dark theme for the interface.</p>
+                <Label className="text-sm font-semibold">Apparence</Label>
+                <p className="text-sm text-muted-foreground font-medium">Choisissez entre le thème clair et sombre pour l'interface.</p>
               </div>
               <div className="flex gap-4">
                 <button 
@@ -208,7 +208,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                   <div className={cn("p-2.5 rounded-xl", theme === 'light' ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                     <Sun className="size-5" />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest">Light</span>
+                  <span className="text-xs font-black uppercase tracking-widest">Clair</span>
                 </button>
                 <button 
                   onClick={() => setTheme('dark')}
@@ -220,7 +220,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                   <div className={cn("p-2.5 rounded-xl", theme === 'dark' ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                     <Moon className="size-5" />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest">Dark</span>
+                  <span className="text-xs font-black uppercase tracking-widest">Sombre</span>
                 </button>
               </div>
             </div>
@@ -228,20 +228,20 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             {/* Language & Locale */}
             <div className="grid md:grid-cols-2 gap-10 pt-10 border-t border-border/40">
               <div className="space-y-4">
-                <Label className="text-sm font-semibold">Language</Label>
+                <Label className="text-sm font-semibold">Langue</Label>
                 <Select value={settings.language} onValueChange={(v) => handleSelect('language', v)}>
                   <SelectTrigger className="h-12 bg-muted/20 border-border/40 rounded-xl px-4 font-bold text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="en">English (US)</SelectItem>
-                    <SelectItem value="es">Spanish</SelectItem>
-                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                    <SelectItem value="fr">Français</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-4">
-                <Label className="text-sm font-semibold">Regional Locale</Label>
+                <Label className="text-sm font-semibold">Région</Label>
                 <Select value={settings.locale} onValueChange={(v) => handleSelect('locale', v)}>
                   <SelectTrigger className="h-12 bg-muted/20 border-border/40 rounded-xl px-4 font-bold text-sm">
                     <SelectValue />
@@ -265,14 +265,14 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
               <div className="bg-destructive/10 p-2.5 rounded-xl">
                 <Save className="size-4 text-destructive" />
               </div>
-              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Data Management</CardTitle>
+              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Gestion des données</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-6">
             <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-[24px] border border-destructive/10">
               <div className="space-y-1">
-                <Label className="text-sm font-bold text-destructive">Export Your Personal Data</Label>
-                <p className="text-xs text-muted-foreground font-medium max-w-md">Download a complete archive of your posts, analytics, and account settings in JSON format.</p>
+                <Label className="text-sm font-bold text-destructive">Exporter vos données personnelles</Label>
+                <p className="text-xs text-muted-foreground font-medium max-w-md">Téléchargez une archive complète de vos posts, analytics et paramètres de compte au format JSON.</p>
               </div>
               <Button 
                 variant="outline" 
@@ -281,7 +281,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                 onClick={handleExport}
                 className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all font-bold px-5"
               >
-                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Export Data"}
+                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Exporter les données"}
               </Button>
             </div>
           </CardContent>

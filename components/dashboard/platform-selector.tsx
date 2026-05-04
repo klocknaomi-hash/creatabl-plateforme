@@ -15,7 +15,7 @@ export function PlatformSelector({
   const currentPlatform = searchParams.get("platform") || "all";
 
   const platforms = [
-    { id: "all", label: "All Platforms", icon: null },
+    { id: "all", label: "Tous les réseaux", icon: null },
     { id: "twitter", label: "X / Twitter", icon: TwitterIcon },
     { id: "instagram", label: "Instagram", icon: InstagramIcon },
     { id: "facebook", label: "Facebook", icon: FacebookIcon },
@@ -35,7 +35,7 @@ export function PlatformSelector({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">Select Platform</h3>
+        <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">Filtrer par réseau</h3>
       </div>
       <div className="flex flex-wrap gap-1.5">
         {platforms.map((p) => {

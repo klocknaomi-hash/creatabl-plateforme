@@ -30,8 +30,8 @@ import {
 import { DisconnectButton } from './disconnect-button';
 
 export const metadata: Metadata = {
-  title: 'Connected Accounts | Creatabl.ia',
-  description: 'Manage your connected social media accounts.',
+  title: 'Comptes connectés | Creatabl.ia',
+  description: 'Gérez vos comptes connectés.',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -123,16 +123,16 @@ export default async function AccountsPage({
   return (
     <div className="flex-1 space-y-6 max-w-6xl mx-auto w-full">
       <div className="flex flex-col space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Connected Accounts</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Comptes connectés</h1>
         <p className="text-muted-foreground">
-          Connect your social media profiles to start scheduling and automating your content.
+          Connecte tes comptes pour programmer et automatiser ton contenu.
         </p>
       </div>
 
       {success && (
         <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl text-sm font-medium flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
           <CheckCircle2 className="h-4 w-4" />
-          Successfully connected your account!
+          Compte connecté avec succès !
         </div>
       )}
 
@@ -145,10 +145,10 @@ export default async function AccountsPage({
       {limitReached && (
         <Alert variant="destructive" className="bg-destructive/5 border-destructive/20">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Account Limit Reached</AlertTitle>
+          <AlertTitle>Limite de comptes atteinte</AlertTitle>
           <AlertDescription>
-            You have connected {current} of your {limit} accounts. 
-            <Link href="/dashboard/billing" className="ml-1 font-semibold underline">Upgrade to Pro</Link> to connect more.
+            Tu as connecté {current} de tes {limit} comptes. 
+            <Link href="/dashboard/billing" className="ml-1 font-semibold underline">Upgrade au Plan Pro</Link> pour en connecter plus.
           </AlertDescription>
         </Alert>
       )}
@@ -170,18 +170,18 @@ export default async function AccountsPage({
                       {platform.name}
                     </CardTitle>
                     {platform.comingSoon && (
-                      <Badge variant="secondary" className="text-[10px] h-4 py-0 leading-none">Coming Soon</Badge>
+                      <Badge variant="secondary" className="text-[10px] h-4 py-0 leading-none">Bientôt disponible</Badge>
                     )}
                   </div>
                 </div>
                 {connected ? (
                   <Badge variant="default" className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none px-2 py-0.5">
                     <CheckCircle2 className="mr-1 h-3 w-3" />
-                    Connected
+                    Connecté
                   </Badge>
                 ) : (
                   <Badge variant="secondary" className="bg-muted/50 text-muted-foreground border-none px-2 py-0.5">
-                    Not Connected
+                    Non connecté
                   </Badge>
                 )}
               </CardHeader>
@@ -198,7 +198,7 @@ export default async function AccountsPage({
                         </Avatar>
                         <div className="flex flex-col min-w-0">
                           <p className="text-sm font-semibold truncate leading-tight">
-                            {typeof connected.username === 'string' ? connected.username : 'Connected Account'}
+                            {typeof connected.username === 'string' ? connected.username : 'Compte connecté'}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
                             {typeof connected.platformUserId === 'string' ? connected.platformUserId : ''}
@@ -208,8 +208,8 @@ export default async function AccountsPage({
                     ) : (
                       <p className="text-xs text-muted-foreground leading-relaxed">
                         {platform.comingSoon 
-                          ? 'We are working on bringing this integration to you.' 
-                          : `Manage your ${platform.name} presence directly from Creatabl.`}
+                          ? 'Nous travaillons pour intégrer ce réseau prochainement.' 
+                          : `Gère ta présence sur ${platform.name} directement depuis Creatabl.`}
                       </p>
                     )}
                   </div>
@@ -220,7 +220,7 @@ export default async function AccountsPage({
                     ) : platform.comingSoon ? (
                       <div className="h-9 flex items-center justify-center rounded-md bg-muted/30 border border-dashed border-border/50">
                         <p className="text-[11px] text-muted-foreground font-medium italic">
-                          We are working on bringing this integration to you.
+                          Nous travaillons pour intégrer ce réseau prochainement.
                         </p>
                       </div>
                     ) : (
@@ -233,7 +233,7 @@ export default async function AccountsPage({
                         )}
                       >
                         <Plus className="mr-2 h-4 w-4" />
-                        Connect Account
+                        Connecter
                       </Link>
                     )}
                   </div>

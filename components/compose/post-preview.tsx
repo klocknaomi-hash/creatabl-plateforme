@@ -50,8 +50,8 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
         <div className="w-12 h-12 rounded-full bg-muted/10 flex items-center justify-center mb-3">
           <TwitterIcon className="w-6 h-6 opacity-20" />
         </div>
-        <p className="text-sm font-bold text-foreground/80">Preview visuel</p>
-        <p className="text-xs max-w-[150px]">Sélectionnez une plateforme pour voir la preview de votre Post.</p>
+        <p className="text-sm font-bold text-foreground/80">Preview visuelle</p>
+        <p className="text-xs max-w-[150px]">Sélectionnez une plateforme pour voir la preview de votre post.</p>
       </div>
     );
   }
@@ -100,10 +100,10 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                   <Bookmark className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[12px] font-bold">1,234 likes</p>
+                  <p className="text-[12px] font-bold">1,234 Likes</p>
                   <p className="text-[12px] leading-snug">
                     <span className="font-bold mr-1.5">{username}</span>
-                    {content || "Your caption..."}
+                    {content || "Votre caption..."}
                   </p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                     <span className="text-muted-foreground text-[14px]">@{username.toLowerCase()} · 1m</span>
                   </div>
                   <p className="text-[14px] text-foreground leading-snug whitespace-pre-wrap">
-                    {content || "What's happening?"}
+                    {content || "Quoi de neuf ?"}
                   </p>
                   
                   {mediaFiles.length > 0 && (
@@ -176,7 +176,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
             </div>
             <CardContent className="p-0">
               <p className="px-3 pb-3 text-[14px] leading-tight whitespace-pre-wrap">
-                {content || "What's on your mind?"}
+                {content || "Quoi de neuf ?"}
               </p>
               {mediaFiles.length > 0 && (
                 <div className="bg-muted border-y border-border/40">
@@ -190,14 +190,14 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                     <span>12</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>4 comments</span>
-                    <span>2 shares</span>
+                    <span>4 commentaires</span>
+                    <span>2 partages</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between px-2">
-                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><Heart className="w-4 h-4" /> Like</div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><MessageCircle className="w-4 h-4" /> Comment</div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><Share2 className="w-4 h-4" /> Share</div>
+                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><Heart className="w-4 h-4" /> J'aime</div>
+                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><MessageCircle className="w-4 h-4" /> Commenter</div>
+                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><Share2 className="w-4 h-4" /> Partager</div>
                 </div>
               </div>
             </CardContent>
@@ -220,7 +220,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
             </div>
             <CardContent className="p-0">
               <p className="px-3 pb-3 text-[14px] leading-snug whitespace-pre-wrap">
-                {content || "What do you want to talk about?"}
+                {content || "De quoi voulez-vous discuter ?"}
               </p>
               {mediaFiles.length > 0 && (
                 <div className="bg-muted border-y border-border/40">
@@ -230,13 +230,13 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               <div className="p-3">
                 <div className="flex items-center gap-1 text-muted-foreground text-[11px] mb-3">
                   <span className="text-blue-600 font-bold">👍 45</span>
-                  <span>· 2 comments</span>
+                  <span>· 2 commentaires</span>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-border/40">
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Heart className="w-4 h-4" /> Like</div>
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><MessageCircle className="w-4 h-4" /> Comment</div>
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Repeat2 className="w-4 h-4" /> Repost</div>
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Send className="w-4 h-4" /> Send</div>
+                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Heart className="w-4 h-4" /> J'aime</div>
+                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><MessageCircle className="w-4 h-4" /> Commenter</div>
+                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Repeat2 className="w-4 h-4" /> Reposter</div>
+                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Send className="w-4 h-4" /> Envoyer</div>
                 </div>
               </div>
             </CardContent>

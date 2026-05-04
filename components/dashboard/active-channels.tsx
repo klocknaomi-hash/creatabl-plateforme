@@ -37,7 +37,7 @@ export async function ActiveChannels() {
     getCachedUserSettings(clerkId),
   ]);
 
-  const t = getTranslation(settings?.language || "en");
+  const t = getTranslation(settings?.language || "fr");
 
   return <ActiveChannelsView accounts={accounts || []} t={t} />;
 }

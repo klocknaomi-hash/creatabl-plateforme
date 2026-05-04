@@ -24,11 +24,11 @@ export function DisconnectButton({ platformId }: DisconnectButtonProps) {
         router.refresh();
       } else {
         const data = await response.json().catch(() => ({}));
-        alert(`Error: ${data.error || 'Failed to disconnect'}`);
+        alert(`Erreur: ${data.error || 'Échec de la déconnexion'}`);
       }
     } catch (error) {
       console.error('Disconnect error:', error);
-      alert('An unexpected error occurred.');
+      alert('Une erreur inattendue est survenue.');
     } finally {
       setIsPending(false);
       setIsConfirming(false);
@@ -44,7 +44,7 @@ export function DisconnectButton({ platformId }: DisconnectButtonProps) {
           disabled={isPending}
           className="flex-1 h-7 items-center justify-center rounded-[min(var(--radius-md),12px)] border border-border bg-background px-2.5 text-[0.8rem] font-medium transition-all hover:bg-muted disabled:opacity-50"
         >
-          Cancel
+          Annuler
         </button>
         <button 
           type="button"
@@ -52,7 +52,7 @@ export function DisconnectButton({ platformId }: DisconnectButtonProps) {
           disabled={isPending}
           className="flex-1 h-7 items-center justify-center rounded-[min(var(--radius-md),12px)] border border-destructive/20 bg-destructive text-destructive-foreground px-2.5 text-[0.8rem] font-medium transition-all hover:bg-destructive/90 disabled:opacity-50"
         >
-          {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Confirm'}
+          {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Confirmer'}
         </button>
       </div>
     );
@@ -65,7 +65,7 @@ export function DisconnectButton({ platformId }: DisconnectButtonProps) {
       className="inline-flex h-7 w-full items-center justify-center gap-1 rounded-[min(var(--radius-md),12px)] border border-destructive/20 bg-background px-2.5 text-[0.8rem] font-medium text-destructive transition-all hover:bg-destructive/5 hover:border-destructive/30"
     >
       <Trash2 className="mr-2 h-3.5 w-3.5" />
-      Disconnect
+      Supprimer
     </button>
   );
 }

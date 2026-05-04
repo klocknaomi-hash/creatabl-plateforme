@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 import { format, subWeeks, addWeeks, startOfWeek, endOfWeek, parseISO } from "date-fns";
+import { fr } from "date-fns/locale";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -43,7 +44,7 @@ export function AnalyticsNavigation() {
       <div className="flex items-center gap-2 px-3 h-8 border-x border-border/40">
         <CalendarIcon className="size-3.5 text-primary/60" />
         <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap">
-          {format(weekStart, "MMM d")} - {format(weekEnd, "MMM d, yyyy")}
+          {format(weekStart, "MMM d", { locale: fr })} - {format(weekEnd, "MMM d, yyyy", { locale: fr })}
         </span>
       </div>
 

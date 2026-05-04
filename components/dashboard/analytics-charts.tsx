@@ -29,7 +29,7 @@ export function ReachLineChart({ data }: { data: any[] }) {
           axisLine={false}
           tickFormatter={(str) => {
             const date = new Date(str);
-            return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+            return date.toLocaleDateString("fr-FR", { month: "short", day: "numeric" });
           }}
         />
         <YAxis 
@@ -45,7 +45,7 @@ export function ReachLineChart({ data }: { data: any[] }) {
           stroke="#8884d8" 
           strokeWidth={2}
           dot={false}
-          name="Reach"
+          name="Portée totale"
         />
         <Line 
           type="monotone" 
@@ -53,7 +53,7 @@ export function ReachLineChart({ data }: { data: any[] }) {
           stroke="#82ca9d" 
           strokeWidth={2}
           dot={false}
-          name="Impressions"
+          name="Impressions totales"
         />
       </ReLineChart>
     </ResponsiveContainer>
@@ -96,7 +96,7 @@ export function ContentVelocityChart({ data }: { data: any[] }) {
           axisLine={false}
           tickFormatter={(str) => {
             const date = new Date(str);
-            return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+            return date.toLocaleDateString("fr-FR", { month: "short", day: "numeric" });
           }}
         />
         <YAxis 

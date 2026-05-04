@@ -26,7 +26,7 @@ export async function StatsRow() {
     getCachedAccounts(clerkId),
   ]);
 
-  const t = getTranslation(settings?.language || "en");
+  const t = getTranslation(settings?.language || "fr");
   const hasAccounts = (accounts || []).length > 0;
   const hasPosts = Number(stats.totalPosts || 0) > 0;
 
@@ -47,7 +47,7 @@ export function StatsRowView({ summary, upcomingCount, hasAccounts, hasPosts, t 
       id: "stat-total-reach",
       title: t.totalReach,
       value: hasPosts ? (summary.totalReach?.toLocaleString() || "0") : "0",
-      description: "Across platforms",
+      description: "Toutes plateformes",
       icon: Users,
       trend: hasPosts ? "+12%" : "---",
       variant: "violet"
@@ -56,7 +56,7 @@ export function StatsRowView({ summary, upcomingCount, hasAccounts, hasPosts, t 
       id: "stat-engagement",
       title: t.engagement,
       value: hasPosts ? `${summary.avgEngagementRate?.toFixed(1) || "0.0"}%` : "0.0%",
-      description: "Average rate",
+      description: "Taux moyen",
       icon: TrendingUp,
       trend: hasPosts ? "+2.4%" : "---",
       variant: "violet"
@@ -65,18 +65,18 @@ export function StatsRowView({ summary, upcomingCount, hasAccounts, hasPosts, t 
       id: "stat-scheduled",
       title: t.scheduled,
       value: upcomingCount || "0",
-      description: "In pipeline",
+      description: "En pipeline",
       icon: CalendarIcon,
-      trend: "Upcoming",
+      trend: "À venir",
       variant: "violet"
     },
     {
       id: "stat-drafts",
       title: t.drafts,
       value: summary.totalDrafts || "0",
-      description: "Ready to polish",
+      description: "Prêt à peaufiner",
       icon: FileText,
-      trend: "In progress",
+      trend: "En cours",
       variant: "violet"
     },
   ];
@@ -113,12 +113,12 @@ export function StatsRowView({ summary, upcomingCount, hasAccounts, hasPosts, t 
                 {!hasAccounts && !card.id.includes("drafts") && !card.id.includes("scheduled") ? (
                   <div className="space-y-2">
                     <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{card.title}</p>
-                    <p className="text-sm font-bold text-violet-600 group-hover:underline">Connect accounts</p>
+                    <p className="text-sm font-bold text-violet-600 group-hover:underline">Connecter des comptes</p>
                   </div>
                 ) : hasAccounts && !hasPosts && !card.id.includes("drafts") && !card.id.includes("scheduled") ? (
                   <div className="space-y-2">
                     <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{card.title}</p>
-                    <p className="text-sm font-bold text-muted-foreground/60 italic">No data available</p>
+                    <p className="text-sm font-bold text-muted-foreground/60 italic">Aucune donnée disponible</p>
                   </div>
                 ) : (
                   <div className="space-y-2">

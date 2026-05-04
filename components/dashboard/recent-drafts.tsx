@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { FileText, Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -47,7 +48,7 @@ export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
-                    {format(new Date(post.createdAt), "MMM d")}
+                    {format(new Date(post.createdAt), "MMM d", { locale: fr })}
                   </span>
                   <div className="flex -space-x-1.5">
                     {post.platforms?.map((p: string) => {
@@ -61,15 +62,15 @@ export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {
                     })}
                   </div>
                 </div>
-                <p className="text-sm font-bold line-clamp-1 text-foreground/80 group-hover:text-violet-600 transition-colors">{post.content || "Untitled draft..."}</p>
+                <p className="text-sm font-bold line-clamp-1 text-foreground/80 group-hover:text-violet-600 transition-colors">{post.content || "Draft sans titre..."}</p>
               </a>
             ))}
           </div>
         ) : (
           <div className="p-12 text-center flex flex-col items-center gap-3">
-            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">No drafts found</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">Aucun Draft trouvé</p>
             <Button variant="link" size="sm" className="text-sm font-bold text-violet-600 p-0 h-auto">
-              <a href="/dashboard/compose">Create a draft</a>
+              <a href="/dashboard/compose">Créer un Draft</a>
             </Button>
           </div>
         )}

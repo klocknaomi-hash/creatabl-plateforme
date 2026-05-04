@@ -67,7 +67,7 @@ async function DashboardHeader() {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
   const settings = await getCachedUserSettings(clerkId);
-  const t = getTranslation(settings?.language || "en");
+  const t = getTranslation(settings?.language || "fr");
 
   return (
     <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">

@@ -120,7 +120,7 @@ export function AppSidebar() {
       <SidebarContent>
         {/* Main */}
         <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navMain.map((item) => (
@@ -141,7 +141,7 @@ export function AppSidebar() {
 
         {/* Content */}
         <SidebarGroup>
-          <SidebarGroupLabel>Content</SidebarGroupLabel>
+          <SidebarGroupLabel>Contenu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navContent.map((item) => (
@@ -162,7 +162,7 @@ export function AppSidebar() {
 
         {/* Settings */}
         <SidebarGroup>
-          <SidebarGroupLabel>Settings</SidebarGroupLabel>
+          <SidebarGroupLabel>Paramètres</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navSettings.map((item) => (
@@ -211,7 +211,7 @@ export function AppSidebar() {
                 variant="secondary"
                 className="shrink-0 text-[10px] group-data-[collapsible=icon]:hidden"
               >
-                Free
+                Gratuit
               </Badge>
             </div>
           </SidebarMenuItem>

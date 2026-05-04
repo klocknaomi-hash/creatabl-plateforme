@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {
           <div className="size-10 rounded-xl bg-violet-600/10 flex items-center justify-center">
             <Clock className="size-5 text-violet-600" />
           </div>
-          Schedule
+          Scheduling
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
@@ -50,7 +51,7 @@ export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {
                     <div className="min-w-0 space-y-0.5">
                       <p className="text-sm font-bold line-clamp-1 group-hover:text-violet-600 transition-colors">{post.content}</p>
                       <p className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest">
-                        {format(new Date(post.scheduledAt), "h:mm a")} • {brand.label}
+                        {format(new Date(post.scheduledAt), "HH:mm", { locale: fr })} • {brand.label}
                       </p>
                     </div>
                   </div>
@@ -61,15 +62,15 @@ export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {
           </div>
         ) : (
           <div className="p-12 text-center flex flex-col items-center gap-3">
-            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">Queue is empty</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">La file d'attente est vide</p>
             <Button variant="link" size="sm" className="text-sm font-bold text-violet-600 p-0 h-auto">
-              <a href="/dashboard/compose">Schedule a post</a>
+              <a href="/dashboard/compose">Programmer un post</a>
             </Button>
           </div>
         )}
         <div className="p-4 bg-muted/20 border-t border-border/10">
           <Button variant="ghost" size="sm" className="w-full text-xs font-bold text-muted-foreground hover:text-violet-600">
-            <a href="/dashboard/calendar">View full calendar</a>
+            <a href="/dashboard/calendar">Voir le calendrier complet</a>
           </Button>
         </div>
       </CardContent>

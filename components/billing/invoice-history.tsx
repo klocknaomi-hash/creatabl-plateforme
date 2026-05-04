@@ -9,7 +9,7 @@ export function InvoiceHistory() {
           <div className="bg-primary/10 p-2 rounded-lg">
             <History className="size-4 text-primary" />
           </div>
-          <CardTitle className="text-sm font-black uppercase tracking-widest">Invoice History</CardTitle>
+          <CardTitle className="text-sm font-black uppercase tracking-widest">Historique</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="py-16">
@@ -18,9 +18,9 @@ export function InvoiceHistory() {
             <Receipt className="size-10 text-muted-foreground/30" />
           </div>
           <div className="space-y-1">
-            <h3 className="font-bold text-lg">No invoices found yet.</h3>
+            <h3 className="font-bold text-lg">Aucune facture trouvée.</h3>
             <p className="text-muted-foreground text-sm max-w-[280px]">
-              Visit your customer portal to view full billing history.
+              Consultez votre portail client pour voir l'historique complet.
             </p>
           </div>
         </div>
