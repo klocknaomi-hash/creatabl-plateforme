@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 const routeTitles: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/dashboard/posts": "Posts",
-  "/dashboard/compose": "Créer un Post",
+  "/dashboard/compose": "Créer un post",
   "/dashboard/calendar": "Calendrier",
   "/dashboard/analytics": "Analytics",
   "/dashboard/accounts": "Comptes connectés",
@@ -60,7 +60,7 @@ export function Topbar() {
           className="hidden sm:inline-flex"
         >
           <PenSquare />
-          Créer un Post
+          Créer un post
         </Button>
 
         {/* New Post — icon only on mobile */}
@@ -70,7 +70,7 @@ export function Topbar() {
           variant="ghost"
           render={<Link href="/dashboard/compose" />}
           className="sm:hidden"
-          aria-label="Nouveau Post"
+          aria-label="Nouveau post"
         >
           <PenSquare />
         </Button>

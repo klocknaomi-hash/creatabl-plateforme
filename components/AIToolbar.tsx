@@ -292,7 +292,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                     }
                   >
                     <Smartphone className="size-3.5 transition-transform group-hover:scale-110" />
-                    <span className="capitalize">{platform} Prêt</span>
+                    <span className="capitalize">{platform} Ready</span>
                     <ArrowRight className="size-3 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                   </TooltipTrigger>
                   <TooltipContent>Optimiser spécifiquement pour {platform}</TooltipContent>
