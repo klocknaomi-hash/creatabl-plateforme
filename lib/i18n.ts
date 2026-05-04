@@ -2,23 +2,23 @@ export type Language = "en" | "es" | "fr";
 
 export const translations = {
   en: {
-    dashboard: "Dashboard",
-    compose: "Compose",
+    dashboard: "Tableau de bord",
+    compose: "Créer un post",
     posts: "Posts",
-    calendar: "Calendar",
-    analytics: "Analytics",
-    accounts: "Connected Accounts",
-    billing: "Billing",
-    settings: "Settings",
-    newPost: "New Post",
-    totalReach: "Total Reach",
+    calendar: "Calendrier",
+    analytics: "Statistiques",
+    accounts: "Comptes connectés",
+    billing: "Facturation",
+    settings: "Paramètres",
+    newPost: "Créer un post",
+    totalReach: "Portée totale",
     engagement: "Engagement",
-    scheduled: "Scheduled",
-    drafts: "Drafts",
-    activeChannels: "Active Channels",
-    manageAccounts: "Manage Accounts",
-    myContentDashboard: "My content dashboard",
-    trackGrowth: "Track growth and optimise your posting strategy in real time.",
+    scheduled: "Programmé",
+    drafts: "Brouillons",
+    activeChannels: "Chaînes actives",
+    manageAccounts: "Gérer les comptes",
+    myContentDashboard: "Mon tableau de bord",
+    trackGrowth: "Suivez votre croissance et optimisez votre stratégie en temps réel.",
   },
   es: {
     dashboard: "Panel",
@@ -41,25 +41,25 @@ export const translations = {
   },
   fr: {
     dashboard: "Tableau de bord",
-    compose: "Composer",
-    posts: "Publications",
+    compose: "Créer un post",
+    posts: "Posts",
     calendar: "Calendrier",
-    analytics: "Analytique",
-    accounts: "Comptes Connectés",
+    analytics: "Statistiques",
+    accounts: "Comptes connectés",
     billing: "Facturation",
     settings: "Paramètres",
-    newPost: "Nouvelle Publication",
-    totalReach: "Portée Totale",
+    newPost: "Créer un post",
+    totalReach: "Portée totale",
     engagement: "Engagement",
     scheduled: "Programmé",
     drafts: "Brouillons",
-    activeChannels: "Chaînes Actives",
+    activeChannels: "Chaînes actives",
     manageAccounts: "Gérer les comptes",
     myContentDashboard: "Mon tableau de bord",
-    trackGrowth: "Suivez la croissance et optimisez votre stratégie de publication en temps réel.",
+    trackGrowth: "Suivez votre croissance et optimisez votre stratégie en temps réel.",
   }
 };
 
-export function getTranslation(lang: string = "en") {
-  return translations[lang as Language] || translations.en;
+export function getTranslation(lang: string = "fr") {
+  return translations[lang as Language] || translations.fr || translations.en;
 }

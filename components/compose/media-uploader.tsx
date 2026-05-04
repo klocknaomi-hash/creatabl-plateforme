@@ -105,7 +105,7 @@ function MediaItem({
                   variant="secondary" 
                   className="h-8 px-4 rounded-lg font-bold gap-1.5 transition-transform hover:scale-105 active:scale-95 bg-white text-black hover:bg-white/90 border-none shadow-sm"
                 >
-                  Edit
+                  Modifier
                 </Button>
               }
             />
@@ -118,8 +118,8 @@ function MediaItem({
                       <Sparkles className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <DialogTitle className="text-base font-bold">ImageKit AI Tools</DialogTitle>
-                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Transform with Artificial Intelligence</p>
+                      <DialogTitle className="text-base font-bold">Outils IA ImageKit</DialogTitle>
+                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Transformer avec l'IA</p>
                     </div>
                   </div>
                 </div>
@@ -128,8 +128,8 @@ function MediaItem({
                   {/* Left: Options */}
                   <div className="w-full md:w-[320px] flex flex-col bg-muted/20 p-5 border-r border-border/40 overflow-y-auto custom-scrollbar">
                     <div className="mb-4">
-                      <h4 className="text-[11px] font-bold uppercase tracking-widest text-foreground/60 mb-1">AI Enhancements</h4>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">Select a feature to enhance your media.</p>
+                      <h4 className="text-[11px] font-bold uppercase tracking-widest text-foreground/60 mb-1">Améliorations IA</h4>
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">Sélectionnez une fonctionnalité pour améliorer votre média.</p>
                     </div>
                     
                     <div className="space-y-2">
@@ -166,7 +166,7 @@ function MediaItem({
                                 onClick={() => applyTransformation(t)}
                                 className="w-full h-8 rounded-lg text-[10px] font-bold gap-1.5"
                               >
-                                <Wand2 className="w-3 h-3" /> Apply {t.label}
+                                <Wand2 className="w-3 h-3" /> Appliquer {t.label}
                               </Button>
                             </div>
                           )}
@@ -187,7 +187,7 @@ function MediaItem({
                       }}
                     >
                       <RefreshCcw className="w-3.5 h-3.5" />
-                      Reset to Original
+                      Réinitialiser l'original
                     </Button>
                   </div>
 
@@ -202,21 +202,21 @@ function MediaItem({
                       
                       {/* Loading indicator for the image itself */}
                       <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">AI Processing...</p>
+                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Traitement IA...</p>
                       </div>
                     </div>
                     
                     <div className="flex flex-col items-center gap-1">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Preview Window</p>
-                      <p className="text-[9px] text-muted-foreground/60 italic">AI transformations may take up to 30s to process initially</p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Fenêtre d'aperçu</p>
+                      <p className="text-[9px] text-muted-foreground/60 italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Footer */}
                 <div className="p-5 border-t border-border/40 bg-background flex justify-end gap-3">
-                  <Button variant="ghost" size="sm" className="rounded-xl h-10 px-6 text-xs font-bold" onClick={handleCancel}>Cancel</Button>
-                  <Button size="sm" className="rounded-xl h-10 px-8 text-xs font-bold bg-foreground text-background hover:opacity-90 shadow-lg shadow-foreground/10" onClick={handleSave}>Apply & Save</Button>
+                  <Button variant="ghost" size="sm" className="rounded-xl h-10 px-6 text-xs font-bold" onClick={handleCancel}>Annuler</Button>
+                  <Button size="sm" className="rounded-xl h-10 px-8 text-xs font-bold bg-foreground text-background hover:opacity-90 shadow-lg shadow-foreground/10" onClick={handleSave}>Appliquer & Enregistrer</Button>
                 </div>
               </div>
             </DialogContent>

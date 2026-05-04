@@ -20,8 +20,8 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
   }
 
   const tooltip = progress >= 1 
-    ? "Limite atteinte — renouvellement le 1er du mois" 
-    : `${used} générations utilisées sur ${limit} ce mois-ci`;
+    ? "Limit reached — renews on the 1st of the month" 
+    : `${used} generations used out of ${limit} this month`;
 
   return (
     <div 
@@ -50,7 +50,7 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
         ) : (
           <text x={size/2} y={(size/2) + 4} textAnchor="middle" 
             fontSize={size > 60 ? "12" : "8"} fontWeight="700" fill={color}>
-            LIMITE
+            LIMIT
           </text>
         )}
       </svg>

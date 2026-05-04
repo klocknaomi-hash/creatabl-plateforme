@@ -50,8 +50,8 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
         <div className="w-12 h-12 rounded-full bg-muted/10 flex items-center justify-center mb-3">
           <TwitterIcon className="w-6 h-6 opacity-20" />
         </div>
-        <p className="text-sm font-bold text-foreground/80">Visual Preview</p>
-        <p className="text-xs max-w-[150px]">Select a platform to see your post in action.</p>
+        <p className="text-sm font-bold text-foreground/80">Aperçu visuel</p>
+        <p className="text-xs max-w-[150px]">Sélectionnez une plateforme pour voir l'aperçu de votre post.</p>
       </div>
     );
   }

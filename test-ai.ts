@@ -6,7 +6,7 @@ async function test() {
   try {
     const res = await generatePost({
       content: "Ceci est un petit test",
-      action: "ameliorer",
+      action: "improve",
       provider: "gemini"
     });
     console.log("Success:", res);

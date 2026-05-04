@@ -46,9 +46,9 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           content: aiPrompt, 
-          action: "generer",
+          action: "generate",
           platform: selectedPlatforms[0] || "linkedin",
-          tone: tone || "professionnel"
+          tone: tone || "professional"
         }),
       });
 

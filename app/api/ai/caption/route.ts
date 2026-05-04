@@ -20,17 +20,17 @@ export async function POST(request: NextRequest) {
     // Use the unified generatePost function
     const result = await generatePost({
       content: prompt,
-      action: "generer",
+      action: "generate",
       platform: platforms && platforms.length > 0 ? platforms[0] : undefined,
-      tone: tone || "professionnel",
+      tone: tone || "professional",
     });
 
     // Log the AI usage
     await db.insert(aiLogs).values({
       userId,
-      action: "generer",
+      action: "generate",
       platform: platforms && platforms.length > 0 ? platforms[0] : null,
-      tone: tone || "professionnel",
+      tone: tone || "professional",
       provider: result.provider,
       tokensUsed: result.tokensUsed ?? null,
     });

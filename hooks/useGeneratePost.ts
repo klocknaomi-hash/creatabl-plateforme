@@ -34,7 +34,7 @@ export function useGeneratePost(options?: UseGeneratePostOptions) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de la génération");
+        throw new Error(data.error || "Error during generation");
       }
 
       if (data.limitReached) {
@@ -46,7 +46,7 @@ export function useGeneratePost(options?: UseGeneratePostOptions) {
       return data;
 
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Erreur inconnue";
+      const message = err instanceof Error ? err.message : "Unknown error";
       setError(message);
       options?.onError?.(message);
       return null;

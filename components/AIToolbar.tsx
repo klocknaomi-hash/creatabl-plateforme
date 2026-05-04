@@ -51,11 +51,11 @@ interface AIToolbarProps {
 }
 
 const TONES: { value: PostTone; label: string; icon: string; description: string }[] = [
-  { value: "professionnel", label: "Professionnel", icon: "💼", description: "Expert et autoritaire" },
-  { value: "storytelling", label: "Storytelling", icon: "📖", description: "Narratif et captivant" },
-  { value: "viral", label: "Viral", icon: "🚀", description: "Impactant et partageable" },
-  { value: "educatif", label: "Éducatif", icon: "🎓", description: "Clair et pédagogique" },
-  { value: "conversationnel", label: "Conversationnel", icon: "💬", description: "Naturel et proche" },
+  { value: "professional", label: "Professionnel", icon: "💼", description: "Expert et autoritaire" },
+  { value: "storytelling", label: "Storytelling", icon: "📖", description: "Narratif et engageant" },
+  { value: "viral", label: "Viral", icon: "🚀", description: "Percutant et partageable" },
+  { value: "educational", label: "Éducatif", icon: "🎓", description: "Clair et éducatif" },
+  { value: "conversational", label: "Conversationnel", icon: "💬", description: "Naturel et amical" },
 ];
 
 export function AIToolbar({ content, platform, onResult, postId, tone: propTone }: AIToolbarProps) {
@@ -182,39 +182,39 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
           <div className="flex items-center gap-1">
             {/* Main Actions */}
             <TooltipButton
-              onClick={() => handleAction("ameliorer")}
+              onClick={() => handleAction("improve")}
               disabled={disabled}
               icon={<Zap className={cn("size-3.5", !disabled && "text-amber-500")} />}
               label="Améliorer"
               loading={loading}
-              tooltip="Sublimer le style et l'accroche"
+              tooltip="Améliorer le style"
             />
 
             <TooltipButton
-              onClick={() => handleAction("reformuler")}
+              onClick={() => handleAction("rewrite")}
               disabled={disabled}
               icon={<RotateCcw className="size-3.5 text-blue-500" />}
               label="Reformuler"
               loading={loading}
-              tooltip="Réécrire sous un nouvel angle"
+              tooltip="Reformuler depuis un nouvel angle"
             />
 
             <TooltipButton
-              onClick={() => handleAction("raccourcir")}
+              onClick={() => handleAction("shorten")}
               disabled={disabled}
               icon={<Minimize2 className="size-3.5 text-emerald-500" />}
               label="Raccourcir"
               loading={loading}
-              tooltip="Rendre plus concis et percutant"
+              tooltip="Raccourcir le contenu"
             />
 
             <TooltipButton
-              onClick={() => handleAction("allonger")}
+              onClick={() => handleAction("lengthen")}
               disabled={disabled}
               icon={<Maximize2 className="size-3.5 text-orange-500" />}
               label="Allonger"
               loading={loading}
-              tooltip="Développer avec plus de détails"
+              tooltip="Allonger le contenu"
             />
 
             {/* Tone Selector */}
@@ -238,22 +238,22 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                   }
                 >
                   <Type className="size-3.5" />
-                  <span>Ton</span>
+                  <span>Tone</span>
                   <ChevronDown className="size-3 opacity-40" />
                 </TooltipTrigger>
-                <TooltipContent>Changer le ton du post</TooltipContent>
+                <TooltipContent>Change post tone</TooltipContent>
               </Tooltip>
               <DropdownMenuContent 
                 align="start" 
                 className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl bg-background/95"
               >
                 <div className="px-3 py-2 mb-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choisir une voix</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choose a voice</p>
                 </div>
                 {TONES.map((t) => (
                   <DropdownMenuItem
                     key={t.value}
-                    onClick={() => handleAction("changer_ton", t.value)}
+                    onClick={() => handleAction("change_tone", t.value)}
                     className="rounded-xl text-xs font-semibold gap-3 py-2.5 cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors group"
                   >
                     <span className="text-lg bg-muted/50 size-8 flex items-center justify-center rounded-lg group-hover:bg-primary/10 transition-colors">{t.icon}</span>
@@ -281,7 +281,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleAction("optimiser_plateforme")}
+                        onClick={() => handleAction("optimize_platform")}
                         disabled={disabled}
                         className={cn(
                           "h-8 px-3 rounded-xl text-xs font-black gap-2 transition-all group",
@@ -295,7 +295,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                     <span className="capitalize">{platform} Ready</span>
                     <ArrowRight className="size-3 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                   </TooltipTrigger>
-                  <TooltipContent>Adapter spécifiquement pour {platform}</TooltipContent>
+                  <TooltipContent>Optimize specifically for {platform}</TooltipContent>
                 </Tooltip>
               </>
             )}

@@ -114,7 +114,7 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
         className="h-[52px] px-4 rounded-xl border-2 border-dashed border-muted-foreground/30 hover:border-foreground hover:bg-foreground hover:text-background transition-all gap-2 group"
       >
         <Plus className="w-4 h-4" />
-        <span className="text-xs font-semibold">Connect</span>
+        <span className="text-xs font-semibold">Connecter</span>
       </Button>
     </div>
   );

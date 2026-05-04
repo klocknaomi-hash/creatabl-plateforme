@@ -15,43 +15,43 @@ export async function POST(req: NextRequest) {
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
-      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Récupérer les infos de l'utilisateur
+    // Fetch user info
     const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1);
     
     if (!user) {
-      return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const plan = (user.selectedPlan || "starter") as keyof typeof PLAN_AI_LIMITS;
     const limit = PLAN_AI_LIMITS[plan] || PLAN_AI_LIMITS.starter;
     const currentCount = user.monthlyAiCount || 0;
 
-    // Vérifier la limite
+    // Check limit
     if (currentCount >= limit) {
       return NextResponse.json({
         limitReached: true,
         used: currentCount,
         limit: limit,
         plan: plan
-      }, { status: 200 }); // Status 200 comme demandé
+      }, { status: 200 }); // Status 200 as requested
     }
 
     const body: GeneratePostOptions = await req.json();
 
     if (!body.content || !body.action) {
       return NextResponse.json(
-        { error: "content et action sont requis" },
+        { error: "content and action are required" },
         { status: 400 }
       );
     }
 
-    // Générer normalement
+    // Generate normally
     const result = await generatePost(body);
 
-    // Incrémenter le compteur et loguer l'action
+    // Increment counter and log action
     await db.transaction(async (tx) => {
       await tx.insert(aiLogs).values({
         userId: clerkId,
@@ -76,8 +76,8 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Erreur inconnue";
-    console.error("[generate-post] Erreur:", message);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("[generate-post] Error:", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

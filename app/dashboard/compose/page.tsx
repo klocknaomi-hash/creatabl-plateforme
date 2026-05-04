@@ -43,11 +43,11 @@ interface MediaFile {
 }
 
 const TONES = [
-  { value: "professionnel", label: "Professionnel", icon: "💼" },
+  { value: "professional", label: "Professional", icon: "💼" },
   { value: "storytelling", label: "Storytelling", icon: "📖" },
   { value: "viral", label: "Viral", icon: "🚀" },
-  { value: "educatif", label: "Éducatif", icon: "🎓" },
-  { value: "conversationnel", label: "Conversationnel", icon: "💬" },
+  { value: "educational", label: "Educational", icon: "🎓" },
+  { value: "conversational", label: "Conversational", icon: "💬" },
 ];
 
 function ComposePageInner() {
@@ -64,7 +64,7 @@ function ComposePageInner() {
   const [loading, setLoading] = useState(false);
   const [isAiDialogOpen, setIsAiDialogOpen] = useState(false);
   const [aiPrompt, setAiPrompt] = useState("");
-  const [selectedTone, setSelectedTone] = useState("professionnel");
+  const [selectedTone, setSelectedTone] = useState("professional");
   const [generating, setGenerating] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const lastSavedRef = useRef<string>("");
@@ -246,7 +246,7 @@ function ComposePageInner() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           content: aiPrompt, 
-          action: "generer",
+          action: "generate",
           platform: selectedPlatforms[0],
           tone: selectedTone 
         }),
@@ -271,7 +271,7 @@ function ComposePageInner() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Compose Post</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Créer un post</h1>
             <AnimatePresence>
               {saveStatus !== "idle" && (
                 <motion.div 
@@ -283,22 +283,17 @@ function ComposePageInner() {
                   {saveStatus === "saving" && <Loader2 className="size-2.5 animate-spin" />}
                   {saveStatus === "saved" && <CheckCircle2 className="size-2.5 text-emerald-500" />}
                   {saveStatus === "error" && <AlertCircle className="size-2.5 text-destructive" />}
-                  {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved to DB" : "Error saving"}
-                </motion.div>
+                  <span className="text-xs font-medium text-muted-foreground animate-pulse">
+                  {saveStatus === "saving" ? "Enregistrement..." : saveStatus === "saved" ? "Enregistré" : "Erreur"}
+                </span></motion.div>
               )}
             </AnimatePresence>
           </div>
-          <p className="text-sm text-muted-foreground">Create and schedule your social content</p>
+          <p className="text-sm text-muted-foreground">Créez et programmez votre contenu social</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => handlePost(true)}
-            disabled={loading}
-            className="h-8 px-3 rounded-lg font-medium text-muted-foreground hover:text-foreground transition-all text-xs"
-          >
-            <Save className="size-3.5 mr-1.5" /> Save Draft
+          <Button variant="outline" className="rounded-xl shadow-sm text-sm" onClick={() => handlePost(true)} disabled={loading}>
+            <Save className="size-3.5 mr-1.5" /> Enregistrer le brouillon
           </Button>
           <Button 
             onClick={() => handlePost(false)} 
@@ -309,7 +304,7 @@ function ComposePageInner() {
             {loading ? <Loader2 className="size-3.5 mr-1.5 animate-spin" /> : (
               scheduledAt ? <Calendar className="size-3.5 mr-1.5" /> : <Send className="size-3.5 mr-1.5" />
             )}
-            {scheduledAt ? "Schedule Post" : "Post Now"}
+            {scheduledAt ? "Programmer le post" : "Publier maintenant"}
           </Button>
         </div>
       </div>
@@ -319,7 +314,7 @@ function ComposePageInner() {
         <div className="space-y-4">
           {/* Platforms Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Platforms</h3>
+            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Plateformes</h3>
             <PlatformSelector 
               selectedPlatforms={selectedPlatforms} 
               onToggle={(p) => setSelectedPlatforms(prev => 
@@ -331,7 +326,7 @@ function ComposePageInner() {
           {/* Caption Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Caption</h3>
+              <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Légende</h3>
               
               {/* Integrated Tone Selector */}
               <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-lg border border-border/50">
@@ -365,7 +360,7 @@ function ComposePageInner() {
 
           {/* Media Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Media</h3>
+            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Média</h3>
             <MediaUploader 
               mediaFiles={mediaFiles} 
               selectedPlatforms={selectedPlatforms}
@@ -377,7 +372,7 @@ function ComposePageInner() {
 
           {/* Schedule Card */}
           <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Schedule</h3>
+            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Programmation</h3>
             <SchedulePicker 
               scheduledAt={scheduledAt} 
               onChange={setScheduledAt} 
@@ -386,21 +381,16 @@ function ComposePageInner() {
 
           {/* Bottom Smart Action Button */}
           <div className="flex justify-end pt-2">
-             <Button 
-              onClick={() => handlePost(false)} 
-              disabled={loading || !content.trim()} 
-              size="sm"
-              className="rounded-lg font-bold px-10 h-10 shadow-sm bg-foreground text-background hover:bg-foreground/90 transition-all"
-            >
-              {loading ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
-              {scheduledAt ? "Schedule Post" : "Post Now"}
-            </Button>
+             <Button className="rounded-xl shadow-lg shadow-primary/20 text-sm font-bold bg-foreground text-background" onClick={() => handlePost(false)} disabled={loading || !content.trim()}>
+            {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+            {scheduledAt ? "Programmer le post" : "Publier maintenant"}
+          </Button>
           </div>
         </div>
 
         {/* Right Column: Live Preview */}
         <aside className="sticky top-20 space-y-3">
-          <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest px-2">Post Preview</h3>
+          <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest px-2">Aperçu</h3>
           <PostPreview 
             content={content} 
             mediaFiles={mediaFiles} 
@@ -414,17 +404,17 @@ function ComposePageInner() {
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
               <Wand2 className="w-5 h-5 text-foreground" />
-              AI Post Generator
+              Générateur de post IA
             </DialogTitle>
             <DialogDescription className="text-xs">
-              Describe what you want to post about and Gemini will craft a perfect caption for you.
+              Décrivez votre sujet et Gemini va générer une légende parfaite pour vous.
             </DialogDescription>
           </DialogHeader>
           <div className="py-2 space-y-4">
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Prompt</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sujet</Label>
               <Textarea 
-                placeholder="e.g. Write a post about our new AI feature launch..."
+                placeholder="ex. Écrire un post sur le lancement de notre nouvelle fonctionnalité IA..."
                 className="min-h-[100px] rounded-xl resize-none border focus-visible:ring-1 focus-visible:ring-foreground bg-muted/5"
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
@@ -432,7 +422,7 @@ function ComposePageInner() {
             </div>
 
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Desired Tone</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Ton souhaité</Label>
               <div className="grid grid-cols-2 gap-2">
                 {TONES.map((tone) => (
                   <button
@@ -453,10 +443,10 @@ function ComposePageInner() {
             </div>
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" size="sm" onClick={() => setIsAiDialogOpen(false)} className="rounded-lg text-xs">Cancel</Button>
+            <Button variant="outline" size="sm" onClick={() => setIsAiDialogOpen(false)} className="rounded-lg text-xs">Annuler</Button>
             <Button onClick={handleGeneratePost} size="sm" disabled={generating || !aiPrompt} className="rounded-lg px-6 bg-foreground text-background text-xs">
               {generating ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
-              Generate Post
+              Générer le post
             </Button>
           </DialogFooter>
         </DialogContent>

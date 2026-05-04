@@ -95,7 +95,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground ml-0.5">Time</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground ml-0.5">Heure</Label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground/70" />
                 <input

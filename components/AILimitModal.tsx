@@ -30,13 +30,13 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
   const getUpgradeMessage = () => {
     switch (plan) {
       case "starter":
-        return "Tu as utilisé tes 30 générations ce mois-ci. Passe au plan Pro pour 120 générations/mois.";
+        return "You have used your 30 generations this month. Upgrade to Pro for 120 generations/month.";
       case "pro":
-        return "Tu as utilisé tes 120 générations ce mois-ci. Passe au plan Business pour 500 générations/mois.";
+        return "You have used your 120 generations this month. Upgrade to Business for 500 generations/month.";
       case "business":
-        return "Tu as utilisé tes 500 générations ce mois-ci. Contacte-nous pour un plan sur mesure.";
+        return "You have used your 500 generations this month. Contact us for a custom plan.";
       default:
-        return `Tu as atteint ta limite de ${limit} générations ce mois-ci.`;
+        return `You have reached your limit of ${limit} generations this month.`;
     }
   };
 
@@ -46,7 +46,7 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
         <DialogHeader className="flex flex-col items-center">
           <AIUsageIndicator used={used} limit={limit} size={80} />
           <DialogTitle className="text-2xl font-bold mt-4 text-[#D85A30]">
-            Limite IA atteinte
+            AI Limit Reached
           </DialogTitle>
         </DialogHeader>
         <div className="py-4 text-gray-600 text-base leading-relaxed">
@@ -57,14 +57,14 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
             render={<Link href="/pricing" />}
             className="w-full bg-[#7F77DD] hover:bg-[#6a62c5] text-white rounded-xl py-6 h-auto text-base"
           >
-            Voir les plans
+            View Plans
           </Button>
           <Button 
             variant="outline" 
             onClick={onClose}
             className="w-full rounded-xl py-6 h-auto text-base border-gray-200"
           >
-            Fermer
+            Close
           </Button>
         </DialogFooter>
       </DialogContent>

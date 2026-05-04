@@ -91,7 +91,7 @@ export function ActiveChannelsView({ accounts, t }: ActiveChannelsProps) {
             <div className="size-9 rounded-full bg-background flex items-center justify-center text-muted-foreground/40 shadow-sm group-hover:text-violet-600 transition-colors">
               <Plus className="size-4" />
             </div>
-            <span className="text-[11px] font-bold text-muted-foreground/60 group-hover:text-violet-600 transition-colors whitespace-nowrap">Connect Platform</span>
+            <span className="text-[11px] font-bold text-muted-foreground/60 group-hover:text-violet-600 transition-colors whitespace-nowrap">Connecter la plateforme</span>
           </div>
         </Link>
       </div>

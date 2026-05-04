@@ -23,13 +23,13 @@ export function UsageMetrics({ data }: UsageProps) {
 
   const stats = [
     {
-      label: "MONTHLY POSTS",
+      label: "POSTS MENSUELS",
       current: usage.postsPerMonth,
       limit: limits.postsPerMonth,
       unit: "posts",
     },
     {
-      label: "SOCIAL ACCOUNTS",
+      label: "COMPTES SOCIAUX",
       current: usage.socialAccounts,
       limit: limits.socialAccounts,
       unit: "accounts",
