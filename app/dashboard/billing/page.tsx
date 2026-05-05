@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PLAN_LIMITS } from "@/lib/plan-limits";
-import { ArrowRight, Sparkles, Building2, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { getTrialStatus } from "@/lib/trial";
 import { BillingPlans } from "./billing-plans";
 
@@ -160,13 +160,11 @@ export default async function BillingPage() {
         </Card>
       )}
 
-      {/* SECTION — Choix du plan (si trial ou pas encore abonné) */}
-      {(!user.isSubscribed) && (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">Active ton abonnement</h2>
-          <BillingPlans currentPlan={user.selectedPlan || 'starter'} />
-        </div>
-      )}
+      {/* SECTION — Plans (toujours visible) */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-900">Ton abonnement</h2>
+        <BillingPlans currentPlan={user.selectedPlan || 'starter'} />
+      </div>
 
       {/* SECTION 2 — Consommation ce mois-ci */}
       <div className="space-y-4 pt-4">
@@ -200,64 +198,7 @@ export default async function BillingPage() {
         <p className="text-center text-sm text-muted-foreground">Remise à zéro le 1er de chaque mois</p>
       </div>
 
-      {/* SECTION 3 — Promo upgrade (si déjà abonné mais peut monter) */}
-      {user.isSubscribed && (
-        <div className="space-y-4">
-          {planKey === 'starter' && (
-            <Card className="border-none bg-[#EEEDFE] shadow-none">
-              <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="space-y-4 text-center md:text-left">
-                  <div className="flex items-center gap-3 justify-center md:justify-start">
-                    <div className="bg-white p-2 rounded-lg shadow-sm text-[#7F77DD]">
-                      <Sparkles className="h-6 w-6" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-[#2D2A4A]">Passe au Pro 🚀</h3>
-                  </div>
-                  <p className="text-[#5D5A88] max-w-md">
-                    Débloque Reformuler, Changer le ton, 120 posts/mois et Analytics avancés.
-                  </p>
-                  <div className="text-xl font-bold text-[#2D2A4A]">
-                    99€/mois <span className="text-sm font-normal text-[#5D5A88]">ou 79€/mois en annuel</span>
-                  </div>
-                </div>
-                <a
-                  href="/api/stripe/create-checkout?plan=pro&billing=monthly"
-                  className="bg-[#7F77DD] hover:bg-[#6C64C5] text-white rounded-full px-8 h-14 text-lg font-bold flex items-center gap-2 transition-colors"
-                >
-                  Passer au Pro <ArrowRight className="h-5 w-5" />
-                </a>
-              </CardContent>
-            </Card>
-          )}
 
-          {(planKey === 'pro' || planKey === 'free') && (
-            <Card className="border-none bg-[#E1F5EE] shadow-none">
-              <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="space-y-4 text-center md:text-left">
-                  <div className="flex items-center gap-3 justify-center md:justify-start">
-                    <div className="bg-white p-2 rounded-lg shadow-sm text-[#10B981]">
-                      <Building2 className="h-6 w-6" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-[#1F2937]">Passe au Business 🏢</h3>
-                  </div>
-                  <p className="text-[#4B5563] max-w-md">
-                    Gère plusieurs clients avec multi-comptes, équipe et 500 posts/mois.
-                  </p>
-                  <div className="text-xl font-bold text-[#1F2937]">
-                    199€/mois <span className="text-sm font-normal text-[#4B5563]">ou 159€/mois en annuel</span>
-                  </div>
-                </div>
-                <a
-                  href="/api/stripe/create-checkout?plan=business&billing=monthly"
-                  className="bg-[#10B981] hover:bg-[#059669] text-white rounded-full px-8 h-14 text-lg font-bold flex items-center gap-2 transition-colors"
-                >
-                  Passer au Business <ArrowRight className="h-5 w-5" />
-                </a>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      )}
 
       {/* Bandeau sécurité bas de page */}
       <div className="rounded-2xl bg-gray-50 py-5 px-6 text-center">
