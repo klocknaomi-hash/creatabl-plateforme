@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PLAN_LIMITS } from "@/lib/plan-limits";
-import { ArrowRight, Sparkles, Building2 } from "lucide-react";
+import { ArrowRight, Sparkles, Building2, Lock } from "lucide-react";
 import { getTrialStatus } from "@/lib/trial";
 import { BillingPlans } from "./billing-plans";
 
@@ -26,25 +26,35 @@ export default async function BillingPage() {
   const postCount = user.monthlyPostCount || 0;
   const aiCount = user.monthlyAiCount || 0;
 
+  const isBusiness = planKey === 'business' || planKey === 'agency';
+
   const postLimit = limits.posts;
   const aiLimit = limits.ai;
 
-  const postPercentage = Math.min(postCount / postLimit, 1);
-  const aiPercentage = Math.min(aiCount / aiLimit, 1);
+  const postPercentage = isBusiness ? 0 : Math.min(postCount / postLimit, 1);
+  const aiPercentage = isBusiness ? 0 : Math.min(aiCount / aiLimit, 1);
 
   const getProgressColor = (percentage: number) => {
     if (percentage >= 1) return "#EF4444"; // Red
     if (percentage >= 0.8) return "#F59E0B"; // Orange
-    return "#6366F1"; // Violet
+    return "#7F77DD"; // Violet
   };
 
-  const renderCircularProgress = (percentage: number, label: string, value: string | number, size = 140, radius = 54) => {
+  const renderCircularProgress = (
+    percentage: number,
+    label: string,
+    detailText: string,
+    value: string | number,
+    size = 140,
+    radius = 54
+  ) => {
     const circumference = 2 * Math.PI * radius;
     const offset = circumference * (1 - percentage);
-    const color = getProgressColor(percentage);
+    const color = isBusiness ? "#7F77DD" : getProgressColor(percentage);
+    const pct = Math.round(percentage * 100);
 
     return (
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-4 w-full">
         <div className="relative flex items-center justify-center">
           <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="transform -rotate-90">
             <circle
@@ -63,7 +73,7 @@ export default async function BillingPage() {
               stroke={color}
               strokeWidth="10"
               strokeDasharray={circumference}
-              strokeDashoffset={offset}
+              strokeDashoffset={isBusiness ? 0 : offset}
               strokeLinecap="round"
               className="transition-all duration-500 ease-in-out"
             />
@@ -72,7 +82,24 @@ export default async function BillingPage() {
             <span className="text-2xl font-bold text-foreground">{value}</span>
           </div>
         </div>
-        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <p className="text-sm font-medium text-muted-foreground text-center">{label}</p>
+        {/* Detail text */}
+        <p className="text-xs text-gray-500 text-center -mt-2">{detailText}</p>
+        {/* Linear progress bar */}
+        {!isBusiness && (
+          <div className="w-full space-y-1">
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>{pct}% utilisé</span>
+              <span>{postLimit}</span>
+            </div>
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{ width: `${pct}%`, backgroundColor: color }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -88,7 +115,7 @@ export default async function BillingPage() {
       {isTrial && (
         <Card className="border-none shadow-xl ring-1 ring-foreground/5 bg-white overflow-hidden">
           <CardContent className="p-10 flex flex-col md:flex-row items-center gap-10">
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center flex-shrink-0">
               <svg width="180" height="180" viewBox="0 0 180 180" className="transform -rotate-90">
                 <circle cx="90" cy="90" r="70" fill="none" stroke="#F3F4F6" strokeWidth="12" />
                 <circle
@@ -96,7 +123,7 @@ export default async function BillingPage() {
                   cy="90"
                   r="70"
                   fill="none"
-                  stroke={trialDaysLeft > 3 ? "#6366F1" : "#F59E0B"}
+                  stroke={trialDaysLeft > 3 ? "#7F77DD" : "#F59E0B"}
                   strokeWidth="12"
                   strokeDasharray={2 * Math.PI * 70}
                   strokeDashoffset={2 * Math.PI * 70 * (1 - trialDaysLeft / 7)}
@@ -109,19 +136,24 @@ export default async function BillingPage() {
                 <span className="text-xs font-bold uppercase tracking-widest text-gray-400">jours restants</span>
               </div>
             </div>
-            
+
             <div className="space-y-4 text-center md:text-left flex-1">
               <div className="flex items-center gap-2 justify-center md:justify-start">
                 <Badge className={trialDaysLeft > 3 ? "bg-indigo-100 text-indigo-700 border-none" : "bg-orange-100 text-orange-700 border-none"}>
-                  Essai gratuit en cours
+                  {trialDaysLeft <= 3 ? "⚠️ Essai bientôt terminé !" : "Essai gratuit en cours"}
                 </Badge>
               </div>
               <h2 className="text-3xl font-bold text-gray-900">
-                Ton essai gratuit se termine le {user.trialEndsAt?.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                {trialDaysLeft <= 3
+                  ? `Plus que ${trialDaysLeft} jour${trialDaysLeft > 1 ? 's' : ''} — abonne-toi maintenant !`
+                  : `Ton essai gratuit se termine le ${user.trialEndsAt?.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`
+                }
               </h2>
               <p className="text-gray-500 max-w-lg">
-                Profite de toutes les fonctionnalités de ton plan {user.selectedPlan}. 
-                Une fois l&apos;essai terminé, tes données seront conservées mais l&apos;accès sera limité.
+                {trialDaysLeft <= 3
+                  ? "Ton accès sera limité dans moins de 72h. Active ton abonnement pour ne rien perdre."
+                  : `Profite de toutes les fonctionnalités de ton plan ${user.selectedPlan}. Une fois l'essai terminé, tes données seront conservées mais l'accès sera limité.`
+                }
               </p>
             </div>
           </CardContent>
@@ -143,18 +175,24 @@ export default async function BillingPage() {
           <Card className="border-none shadow-sm ring-1 ring-foreground/5">
             <CardContent className="p-8 flex flex-col items-center justify-center">
               {renderCircularProgress(
-                postPercentage, 
-                "posts ce mois-ci", 
-                planKey === 'business' ? "∞" : `${postCount} / ${postLimit}`
+                postPercentage,
+                "Posts ce mois-ci",
+                isBusiness
+                  ? "Illimité sur votre plan Business"
+                  : `${postCount} posts utilisés sur ${postLimit} ce mois-ci`,
+                isBusiness ? "∞" : `${postCount} / ${postLimit}`
               )}
             </CardContent>
           </Card>
           <Card className="border-none shadow-sm ring-1 ring-foreground/5">
             <CardContent className="p-8 flex flex-col items-center justify-center">
               {renderCircularProgress(
-                aiPercentage, 
-                "générations IA ce mois-ci", 
-                planKey === 'business' ? "∞" : `${aiCount} / ${aiLimit}`
+                aiPercentage,
+                "Générations IA ce mois-ci",
+                isBusiness
+                  ? "Illimité sur votre plan Business"
+                  : `${aiCount} générations utilisées sur ${aiLimit} ce mois-ci`,
+                isBusiness ? "∞" : `${aiCount} / ${aiLimit}`
               )}
             </CardContent>
           </Card>
@@ -173,7 +211,7 @@ export default async function BillingPage() {
                     <div className="bg-white p-2 rounded-lg shadow-sm text-[#7F77DD]">
                       <Sparkles className="h-6 w-6" />
                     </div>
-                    <h3 className="text-2xl font-bold text-[#2D2A4A]">Passe au plan Pro 🚀</h3>
+                    <h3 className="text-2xl font-bold text-[#2D2A4A]">Passe au Pro 🚀</h3>
                   </div>
                   <p className="text-[#5D5A88] max-w-md">
                     Débloque Reformuler, Changer le ton, 120 posts/mois et Analytics avancés.
@@ -182,14 +220,17 @@ export default async function BillingPage() {
                     99€/mois <span className="text-sm font-normal text-[#5D5A88]">ou 79€/mois en annuel</span>
                   </div>
                 </div>
-                <button className="bg-[#7F77DD] hover:bg-[#6C64C5] text-white rounded-full px-8 h-14 text-lg font-bold flex items-center gap-2">
+                <a
+                  href="/api/stripe/create-checkout?plan=pro&billing=monthly"
+                  className="bg-[#7F77DD] hover:bg-[#6C64C5] text-white rounded-full px-8 h-14 text-lg font-bold flex items-center gap-2 transition-colors"
+                >
                   Passer au Pro <ArrowRight className="h-5 w-5" />
-                </button>
+                </a>
               </CardContent>
             </Card>
           )}
 
-          {planKey === 'pro' && (
+          {(planKey === 'pro' || planKey === 'free') && (
             <Card className="border-none bg-[#E1F5EE] shadow-none">
               <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="space-y-4 text-center md:text-left">
@@ -197,7 +238,7 @@ export default async function BillingPage() {
                     <div className="bg-white p-2 rounded-lg shadow-sm text-[#10B981]">
                       <Building2 className="h-6 w-6" />
                     </div>
-                    <h3 className="text-2xl font-bold text-[#1F2937]">Passe au plan Business 🏢</h3>
+                    <h3 className="text-2xl font-bold text-[#1F2937]">Passe au Business 🏢</h3>
                   </div>
                   <p className="text-[#4B5563] max-w-md">
                     Gère plusieurs clients avec multi-comptes, équipe et 500 posts/mois.
@@ -206,14 +247,25 @@ export default async function BillingPage() {
                     199€/mois <span className="text-sm font-normal text-[#4B5563]">ou 159€/mois en annuel</span>
                   </div>
                 </div>
-                <button className="bg-[#10B981] hover:bg-[#059669] text-white rounded-full px-8 h-14 text-lg font-bold flex items-center gap-2 border-none">
+                <a
+                  href="/api/stripe/create-checkout?plan=business&billing=monthly"
+                  className="bg-[#10B981] hover:bg-[#059669] text-white rounded-full px-8 h-14 text-lg font-bold flex items-center gap-2 transition-colors"
+                >
                   Passer au Business <ArrowRight className="h-5 w-5" />
-                </button>
+                </a>
               </CardContent>
             </Card>
           )}
         </div>
       )}
+
+      {/* Bandeau sécurité bas de page */}
+      <div className="rounded-2xl bg-gray-50 py-5 px-6 text-center">
+        <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
+          <Lock className="w-4 h-4 text-gray-400" />
+          Paiement sécurisé · Annulez à tout moment · Données hébergées en Europe
+        </p>
+      </div>
     </div>
   );
 }

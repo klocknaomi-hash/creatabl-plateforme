@@ -4,8 +4,10 @@ import { eq, count, and, gte } from "drizzle-orm";
 
 export const PLAN_LIMITS = {
   starter: {
+    label: 'Starter',
     posts: 30,
     ai: 30,
+    workspaces: 1,
     socialAccounts: 3,
     storageLimit: 100, // 100MB
     analyticsDays: 7,
@@ -13,8 +15,10 @@ export const PLAN_LIMITS = {
     price: 0,
   },
   pro: {
+    label: 'Pro',
     posts: 120,
     ai: 120,
+    workspaces: 3,
     socialAccounts: 15,
     storageLimit: 5120, // 5GB
     analyticsDays: 90,
@@ -22,8 +26,10 @@ export const PLAN_LIMITS = {
     price: 99,
   },
   business: {
+    label: 'Business',
     posts: 500,
     ai: 500,
+    workspaces: 5,
     socialAccounts: 50,
     storageLimit: 20480, // 20GB
     analyticsDays: 365,
@@ -32,8 +38,10 @@ export const PLAN_LIMITS = {
   },
   // Aliases for compatibility
   free: {
+    label: 'Starter',
     posts: 30,
     ai: 30,
+    workspaces: 1,
     socialAccounts: 3,
     storageLimit: 100,
     analyticsDays: 7,
@@ -41,8 +49,10 @@ export const PLAN_LIMITS = {
     price: 0,
   },
   agency: {
+    label: 'Business',
     posts: 500,
     ai: 500,
+    workspaces: 5,
     socialAccounts: 50,
     storageLimit: 20480,
     analyticsDays: 365,
