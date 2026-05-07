@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { clerkClient } from '@clerk/nextjs/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -58,6 +59,14 @@ export async function POST(req: NextRequest) {
       })
       .where(eq(users.clerkId, userId!));
 
+    // Sync to Clerk metadata
+    await (await clerkClient()).users.updateUserMetadata(userId!, {
+      publicMetadata: {
+        plan: plan,
+        billing: billing,
+      },
+    });
+
     console.log(`✅ User ${userId} → plan ${plan} · trial ends ${trialEndsAt}`);
   }
 
@@ -67,15 +76,26 @@ export async function POST(req: NextRequest) {
     const userId = subscription.metadata?.userId;
 
     if (userId) {
+      const plan = subscription.metadata?.plan || 'starter';
+      const billing = subscription.metadata?.billing || 'monthly';
+
       await db.update(users)
         .set({
-          plan: subscription.metadata?.plan || 'starter',
+          plan: plan,
           subscriptionStatus: subscription.status,
           trialEndsAt: subscription.trial_end
             ? new Date(subscription.trial_end * 1000)
             : null,
         })
         .where(eq(users.clerkId, userId));
+
+      // Sync to Clerk metadata
+      await (await clerkClient()).users.updateUserMetadata(userId, {
+        publicMetadata: {
+          plan: plan,
+          billing: billing,
+        },
+      });
     }
   }
 
