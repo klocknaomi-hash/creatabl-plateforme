@@ -6,16 +6,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useTheme } from "next-themes";
 import { 
   Bell, 
@@ -41,8 +32,6 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [settings, setSettings] = useState(initialSettings);
-  const canvaEnabled = process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
-  const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
 
   const handleToggle = (key: string) => {
     setSettings((prev: any) => ({ ...prev, [key]: !prev[key] }));
@@ -265,83 +254,6 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* INTEGRATIONS SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
-          <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2.5 rounded-xl">
-                  <Plus className="size-4 text-primary" />
-                </div>
-                <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Intégrations</CardTitle>
-              </div>
-              {!canvaEnabled && (
-                <Badge className="bg-[#7F77DD] hover:bg-[#7F77DD]/90 text-white border-none text-[10px] px-2 py-0.5 rounded-full font-bold">
-                  Bientôt disponible
-                </Badge>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent className="p-8 space-y-6">
-            <div className="flex items-center justify-between p-6 bg-muted/30 rounded-[24px] border border-border/20">
-              <div className="flex items-center gap-4">
-                <div className="size-12 rounded-2xl bg-background border border-border/40 flex items-center justify-center p-2.5 shadow-sm">
-                  <img 
-                    src="https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg" 
-                    alt="Canva" 
-                    className={cn("size-full", !canvaEnabled && "opacity-40 grayscale")} 
-                  />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <Label className="text-sm font-bold leading-none">Canva</Label>
-                  </div>
-                  <p className="text-xs text-muted-foreground font-medium max-w-sm">
-                    Créez tes visuels Canva directement depuis Creatabl et attache-les à tes posts.
-                  </p>
-                </div>
-              </div>
-
-              {canvaEnabled ? (
-                <Link 
-                  href="/api/canva/auth"
-                  className={cn(buttonVariants({ size: 'default' }), "rounded-xl font-bold px-6 shadow-lg shadow-primary/20")}
-                >
-                  {user.canvaAccessToken ? "Connecté" : "Connecter Canva"}
-                </Link>
-              ) : canvaTestMode ? (
-                <Link 
-                  href="/api/canva/auth"
-                  className={cn(buttonVariants({ size: 'default' }), "rounded-xl font-bold px-6 opacity-40 bg-muted text-muted-foreground border-none hover:opacity-80")}
-                >
-                  Connecter Canva (Test)
-                </Link>
-              ) : (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger
-                      render={
-                        <div className="cursor-not-allowed">
-                          <Button 
-                            disabled 
-                            className="rounded-xl font-bold px-6 opacity-40 bg-muted text-muted-foreground border-none"
-                          >
-                            Connecter Canva
-                          </Button>
-                        </div>
-                      }
-                    />
-                    <TooltipContent className="bg-foreground text-background border-none text-[11px] font-bold py-2 px-3 rounded-lg shadow-xl">
-                      <p>Intégration Canva en cours de validation.</p>
-                      <p className="text-primary-foreground/60">Disponible très bientôt 🎨</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
             </div>
           </CardContent>
         </Card>

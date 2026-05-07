@@ -1,18 +1,29 @@
-import * as dotenv from 'dotenv'
-import path from 'path'
-dotenv.config({ path: path.join(__dirname, '../.env.local') })
+import { db } from "../lib/db";
+import { users } from "../lib/db/schema";
+import { desc, isNotNull } from "drizzle-orm";
 
-async function test() {
-  const { db } = await import('../lib/db')
-  const { users } = await import('../lib/db/schema')
-
+async function checkTokens() {
   try {
-    const result = await db.select().from(users).limit(1)
-    console.log('✅ DB connection works')
-    console.log('Columns available:', Object.keys(result[0] || {}))
+    const latestUsers = await db.select({
+      clerkId: users.clerkId,
+      canvaAccessToken: users.canvaAccessToken,
+      canvaTokenExpiresAt: users.canvaTokenExpiresAt,
+      updatedAt: users.updatedAt
+    })
+    .from(users)
+    .orderBy(desc(users.updatedAt))
+    .limit(5);
+
+    console.log("Latest users with Canva status:");
+    console.table(latestUsers.map(u => ({
+      ...u,
+      hasToken: !!u.canvaAccessToken,
+      tokenPreview: u.canvaAccessToken ? `${u.canvaAccessToken.substring(0, 10)}...` : null
+    })));
+
   } catch (error) {
-    console.error('❌ DB connection failed:', error)
+    console.error("❌ Error checking tokens:", error);
   }
 }
 
-test().catch(console.error)
+checkTokens();

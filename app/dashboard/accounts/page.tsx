@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   CheckCircle2,
   Plus,
+  Palette
 } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -98,6 +99,14 @@ const PLATFORMS: PlatformInfo[] = [
     bgColor: 'bg-[#BD081C]/10',
     comingSoon: true 
   },
+  {
+    id: 'canva',
+    name: 'Canva',
+    icon: Palette,
+    color: 'text-[#00C4CC]',
+    bgColor: 'bg-[#00C4CC]/10',
+    isIntegration: true
+  }
 ];
 
 export default async function AccountsPage({
@@ -155,8 +164,20 @@ export default async function AccountsPage({
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {PLATFORMS.map((platform) => {
-          const connected = connectedAccounts.find((a: any) => a.platform === platform.id);
+          const isCanva = platform.id === 'canva';
+          const canvaEnabled = process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
+          const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
+          const isCanvaAccessible = isCanva && (canvaEnabled || canvaTestMode);
+          
+          const connected = isCanva 
+            ? !!user.canvaAccessToken 
+            : connectedAccounts.find((a: any) => a.platform === platform.id);
+          
           const Icon = platform.icon;
+
+          if (isCanva && !isCanvaAccessible && !canvaEnabled) {
+            platform.comingSoon = true;
+          }
 
           return (
             <Card key={platform.id} className={`group relative overflow-hidden transition-all hover:shadow-md border-border/50 ${platform.comingSoon ? 'opacity-75' : ''}`}>
@@ -191,32 +212,51 @@ export default async function AccountsPage({
                     {connected ? (
                       <div className="flex items-center space-x-3 w-full">
                         <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
-                          <AvatarImage src={connected.avatarUrl || ''} />
-                          <AvatarFallback className="bg-muted text-muted-foreground">
-                            {connected.username?.charAt(0).toUpperCase()}
-                          </AvatarFallback>
+                          {isCanva ? (
+                            <AvatarFallback className="bg-primary/10 text-primary">
+                              <Palette className="h-5 w-5" />
+                            </AvatarFallback>
+                          ) : (
+                            <>
+                              <AvatarImage src={connected.avatarUrl || ''} />
+                              <AvatarFallback className="bg-muted text-muted-foreground">
+                                {connected.username?.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </>
+                          )}
                         </Avatar>
                         <div className="flex flex-col min-w-0">
                           <p className="text-sm font-semibold truncate leading-tight">
-                            {typeof connected.username === 'string' ? connected.username : 'Compte connecté'}
+                            {isCanva ? 'Canva Pro' : (typeof connected.username === 'string' ? connected.username : 'Compte connecté')}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {typeof connected.platformUserId === 'string' ? connected.platformUserId : ''}
+                            {isCanva ? 'Design & Creative' : (typeof connected.platformUserId === 'string' ? connected.platformUserId : '')}
                           </p>
                         </div>
                       </div>
                     ) : (
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        {platform.comingSoon 
-                          ? 'Nous travaillons pour intégrer ce réseau prochainement.' 
-                          : `Gère ta présence sur ${platform.name} directement depuis Creatabl.`}
+                        {isCanva 
+                          ? 'Crée tes visuels Canva directement depuis Creatabl et attache-les à tes posts.'
+                          : platform.comingSoon 
+                            ? 'Nous travaillons pour intégrer ce réseau prochainement.' 
+                            : `Gère ta présence sur ${platform.name} directement depuis Creatabl.`}
                       </p>
                     )}
                   </div>
                   
                   <div className="pt-2">
                     {connected ? (
-                      <DisconnectButton platformId={platform.id} />
+                      isCanva ? (
+                        <Link 
+                          href="/api/canva/auth"
+                          className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), "w-full border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/5")}
+                        >
+                          Reconnecter
+                        </Link>
+                      ) : (
+                        <DisconnectButton platformId={platform.id} />
+                      )
                     ) : platform.comingSoon ? (
                       <div className="h-9 flex items-center justify-center rounded-md bg-muted/30 border border-dashed border-border/50">
                         <p className="text-[11px] text-muted-foreground font-medium italic">
@@ -225,15 +265,20 @@ export default async function AccountsPage({
                       </div>
                     ) : (
                       <Link 
-                        href={limitReached ? "#" : `/api/oauth/${platform.id}`}
+                        href={isCanva ? "/api/canva/auth" : (limitReached ? "#" : `/api/oauth/${platform.id}`)}
                         className={cn(
                           buttonVariants({ size: 'sm' }), 
                           "w-full shadow-sm",
-                          limitReached && "opacity-50 cursor-not-allowed pointer-events-none"
+                          !isCanva && limitReached && "opacity-50 cursor-not-allowed pointer-events-none",
+                          isCanva && canvaTestMode && "bg-[#7F77DD] hover:bg-[#7F77DD]/90"
                         )}
                       >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Connecter
+                        {isCanva ? (canvaTestMode ? "Tester Canva" : "Connecter") : (
+                          <>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Connecter
+                          </>
+                        )}
                       </Link>
                     )}
                   </div>

@@ -407,19 +407,28 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
         <a 
           href="/api/canva/auth"
           className={cn(
-            "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all opacity-50 grayscale flex flex-col items-center justify-center group/canva hover:opacity-80 hover:grayscale-0"
+            "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva",
+            canvaConnected ? "opacity-100 grayscale-0" : "opacity-50 grayscale hover:opacity-80 hover:grayscale-0"
           )}
         >
           <div className="absolute -top-2 -right-2 z-10">
-            <Badge className="bg-[#7F77DD] text-white border-none text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm">
-              Soon (Test)
+            <Badge className={cn(
+              "text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm",
+              canvaConnected ? "bg-emerald-500 text-white border-none" : "bg-[#7F77DD] text-white border-none"
+            )}>
+              {canvaConnected ? "Connected" : "Soon (Test)"}
             </Badge>
           </div>
 
-          <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center">
-            <Palette className="size-4 text-muted-foreground/60" />
+          <div className={cn(
+            "size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center",
+            canvaConnected && "bg-emerald-500/10 border-emerald-500/20"
+          )}>
+            <Palette className={cn("size-4 text-muted-foreground/60", canvaConnected && "text-emerald-600")} />
           </div>
-          <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">Canva</span>
+          <span className={cn("text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2", canvaConnected && "text-emerald-600")}>
+            {canvaConnected ? "Canva Connecté" : "Canva"}
+          </span>
         </a>
       ) : (
         <TooltipProvider>
