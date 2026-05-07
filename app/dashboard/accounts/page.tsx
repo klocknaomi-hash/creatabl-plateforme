@@ -44,6 +44,7 @@ interface PlatformInfo {
   color: string;
   bgColor: string;
   comingSoon?: boolean;
+  isIntegration?: boolean;
 }
 
 const PLATFORMS: PlatformInfo[] = [
