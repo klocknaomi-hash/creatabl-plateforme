@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 
 export async function GET() {
-  const codeVerifier = crypto.randomBytes(64)
+  const codeVerifier = crypto
+    .randomBytes(64)
     .toString('base64url')
 
   const codeChallenge = crypto
@@ -16,7 +17,13 @@ export async function GET() {
     client_id: process.env.CANVA_CLIENT_ID!,
     response_type: 'code',
     redirect_uri: process.env.CANVA_REDIRECT_URI!,
-    scope: 'design:content:read design:content:write asset:read asset:write profile:read',
+    scope: [
+      'design:content:read',
+      'design:content:write',
+      'asset:read',
+      'asset:write',
+      'profile:read'
+    ].join(' '),
     code_challenge: codeChallenge,
     code_challenge_method: 'S256',
     state,
@@ -26,12 +33,11 @@ export async function GET() {
 
   const response = NextResponse.redirect(authUrl)
 
-  // Store verifier and state in cookies
   response.cookies.set('canva_code_verifier', codeVerifier, {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
-    maxAge: 600, // 10 minutes
+    maxAge: 600,
   })
   response.cookies.set('canva_state', state, {
     httpOnly: true,

@@ -42,6 +42,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
   const [exporting, setExporting] = useState(false);
   const [settings, setSettings] = useState(initialSettings);
   const canvaEnabled = process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
+  const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
 
   const handleToggle = (key: string) => {
     setSettings((prev: any) => ({ ...prev, [key]: !prev[key] }));
@@ -311,6 +312,13 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                   className={cn(buttonVariants({ size: 'default' }), "rounded-xl font-bold px-6 shadow-lg shadow-primary/20")}
                 >
                   {user.canvaAccessToken ? "Connecté" : "Connecter Canva"}
+                </Link>
+              ) : canvaTestMode ? (
+                <Link 
+                  href="/api/canva/auth"
+                  className={cn(buttonVariants({ size: 'default' }), "rounded-xl font-bold px-6 opacity-40 bg-muted text-muted-foreground border-none hover:opacity-80")}
+                >
+                  Connecter Canva (Test)
                 </Link>
               ) : (
                 <TooltipProvider>

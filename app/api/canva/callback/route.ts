@@ -7,19 +7,30 @@ import { cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
-  if (!userId) return NextResponse.redirect(
-    new URL('/sign-in', process.env.NEXT_PUBLIC_APP_URL!)
-  )
+  if (!userId) {
+    return NextResponse.redirect(
+      new URL('/sign-in', process.env.NEXT_PUBLIC_APP_URL!)
+    )
+  }
 
   const { searchParams } = req.nextUrl
   const code = searchParams.get('code')
   const state = searchParams.get('state')
+  const error = searchParams.get('error')
+
+  if (error) {
+    console.error('Canva OAuth error:', error)
+    return NextResponse.redirect(
+      new URL('/dashboard?canva=error',
+        process.env.NEXT_PUBLIC_APP_URL!)
+    )
+  }
 
   const cookieStore = await cookies()
   const storedState = cookieStore.get('canva_state')?.value
-  const codeVerifier = cookieStore.get('canva_code_verifier')?.value
+  const codeVerifier =
+    cookieStore.get('canva_code_verifier')?.value
 
-  // Verify state
   if (state !== storedState) {
     return NextResponse.json(
       { error: 'Invalid state' },
@@ -27,12 +38,13 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  // Exchange code for token
   const tokenResponse = await fetch(
-    'https://www.canva.com/api/oauth/token',
+    'https://api.canva.com/rest/v1/oauth/token',
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code: code!,
@@ -47,15 +59,17 @@ export async function GET(req: NextRequest) {
   const tokenData = await tokenResponse.json()
 
   if (!tokenData.access_token) {
-    return NextResponse.json(
-      { error: 'Token exchange failed', details: tokenData },
-      { status: 400 }
+    console.error('Token exchange failed:', tokenData)
+    return NextResponse.redirect(
+      new URL('/dashboard?canva=token_error',
+        process.env.NEXT_PUBLIC_APP_URL!)
     )
   }
 
-  const expiresAt = new Date(Date.now() + tokenData.expires_in * 1000)
+  const expiresAt = new Date(
+    Date.now() + tokenData.expires_in * 1000
+  )
 
-  // Save tokens to Neon
   await db.update(users)
     .set({
       canvaAccessToken: tokenData.access_token,
@@ -64,9 +78,9 @@ export async function GET(req: NextRequest) {
     })
     .where(eq(users.clerkId, userId))
 
-  // Clear cookies
   const response = NextResponse.redirect(
-    new URL('/dashboard', process.env.NEXT_PUBLIC_APP_URL!)
+    new URL('/dashboard?canva=connected',
+      process.env.NEXT_PUBLIC_APP_URL!)
   )
   response.cookies.delete('canva_code_verifier')
   response.cookies.delete('canva_state')
