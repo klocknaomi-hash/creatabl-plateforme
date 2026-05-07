@@ -33,6 +33,15 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+export const aiUsage = pgTable('ai_usage', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: text('user_id').notNull(),
+  requestCount: integer('request_count').default(0).notNull(),
+  windowStart: timestamp('window_start').defaultNow().notNull(),
+  cooldownUntil: timestamp('cooldown_until'),
+  lastRequestAt: timestamp('last_request_at').defaultNow(),
+});
+
 export const socialAccounts = pgTable('social_accounts', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id).notNull(),
