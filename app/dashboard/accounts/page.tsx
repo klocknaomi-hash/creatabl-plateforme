@@ -170,9 +170,11 @@ export default async function AccountsPage({
           const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
           const isCanvaAccessible = isCanva && (canvaEnabled || canvaTestMode);
           
-          const connected = isCanva 
-            ? !!user.canvaAccessToken 
+          const socialAccount = isCanva 
+            ? null 
             : connectedAccounts.find((a: any) => a.platform === platform.id);
+          
+          const connected = isCanva ? !!user.canvaAccessToken : !!socialAccount;
           
           const Icon = platform.icon;
 
@@ -219,19 +221,19 @@ export default async function AccountsPage({
                             </AvatarFallback>
                           ) : (
                             <>
-                              <AvatarImage src={connected.avatarUrl || ''} />
+                              <AvatarImage src={socialAccount?.avatarUrl || ''} />
                               <AvatarFallback className="bg-muted text-muted-foreground">
-                                {connected.username?.charAt(0).toUpperCase()}
+                                {socialAccount?.username?.charAt(0).toUpperCase()}
                               </AvatarFallback>
                             </>
                           )}
                         </Avatar>
                         <div className="flex flex-col min-w-0">
                           <p className="text-sm font-semibold truncate leading-tight">
-                            {isCanva ? 'Canva Pro' : (typeof connected.username === 'string' ? connected.username : 'Compte connecté')}
+                            {isCanva ? 'Canva Pro' : (typeof socialAccount?.username === 'string' ? socialAccount.username : 'Compte connecté')}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {isCanva ? 'Design & Creative' : (typeof connected.platformUserId === 'string' ? connected.platformUserId : '')}
+                            {isCanva ? 'Design & Creative' : (typeof socialAccount?.platformUserId === 'string' ? socialAccount.platformUserId : '')}
                           </p>
                         </div>
                       </div>
