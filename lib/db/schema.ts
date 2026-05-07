@@ -30,6 +30,7 @@ export const users = pgTable('users', {
   clientType: text('client_type'),
   onboardingCompleted: boolean('onboarding_completed').default(false),
   maxWorkspaces: integer("max_workspaces").default(1).notNull(),
+  updatedAt: timestamp('updated_at').defaultNow(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
