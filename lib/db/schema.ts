@@ -30,6 +30,9 @@ export const users = pgTable('users', {
   clientType: text('client_type'),
   onboardingCompleted: boolean('onboarding_completed').default(false),
   maxWorkspaces: integer("max_workspaces").default(1).notNull(),
+  canvaAccessToken: text('canva_access_token'),
+  canvaRefreshToken: text('canva_refresh_token'),
+  canvaTokenExpiresAt: timestamp('canva_token_expires_at'),
   updatedAt: timestamp('updated_at').defaultNow(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });

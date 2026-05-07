@@ -66,6 +66,7 @@ function ComposePageInner() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [selectedTone, setSelectedTone] = useState("professional");
   const [generating, setGenerating] = useState(false);
+  const [canvaConnected, setCanvaConnected] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const lastSavedRef = useRef<string>("");
 
@@ -139,6 +140,20 @@ function ComposePageInner() {
       };
       fetchLatestDraft();
     }
+
+    // Fetch account connections (Canva, etc.)
+    const fetchConnections = async () => {
+      try {
+        const res = await fetch("/api/accounts");
+        const data = await res.json();
+        if (data.canvaConnected) {
+          setCanvaConnected(true);
+        }
+      } catch (err) {
+        console.error("Failed to fetch connections", err);
+      }
+    };
+    fetchConnections();
   }, [idParam, dateParam]);
 
   // Autosave logic
@@ -367,6 +382,7 @@ function ComposePageInner() {
               onUpload={(file) => setMediaFiles([...mediaFiles, file])}
               onRemove={(id) => setMediaFiles(mediaFiles.filter(f => f.fileId !== id))}
               onTransform={(id, newUrl) => setMediaFiles(mediaFiles.map(f => f.fileId === id ? { ...f, url: newUrl } : f))}
+              canvaConnected={canvaConnected}
             />
           </div>
 

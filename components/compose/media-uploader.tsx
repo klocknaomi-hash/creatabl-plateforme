@@ -15,6 +15,12 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MediaFile {
   url: string;
@@ -28,6 +34,7 @@ interface MediaUploaderProps {
   onUpload: (file: MediaFile) => void;
   onRemove: (fileId: string) => void;
   onTransform: (fileId: string, newUrl: string) => void;
+  canvaConnected?: boolean;
 }
 
 function MediaItem({ 
@@ -253,8 +260,9 @@ interface MediaLimit {
   types: string[];
 }
 
-export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemove, onTransform }: MediaUploaderProps) {
+export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemove, onTransform, canvaConnected }: MediaUploaderProps) {
   const [uploading, setUploading] = useState(false);
+  const canvaEnabled = process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getStrictestLimit = (): MediaLimit => {
@@ -368,20 +376,60 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
       )}
 
       {/* Canva Tile */}
-      <div className={cn(
-        "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all opacity-50 grayscale cursor-not-allowed flex flex-col items-center justify-center"
-      )}>
-        <div className="absolute -top-2 -right-2 z-10">
-          <Badge variant="secondary" className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider bg-primary/10 text-primary border-2 border-background shadow-sm">
-            Soon
-          </Badge>
-        </div>
+      {canvaEnabled ? (
+        <a 
+          href="/api/canva/auth"
+          className={cn(
+            "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva",
+            !canvaConnected && "hover:border-primary/40 hover:bg-primary/[0.03] hover:shadow-sm"
+          )}
+        >
+          {!canvaConnected && (
+            <div className="absolute -top-2 -right-2 z-10">
+              <Badge variant="secondary" className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border-2 border-background shadow-sm">
+                New
+              </Badge>
+            </div>
+          )}
 
-        <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center">
-          <Palette className="size-4 text-muted-foreground/60" />
-        </div>
-        <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">Canva</span>
-      </div>
+          <div className={cn(
+            "size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center transition-transform group-hover/canva:scale-110",
+            canvaConnected && "bg-emerald-500/10 border-emerald-500/20"
+          )}>
+            <Palette className={cn("size-4 text-muted-foreground/60", canvaConnected && "text-emerald-600")} />
+          </div>
+          <span className={cn("text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2", canvaConnected && "text-emerald-600")}>
+            {canvaConnected ? "Canva Connecté" : "Canva"}
+          </span>
+        </a>
+      ) : (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <div className={cn(
+                  "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all opacity-50 grayscale cursor-not-allowed flex flex-col items-center justify-center group/canva"
+                )}>
+                  <div className="absolute -top-2 -right-2 z-10">
+                    <Badge className="bg-[#7F77DD] hover:bg-[#7F77DD]/90 text-white border-none text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm">
+                      Soon
+                    </Badge>
+                  </div>
+
+                  <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center">
+                    <Palette className="size-4 text-muted-foreground/60" />
+                  </div>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">Canva</span>
+                </div>
+              }
+            />
+            <TooltipContent className="bg-foreground text-background border-none text-[10px] font-bold py-1.5 px-2.5 rounded-lg shadow-xl">
+              <p>Intégration Canva en cours de validation.</p>
+              <p className="text-primary-foreground/60">Disponible très bientôt 🎨</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
     </div>
   );
 }

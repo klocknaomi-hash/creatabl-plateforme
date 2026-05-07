@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
       where: eq(socialAccounts.userId, userRecord.id),
     });
 
-    return NextResponse.json({ accounts });
+    return NextResponse.json({ 
+      accounts,
+      canvaConnected: !!userRecord.canvaAccessToken
+    });
   } catch (error: any) {
     console.error('Fetch accounts error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });

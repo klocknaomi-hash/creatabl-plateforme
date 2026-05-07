@@ -12,6 +12,7 @@ export const PLAN_LIMITS = {
     storageLimit: 100, // 100MB
     analyticsDays: 7,
     recurringPosts: false,
+    canvaIntegration: true,
     price: 0,
   },
   pro: {
@@ -23,6 +24,7 @@ export const PLAN_LIMITS = {
     storageLimit: 5120, // 5GB
     analyticsDays: 90,
     recurringPosts: true,
+    canvaIntegration: true,
     price: 99,
   },
   business: {
@@ -34,6 +36,7 @@ export const PLAN_LIMITS = {
     storageLimit: 20480, // 20GB
     analyticsDays: 365,
     recurringPosts: true,
+    canvaIntegration: true,
     price: 199,
   },
   // Aliases for compatibility
@@ -46,6 +49,7 @@ export const PLAN_LIMITS = {
     storageLimit: 100,
     analyticsDays: 7,
     recurringPosts: false,
+    canvaIntegration: true,
     price: 0,
   },
   agency: {
@@ -57,6 +61,7 @@ export const PLAN_LIMITS = {
     storageLimit: 20480,
     analyticsDays: 365,
     recurringPosts: true,
+    canvaIntegration: true,
     price: 199,
   },
 } as const;
