@@ -27,7 +27,8 @@ export const users = pgTable('users', {
   isSubscribed: boolean("is_subscribed").default(false),
   paddleCustomerId: text("paddle_customer_id"), // Deprecated in favor of Stripe
   profileType: text("profile_type"),
-  onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
+  clientType: text('client_type'),
+  onboardingCompleted: boolean('onboarding_completed').default(false),
   maxWorkspaces: integer("max_workspaces").default(1).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
