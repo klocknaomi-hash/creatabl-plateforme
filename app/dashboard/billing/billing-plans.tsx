@@ -128,15 +128,13 @@ export function BillingPlans({ currentPlan }: BillingPlansProps) {
         </span>
         <button
           onClick={() => setBilling(billing === 'monthly' ? 'yearly' : 'monthly')}
-          className={`relative w-12 h-6 rounded-full transition-colors ${
-            billing === 'yearly' ? 'bg-[#7F77DD]' : 'bg-gray-200'
-          }`}
+          className={`relative w-12 h-6 rounded-full transition-colors ${billing === 'yearly' ? 'bg-[#7F77DD]' : 'bg-gray-200'
+            }`}
           aria-label="Basculer entre mensuel et annuel"
         >
           <span
-            className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-              billing === 'yearly' ? 'translate-x-6' : 'translate-x-0'
-            }`}
+            className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${billing === 'yearly' ? 'translate-x-6' : 'translate-x-0'
+              }`}
           />
         </button>
         <span className={`text-sm font-medium ${billing === 'yearly' ? 'text-gray-900' : 'text-gray-400'}`}>
@@ -157,11 +155,10 @@ export function BillingPlans({ currentPlan }: BillingPlansProps) {
             <motion.div
               key={plan.id}
               whileHover={isCurrentPlan ? {} : { y: -4 }}
-              className={`relative bg-white rounded-3xl p-7 border-2 flex flex-col transition-all ${
-                isCurrentPlan
-                  ? 'border-[#7F77DD] shadow-lg shadow-purple-50'
-                  : 'border-gray-100 hover:border-gray-200 shadow-sm opacity-70 hover:opacity-90'
-              }`}
+              className={`relative bg-white rounded-3xl p-7 border-2 flex flex-col transition-all ${isCurrentPlan
+                ? 'border-[#7F77DD] shadow-lg shadow-purple-50'
+                : 'border-gray-100 hover:border-gray-200 shadow-sm opacity-70 hover:opacity-90'
+                }`}
             >
               {/* Badge plan actuel — seul indicateur, pas de bouton */}
               {isCurrentPlan && (
