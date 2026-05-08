@@ -33,6 +33,11 @@ export const users = pgTable('users', {
   canvaAccessToken: text('canva_access_token'),
   canvaRefreshToken: text('canva_refresh_token'),
   canvaTokenExpiresAt: timestamp('canva_token_expires_at'),
+  facebookAccessToken: text('facebook_access_token'),
+  facebookUserId: text('facebook_user_id'),
+  facebookPageId: text('facebook_page_id'),
+  instagramAccountId: text('instagram_account_id'),
+  instagramAccessToken: text('instagram_access_token'),
   updatedAt: timestamp('updated_at').defaultNow(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });

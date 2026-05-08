@@ -16,14 +16,34 @@ export async function POST(
   }
 
   try {
-    await db
-      .delete(socialAccounts)
-      .where(
-        and(
-          eq(socialAccounts.userId, user.id),
-          eq(socialAccounts.platform, platform as any)
-        )
-      );
+    if (platform === 'facebook' || platform === 'instagram') {
+      const { users } = await import('@/lib/db/schema');
+      if (platform === 'facebook') {
+        await db.update(users)
+          .set({ 
+            facebookAccessToken: null, 
+            facebookUserId: null, 
+            facebookPageId: null 
+          })
+          .where(eq(users.id, user.id));
+      } else {
+        await db.update(users)
+          .set({ 
+            instagramAccountId: null, 
+            instagramAccessToken: null 
+          })
+          .where(eq(users.id, user.id));
+      }
+    } else {
+      await db
+        .delete(socialAccounts)
+        .where(
+          and(
+            eq(socialAccounts.userId, user.id),
+            eq(socialAccounts.platform, platform as any)
+          )
+        );
+    }
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

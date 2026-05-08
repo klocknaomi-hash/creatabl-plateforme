@@ -9,6 +9,10 @@ export async function GET(
 ) {
   const { platform } = await params;
   
+  if (platform === 'facebook' || platform === 'instagram') {
+    return NextResponse.redirect(new URL('/api/oauth/facebook', request.nextUrl.origin));
+  }
+  
   try {
     const client = getPlatformClient(platform);
     

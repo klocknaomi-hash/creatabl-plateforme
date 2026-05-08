@@ -113,9 +113,9 @@ const PLATFORMS: PlatformInfo[] = [
 export default async function AccountsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string; error?: string }>;
+  searchParams: Promise<{ success?: string; error?: string; facebook?: string }>;
 }) {
-  const { success, error } = await searchParams;
+  const { success, error, facebook } = await searchParams;
   const user = await getCurrentUser();
 
   if (!user) {
@@ -139,7 +139,7 @@ export default async function AccountsPage({
         </p>
       </div>
 
-      {success && (
+      {(success || facebook === 'connected') && (
         <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl text-sm font-medium flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
           <CheckCircle2 className="h-4 w-4" />
           Compte connecté avec succès !
@@ -174,7 +174,16 @@ export default async function AccountsPage({
             ? null 
             : connectedAccounts.find((a: any) => a.platform === platform.id);
           
-          const connected = isCanva ? !!user.canvaAccessToken : !!socialAccount;
+          let connected = false;
+          if (isCanva) {
+            connected = !!user.canvaAccessToken;
+          } else if (platform.id === 'facebook') {
+            connected = !!(user as any).facebookAccessToken;
+          } else if (platform.id === 'instagram') {
+            connected = !!(user as any).instagramAccessToken;
+          } else {
+            connected = !!socialAccount;
+          }
           
           const Icon = platform.icon;
 
@@ -219,6 +228,10 @@ export default async function AccountsPage({
                             <AvatarFallback className="bg-primary/10 text-primary">
                               <Palette className="h-5 w-5" />
                             </AvatarFallback>
+                          ) : (platform.id === 'facebook' || platform.id === 'instagram') ? (
+                            <AvatarFallback className={cn("bg-primary/10", platform.color)}>
+                              <Icon className="h-5 w-5" />
+                            </AvatarFallback>
                           ) : (
                             <>
                               <AvatarImage src={socialAccount?.avatarUrl || ''} />
@@ -230,10 +243,16 @@ export default async function AccountsPage({
                         </Avatar>
                         <div className="flex flex-col min-w-0">
                           <p className="text-sm font-semibold truncate leading-tight">
-                            {isCanva ? 'Canva Pro' : (typeof socialAccount?.username === 'string' ? socialAccount.username : 'Compte connecté')}
+                            {isCanva ? 'Canva Pro' : 
+                             platform.id === 'facebook' ? 'Facebook Connecté' :
+                             platform.id === 'instagram' ? 'Instagram Connecté' :
+                             (typeof socialAccount?.username === 'string' ? socialAccount.username : 'Compte connecté')}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {isCanva ? 'Design & Creative' : (typeof socialAccount?.platformUserId === 'string' ? socialAccount.platformUserId : '')}
+                            {isCanva ? 'Design & Créatif' : 
+                             platform.id === 'facebook' ? 'Meta Account' :
+                             platform.id === 'instagram' ? 'Meta Account' :
+                             (typeof socialAccount?.platformUserId === 'string' ? socialAccount.platformUserId : '')}
                           </p>
                         </div>
                       </div>
