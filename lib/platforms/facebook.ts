@@ -5,7 +5,7 @@ export class FacebookClient implements PlatformClient {
   private clientSecret = process.env.FACEBOOK_CLIENT_SECRET!;
   private get redirectUri() {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
-    return `${baseUrl}/api/oauth/facebook/callback`;
+    return `${baseUrl}/api/oauth/callback/facebook`;
   }
 
   getAuthorizationUrl(params?: { state?: string }): string {
