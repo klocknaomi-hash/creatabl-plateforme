@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return NextResponse.redirect(
     new URL('/sign-in', process.env.NEXT_PUBLIC_APP_URL!)
   )
