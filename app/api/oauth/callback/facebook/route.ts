@@ -8,7 +8,7 @@ import { cookies } from 'next/headers'
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.redirect(
-    new URL('/sign-in', process.env.NEXT_PUBLIC_APP_URL!)
+    new URL('/sign-in', req.nextUrl.origin)
   )
 
   const { searchParams } = req.nextUrl
@@ -18,8 +18,7 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      new URL('/dashboard/accounts?error=facebook_denied',
-        process.env.NEXT_PUBLIC_APP_URL!)
+      new URL('/dashboard/accounts?error=facebook_denied', req.nextUrl.origin)
     )
   }
 
@@ -33,13 +32,15 @@ export async function GET(req: NextRequest) {
     )
   }
 
+  const redirectUri = `${req.nextUrl.origin}/api/oauth/callback/facebook`
+  
   // Exchange code for access token
   const tokenRes = await fetch(
     `https://graph.facebook.com/v19.0/oauth/access_token?` +
     new URLSearchParams({
       client_id: process.env.FACEBOOK_APP_ID!,
       client_secret: process.env.FACEBOOK_APP_SECRET!,
-      redirect_uri: process.env.FACEBOOK_REDIRECT_URI!,
+      redirect_uri: redirectUri,
       code: code!,
     })
   )
@@ -48,8 +49,7 @@ export async function GET(req: NextRequest) {
 
   if (!tokenData.access_token) {
     return NextResponse.redirect(
-      new URL('/dashboard/accounts?error=facebook_token',
-        process.env.NEXT_PUBLIC_APP_URL!)
+      new URL('/dashboard/accounts?error=facebook_token', req.nextUrl.origin)
     )
   }
 
@@ -94,8 +94,7 @@ export async function GET(req: NextRequest) {
   console.log('Update successful')
 
   const response = NextResponse.redirect(
-    new URL('/dashboard/accounts?facebook=connected',
-      process.env.NEXT_PUBLIC_APP_URL!)
+    new URL('/dashboard/accounts?facebook=connected', req.nextUrl.origin)
   )
   response.cookies.delete('fb_state')
 

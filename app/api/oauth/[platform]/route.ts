@@ -5,7 +5,7 @@ export async function GET(
   { params }: { params: Promise<{ platform: string }> }
 ) {
   const { platform } = await params
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!
+  const baseUrl = req.nextUrl.origin
 
   switch (platform.toLowerCase()) {
     case 'facebook':
