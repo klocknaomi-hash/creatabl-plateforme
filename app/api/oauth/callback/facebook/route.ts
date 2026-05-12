@@ -7,6 +7,10 @@ import { cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
+  console.log('Callback userId:', userId)
+  console.log('Callback cookies:', 
+    req.cookies.getAll().map(c => c.name))
+
   if (!userId) return NextResponse.redirect(
     new URL('/sign-in', req.nextUrl.origin)
   )
@@ -26,6 +30,7 @@ export async function GET(req: NextRequest) {
   const storedState = cookieStore.get('fb_state')?.value
 
   if (state !== storedState) {
+    console.error('State mismatch:', { state, storedState })
     return NextResponse.json(
       { error: 'Invalid state' },
       { status: 400 }
@@ -49,6 +54,7 @@ export async function GET(req: NextRequest) {
   const tokenData = await tokenRes.json()
 
   if (!tokenData.access_token) {
+    console.error('Token exchange failed:', tokenData)
     return NextResponse.redirect(
       new URL('/dashboard/accounts?error=facebook_token', req.nextUrl.origin)
     )
@@ -80,19 +86,35 @@ export async function GET(req: NextRequest) {
       igData.instagram_business_account?.id || null
   }
 
-  // Save to Neon
-  console.log('Updating user tokens for:', userId)
-  await db.update(users)
-    .set({
-      facebookAccessToken: tokenData.access_token,
-      facebookUserId: meData.id,
-      facebookPageId: pageId,
-      instagramAccountId,
-      instagramAccessToken: pageToken,
-      updatedAt: new Date(),
-    })
-    .where(eq(users.clerkId, userId))
-  console.log('Update successful')
+  // Save to Neon using Upsert
+  console.log('Upserting user tokens for:', userId)
+  try {
+    await db.insert(users)
+      .values({
+        clerkId: userId,
+        email: '', // Will be updated if exists
+        facebookAccessToken: tokenData.access_token,
+        facebookUserId: meData.id,
+        facebookPageId: pageId,
+        instagramAccountId,
+        instagramAccessToken: pageToken,
+        updatedAt: new Date(),
+      })
+      .onConflictDoUpdate({
+        target: users.clerkId,
+        set: {
+          facebookAccessToken: tokenData.access_token,
+          facebookUserId: meData.id,
+          facebookPageId: pageId,
+          instagramAccountId,
+          instagramAccessToken: pageToken,
+          updatedAt: new Date(),
+        }
+      })
+    console.log('Upsert successful')
+  } catch (dbError) {
+    console.error('Database upsert failed:', dbError)
+  }
 
   const response = NextResponse.redirect(
     new URL('/dashboard/accounts?facebook=connected', req.nextUrl.origin)
