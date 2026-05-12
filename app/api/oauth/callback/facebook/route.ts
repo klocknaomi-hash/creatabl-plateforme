@@ -80,6 +80,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Save to Neon
+  console.log('Updating user tokens for:', userId)
   await db.update(users)
     .set({
       facebookAccessToken: tokenData.access_token,
@@ -87,8 +88,10 @@ export async function GET(req: NextRequest) {
       facebookPageId: pageId,
       instagramAccountId,
       instagramAccessToken: pageToken,
+      updatedAt: new Date(),
     })
     .where(eq(users.clerkId, userId))
+  console.log('Update successful')
 
   const response = NextResponse.redirect(
     new URL('/dashboard/accounts?facebook=connected',
