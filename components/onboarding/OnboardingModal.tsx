@@ -62,12 +62,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         setStep(3);
         await updateOnboardingStep(3);
       } else if (step === 3) {
-        await createWorkspace({ 
-          name: formData.workspaceName, 
-          logoUrl: formData.logoUrl || undefined,
-          clientType: formData.clientType 
-        });
+        try {
+          await createWorkspace({ 
+            name: formData.workspaceName, 
+            logoUrl: formData.logoUrl || undefined,
+            clientType: formData.clientType || undefined
+          });
+        } catch (err) {
+          console.error("createWorkspace failed, continuing anyway", err);
+        }
         setStep(4);
+        await updateOnboardingStep(4);
       } else if (step === 4) {
         if (formData.writingTone) {
           await saveWritingStyle(formData.writingTone);

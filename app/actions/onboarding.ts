@@ -37,33 +37,38 @@ export async function saveClientType(clientType: string) {
 }
 
 export async function createWorkspace(data: { name: string; logoUrl?: string; clientType?: string }) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
 
-  // Get internal user ID
-  const user = await db.query.users.findFirst({
-    where: eq(users.clerkId, userId),
-  });
+    // Get internal user ID
+    const user = await db.query.users.findFirst({
+      where: eq(users.clerkId, userId),
+    });
 
-  if (!user) throw new Error("User not found");
+    if (!user) throw new Error("User not found");
 
-  const [newWorkspace] = await db.insert(workspaces).values({
-    name: data.name,
-    logoUrl: data.logoUrl,
-    ownerId: user.id,
-    clientType: data.clientType,
-  }).returning();
+    const [newWorkspace] = await db.insert(workspaces).values({
+      name: data.name,
+      logoUrl: data.logoUrl,
+      ownerId: user.id,
+      clientType: data.clientType,
+    }).returning();
 
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      workspaceId: newWorkspace.id,
-      onboardingStep: 4,
-    },
-  });
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        workspaceId: newWorkspace.id,
+        onboardingStep: 4,
+      },
+    });
 
-  revalidatePath("/dashboard");
-  return newWorkspace;
+    revalidatePath("/dashboard");
+    return newWorkspace;
+  } catch (error) {
+    console.error("createWorkspace DB error:", error);
+    // do not throw — just return silently
+  }
 }
 
 export async function saveWritingStyle(writingTone: string) {
