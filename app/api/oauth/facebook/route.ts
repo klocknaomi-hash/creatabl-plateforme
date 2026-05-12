@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 
 export async function GET() {
+  console.log('FACEBOOK_APP_ID loaded:',
+    process.env.FACEBOOK_APP_ID ? 'YES' : 'MISSING')
+  console.log('App ID value:',
+    process.env.FACEBOOK_APP_ID?.substring(0, 6) + '...')
+
   const state = crypto.randomBytes(16).toString('hex')
 
   const params = new URLSearchParams({
