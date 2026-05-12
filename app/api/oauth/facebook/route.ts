@@ -21,6 +21,8 @@ export async function GET(req: NextRequest) {
   
   console.log('Final Redirect URI used:', redirectUri)
   console.log('REDIRECT URI USED:', redirectUri)
+  console.log('=== REDIRECT URI FINAL ===')
+  console.log(JSON.stringify(redirectUri))
 
   const params = new URLSearchParams({
     client_id: appId,
