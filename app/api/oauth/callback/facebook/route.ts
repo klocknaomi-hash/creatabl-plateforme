@@ -63,8 +63,11 @@ export async function GET(req: NextRequest) {
 
   const tokenData = await tokenRes.json()
 
+  console.log('Token exchange status:', tokenRes.status)
+  console.log('Token exchange response:', JSON.stringify(tokenData))
+
   if (!tokenData.access_token) {
-    console.error('Token exchange failed:', tokenData)
+    console.error('Token exchange failed:', JSON.stringify(tokenData))
     return NextResponse.redirect(
       new URL('/dashboard/accounts?error=facebook_token', req.nextUrl.origin)
     )
