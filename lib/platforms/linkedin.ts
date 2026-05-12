@@ -4,6 +4,10 @@ export class LinkedInClient implements PlatformClient {
   private clientId = process.env.LINKEDIN_CLIENT_ID!;
   private clientSecret = process.env.LINKEDIN_CLIENT_SECRET!;
   private get redirectUri() {
+    if (process.env.LINKEDIN_REDIRECT_URI) {
+      return process.env.LINKEDIN_REDIRECT_URI;
+    }
+
     let baseUrl = process.env.NEXT_PUBLIC_APP_URL || '';
     
     // Fallback for Vercel environments

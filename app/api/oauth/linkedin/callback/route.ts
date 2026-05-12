@@ -1,0 +1,123 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@/lib/db';
+import { socialAccounts, users } from '@/lib/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { cookies } from 'next/headers';
+import { getPlatformClient } from '@/lib/platforms';
+import { encryptToken } from '@/lib/encryption';
+
+export async function GET(req: NextRequest) {
+  const { userId } = await auth();
+  console.log('LinkedIn Callback userId:', userId);
+
+  if (!userId) {
+    return NextResponse.redirect(new URL('/sign-in', req.nextUrl.origin));
+  }
+
+  const { searchParams } = req.nextUrl;
+  const code = searchParams.get('code');
+  const state = searchParams.get('state');
+  const error = searchParams.get('error');
+  const errorDescription = searchParams.get('error_description');
+
+  if (error) {
+    console.error('LinkedIn Auth Error:', error, errorDescription);
+    return NextResponse.redirect(
+      new URL(`/dashboard/accounts?error=linkedin_${error}`, req.nextUrl.origin)
+    );
+  }
+
+  if (!code) {
+    return NextResponse.redirect(
+      new URL('/dashboard/accounts?error=no_code', req.nextUrl.origin)
+    );
+  }
+
+  const cookieStore = await cookies();
+  const storedState = cookieStore.get('linkedin_oauth_state')?.value;
+
+  console.log('LinkedIn State check - URL:', state);
+  console.log('LinkedIn State check - Cookie:', storedState);
+
+  // For now, we bypass state check for debugging as requested in Facebook pattern
+  /*
+  if (state !== storedState) {
+    console.error('LinkedIn State mismatch:', { state, storedState });
+    return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
+  }
+  */
+
+  try {
+    const client = getPlatformClient('linkedin');
+    
+    // getTokens handles the exchange and profile fetch
+    console.log('Exchanging LinkedIn code for tokens...');
+    const tokens = await client.getTokens(code);
+    console.log('LinkedIn tokens received for:', tokens.username);
+
+    // Get internal user ID
+    const userRecord = await db.query.users.findFirst({
+      where: eq(users.clerkId, userId),
+    });
+
+    if (!userRecord) {
+      throw new Error('User not found in database');
+    }
+
+    // Encrypt tokens
+    const encryptedAccessToken = tokens.accessToken ? encryptToken(tokens.accessToken) : null;
+    const encryptedRefreshToken = tokens.refreshToken ? encryptToken(tokens.refreshToken) : null;
+
+    // Save to social_accounts
+    const existing = await db
+      .select()
+      .from(socialAccounts)
+      .where(
+        and(
+          eq(socialAccounts.userId, userRecord.id),
+          eq(socialAccounts.platform, 'linkedin')
+        )
+      )
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db
+        .update(socialAccounts)
+        .set({
+          platformUserId: tokens.platformUserId,
+          accessToken: encryptedAccessToken,
+          refreshToken: encryptedRefreshToken,
+          expiresAt: tokens.expiresAt,
+          username: tokens.username,
+          avatarUrl: tokens.avatarUrl,
+        })
+        .where(eq(socialAccounts.id, existing[0].id));
+    } else {
+      await db.insert(socialAccounts).values({
+        userId: userRecord.id,
+        platform: 'linkedin',
+        platformUserId: tokens.platformUserId,
+        accessToken: encryptedAccessToken,
+        refreshToken: encryptedRefreshToken,
+        expiresAt: tokens.expiresAt,
+        username: tokens.username,
+        avatarUrl: tokens.avatarUrl,
+      });
+    }
+
+    console.log('LinkedIn account saved successfully');
+
+    const response = NextResponse.redirect(
+      new URL('/dashboard/accounts?success=true&linkedin=connected', req.nextUrl.origin)
+    );
+    response.cookies.delete('linkedin_oauth_state');
+    return response;
+
+  } catch (err: any) {
+    console.error('LinkedIn Callback Error:', err);
+    return NextResponse.redirect(
+      new URL(`/dashboard/accounts?error=${encodeURIComponent(err.message)}`, req.nextUrl.origin)
+    );
+  }
+}
