@@ -32,13 +32,14 @@ export async function GET(req: NextRequest) {
     )
   }
 
+  const appId = process.env.FACEBOOK_APP_ID || '1306176321466122'
   const redirectUri = `${req.nextUrl.origin}/api/oauth/callback/facebook`
   
   // Exchange code for access token
   const tokenRes = await fetch(
     `https://graph.facebook.com/v19.0/oauth/access_token?` +
     new URLSearchParams({
-      client_id: process.env.FACEBOOK_APP_ID!,
+      client_id: appId,
       client_secret: process.env.FACEBOOK_APP_SECRET!,
       redirect_uri: redirectUri,
       code: code!,

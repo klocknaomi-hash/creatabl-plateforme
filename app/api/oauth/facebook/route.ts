@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
 export async function GET(req: NextRequest) {
+  const appId = process.env.FACEBOOK_APP_ID || '1306176321466122'
+  
   console.log('=== FACEBOOK OAUTH DEBUG ===')
-  console.log('App ID:', process.env.FACEBOOK_APP_ID)
+  console.log('App ID source:', process.env.FACEBOOK_APP_ID ? 'from env' : 'hardcoded fallback')
+  console.log('App ID used:', appId)
   console.log('Redirect URI from Env:', process.env.FACEBOOK_REDIRECT_URI)
   console.log('Request origin:', req.nextUrl.origin)
 
@@ -15,7 +18,7 @@ export async function GET(req: NextRequest) {
   console.log('Final Redirect URI used:', redirectUri)
 
   const params = new URLSearchParams({
-    client_id: process.env.FACEBOOK_APP_ID!,
+    client_id: appId,
     redirect_uri: redirectUri,
     scope: [
       'email',
