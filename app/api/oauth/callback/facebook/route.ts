@@ -29,6 +29,10 @@ export async function GET(req: NextRequest) {
   const cookieStore = await cookies()
   const storedState = cookieStore.get('fb_state')?.value
 
+  console.log('State from URL:', state)
+  console.log('Stored state cookie:', storedState)
+  console.log('Match:', state === storedState)
+
   if (state !== storedState) {
     console.error('State mismatch:', { state, storedState })
     return NextResponse.json(
