@@ -197,65 +197,65 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
             </div>
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Comment s'appelle ton workspace ?</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Comment s'appelle ton workspace ?
+                </label>
                 <input
                   type="text"
                   placeholder="Ex : Mon agence, Studio Léa, Marque perso..."
                   value={formData.workspaceName}
                   onChange={(e) => setFormData({ ...formData, workspaceName: e.target.value })}
                   className="w-full p-4 rounded-xl border border-gray-200 focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] outline-none transition-all"
-                  required
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Ajoute un logo (optionnel)</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Ajoute un logo (optionnel)
+                </label>
                 <div className="flex items-center space-x-4">
-                   <div className="w-16 h-16 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 overflow-hidden relative group transition-all hover:bg-gray-50">
-                      {formData.logoUrl ? (
-                        <img src={formData.logoUrl} className="w-full h-full object-cover" alt="Logo preview" />
-                      ) : (
-                        <div className="flex flex-col items-center text-gray-300">
-                          <Upload size={20} />
-                          <span className="text-[10px] mt-1 font-bold uppercase tracking-tighter">Aucun</span>
-                        </div>
-                      )}
-                   </div>
-                   <div className="flex flex-col items-start gap-1">
-                     <input 
-                       type="file" 
-                       id="logo-upload" 
-                       className="hidden" 
-                       accept="image/*"
-                       onChange={(e) => {
-                         const file = e.target.files?.[0];
-                         if (file) {
-                           const reader = new FileReader();
-                           reader.onloadend = () => {
-                             setFormData({ ...formData, logoUrl: reader.result as string });
-                           };
-                           reader.readAsDataURL(file);
-                         }
-                       }}
-                     />
-                     <button 
-                       type="button"
-                       className="text-sm text-[#534AB7] font-bold hover:underline"
-                       onClick={() => document.getElementById('logo-upload')?.click()}
-                     >
-                       {formData.logoUrl ? "Modifier l'image" : "Importer une image"}
-                     </button>
-                     <button 
-                       type="button"
-                       onClick={() => {
-                         setFormData({ ...formData, logoUrl: "" });
-                         const fileInput = document.getElementById('logo-upload') as HTMLInputElement;
-                         if (fileInput) fileInput.value = "";
-                       }}
-                       className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors"
-                     >
-                       {formData.logoUrl ? "Retirer le logo" : "Passer l'étape du logo"}
-                     </button>
-                   </div>
+                  <div className="w-16 h-16 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                    {formData.logoUrl ? (
+                      <img src={formData.logoUrl} className="w-full h-full object-cover" alt="Logo" />
+                    ) : (
+                      <Upload size={20} className="text-gray-300" />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <input
+                      type="file"
+                      id="logo-upload"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setFormData({ ...formData, logoUrl: reader.result as string });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => document.getElementById('logo-upload')?.click()}
+                      className="text-sm text-[#534AB7] font-bold hover:underline text-left"
+                    >
+                      Importer une image
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData({ ...formData, logoUrl: "" });
+                        const input = document.getElementById('logo-upload') as HTMLInputElement;
+                        if (input) input.value = "";
+                      }}
+                      className="text-xs text-gray-400 hover:text-gray-600 text-left"
+                    >
+                      Passer
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
