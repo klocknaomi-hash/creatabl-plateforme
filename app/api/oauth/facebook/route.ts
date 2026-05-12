@@ -12,8 +12,12 @@ export async function GET(req: NextRequest) {
 
   const state = crypto.randomBytes(16).toString('hex')
 
-  const redirectUri = process.env.FACEBOOK_REDIRECT_URI 
-    || `${req.nextUrl.origin}/api/oauth/callback/facebook`
+  let redirectUri = process.env.FACEBOOK_REDIRECT_URI || `${req.nextUrl.origin}/api/oauth/callback/facebook`
+  
+  // Fix for Vercel env var corruption where name is included in value
+  if (redirectUri.startsWith('FACEBOOK_REDIRECT_URI=')) {
+    redirectUri = redirectUri.replace('FACEBOOK_REDIRECT_URI=', '')
+  }
   
   console.log('Final Redirect URI used:', redirectUri)
   console.log('REDIRECT URI USED:', redirectUri)
