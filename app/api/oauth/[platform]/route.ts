@@ -9,8 +9,14 @@ export async function GET(
 ) {
   const { platform } = await params;
   
-  if (platform === 'facebook' || platform === 'instagram') {
-    return NextResponse.redirect(new URL('/api/oauth/facebook', request.nextUrl.origin));
+  // Redirect to specific OAuth handlers
+  if (platform.toLowerCase() === 'facebook' || platform.toLowerCase() === 'instagram') {
+    return NextResponse.redirect(
+      new URL(
+        '/api/oauth/facebook',
+        process.env.NEXT_PUBLIC_APP_URL!
+      )
+    )
   }
   
   try {
