@@ -14,7 +14,8 @@ import {
   CreditCard,
   PenSquare,
   FileText,
-  Settings
+  Settings,
+  Clock
 } from "lucide-react";
 
 import {
@@ -183,7 +184,25 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* ── User Footer ── */}
-      <SidebarFooter className="px-2 py-3">
+      <SidebarFooter className="px-4 py-4 space-y-4 group-data-[collapsible=icon]:px-1">
+        {/* Trial Info */}
+        <div className="bg-[#534AB7]/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
+          <div className="flex items-center gap-3 text-[#534AB7]">
+            <div className="bg-[#534AB7] p-1.5 rounded-lg text-white">
+               <Clock size={16} />
+            </div>
+            <span className="text-xs font-bold leading-tight">
+              Ton essai gratuit termine dans 7 jours
+            </span>
+          </div>
+          <Button 
+            className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white text-xs font-bold py-2 h-auto"
+            render={<Link href="/dashboard/billing" />}
+          >
+            Voir les plans
+          </Button>
+        </div>
+
         <SidebarMenu>
           <SidebarMenuItem>
             <div
@@ -200,19 +219,13 @@ export function AppSidebar() {
                 }}
               />
               <div className="flex min-w-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
-                <span className="truncate text-sm font-medium leading-tight">
+                <span className="truncate text-sm font-medium leading-tight text-foreground">
                   {user?.fullName ?? user?.username ?? "User"}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
                   {user?.primaryEmailAddress?.emailAddress ?? ""}
                 </span>
               </div>
-              <Badge
-                variant="secondary"
-                className="shrink-0 text-[10px] capitalize group-data-[collapsible=icon]:hidden"
-              >
-                {(user?.publicMetadata?.plan as string) === 'pro' ? 'Pro' : (user?.publicMetadata?.plan as string) === 'business' ? 'Business' : 'Starter'}
-              </Badge>
             </div>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -15,6 +15,7 @@ import { AudienceActivity } from "@/components/dashboard/audience-activity";
 import { UpcomingSchedule } from "@/components/dashboard/upcoming-schedule";
 import { RecentDrafts } from "@/components/dashboard/recent-drafts";
 import { TopContent } from "@/components/dashboard/top-content";
+import { OnboardingChecklist } from "@/components/onboarding/OnboardingChecklist";
 
 
 export default async function DashboardPage() {
@@ -46,6 +47,7 @@ export default async function DashboardPage() {
 
         {/* Right Column: Schedule & Drafts */}
         <div className="space-y-10">
+          <OnboardingChecklist />
           <Suspense fallback={<Skeleton className="h-[400px] rounded-[2.5rem]" />}>
             <UpcomingSchedule />
           </Suspense>

@@ -104,13 +104,12 @@ export async function GET(req: NextRequest) {
   try {
     await db.insert(users)
       .values({
-        clerkId: userId,
-        email: '', // Will be updated if exists
+        clerkId: userId as string,
+        email: '', 
         facebookAccessToken: tokenData.access_token,
         facebookUserId: meData.id,
         facebookPageId: pageId,
         instagramAccountId,
-        instagramAccessToken: pageToken,
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({
@@ -120,7 +119,6 @@ export async function GET(req: NextRequest) {
           facebookUserId: meData.id,
           facebookPageId: pageId,
           instagramAccountId,
-          instagramAccessToken: pageToken,
           updatedAt: new Date(),
         }
       })

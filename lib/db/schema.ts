@@ -37,8 +37,20 @@ export const users = pgTable('users', {
   facebookUserId: text('facebook_user_id'),
   facebookPageId: text('facebook_page_id'),
   instagramAccountId: text('instagram_account_id'),
-  instagramAccessToken: text('instagram_access_token'),
+  writingTone: text('writing_tone'),
+  genderAgreement: text('gender_agreement'),
+  emojiPreference: text('emoji_preference'),
+  onboardingCompletedAt: timestamp('onboarding_completed_at'),
   updatedAt: timestamp('updated_at').defaultNow(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const workspaces = pgTable('workspaces', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  logoUrl: text('logo_url'),
+  ownerId: uuid('owner_id').references(() => users.id).notNull(),
+  clientType: text('client_type'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
@@ -189,6 +201,7 @@ import { relations } from 'drizzle-orm';
 export const usersRelations = relations(users, ({ many, one }) => ({
   posts: many(posts),
   socialAccounts: many(socialAccounts),
+  workspaces: many(workspaces),
   settings: one(userSettings, {
     fields: [users.id],
     references: [userSettings.userId],
@@ -220,6 +233,13 @@ export const postPlatformResultsRelations = relations(postPlatformResults, ({ on
 export const socialAccountsRelations = relations(socialAccounts, ({ one }) => ({
   user: one(users, {
     fields: [socialAccounts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const workspacesRelations = relations(workspaces, ({ one }) => ({
+  owner: one(users, {
+    fields: [workspaces.ownerId],
     references: [users.id],
   }),
 }));

@@ -29,8 +29,7 @@ export async function POST(
       } else {
         await db.update(users)
           .set({ 
-            instagramAccountId: null, 
-            instagramAccessToken: null 
+            instagramAccountId: null
           })
           .where(eq(users.id, user.id));
       }

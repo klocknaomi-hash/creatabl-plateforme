@@ -1,11 +1,13 @@
+import { auth, currentUser } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
+import { db } from '@/lib/db'
+import { users } from '@/lib/db/schema'
+import { OnboardingModal } from '@/components/onboarding/OnboardingModal'
 import { DashboardProviders } from "@/components/dashboard/providers";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/sidebar";
 import { Topbar } from "@/components/dashboard/topbar";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { getTrialStatus } from "@/lib/trial";
 import { TrialBanner } from "@/components/dashboard/TrialBanner";
 import { PaywallOverlay } from "@/components/PaywallOverlay";
@@ -15,33 +17,72 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
-  
-  const userData = await db.query.users.findFirst({
-    where: eq(users.clerkId, userId as string),
-  });
+  try {
+    const { userId } = await auth()
+    if (!userId) redirect('https://app.creatabl-ia.com/sign-in')
+    
+    const clerkUser = await currentUser()
+    
+    // Fix 5: Upsert user in DB — never crash if user doesn't exist
+    let dbUser;
+    try {
+      const [newUser] = await db.insert(users).values({
+        clerkId: userId,
+        email: clerkUser?.emailAddresses[0]?.emailAddress ?? '',
+        name: clerkUser?.fullName ?? '',
+        plan: 'starter',
+        selectedPlan: 'starter',
+      }).onConflictDoNothing().returning()
+      
+      dbUser = newUser;
+      
+      // If it already existed, fetch it
+      if (!dbUser) {
+        dbUser = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.clerkId, userId)
+        });
+      }
+    } catch (dbError) {
+      console.error('DB upsert error:', dbError)
+      // Continue anyway — don't crash the layout
+    }
+    
+    const onboardingStep = clerkUser?.publicMetadata?.onboardingStep
+    const showOnboarding = !onboardingStep || onboardingStep !== 'done'
+    
+    const trialStatus = dbUser ? getTrialStatus({
+      trialStartedAt: dbUser.trialStartedAt,
+      trialEndsAt: dbUser.trialEndsAt,
+      isSubscribed: dbUser.isSubscribed ?? false,
+    }) : { status: 'no_trial', daysLeft: null };
 
-  const trialStatus = userData ? getTrialStatus({
-    trialStartedAt: userData.trialStartedAt,
-    trialEndsAt: userData.trialEndsAt,
-    isSubscribed: userData.isSubscribed ?? false,
-  }) : { status: 'no_trial', daysLeft: null };
-
-  return (
-    <DashboardProviders>
-      <AppSidebar />
-      <SidebarInset>
-        {trialStatus.status === 'trial' && (
-          <TrialBanner daysLeft={trialStatus.daysLeft} />
-        )}
-        <Topbar />
-        <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
-          {children}
-          {trialStatus.status === 'expired' && (
-            <PaywallOverlay plan={userData?.selectedPlan || 'starter'} />
+    return (
+      <DashboardProviders>
+        <ErrorBoundary>
+          <AppSidebar />
+        </ErrorBoundary>
+        <SidebarInset>
+          {trialStatus.status === 'trial' && (
+            <TrialBanner daysLeft={trialStatus.daysLeft} />
           )}
-        </main>
-      </SidebarInset>
-    </DashboardProviders>
-  );
+          <ErrorBoundary>
+            <Topbar />
+          </ErrorBoundary>
+          <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+            {/* Show onboarding if not completed */}
+            {showOnboarding && <OnboardingModal />}
+            {trialStatus.status === 'expired' && (
+              <PaywallOverlay plan={dbUser?.selectedPlan || 'starter'} />
+            )}
+          </main>
+        </SidebarInset>
+      </DashboardProviders>
+    );
+  } catch (error) {
+    console.error('Dashboard layout error:', error)
+    redirect('https://app.creatabl-ia.com/sign-in')
+  }
 }

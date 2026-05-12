@@ -9,39 +9,47 @@ import { eq } from 'drizzle-orm';
  * @returns The database user object if authenticated and found, otherwise null.
  */
 export async function getCurrentUser() {
-  const { userId, sessionClaims } = await auth();
-  
-  if (!userId) {
-    return null;
-  }
+  try {
+    const { userId, sessionClaims } = await auth();
+    
+    if (!userId) {
+      return null;
+    }
 
-  const userResult = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
-  let user = userResult[0];
-
-  // Auto-sync user if they exist in Clerk but not in our DB (common in dev/no webhooks)
-  if (!user) {
     const email = (sessionClaims as any)?.email || '';
     const name = (sessionClaims as any)?.full_name || '';
-    
-    const [newUser] = await db.insert(users).values({
-      clerkId: userId,
-      email: email,
-      name: name,
-      plan: 'starter',
-      selectedPlan: 'starter',
-    }).returning();
-    
-    user = newUser;
-  }
 
-  // Ensure user settings exist
-  const settingsResult = await db.select().from(userSettings).where(eq(userSettings.userId, user.id)).limit(1);
-  if (settingsResult.length === 0) {
-    await db.insert(userSettings).values({
-      userId: user.id,
-    });
-  }
+    // Bug 2 Fix: Ensure user record exists (Upsert)
+    // We try to insert, and if it already exists, we just fetch it.
+    // This handles the race condition where multiple components might call this simultaneously.
+    try {
+      await db.insert(users).values({
+        clerkId: userId,
+        email: email,
+        name: name,
+        plan: 'starter',
+        selectedPlan: 'starter',
+      }).onConflictDoNothing();
+    } catch (e) {
+      // Ignore conflict errors
+    }
 
-  return user;
+    const userResult = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    let user = userResult[0];
+
+    if (!user) return null;
+
+    // Ensure user settings exist
+    try {
+      await db.insert(userSettings).values({
+        userId: user.id,
+      }).onConflictDoNothing();
+    } catch (e) {}
+
+    return user;
+  } catch (error) {
+    console.error("[auth] Error in getCurrentUser:", error);
+    return null;
+  }
 }
 

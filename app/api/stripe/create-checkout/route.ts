@@ -2,6 +2,8 @@ import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function GET(req: NextRequest) {
@@ -39,8 +41,8 @@ export async function GET(req: NextRequest) {
       trial_period_days: 7,
       metadata: { userId, plan, billing },
     },
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/onboarding`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tarifs`,
+    success_url: `https://app.creatabl-ia.com/dashboard`,
+    cancel_url: `https://creatabl-ia.com/tarifs`,
     metadata: { userId, plan, billing },
   });
 
