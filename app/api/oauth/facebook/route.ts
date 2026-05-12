@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     || `${req.nextUrl.origin}/api/oauth/callback/facebook`
   
   console.log('Final Redirect URI used:', redirectUri)
+  console.log('REDIRECT URI USED:', redirectUri)
 
   const params = new URLSearchParams({
     client_id: appId,
@@ -32,6 +33,7 @@ export async function GET(req: NextRequest) {
     state,
   })
 
+  console.log('FULL PARAMS:', params.toString())
   const authUrl = `https://www.facebook.com/v19.0/dialog/oauth?${params}`
   console.log('Full auth URL:', authUrl)
 
