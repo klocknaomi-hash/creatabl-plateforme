@@ -54,7 +54,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         setStep(1);
         await updateOnboardingStep(1);
       } else if (step === 1) {
-        await saveClientType(formData.clientType);
+        if (formData.clientType) {
+          await saveClientType(formData.clientType);
+        }
         setStep(2);
       } else if (step === 2) {
         setStep(3);
@@ -62,18 +64,24 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
       } else if (step === 3) {
         await createWorkspace({ 
           name: formData.workspaceName, 
-          logoUrl: formData.logoUrl,
+          logoUrl: formData.logoUrl || undefined,
           clientType: formData.clientType 
         });
         setStep(4);
       } else if (step === 4) {
-        await saveWritingStyle(formData.writingTone);
+        if (formData.writingTone) {
+          await saveWritingStyle(formData.writingTone);
+        }
         setStep(5);
       } else if (step === 5) {
-        await saveGenderAgreement(formData.genderAgreement);
+        if (formData.genderAgreement) {
+          await saveGenderAgreement(formData.genderAgreement);
+        }
         setStep(6);
       } else if (step === 6) {
-        await saveEmojiPreference(formData.emojiPreference);
+        if (formData.emojiPreference) {
+          await saveEmojiPreference(formData.emojiPreference);
+        }
         setStep("final");
       } else if (step === "final") {
         await completeOnboarding();
@@ -202,11 +210,52 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Ajoute un logo (optionnel)</label>
                 <div className="flex items-center space-x-4">
-                   <div className="w-16 h-16 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 overflow-hidden">
-                      {formData.logoUrl ? <img src={formData.logoUrl} className="w-full h-full object-cover" /> : <Upload size={24} />}
+                   <div className="w-16 h-16 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 overflow-hidden relative group transition-all hover:bg-gray-50">
+                      {formData.logoUrl ? (
+                        <img src={formData.logoUrl} className="w-full h-full object-cover" alt="Logo preview" />
+                      ) : (
+                        <div className="flex flex-col items-center text-gray-300">
+                          <Upload size={20} />
+                          <span className="text-[10px] mt-1 font-bold uppercase tracking-tighter">Aucun</span>
+                        </div>
+                      )}
                    </div>
-                   <button className="text-sm text-[#534AB7] font-medium hover:underline">Importer une image</button>
-                   <button className="text-sm text-gray-400 hover:underline">Passer</button>
+                   <div className="flex flex-col items-start gap-1">
+                     <input 
+                       type="file" 
+                       id="logo-upload" 
+                       className="hidden" 
+                       accept="image/*"
+                       onChange={(e) => {
+                         const file = e.target.files?.[0];
+                         if (file) {
+                           const reader = new FileReader();
+                           reader.onloadend = () => {
+                             setFormData({ ...formData, logoUrl: reader.result as string });
+                           };
+                           reader.readAsDataURL(file);
+                         }
+                       }}
+                     />
+                     <button 
+                       type="button"
+                       className="text-sm text-[#534AB7] font-bold hover:underline"
+                       onClick={() => document.getElementById('logo-upload')?.click()}
+                     >
+                       {formData.logoUrl ? "Modifier l'image" : "Importer une image"}
+                     </button>
+                     <button 
+                       type="button"
+                       onClick={() => {
+                         setFormData({ ...formData, logoUrl: "" });
+                         const fileInput = document.getElementById('logo-upload') as HTMLInputElement;
+                         if (fileInput) fileInput.value = "";
+                       }}
+                       className="text-xs text-gray-400 font-medium hover:text-gray-600 transition-colors"
+                     >
+                       {formData.logoUrl ? "Retirer le logo" : "Passer l'étape du logo"}
+                     </button>
+                   </div>
                 </div>
               </div>
             </div>
@@ -326,11 +375,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
   };
 
   const isNextDisabled = () => {
-    if (step === 1 && !formData.clientType) return true;
     if (step === 3 && !formData.workspaceName) return true;
-    if (step === 4 && !formData.writingTone) return true;
-    if (step === 5 && !formData.genderAgreement) return true;
-    if (step === 6 && !formData.emojiPreference) return true;
     return false;
   };
 
