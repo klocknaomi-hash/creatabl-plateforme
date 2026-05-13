@@ -199,20 +199,29 @@ export async function completeOnboarding() {
     if (!user) return;
 
     const now = new Date();
-    await db.update(users).set({ 
-      onboardingCompleted: true,
-      onboardingCompletedAt: now,
-    }).where(eq(users.id, user.id));
-    
-    console.log('Saved onboardingCompletedAt for user', userId, ':', now);
-    
+    const trialEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+    // Update Clerk metadata
     const client = await clerkClient();
     await client.users.updateUserMetadata(userId, {
-      publicMetadata: {
+      publicMetadata: { 
         onboardingStep: "done",
-      },
+        trialStartedAt: now.toISOString(),
+        trialEndsAt: trialEndsAt.toISOString(),
+        trialPlan: "business"
+      }
     });
-
+    
+    // Update DB
+    await db.update(users).set({ 
+      plan: "business",
+      trialEndsAt: trialEndsAt,
+      onboardingCompletedAt: now,
+      onboardingCompleted: true,
+    }).where(eq(users.id, user.id));
+    
+    console.log('Saved onboarding completion and trial for user', userId);
+    
     revalidatePath("/dashboard");
   } catch (error) {
     console.error("completeOnboarding error:", error);

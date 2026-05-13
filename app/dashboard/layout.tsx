@@ -62,13 +62,11 @@ export default async function DashboardLayout({
           <AppSidebar />
         </ErrorBoundary>
         <SidebarInset>
-          {trialStatus.status === 'trial' && (
-            <TrialBanner daysLeft={trialStatus.daysLeft} />
-          )}
           <ErrorBoundary>
             <Topbar />
           </ErrorBoundary>
           <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
+            <TrialBanner />
             <ErrorBoundary>
               {children}
             </ErrorBoundary>

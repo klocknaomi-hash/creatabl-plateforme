@@ -1,6 +1,9 @@
 import Stripe from 'stripe';
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { users } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +20,15 @@ export async function GET(req: NextRequest) {
 
   const plan = req.nextUrl.searchParams.get('plan') || 'starter';
   const billing = req.nextUrl.searchParams.get('billing') || 'monthly';
+
+  // Update user's selected plan in DB
+  try {
+    await db.update(users)
+      .set({ selectedPlan: plan })
+      .where(eq(users.clerkId, userId));
+  } catch (err) {
+    console.error('Error updating selectedPlan in create-checkout:', err);
+  }
 
   // Lookup key format: "starter_monthly", "pro_yearly", etc.
   const lookupKey = `${plan}_${billing}`;

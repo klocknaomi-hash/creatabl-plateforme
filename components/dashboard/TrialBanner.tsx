@@ -1,49 +1,35 @@
-'use client'
+"use client"
+import { useUser } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
 
-import Link from 'next/link'
-import { AlertTriangle, PartyPopper, ArrowRight } from 'lucide-react'
-
-interface TrialBannerProps {
-  daysLeft: number | null
-}
-
-export function TrialBanner({ daysLeft }: TrialBannerProps) {
-  if (daysLeft === null) return null
-
-  const isUrgent = daysLeft <= 3
-
+export function TrialBanner() {
+  const { user } = useUser()
+  const router = useRouter()
+  
+  const trialEndsAt = user?.publicMetadata?.trialEndsAt as string
+  const onboardingStep = user?.publicMetadata?.onboardingStep as string
+  
+  if (!trialEndsAt || onboardingStep !== "done") return null
+  
+  const daysLeft = Math.ceil(
+    (new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+  )
+  
+  if (daysLeft <= 0) return null
+  
   return (
-    <div 
-      className={`w-full py-2 px-4 flex items-center justify-center gap-4 transition-all duration-300 ${
-        isUrgent 
-          ? 'bg-[#FAEEDA] text-[#854D0E] border-b border-[#F6E0B3]' 
-          : 'bg-[#EEEDFE] text-[#4F46E5] border-b border-[#E0DFFD]'
-      }`}
-    >
-      <div className="flex items-center gap-2 text-sm font-medium">
-        {isUrgent ? (
-          <AlertTriangle className="w-4 h-4 text-[#D97706]" />
-        ) : (
-          <PartyPopper className="w-4 h-4 text-[#6366F1]" />
-        )}
-        <span>
-          {isUrgent 
-            ? `⚠️ Plus que ${daysLeft} jour${daysLeft > 1 ? 's' : ''} d'essai gratuit !` 
-            : `🎉 Essai gratuit — il te reste ${daysLeft} jours`}
-        </span>
-      </div>
-      
-      <Link 
-        href="/dashboard/billing"
-        className={`text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 transition-all ${
-          isUrgent
-            ? 'bg-[#854D0E] text-white hover:bg-[#71420C]'
-            : 'bg-[#4F46E5] text-white hover:bg-[#4338CA]'
-        }`}
+    <div className="w-full bg-[#534AB7] text-white px-6 py-3 flex items-center justify-between text-sm">
+      <span>
+        Tu bénéficies de toutes les fonctionnalités Business gratuitement 
+        encore <strong>{daysLeft} jour{daysLeft > 1 ? "s" : ""}</strong>. 
+        Choisis ton plan avant la fin de l'essai.
+      </span>
+      <button
+        onClick={() => router.push("/dashboard/billing")}
+        className="ml-4 bg-white text-[#534AB7] font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-gray-100 transition-colors whitespace-nowrap"
       >
-        {isUrgent ? 'Activer maintenant' : 'Activer mon abonnement'}
-        <ArrowRight className="w-3 h-3" />
-      </Link>
+        Voir les plans
+      </button>
     </div>
   )
 }

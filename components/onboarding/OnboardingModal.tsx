@@ -88,6 +88,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         setStep("final");
       } else if (step === "final") {
         await completeOnboarding().catch(console.error);
+        await user?.reload(); // refresh Clerk user object
         router.refresh();
       }
     } finally {
