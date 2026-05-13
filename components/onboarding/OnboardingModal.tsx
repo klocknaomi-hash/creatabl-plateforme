@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronRight, Upload, Check, Briefcase, User, Users, Globe } from "lucide-react";
 import { CircularProgress } from "./CircularProgress";
@@ -35,19 +35,22 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
   const router = useRouter();
 
   const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const hasSynced = useRef(false);
 
-  // Sync step from clerk metadata if available
+  // Sync step from clerk metadata ONLY ONCE
   useEffect(() => {
-    if (isLoaded && user?.publicMetadata?.onboardingStep !== undefined) {
-      const savedStep = user.publicMetadata.onboardingStep;
+    if (isLoaded && !hasSynced.current && user) {
+      const savedStep = user.publicMetadata?.onboardingStep;
+      // Only "done" closes the modal
       if (savedStep === "done") return;
-      if (typeof savedStep === "number" || savedStep === "final") {
-         setStep(savedStep);
-      }
+      // Always restart from 0 — never resume mid-flow
+      setStep(0);
+      hasSynced.current = true;
     }
   }, [isLoaded, user]);
 
-  if (!isLoaded || user?.publicMetadata?.onboardingStep === "done") return null;
+  if (!isLoaded) return null;
+  if (user?.publicMetadata?.onboardingStep === "done") return null;
 
   const handleNext = async () => {
     setLoading(true);
@@ -89,9 +92,20 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         }
         setStep("final");
       } else if (step === "final") {
-        await completeOnboarding().catch(console.error);
-        await user?.reload(); // refresh Clerk user object
-        router.refresh();
+        const result = await completeOnboarding();
+        if (result?.success) {
+          await user?.reload(); // refresh Clerk user object
+          await new Promise(resolve => setTimeout(resolve, 800)); // Delay to ensure metadata is fresh
+          router.refresh();
+        } else {
+          console.error("Failed to complete onboarding:", result?.error);
+          // Try once more
+          const retry = await completeOnboarding();
+          if (retry?.success) {
+            await user?.reload();
+            router.refresh();
+          }
+        }
       }
     } finally {
       setLoading(false);

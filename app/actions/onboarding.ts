@@ -193,16 +193,13 @@ export async function saveEmojiPreference(emojiPreference: string) {
 export async function completeOnboarding() {
   try {
     const { userId } = await auth();
-    if (!userId) return;
+    if (!userId) return { success: false, error: "No userId" };
 
-    const user = await getOrCreateUser(userId);
-    if (!user) return;
-
+    const client = await clerkClient();
     const now = new Date();
     const trialEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-    // Update Clerk metadata
-    const client = await clerkClient();
+    // Update Clerk metadata FIRST — this is critical to stop the modal from showing
     await client.users.updateUserMetadata(userId, {
       publicMetadata: { 
         onboardingStep: "done",
@@ -212,18 +209,23 @@ export async function completeOnboarding() {
       }
     });
     
-    // Update DB
-    await db.update(users).set({ 
-      plan: "business",
-      trialEndsAt: trialEndsAt,
-      onboardingCompletedAt: now,
-      onboardingCompleted: true,
-    }).where(eq(users.id, user.id));
-    
-    console.log('Saved onboarding completion and trial for user', userId);
+    // Update DB — wrapped separately
+    try {
+      await db.update(users).set({ 
+        plan: "business",
+        trialEndsAt: trialEndsAt,
+        onboardingCompletedAt: now,
+        onboardingCompleted: true,
+      }).where(eq(users.clerkId, userId));
+      console.log('Saved onboarding completion and trial in DB for user', userId);
+    } catch (dbErr) {
+      console.error("DB update failed but Clerk is updated:", dbErr);
+    }
     
     revalidatePath("/dashboard");
+    return { success: true };
   } catch (error) {
     console.error("completeOnboarding error:", error);
+    return { success: false, error: String(error) };
   }
 }
