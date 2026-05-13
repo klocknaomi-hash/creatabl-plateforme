@@ -7,33 +7,80 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-export async function updateOnboardingStep(step: string | number) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+/**
+ * Helper to ensure user exists in Neon DB
+ * Find or create the user record in the users table
+ */
+async function getOrCreateUser(clerkId: string) {
+  try {
+    const user = await db.query.users.findFirst({
+      where: eq(users.clerkId, clerkId),
+    });
 
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      onboardingStep: step,
-    },
-  });
+    if (user) return user;
+
+    // Fetch from Clerk if missing in DB
+    const client = await clerkClient();
+    const clerkUser = await client.users.getUser(clerkId);
+    const email = clerkUser.emailAddresses[0]?.emailAddress || "";
+    const name = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim();
+
+    const [newUser] = await db.insert(users).values({
+      clerkId,
+      email,
+      name: name || null,
+      plan: 'starter',
+    }).onConflictDoNothing().returning();
+
+    if (newUser) return newUser;
+    
+    // Fallback if insert returned nothing due to conflict
+    return await db.query.users.findFirst({ where: eq(users.clerkId, clerkId) });
+  } catch (error) {
+    console.error("getOrCreateUser error:", error);
+    return null;
+  }
+}
+
+export async function updateOnboardingStep(step: string | number) {
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
+
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        onboardingStep: step,
+      },
+    });
+  } catch (error) {
+    console.error("updateOnboardingStep error:", error);
+  }
 }
 
 export async function saveClientType(clientType: string) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
 
-  await db.update(users).set({ clientType }).where(eq(users.clerkId, userId));
-  
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      clientType,
-      onboardingStep: 2,
-    },
-  });
-  
-  revalidatePath("/dashboard");
+    const user = await getOrCreateUser(userId);
+    if (!user) return;
+
+    await db.update(users).set({ clientType }).where(eq(users.id, user.id));
+    console.log('Saved clientType for user', userId, ':', clientType);
+    
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        clientType,
+        onboardingStep: 2,
+      },
+    });
+    
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("saveClientType error:", error);
+  }
 }
 
 export async function createWorkspace(data: { name: string; logoUrl?: string; clientType?: string }) {
@@ -41,24 +88,22 @@ export async function createWorkspace(data: { name: string; logoUrl?: string; cl
     const { userId } = await auth();
     if (!userId) return;
 
-    // Get internal user ID
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkId, userId),
-    });
-
-    if (!user) throw new Error("User not found");
+    const user = await getOrCreateUser(userId);
+    if (!user) return;
 
     const [newWorkspace] = await db.insert(workspaces).values({
       name: data.name,
       logoUrl: data.logoUrl,
       ownerId: user.id,
       clientType: data.clientType,
-    }).returning();
+    }).onConflictDoNothing().returning();
+
+    console.log('Saved workspace for user', userId, ':', data.name);
 
     const client = await clerkClient();
     await client.users.updateUserMetadata(userId, {
       publicMetadata: {
-        workspaceId: newWorkspace.id,
+        workspaceId: newWorkspace?.id,
         onboardingStep: 4,
       },
     });
@@ -66,77 +111,110 @@ export async function createWorkspace(data: { name: string; logoUrl?: string; cl
     revalidatePath("/dashboard");
     return newWorkspace;
   } catch (error) {
-    console.error("createWorkspace DB error:", error);
-    // do not throw — just return silently
+    console.error("createWorkspace error:", error);
   }
 }
 
 export async function saveWritingStyle(writingTone: string) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
 
-  await db.update(users).set({ writingTone }).where(eq(users.clerkId, userId));
-  
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      writingTone,
-      onboardingStep: 5,
-    },
-  });
+    const user = await getOrCreateUser(userId);
+    if (!user) return;
 
-  revalidatePath("/dashboard");
+    await db.update(users).set({ writingTone }).where(eq(users.id, user.id));
+    console.log('Saved writingTone for user', userId, ':', writingTone);
+    
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        writingTone,
+        onboardingStep: 5,
+      },
+    });
+
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("saveWritingStyle error:", error);
+  }
 }
 
 export async function saveGenderAgreement(genderAgreement: string) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
 
-  await db.update(users).set({ genderAgreement }).where(eq(users.clerkId, userId));
-  
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      genderAgreement,
-      onboardingStep: 6,
-    },
-  });
+    const user = await getOrCreateUser(userId);
+    if (!user) return;
 
-  revalidatePath("/dashboard");
+    await db.update(users).set({ genderAgreement }).where(eq(users.id, user.id));
+    console.log('Saved genderAgreement for user', userId, ':', genderAgreement);
+    
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        genderAgreement,
+        onboardingStep: 6,
+      },
+    });
+
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("saveGenderAgreement error:", error);
+  }
 }
 
 export async function saveEmojiPreference(emojiPreference: string) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
 
-  await db.update(users).set({ emojiPreference }).where(eq(users.clerkId, userId));
-  
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      emojiPreference,
-      onboardingStep: "final",
-    },
-  });
+    const user = await getOrCreateUser(userId);
+    if (!user) return;
 
-  revalidatePath("/dashboard");
+    await db.update(users).set({ emojiPreference }).where(eq(users.id, user.id));
+    console.log('Saved emojiPreference for user', userId, ':', emojiPreference);
+    
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        emojiPreference,
+        onboardingStep: "final",
+      },
+    });
+
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("saveEmojiPreference error:", error);
+  }
 }
 
 export async function completeOnboarding() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
 
-  await db.update(users).set({ 
-    onboardingCompleted: true,
-    onboardingCompletedAt: new Date(),
-  }).where(eq(users.clerkId, userId));
-  
-  const client = await clerkClient();
-  await client.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      onboardingStep: "done",
-    },
-  });
+    const user = await getOrCreateUser(userId);
+    if (!user) return;
 
-  revalidatePath("/dashboard");
+    const now = new Date();
+    await db.update(users).set({ 
+      onboardingCompleted: true,
+      onboardingCompletedAt: now,
+    }).where(eq(users.id, user.id));
+    
+    console.log('Saved onboardingCompletedAt for user', userId, ':', now);
+    
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        onboardingStep: "done",
+      },
+    });
+
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("completeOnboarding error:", error);
+  }
 }
