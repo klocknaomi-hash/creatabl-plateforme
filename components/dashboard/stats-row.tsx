@@ -19,13 +19,16 @@ interface StatsRowProps {
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center 
     h-64 text-center border border-dashed border-gray-200 
-    rounded-2xl p-8">
+    rounded-2xl p-8 col-span-full">
     <p className="font-medium text-gray-500 mb-1">
       Connecte tes réseaux sociaux
     </p>
-    <p className="text-sm text-gray-400">
+    <p className="text-sm text-gray-400 mb-4">
       Tes données apparaîtront ici une fois connecté.
     </p>
+    <Link href="/dashboard/settings/connections" className="bg-[#534AB7] text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-[#453da3] transition-colors">
+      Connecter mes réseaux
+    </Link>
   </div>
 );
 
