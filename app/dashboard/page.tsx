@@ -19,50 +19,148 @@ import { OnboardingChecklist } from "@/components/onboarding/OnboardingChecklist
 
 
 export default async function DashboardPage() {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) redirect("/sign-in");
+
+  // Check for accounts to show empty state if needed
+  let accounts = [];
+  try {
+    accounts = await getCachedAccounts(clerkId) || [];
+  } catch (error) {
+    console.error("Error fetching accounts:", error);
+  }
+
+  const hasAccounts = accounts.length > 0;
+
   return (
     <div className="space-y-12 pb-16 max-w-[1600px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* ── Header ── */}
       <Suspense fallback={<Skeleton className="h-12 w-64" />}>
-        <DashboardHeader />
+        <SafeDashboardHeader />
       </Suspense>
 
-      {/* ── Stats Row ── */}
-      <Suspense fallback={<StatsRowSkeleton />}>
-        <StatsRow />
-      </Suspense>
-
-      {/* ── Active Channels ── */}
-      <Suspense fallback={<Skeleton className="h-16 w-full rounded-full" />}>
-        <ActiveChannels />
-      </Suspense>
-
-      {/* ── Main Dashboard Grid ── */}
-      <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
-        {/* Left Column: Analytics */}
+      {!hasAccounts ? (
+        <div className="flex flex-col items-center justify-center 
+          h-64 text-center text-gray-400 border border-dashed 
+          border-gray-200 rounded-2xl mx-1">
+          <p className="text-lg font-medium text-gray-500 mb-2">
+            Ton dashboard est prêt
+          </p>
+          <p className="text-sm">
+            Connecte tes réseaux sociaux pour voir tes données ici.
+          </p>
+          <a href="/dashboard/settings/connections" 
+            className="mt-4 bg-[#534AB7] text-white px-6 py-2 
+            rounded-xl text-sm font-bold hover:bg-[#453da3]">
+            Connecter mes réseaux
+          </a>
+        </div>
+      ) : (
         <div className="space-y-12">
-          <Suspense fallback={<Skeleton className="h-[450px] w-full rounded-[2.5rem]" />}>
-            <AudienceActivity />
+          {/* ── Stats Row ── */}
+          <Suspense fallback={<StatsRowSkeleton />}>
+            <SafeStatsRow />
           </Suspense>
-        </div>
 
-        {/* Right Column: Schedule & Drafts */}
-        <div className="space-y-10">
-          <OnboardingChecklist />
-          <Suspense fallback={<Skeleton className="h-[400px] rounded-[2.5rem]" />}>
-            <UpcomingSchedule />
+          {/* ── Active Channels ── */}
+          <Suspense fallback={<Skeleton className="h-16 w-full rounded-full" />}>
+            <SafeActiveChannels />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-[300px] rounded-[2rem]" />}>
-            <RecentDrafts />
-          </Suspense>
-        </div>
-      </div>
 
-      {/* ── Top Content ── */}
-      <Suspense fallback={<Skeleton className="h-64 w-full rounded-[2.5rem]" />}>
-        <TopContent />
-      </Suspense>
+          {/* ── Main Dashboard Grid ── */}
+          <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
+            {/* Left Column: Analytics */}
+            <div className="space-y-12">
+              <Suspense fallback={<Skeleton className="h-[450px] w-full rounded-[2.5rem]" />}>
+                <SafeAudienceActivity />
+              </Suspense>
+            </div>
+
+            {/* Right Column: Schedule & Drafts */}
+            <div className="space-y-10">
+              <OnboardingChecklist />
+              <Suspense fallback={<Skeleton className="h-[400px] rounded-[2.5rem]" />}>
+                <SafeUpcomingSchedule />
+              </Suspense>
+              <Suspense fallback={<Skeleton className="h-[300px] rounded-[2rem]" />}>
+                <SafeRecentDrafts />
+              </Suspense>
+            </div>
+          </div>
+
+          {/* ── Top Content ── */}
+          <Suspense fallback={<Skeleton className="h-64 w-full rounded-[2.5rem]" />}>
+            <SafeTopContent />
+          </Suspense>
+        </>
+      )}
     </div>
   );
+}
+
+// ── Safe Wrapper Components ──
+
+async function SafeStatsRow() {
+  try {
+    return await StatsRow();
+  } catch (e) {
+    console.error("StatsRow crashed:", e);
+    return null;
+  }
+}
+
+async function SafeActiveChannels() {
+  try {
+    return await ActiveChannels();
+  } catch (e) {
+    console.error("ActiveChannels crashed:", e);
+    return null;
+  }
+}
+
+async function SafeAudienceActivity() {
+  try {
+    return await AudienceActivity();
+  } catch (e) {
+    console.error("AudienceActivity crashed:", e);
+    return null;
+  }
+}
+
+async function SafeUpcomingSchedule() {
+  try {
+    return await UpcomingSchedule();
+  } catch (e) {
+    console.error("UpcomingSchedule crashed:", e);
+    return null;
+  }
+}
+
+async function SafeRecentDrafts() {
+  try {
+    return await RecentDrafts();
+  } catch (e) {
+    console.error("RecentDrafts crashed:", e);
+    return null;
+  }
+}
+
+async function SafeTopContent() {
+  try {
+    return await TopContent();
+  } catch (e) {
+    console.error("TopContent crashed:", e);
+    return null;
+  }
+}
+
+async function SafeDashboardHeader() {
+  try {
+    return await DashboardHeader();
+  } catch (e) {
+    console.error("DashboardHeader crashed:", e);
+    return null;
+  }
 }
 
 async function DashboardHeader() {
