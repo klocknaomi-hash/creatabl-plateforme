@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { getCachedUserSettings } from "@/lib/dashboard-data";
+import { getCachedUserSettings, getCachedAccounts } from "@/lib/dashboard-data";
 import { getTranslation } from "@/lib/i18n";
 import { StatsRow } from "@/components/dashboard/stats-row";
 import { ActiveChannels } from "@/components/dashboard/active-channels";
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
           <Suspense fallback={<Skeleton className="h-64 w-full rounded-[2.5rem]" />}>
             <SafeTopContent />
           </Suspense>
-        </>
+        </div>
       )}
     </div>
   );
@@ -192,4 +192,3 @@ function StatsRowSkeleton() {
     </div>
   );
 }
-
