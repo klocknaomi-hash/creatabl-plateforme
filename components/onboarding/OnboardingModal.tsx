@@ -52,48 +52,44 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
     try {
       if (step === 0) {
         setStep(1);
-        await updateOnboardingStep(1);
+        await updateOnboardingStep(1).catch(console.error);
       } else if (step === 1) {
         if (formData.clientType) {
-          await saveClientType(formData.clientType);
+          await saveClientType(formData.clientType).catch(console.error);
         }
         setStep(2);
       } else if (step === 2) {
         setStep(3);
-        await updateOnboardingStep(3);
+        await updateOnboardingStep(3).catch(console.error);
       } else if (step === 3) {
-        try {
-          await createWorkspace({ 
-            name: formData.workspaceName, 
-            logoUrl: formData.logoUrl || undefined,
-            clientType: formData.clientType || undefined
-          });
-        } catch (err) {
-          console.error("createWorkspace failed, continuing anyway", err);
-        }
+        await createWorkspace({ 
+          name: formData.workspaceName, 
+          logoUrl: formData.logoUrl || undefined,
+          clientType: formData.clientType || undefined
+        }).catch(console.error);
         setStep(4);
-        await updateOnboardingStep(4);
+        await updateOnboardingStep(4).catch(console.error);
       } else if (step === 4) {
         if (formData.writingTone) {
-          await saveWritingStyle(formData.writingTone);
+          await saveWritingStyle(formData.writingTone).catch(console.error);
         }
         setStep(5);
+        await updateOnboardingStep(5).catch(console.error);
       } else if (step === 5) {
         if (formData.genderAgreement) {
-          await saveGenderAgreement(formData.genderAgreement);
+          await saveGenderAgreement(formData.genderAgreement).catch(console.error);
         }
         setStep(6);
+        await updateOnboardingStep(6).catch(console.error);
       } else if (step === 6) {
         if (formData.emojiPreference) {
-          await saveEmojiPreference(formData.emojiPreference);
+          await saveEmojiPreference(formData.emojiPreference).catch(console.error);
         }
         setStep("final");
       } else if (step === "final") {
-        await completeOnboarding();
+        await completeOnboarding().catch(console.error);
         router.refresh();
       }
-    } catch (error) {
-      console.error("Error saving onboarding step:", error);
     } finally {
       setLoading(false);
     }
