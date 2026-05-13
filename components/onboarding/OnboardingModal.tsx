@@ -34,6 +34,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
   });
   const router = useRouter();
 
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
+
   // Sync step from clerk metadata if available
   useEffect(() => {
     if (isLoaded && user?.publicMetadata?.onboardingStep !== undefined) {
@@ -93,6 +95,14 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBack = () => {
+    if (typeof step === "number" && step > 0) {
+      setStep(step - 1);
+    } else if (step === "final") {
+      setStep(6);
     }
   };
 
@@ -388,6 +398,36 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative"
       >
+        <AnimatePresence>
+          {showConfirmClose && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-[110] bg-white/90 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center"
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Es-tu sûr de vouloir quitter ?</h3>
+              <p className="text-gray-600 mb-8">
+                Prendre 45 secondes pour paramétrer tes préférences permet à l'IA de générer du contenu qui te ressemble vraiment. Ne passe pas à côté de cette personnalisation !
+              </p>
+              <div className="flex flex-col w-full gap-3">
+                <button 
+                  onClick={() => setShowConfirmClose(false)}
+                  className="w-full py-4 bg-[#534AB7] text-white rounded-xl font-bold hover:bg-[#453da3] transition-all"
+                >
+                  Continuer le paramétrage
+                </button>
+                <button 
+                  onClick={() => completeOnboarding().then(() => router.refresh())}
+                  className="w-full py-4 text-gray-400 font-medium hover:text-gray-600"
+                >
+                  Quitter quand même
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Header */}
         <div className="px-8 pt-8 flex justify-between items-start">
           <div>
@@ -403,7 +443,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
             )}
             {step !== 0 && (
               <button 
-                onClick={() => completeOnboarding().then(() => router.refresh())}
+                onClick={() => setShowConfirmClose(true)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X size={24} />
@@ -428,26 +468,37 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         </div>
 
         {/* Footer */}
-        <div className="px-8 pb-8">
+        <div className="px-8 pb-8 flex flex-col gap-3">
           {step !== 2 && (
-            <button
-              onClick={handleNext}
-              disabled={loading || isNextDisabled()}
-              className={`w-full flex items-center justify-center py-4 rounded-xl font-bold text-lg transition-all ${
-                isNextDisabled()
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-[#534AB7] text-white hover:bg-[#453da3] shadow-lg shadow-[#534AB7]/20"
-              }`}
-            >
-              {loading ? (
-                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>
-                  {step === "final" ? "Valider" : "Suivant"}
-                  <ChevronRight size={20} className="ml-2" />
-                </>
+            <div className="flex gap-3">
+              {(step !== 0 && step !== "final") && (
+                <button
+                  onClick={handleBack}
+                  disabled={loading}
+                  className="flex-1 py-4 rounded-xl font-bold text-lg border-2 border-gray-100 text-gray-400 hover:bg-gray-50 transition-all"
+                >
+                  Précédent
+                </button>
               )}
-            </button>
+              <button
+                onClick={handleNext}
+                disabled={loading || isNextDisabled()}
+                className={`${(step === 0 || step === "final") ? "w-full" : "flex-[2]"} flex items-center justify-center py-4 rounded-xl font-bold text-lg transition-all ${
+                  isNextDisabled()
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-[#534AB7] text-white hover:bg-[#453da3] shadow-lg shadow-[#534AB7]/20"
+                }`}
+              >
+                {loading ? (
+                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    {step === "final" ? "Valider" : "Suivant"}
+                    <ChevronRight size={20} className="ml-2" />
+                  </>
+                )}
+              </button>
+            </div>
           )}
         </div>
       </motion.div>
