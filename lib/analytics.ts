@@ -76,7 +76,7 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
   // 2. Line Chart: Reach & Impressions over time
   const timeSeries = await db
     .select({
-      date: sql<string>`DATE(${postPlatformResults.publishedAt})`,
+      date: sql<string>`(${postPlatformResults.publishedAt})::date`,
       platform: postPlatformResults.platform,
       reach: sql<number>`sum(${postPlatformResults.reach})`,
       impressions: sql<number>`sum(${postPlatformResults.impressions})`,
@@ -87,20 +87,20 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
     .from(posts)
     .innerJoin(postPlatformResults, eq(posts.id, postPlatformResults.postId))
     .where(and(...whereConditions))
-    .groupBy(sql`DATE(${postPlatformResults.publishedAt})`, postPlatformResults.platform)
-    .orderBy(sql`DATE(${postPlatformResults.publishedAt})`);
+    .groupBy(sql`(${postPlatformResults.publishedAt})::date`, postPlatformResults.platform)
+    .orderBy(sql`(${postPlatformResults.publishedAt})::date`);
 
   // 3. Bar Chart: Posts per day
   const postsPerDay = await db
     .select({
-      date: sql<string>`DATE(${postPlatformResults.publishedAt})`,
+      date: sql<string>`(${postPlatformResults.publishedAt})::date`,
       count: sql<number>`count(distinct ${posts.id})`,
     })
     .from(posts)
     .innerJoin(postPlatformResults, eq(posts.id, postPlatformResults.postId))
     .where(and(...whereConditions))
-    .groupBy(sql`DATE(${postPlatformResults.publishedAt})`)
-    .orderBy(sql`DATE(${postPlatformResults.publishedAt})`);
+    .groupBy(sql`(${postPlatformResults.publishedAt})::date`)
+    .orderBy(sql`(${postPlatformResults.publishedAt})::date`);
 
   // 4. Donut Chart: Platform distribution
   const platformDist = await db
@@ -202,4 +202,3 @@ export async function getAnalyticsData(userId: string, from?: Date, to?: Date) {
     platformStats,
   };
 }
-

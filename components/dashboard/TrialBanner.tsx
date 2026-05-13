@@ -11,9 +11,10 @@ export function TrialBanner() {
   
   if (!trialEndsAt || onboardingStep !== "done") return null
   
-  const daysLeft = Math.ceil(
-    (new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-  )
+  const endTime = new Date(trialEndsAt).getTime()
+  if (isNaN(endTime)) return null
+
+  const daysLeft = Math.ceil((endTime - Date.now()) / (1000 * 60 * 60 * 24))
   
   if (daysLeft <= 0) return null
   
