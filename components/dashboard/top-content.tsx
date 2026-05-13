@@ -15,25 +15,47 @@ interface TopContentProps {
   hasPosts: boolean;
 }
 
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center 
+    h-64 text-center border border-dashed border-gray-200 
+    rounded-2xl p-8">
+    <p className="font-medium text-gray-500 mb-1">
+      Connecte tes réseaux sociaux
+    </p>
+    <p className="text-sm text-gray-400">
+      Tes données apparaîtront ici une fois connecté.
+    </p>
+  </div>
+);
+
 export async function TopContent() {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
 
-  const [topPosts, accounts] = await Promise.all([
-    getTopContent(clerkId),
-    getCachedAccounts(clerkId),
-  ]);
+  try {
+    const [topPosts, accounts] = await Promise.all([
+      getTopContent(clerkId),
+      getCachedAccounts(clerkId),
+    ]);
 
-  const hasAccounts = (accounts || []).length > 0;
-  const hasPosts = topPosts.length > 0;
+    const hasAccounts = (accounts || []).length > 0;
+    const hasPosts = topPosts.length > 0;
 
-  return (
-    <TopContentView 
-      topPosts={topPosts} 
-      hasAccounts={hasAccounts} 
-      hasPosts={hasPosts} 
-    />
-  );
+    if (!hasAccounts) {
+      return <EmptyState />;
+    }
+
+    return (
+      <TopContentView 
+        topPosts={topPosts} 
+        hasAccounts={hasAccounts} 
+        hasPosts={hasPosts} 
+      />
+    );
+  } catch (error) {
+    console.error("TopContent error:", error);
+    return <EmptyState />;
+  }
 }
 
 export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentProps) {

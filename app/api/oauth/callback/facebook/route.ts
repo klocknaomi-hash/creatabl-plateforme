@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      new URL('/dashboard/accounts?error=facebook_denied', req.nextUrl.origin)
+      new URL('/dashboard/settings/connections?error=facebook_denied', req.nextUrl.origin)
     )
   }
 
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
   if (!tokenData.access_token) {
     console.error('Token exchange failed:', JSON.stringify(tokenData))
     return NextResponse.redirect(
-      new URL('/dashboard/accounts?error=facebook_token', req.nextUrl.origin)
+      new URL('/dashboard/settings/connections?error=facebook_token', req.nextUrl.origin)
     )
   }
 
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
   }
 
   const response = NextResponse.redirect(
-    new URL('/dashboard/accounts?facebook=connected', req.nextUrl.origin)
+    new URL('/dashboard/settings/connections?facebook=connected', req.nextUrl.origin)
   )
   response.cookies.delete('fb_state')
 

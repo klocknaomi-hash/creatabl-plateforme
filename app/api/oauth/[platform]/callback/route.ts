@@ -18,11 +18,11 @@ export async function GET(
   const error = searchParams.get('error');
 
   if (error) {
-    return NextResponse.redirect(new URL(`/dashboard/accounts?error=${error}`, request.nextUrl.origin));
+    return NextResponse.redirect(new URL(`/dashboard/settings/connections?error=${error}`, request.nextUrl.origin));
   }
 
   if (!code) {
-    return NextResponse.redirect(new URL('/dashboard/accounts?error=no_code', request.nextUrl.origin));
+    return NextResponse.redirect(new URL('/dashboard/settings/connections?error=no_code', request.nextUrl.origin));
   }
 
   const user = await getCurrentUser();
@@ -50,7 +50,7 @@ export async function GET(
         });
         // Clear state cookie even on failure to prevent replay
         cookieStore.delete(`${platform}_oauth_state`);
-        return NextResponse.redirect(new URL(`/dashboard/accounts?error=invalid_state&platform=${platform}`, request.nextUrl.origin));
+        return NextResponse.redirect(new URL(`/dashboard/settings/connections?error=invalid_state&platform=${platform}`, request.nextUrl.origin));
       }
       // Clear state cookie on success
       cookieStore.delete(`${platform}_oauth_state`);
@@ -111,9 +111,9 @@ export async function GET(
       });
     }
 
-    return NextResponse.redirect(new URL('/dashboard/accounts?success=true', request.nextUrl.origin));
+    return NextResponse.redirect(new URL('/dashboard/settings/connections?success=true', request.nextUrl.origin));
   } catch (err: any) {
     console.error(`Callback error for ${platform}:`, err);
-    return NextResponse.redirect(new URL(`/dashboard/accounts?error=${encodeURIComponent(err.message)}`, request.nextUrl.origin));
+    return NextResponse.redirect(new URL(`/dashboard/settings/connections?error=${encodeURIComponent(err.message)}`, request.nextUrl.origin));
   }
 }

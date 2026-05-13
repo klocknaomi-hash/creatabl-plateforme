@@ -60,7 +60,7 @@ export function AppSidebar() {
   ];
 
   const navSettings = [
-    { title: t.accounts, href: "/dashboard/accounts", icon: Link2 },
+    { title: t.accounts, href: "/dashboard/settings/connections", icon: Link2 },
     { title: t.billing, href: "/dashboard/billing", icon: CreditCard },
   ];
 

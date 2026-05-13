@@ -6,11 +6,11 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 
 const CHECKLIST_ITEMS = [
-  { id: "connect", label: "Connecte tes réseaux sociaux", href: "/dashboard/accounts" },
+  { id: "connect", label: "Connecte tes réseaux sociaux", href: "/dashboard/settings/connections" },
   { id: "post", label: "Génère un post", href: "/dashboard/compose" },
   { id: "ideas", label: "Génère des idées", href: "/dashboard/compose?tab=ideas" },
   { id: "analytics", label: "Analyse tes métriques", href: "/dashboard/analytics" },
-  { id: "engagement", label: "Crée une liste d'engagement", href: "/dashboard/accounts" },
+  { id: "engagement", label: "Crée une liste d'engagement", href: "/dashboard/settings/connections" },
 ];
 
 export const OnboardingChecklist = () => {

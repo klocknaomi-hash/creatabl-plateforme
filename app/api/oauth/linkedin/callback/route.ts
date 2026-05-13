@@ -24,13 +24,13 @@ export async function GET(req: NextRequest) {
   if (error) {
     console.error('LinkedIn Auth Error:', error, errorDescription);
     return NextResponse.redirect(
-      new URL(`/dashboard/accounts?error=linkedin_${error}`, req.nextUrl.origin)
+      new URL(`/dashboard/settings/connections?error=linkedin_${error}`, req.nextUrl.origin)
     );
   }
 
   if (!code) {
     return NextResponse.redirect(
-      new URL('/dashboard/accounts?error=no_code', req.nextUrl.origin)
+      new URL('/dashboard/settings/connections?error=no_code', req.nextUrl.origin)
     );
   }
 
@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
     console.log('LinkedIn account saved successfully');
 
     const response = NextResponse.redirect(
-      new URL('/dashboard/accounts?success=true&linkedin=connected', req.nextUrl.origin)
+      new URL('/dashboard/settings/connections?success=true&linkedin=connected', req.nextUrl.origin)
     );
     response.cookies.delete('linkedin_oauth_state');
     return response;
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
   } catch (err: any) {
     console.error('LinkedIn Callback Error:', err);
     return NextResponse.redirect(
-      new URL(`/dashboard/accounts?error=${encodeURIComponent(err.message)}`, req.nextUrl.origin)
+      new URL(`/dashboard/settings/connections?error=${encodeURIComponent(err.message)}`, req.nextUrl.origin)
     );
   }
 }

@@ -16,29 +16,51 @@ interface StatsRowProps {
   t: any;
 }
 
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center 
+    h-64 text-center border border-dashed border-gray-200 
+    rounded-2xl p-8">
+    <p className="font-medium text-gray-500 mb-1">
+      Connecte tes réseaux sociaux
+    </p>
+    <p className="text-sm text-gray-400">
+      Tes données apparaîtront ici une fois connecté.
+    </p>
+  </div>
+);
+
 export async function StatsRow() {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
 
-  const [stats, settings, accounts] = await Promise.all([
-    getDashboardStats(clerkId),
-    getCachedUserSettings(clerkId),
-    getCachedAccounts(clerkId),
-  ]);
+  try {
+    const [stats, settings, accounts] = await Promise.all([
+      getDashboardStats(clerkId),
+      getCachedUserSettings(clerkId),
+      getCachedAccounts(clerkId),
+    ]);
 
-  const t = getTranslation(settings?.language || "fr");
-  const hasAccounts = (accounts || []).length > 0;
-  const hasPosts = Number(stats.totalPosts || 0) > 0;
+    const t = getTranslation(settings?.language || "fr");
+    const hasAccounts = (accounts || []).length > 0;
+    const hasPosts = Number(stats.totalPosts || 0) > 0;
 
-  return (
-    <StatsRowView 
-      summary={stats} 
-      upcomingCount={stats.upcomingCount} 
-      hasAccounts={hasAccounts} 
-      hasPosts={hasPosts} 
-      t={t} 
-    />
-  );
+    if (!hasAccounts) {
+      return <EmptyState />;
+    }
+
+    return (
+      <StatsRowView 
+        summary={stats} 
+        upcomingCount={stats.upcomingCount} 
+        hasAccounts={hasAccounts} 
+        hasPosts={hasPosts} 
+        t={t} 
+      />
+    );
+  } catch (error) {
+    console.error("StatsRow error:", error);
+    return <EmptyState />;
+  }
 }
 
 export function StatsRowView({ summary, upcomingCount, hasAccounts, hasPosts, t }: StatsRowProps) {

@@ -13,12 +13,30 @@ interface UpcomingScheduleProps {
   upcomingPosts: any[];
 }
 
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center 
+    h-64 text-center border border-dashed border-gray-200 
+    rounded-2xl p-8">
+    <p className="font-medium text-gray-500 mb-1">
+      Connecte tes réseaux sociaux
+    </p>
+    <p className="text-sm text-gray-400">
+      Tes données apparaîtront ici une fois connecté.
+    </p>
+  </div>
+);
+
 export async function UpcomingSchedule() {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
 
-  const posts = await getUpcomingPosts(clerkId);
-  return <UpcomingScheduleView upcomingPosts={posts} />;
+  try {
+    const posts = await getUpcomingPosts(clerkId);
+    return <UpcomingScheduleView upcomingPosts={posts} />;
+  } catch (error) {
+    console.error("UpcomingSchedule error:", error);
+    return <EmptyState />;
+  }
 }
 
 export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {

@@ -13,12 +13,30 @@ interface RecentDraftsProps {
   recentDrafts: any[];
 }
 
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center 
+    h-64 text-center border border-dashed border-gray-200 
+    rounded-2xl p-8">
+    <p className="font-medium text-gray-500 mb-1">
+      Connecte tes réseaux sociaux
+    </p>
+    <p className="text-sm text-gray-400">
+      Tes données apparaîtront ici une fois connecté.
+    </p>
+  </div>
+);
+
 export async function RecentDrafts() {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
 
-  const drafts = await getRecentDrafts(clerkId);
-  return <RecentDraftsView recentDrafts={drafts} />;
+  try {
+    const drafts = await getRecentDrafts(clerkId);
+    return <RecentDraftsView recentDrafts={drafts} />;
+  } catch (error) {
+    console.error("RecentDrafts error:", error);
+    return <EmptyState />;
+  }
 }
 
 export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {

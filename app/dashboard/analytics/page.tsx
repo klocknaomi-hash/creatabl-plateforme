@@ -110,7 +110,7 @@ export default async function AnalyticsPage(props: {
             Connectez vos comptes sociaux pour commencer à suivre les performances, l'engagement et la portée sur tous vos canaux.
           </p>
         </div>
-        <Link href="/dashboard/accounts">
+        <Link href="/dashboard/settings/connections">
           <Button size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20">
             <Plus className="mr-2 size-5" />
             Connecter votre premier compte

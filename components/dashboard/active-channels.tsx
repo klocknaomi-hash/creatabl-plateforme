@@ -54,7 +54,7 @@ export function ActiveChannelsView({ accounts, t }: ActiveChannelsProps) {
           </div>
           <h2 className="text-sm font-bold tracking-tight">{t.activeChannels || "Active Channels"}</h2>
         </div>
-        <Link href="/dashboard/accounts" className="text-xs font-bold text-muted-foreground hover:text-violet-600 transition-colors flex items-center gap-1.5 group">
+        <Link href="/dashboard/settings/connections" className="text-xs font-bold text-muted-foreground hover:text-violet-600 transition-colors flex items-center gap-1.5 group">
           {t.manageAccounts || "Manage Accounts"}
           <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
@@ -65,7 +65,7 @@ export function ActiveChannelsView({ accounts, t }: ActiveChannelsProps) {
           const brand = PLATFORM_BRANDING[acc.platform.toLowerCase()];
           const Icon = brand?.icon || ExternalLink;
           return (
-            <Link key={acc.id} href="/dashboard/accounts" className="group">
+            <Link key={acc.id} href="/dashboard/settings/connections" className="group">
               <div className="flex items-center gap-3 p-1.5 pr-4 rounded-full bg-background border border-border/50 shadow-sm transition-all hover:shadow-md hover:border-violet-600/20 group-active:scale-[0.98]">
                 <div className={cn(
                   "size-9 rounded-full flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105", 
@@ -86,7 +86,7 @@ export function ActiveChannelsView({ accounts, t }: ActiveChannelsProps) {
           );
         })}
         
-        <Link href="/dashboard/accounts" className="group">
+        <Link href="/dashboard/settings/connections" className="group">
           <div className="flex items-center gap-2.5 p-1.5 pr-4 rounded-full bg-muted/5 border border-dashed border-border/60 hover:bg-muted/10 transition-all h-full group-active:scale-[0.98]">
             <div className="size-9 rounded-full bg-background flex items-center justify-center text-muted-foreground/40 shadow-sm group-hover:text-violet-600 transition-colors">
               <Plus className="size-4" />
