@@ -130,7 +130,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
             }`}
           >
             Annuel
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700`}>
+            <span className={`text-[10px] font-black px-2 py-0.5 rounded-full bg-green-100 text-green-700 uppercase tracking-widest`}>
               -20%
             </span>
           </button>
@@ -154,12 +154,12 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
               {/* Badges */}
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 items-center w-full">
                 {isPro && (
-                  <div className="bg-[#534AB7] text-white text-xs font-bold px-4 py-1 rounded-full whitespace-nowrap shadow-md">
+                  <div className="bg-[#534AB7] text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-md uppercase tracking-widest">
                     Le plus populaire
                   </div>
                 )}
                 {isSelectedPlan && (
-                  <div className="bg-[#534AB7] text-white text-xs font-bold px-4 py-1 rounded-full whitespace-nowrap shadow-md">
+                  <div className="bg-[#534AB7] text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-md uppercase tracking-widest">
                     TON CHOIX
                   </div>
                 )}
