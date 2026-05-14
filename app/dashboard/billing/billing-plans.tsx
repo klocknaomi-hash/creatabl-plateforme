@@ -81,7 +81,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
         </span>
         <button
           onClick={() => setBilling(billing === 'monthly' ? 'yearly' : 'monthly')}
-          className={`relative w-12 h-6 rounded-full transition-colors ${billing === 'yearly' ? 'bg-[#534AB7]' : 'bg-gray-200'
+          className={`relative w-12 h-6 rounded-full transition-colors ${billing === 'yearly' ? 'bg-[#7C3AED]' : 'bg-gray-200'
             }`}
           aria-label="Basculer entre mensuel et annuel"
         >
@@ -111,17 +111,17 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
               whileHover={{ y: -4 }}
               className={`relative bg-white rounded-3xl p-7 flex flex-col transition-all ${
                 isPro
-                  ? 'border-2 border-[#534AB7] shadow-lg shadow-purple-50'
+                  ? 'border-2 border-[#7C3AED] shadow-lg shadow-purple-50'
                   : 'border border-gray-200 hover:border-gray-300 shadow-sm'
               }`}
             >
               {isPro && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#534AB7] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#7C3AED] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
                   Le plus populaire
                 </div>
               )}
               {isSelected && !isPro && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#534AB7] text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest whitespace-nowrap">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#7C3AED] text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest whitespace-nowrap">
                   Ton choix
                 </div>
               )}
@@ -148,7 +148,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-gray-600 text-sm">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-50 flex items-center justify-center mt-0.5">
-                      <Check className="w-3 h-3 text-[#534AB7]" />
+                      <Check className="w-3 h-3 text-[#7C3AED]" />
                     </div>
                     {feature}
                   </li>
@@ -159,7 +159,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
                 href={`/api/stripe/create-checkout?plan=${plan.id}&billing=${billing}`}
                 className={`w-full py-4 px-6 rounded-xl font-bold text-sm flex items-center justify-center transition-all ${
                   isSelected
-                    ? 'bg-[#534AB7] text-white hover:bg-[#453da3] shadow-lg shadow-[#534AB7]/20'
+                    ? 'bg-[#7C3AED] text-white hover:bg-[#6b2fb5] shadow-lg shadow-[#7C3AED]/20'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >

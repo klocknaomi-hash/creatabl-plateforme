@@ -35,7 +35,7 @@ export default async function BillingPage() {
 
       {/* SECTION TRIAL */}
       {isTrial && (
-        <Card className="border-none shadow-2xl shadow-[#534AB7]/10 bg-white overflow-hidden rounded-[32px] ring-1 ring-gray-100">
+        <Card className="border-none shadow-2xl shadow-[#7C3AED]/10 bg-white overflow-hidden rounded-[32px] ring-1 ring-gray-100">
           <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
             <div className="relative flex items-center justify-center flex-shrink-0">
               <svg width="180" height="180" viewBox="0 0 180 180" className="transform -rotate-90">
@@ -45,7 +45,7 @@ export default async function BillingPage() {
                   cy="90"
                   r="76"
                   fill="none"
-                  stroke="#534AB7"
+                  stroke="#7C3AED"
                   strokeWidth="16"
                   strokeDasharray={2 * Math.PI * 76}
                   strokeDashoffset={2 * Math.PI * 76 * (1 - trialDaysLeft / 7)}
@@ -62,7 +62,7 @@ export default async function BillingPage() {
             <div className="space-y-6 text-center md:text-left flex-1">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                  <Badge className="bg-[#534AB7]/10 text-[#534AB7] border-none px-3 py-1 font-bold rounded-full">
+                  <Badge className="bg-[#7C3AED]/10 text-[#7C3AED] border-none px-3 py-1 font-bold rounded-full">
                     Ton essai gratuit Business
                   </Badge>
                 </div>
@@ -81,7 +81,7 @@ export default async function BillingPage() {
                    Accès complet Business
                  </div>
                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
-                   <Clock className="w-4 h-4 text-[#534AB7]" />
+                   <Clock className="w-4 h-4 text-[#7C3AED]" />
                    Expension automatique
                  </div>
               </div>
@@ -103,7 +103,7 @@ export default async function BillingPage() {
       <div className="rounded-[24px] bg-gray-50/50 py-8 px-8 text-center border border-gray-100">
         <div className="max-w-2xl mx-auto space-y-4">
           <p className="text-sm font-bold text-gray-600 flex items-center justify-center gap-3">
-            <Lock className="w-5 h-5 text-[#534AB7]" />
+            <Lock className="w-5 h-5 text-[#7C3AED]" />
             Paiements 100% sécurisés via Stripe
           </p>
           <p className="text-xs text-gray-400 leading-relaxed">

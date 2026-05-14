@@ -202,22 +202,17 @@ export function AppSidebar() {
           if (isNaN(daysLeft) || daysLeft <= 0) return null;
           
           return (
-            <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 space-y-4 group-data-[collapsible=icon]:hidden">
-              <div className="flex items-center gap-3 text-primary">
-                <div className="bg-primary p-2 rounded-xl text-white shadow-sm shadow-primary/20">
+            <div className="bg-[#7C3AED]/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
+              <div className="flex items-center gap-3 text-[#7C3AED]">
+                <div className="bg-[#7C3AED] p-1.5 rounded-lg text-white">
                   <Clock size={16} />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-[11px] font-bold leading-tight">
-                    Essai gratuit
-                  </span>
-                  <span className="text-[10px] text-primary/60 font-medium">
-                    {daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}
-                  </span>
-                </div>
+                <span className="text-xs font-bold leading-tight">
+                  Ton essai gratuit termine dans {daysLeft} jour{daysLeft > 1 ? "s" : ""}
+                </span>
               </div>
               <Button 
-                className="w-full bg-primary hover:bg-primary/90 text-white text-[10px] font-black uppercase tracking-widest py-2.5 h-auto rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-95"
+                className="w-full bg-[#7C3AED] hover:bg-[#6b2fb5] text-white text-xs font-bold py-2 h-auto"
                 render={<Link href="/dashboard/billing" />}
               >
                 Voir les plans
