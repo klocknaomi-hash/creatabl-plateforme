@@ -102,18 +102,25 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {PLANS.map((plan) => {
           const isSelected = plan.id === normalizedSelected
+          const isPro = plan.id === 'pro'
           const displayPrice = billing === 'monthly' ? plan.monthlyPrice : plan.yearlyMonthly
 
           return (
             <motion.div
               key={plan.id}
               whileHover={{ y: -4 }}
-              className={`relative bg-white rounded-3xl p-7 border-2 flex flex-col transition-all ${isSelected
-                ? 'border-[#534AB7] shadow-lg shadow-purple-50'
-                : 'border-gray-100 hover:border-gray-200 shadow-sm'
-                }`}
+              className={`relative bg-white rounded-3xl p-7 flex flex-col transition-all ${
+                isPro
+                  ? 'border-2 border-[#534AB7] shadow-lg shadow-purple-50'
+                  : 'border border-gray-200 hover:border-gray-300 shadow-sm'
+              }`}
             >
-              {isSelected && (
+              {isPro && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#534AB7] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                  Le plus populaire
+                </div>
+              )}
+              {isSelected && !isPro && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#534AB7] text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest whitespace-nowrap">
                   Ton choix
                 </div>

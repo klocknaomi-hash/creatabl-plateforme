@@ -186,22 +186,31 @@ export function AppSidebar() {
       {/* ── User Footer ── */}
       <SidebarFooter className="px-4 py-4 space-y-4 group-data-[collapsible=icon]:px-1">
         {/* Trial Info */}
-        <div className="bg-[#534AB7]/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
-          <div className="flex items-center gap-3 text-[#534AB7]">
-            <div className="bg-[#534AB7] p-1.5 rounded-lg text-white">
-               <Clock size={16} />
+        {(() => {
+          const trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
+          if (!trialEndsAt) return null;
+          const daysLeft = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+          if (isNaN(daysLeft) || daysLeft <= 0) return null;
+          
+          return (
+            <div className="bg-[#534AB7]/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
+              <div className="flex items-center gap-3 text-[#534AB7]">
+                <div className="bg-[#534AB7] p-1.5 rounded-lg text-white">
+                  <Clock size={16} />
+                </div>
+                <span className="text-xs font-bold leading-tight">
+                  Ton essai gratuit termine dans {daysLeft} jour{daysLeft > 1 ? "s" : ""}
+                </span>
+              </div>
+              <Button 
+                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white text-xs font-bold py-2 h-auto"
+                render={<Link href="/dashboard/billing" />}
+              >
+                Voir les plans
+              </Button>
             </div>
-            <span className="text-xs font-bold leading-tight">
-              Ton essai gratuit termine dans 7 jours
-            </span>
-          </div>
-          <Button 
-            className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white text-xs font-bold py-2 h-auto"
-            render={<Link href="/dashboard/billing" />}
-          >
-            Voir les plans
-          </Button>
-        </div>
+          );
+        })()}
 
         <SidebarMenu>
           <SidebarMenuItem>

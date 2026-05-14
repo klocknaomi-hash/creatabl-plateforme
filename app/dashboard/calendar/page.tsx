@@ -24,6 +24,7 @@ import {
   X,
   Save
 } from "lucide-react";
+import { fr } from "date-fns/locale";
 import { 
   InstagramIcon as Instagram, 
   LinkedinIcon as Linkedin, 
@@ -152,11 +153,11 @@ export default function CalendarPage() {
   // Range calculation for API
   const range = useMemo(() => {
     if (view === "month") {
-      const start = startOfWeek(startOfMonth(currentDate));
-      const end = endOfWeek(endOfMonth(currentDate));
+      const start = startOfWeek(startOfMonth(currentDate), { weekStartsOn: 1 });
+      const end = endOfWeek(endOfMonth(currentDate), { weekStartsOn: 1 });
       return { start, end };
     } else if (view === "week") {
-      return { start: startOfWeek(currentDate), end: endOfWeek(currentDate) };
+      return { start: startOfWeek(currentDate, { weekStartsOn: 1 }), end: endOfWeek(currentDate, { weekStartsOn: 1 }) };
     } else {
       return { start: startOfDay(currentDate), end: endOfDay(currentDate) };
     }
@@ -294,7 +295,7 @@ export default function CalendarPage() {
             className="rounded-xl h-9 px-4 font-semibold text-xs shadow-sm bg-primary hover:bg-primary/90 transition-all active:scale-95 shrink-0" 
             onClick={() => window.location.href = "/dashboard/compose"}
           >
-            <Plus className="size-3 mr-1.5" /> New Post
+            <Plus className="size-3 mr-1.5" /> Nouveau post
           </Button>
           
           {/* Divider */}
@@ -312,12 +313,12 @@ export default function CalendarPage() {
           
           {/* Current Date Display */}
           <div className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground min-w-[100px] text-center">
-            {format(currentDate, view === "day" ? "MMM d, yyyy" : "MMMM yyyy")}
+            {format(currentDate, view === "day" ? "d MMM yyyy" : "MMMM yyyy", { locale: fr })}
           </div>
           
           {/* Today Button */}
           <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())} className="h-7 text-[10px] font-bold px-3 rounded-lg border-border/40">
-            Today
+            Aujourd'hui
           </Button>
           
           {/* Divider */}
@@ -326,9 +327,9 @@ export default function CalendarPage() {
           {/* View Switcher */}
           <Tabs value={view} onValueChange={(v: any) => setView(v)} className="bg-muted/30 p-1 rounded-xl">
             <TabsList className="bg-transparent h-7 border-none gap-0.5">
-              <TabsTrigger value="month" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Month</TabsTrigger>
-              <TabsTrigger value="week" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Week</TabsTrigger>
-              <TabsTrigger value="day" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Day</TabsTrigger>
+              <TabsTrigger value="month" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Mois</TabsTrigger>
+              <TabsTrigger value="week" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Semaine</TabsTrigger>
+              <TabsTrigger value="day" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Jour</TabsTrigger>
             </TabsList>
           </Tabs>
           
@@ -660,15 +661,15 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
 function MonthView({ currentDate, posts, onPostClick }: any) {
   const monthStart = startOfMonth(currentDate);
   const calendarDays = eachDayOfInterval({ 
-    start: startOfWeek(monthStart), 
-    end: endOfWeek(endOfMonth(monthStart)) 
+    start: startOfWeek(monthStart, { weekStartsOn: 1 }), 
+    end: endOfWeek(endOfMonth(monthStart), { weekStartsOn: 1 }) 
   });
   const today = new Date();
 
   return (
     <div className="flex flex-col flex-1">
       <div className="grid grid-cols-7 border-b bg-muted/20">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
+        {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map(d => (
           <div key={d} className="py-3 text-center text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground border-r last:border-r-0">{d}</div>
         ))}
       </div>
@@ -750,7 +751,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
 }
 
 function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnected, currentTime, isTwitterAnalyzed }: any) {
-  const weekStart = startOfWeek(currentDate);
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const hours = Array.from({ length: 24 }, (_, i) => i);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -768,7 +769,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
             <div className="border-r border-border/40 h-14" />
             {weekDays.map(day => (
               <div key={day.toISOString()} className={cn("py-2 h-14 text-center border-r border-border/40 last:border-r-0 flex flex-col items-center justify-center gap-0.5", isToday(day) && "bg-primary/[0.04]")}>
-                <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 leading-none">{format(day, "EEE")}</span>
+                <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 leading-none">{format(day, "EEE", { locale: fr })}</span>
                 <span className={cn("text-sm font-black size-7 flex items-center justify-center rounded-lg transition-colors", isToday(day) ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80")}>{format(day, "d")}</span>
               </div>
             ))}
@@ -865,7 +866,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
           <div className="grid grid-cols-[100px_1fr] border-b bg-muted/10 backdrop-blur-md h-14">
             <div className="border-r border-border/40 h-14" />
             <div className="flex items-center justify-center px-4">
-              <h2 className="text-sm font-black uppercase tracking-widest text-foreground/80">{format(currentDate, "EEEE, MMMM do")}</h2>
+              <h2 className="text-sm font-black uppercase tracking-widest text-foreground/80">{format(currentDate, "EEEE d MMMM", { locale: fr })}</h2>
             </div>
           </div>
         </div>

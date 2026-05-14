@@ -11,12 +11,11 @@ export function TrialBanner() {
   
   if (!trialEndsAt || onboardingStep !== "done") return null
   
-  const endTime = new Date(trialEndsAt).getTime()
-  if (isNaN(endTime)) return null
-
-  const daysLeft = Math.ceil((endTime - Date.now()) / (1000 * 60 * 60 * 24))
+  const daysLeft = Math.ceil(
+    (new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+  )
   
-  if (daysLeft <= 0) return null
+  if (daysLeft <= 0 || isNaN(daysLeft)) return null
   
   return (
     <div className="w-full bg-[#534AB7] text-white px-6 py-3 flex items-center justify-between text-sm">
