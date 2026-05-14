@@ -117,7 +117,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
         <div className="bg-gray-100 p-1 rounded-full flex items-center gap-1">
           <button
             onClick={() => setBilling('monthly')}
-            className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${
+            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
               billing === 'monthly' ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -125,7 +125,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
           </button>
           <button
             onClick={() => setBilling('yearly')}
-            className={`px-6 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
+            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
               billing === 'yearly' ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -137,7 +137,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch max-w-5xl mx-auto">
         {PLANS.map((plan) => {
           const isSelectedPlan = plan.id === normalizedSelected
           const displayPrice = billing === 'monthly' ? plan.monthlyPrice : plan.yearlyMonthly
@@ -147,7 +147,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
             <motion.div
               key={plan.id}
               whileHover={{ y: -4 }}
-              className={`relative bg-white rounded-2xl p-8 flex flex-col transition-all shadow-sm ${
+              className={`relative bg-white rounded-2xl p-6 flex flex-col transition-all shadow-sm ${
                 isPro ? 'border-2 border-[#534AB7]' : 'border border-gray-100'
               }`}
             >
@@ -166,14 +166,14 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
               </div>
 
               <div className="mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
                 <p className="text-sm italic text-[#534AB7] mt-1 font-serif">
                   {plan.tagline}
                 </p>
                 
                 <div className="mt-6 flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-gray-900">{displayPrice}€</span>
-                  <span className="text-gray-500 text-sm">/mois</span>
+                  <span className="text-3xl font-bold text-gray-900">{displayPrice}€</span>
+                  <span className="text-gray-500 text-sm font-normal">/mois</span>
                 </div>
                 
                 <div className="h-5">
@@ -187,7 +187,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
                     </p>
                   )}
                 </div>
-                <p className="text-[11px] text-gray-400 mt-1 uppercase tracking-wider">
+                <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider">
                   par utilisateur et par mois
                 </p>
               </div>
@@ -197,7 +197,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
               <div className="space-y-8 flex-1">
                 {/* Posts Section */}
                 <div>
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-3">
+                  <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
                     Génération de posts
                   </h4>
                   <div className="flex items-center gap-2 text-gray-900 font-bold">
@@ -208,7 +208,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
 
                 {/* Features Section */}
                 <div>
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-4">
+                  <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
                     Fonctionnalités
                   </h4>
                   
@@ -245,7 +245,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
                 >
                   Choisir ce plan
                 </a>
-                <p className="text-[10px] text-center text-gray-400 font-medium">
+                <p className="text-xs text-center text-gray-400 font-medium">
                   Essai gratuit 7 jours · Sans carte bancaire
                 </p>
               </div>

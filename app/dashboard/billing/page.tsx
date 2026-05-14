@@ -85,10 +85,6 @@ export default async function BillingPage() {
 
       {/* SECTION CHOISIR UN PLAN (UPDATED) */}
       <div className="space-y-8">
-        <div className="text-center md:text-left space-y-1">
-          <h2 className="text-2xl font-bold text-gray-900">Choisir ton plan</h2>
-          <p className="text-sm text-gray-500">Sélectionne le forfait qui te convient le mieux après ton essai.</p>
-        </div>
         <BillingPlans currentPlan={user.plan || 'starter'} selectedPlan={user.selectedPlan || 'starter'} />
       </div>
 
