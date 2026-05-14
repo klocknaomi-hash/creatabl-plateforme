@@ -202,9 +202,9 @@ export function AppSidebar() {
           if (isNaN(daysLeft) || daysLeft <= 0) return null;
           
           return (
-            <div className="bg-[#7C3AED]/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
-              <div className="flex items-center gap-3 text-[#7C3AED]">
-                <div className="bg-[#7C3AED] p-1.5 rounded-lg text-white">
+            <div className="bg-primary/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
+              <div className="flex items-center gap-3 text-primary">
+                <div className="bg-primary p-1.5 rounded-lg text-white">
                   <Clock size={16} />
                 </div>
                 <span className="text-xs font-bold leading-tight">
@@ -212,7 +212,7 @@ export function AppSidebar() {
                 </span>
               </div>
               <Button 
-                className="w-full bg-[#7C3AED] hover:bg-[#6b2fb5] text-white text-xs font-bold py-2 h-auto"
+                className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold py-2 h-auto"
                 render={<Link href="/dashboard/billing" />}
               >
                 Voir les plans

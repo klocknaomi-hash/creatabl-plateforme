@@ -27,7 +27,7 @@ export function TrialBanner() {
   if (daysLeft <= 0 || isNaN(daysLeft)) return null
   
   return (
-    <div className="w-full bg-[#7C3AED] text-white px-6 py-3 flex items-center justify-between text-sm">
+    <div className="w-full bg-primary text-white px-6 py-3 flex items-center justify-between text-sm">
       <span>
         Tu bénéficies de toutes les fonctionnalités Business gratuitement 
         encore <strong>{daysLeft} jour{daysLeft > 1 ? "s" : ""}</strong>. 
