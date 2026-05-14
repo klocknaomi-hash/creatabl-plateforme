@@ -187,23 +187,37 @@ export function AppSidebar() {
       <SidebarFooter className="px-4 py-4 space-y-4 group-data-[collapsible=icon]:px-1">
         {/* Trial Info */}
         {(() => {
-          const trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
+          let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
+          
+          // Fallback to 7 days from creation if trialEndsAt is missing
+          if (!trialEndsAt && user?.createdAt) {
+            const createdAt = new Date(user.createdAt);
+            const sevenDaysLater = new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
+            trialEndsAt = sevenDaysLater.toISOString();
+          }
+
           if (!trialEndsAt) return null;
+          
           const daysLeft = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
           if (isNaN(daysLeft) || daysLeft <= 0) return null;
           
           return (
-            <div className="bg-[#534AB7]/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
-              <div className="flex items-center gap-3 text-[#534AB7]">
-                <div className="bg-[#534AB7] p-1.5 rounded-lg text-white">
+            <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 space-y-4 group-data-[collapsible=icon]:hidden">
+              <div className="flex items-center gap-3 text-primary">
+                <div className="bg-primary p-2 rounded-xl text-white shadow-sm shadow-primary/20">
                   <Clock size={16} />
                 </div>
-                <span className="text-xs font-bold leading-tight">
-                  Ton essai gratuit termine dans {daysLeft} jour{daysLeft > 1 ? "s" : ""}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-bold leading-tight">
+                    Essai gratuit
+                  </span>
+                  <span className="text-[10px] text-primary/60 font-medium">
+                    {daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}
+                  </span>
+                </div>
               </div>
               <Button 
-                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white text-xs font-bold py-2 h-auto"
+                className="w-full bg-primary hover:bg-primary/90 text-white text-[10px] font-black uppercase tracking-widest py-2.5 h-auto rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-95"
                 render={<Link href="/dashboard/billing" />}
               >
                 Voir les plans

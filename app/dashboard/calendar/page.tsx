@@ -283,8 +283,8 @@ export default function CalendarPage() {
   return (
     <div className="space-y-0 w-full mx-auto min-h-screen flex flex-col">
       <div className="flex flex-col gap-1 mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Calendar</h1>
-        <p className="text-muted-foreground text-sm">Manage your content calendar</p>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Calendrier</h1>
+        <p className="text-muted-foreground text-sm">Gérez votre calendrier éditorial</p>
       </div>
 
       {/* Unified Toolbar */}
