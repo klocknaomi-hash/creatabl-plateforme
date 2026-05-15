@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { users } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { socialAccounts, users } from '@/lib/db/schema'
+import { eq, and } from 'drizzle-orm'
 import { cookies } from 'next/headers'
+import { encryptToken } from '@/lib/encryption'
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
@@ -73,9 +74,9 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  // Get Facebook user ID
+  // Get Facebook user info
   const meRes = await fetch(
-    `https://graph.facebook.com/v19.0/me?access_token=${tokenData.access_token}`
+    `https://graph.facebook.com/v19.0/me?fields=id,name,picture&access_token=${tokenData.access_token}`
   )
   const meData = await meRes.json()
 
@@ -88,28 +89,27 @@ export async function GET(req: NextRequest) {
   const pageId = page?.id || null
   const pageToken = page?.access_token || null
 
-  // Get Instagram account ID from page
-  let instagramAccountId = null
+  // Get Instagram account ID and info from page
+  let instagramAccount = null
   if (pageId && pageToken) {
     const igRes = await fetch(
-      `https://graph.facebook.com/v19.0/${pageId}?fields=instagram_business_account&access_token=${pageToken}`
+      `https://graph.facebook.com/v19.0/${pageId}?fields=instagram_business_account{id,username,profile_picture_url}&access_token=${pageToken}`
     )
     const igData = await igRes.json()
-    instagramAccountId =
-      igData.instagram_business_account?.id || null
+    instagramAccount = igData.instagram_business_account || null
   }
 
   // Save to Neon using Upsert
   console.log('Upserting user tokens for:', userId)
   try {
-    await db.insert(users)
+    const userUpdate = await db.insert(users)
       .values({
         clerkId: userId as string,
         email: '', 
         facebookAccessToken: tokenData.access_token,
         facebookUserId: meData.id,
         facebookPageId: pageId,
-        instagramAccountId,
+        instagramAccountId: instagramAccount?.id || null,
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({
@@ -118,10 +118,70 @@ export async function GET(req: NextRequest) {
           facebookAccessToken: tokenData.access_token,
           facebookUserId: meData.id,
           facebookPageId: pageId,
-          instagramAccountId,
+          instagramAccountId: instagramAccount?.id || null,
           updatedAt: new Date(),
         }
       })
+      .returning({ id: users.id });
+    
+    const internalUserId = userUpdate[0]?.id;
+
+    if (internalUserId) {
+      const encryptedToken = encryptToken(tokenData.access_token);
+      const expiresAt = new Date(Date.now() + (tokenData.expires_in || 5184000) * 1000);
+
+      // Save Facebook account to social_accounts
+      const existingFb = await db.select().from(socialAccounts)
+        .where(and(eq(socialAccounts.userId, internalUserId), eq(socialAccounts.platform, 'facebook')))
+        .limit(1);
+
+      if (existingFb.length > 0) {
+        await db.update(socialAccounts).set({
+          platformUserId: meData.id,
+          accessToken: encryptedToken,
+          expiresAt: expiresAt,
+          username: meData.name,
+          avatarUrl: meData.picture?.data?.url,
+        }).where(eq(socialAccounts.id, existingFb[0].id));
+      } else {
+        await db.insert(socialAccounts).values({
+          userId: internalUserId,
+          platform: 'facebook',
+          platformUserId: meData.id,
+          accessToken: encryptedToken,
+          expiresAt: expiresAt,
+          username: meData.name,
+          avatarUrl: meData.picture?.data?.url,
+        });
+      }
+
+      // Save Instagram account to social_accounts if exists
+      if (instagramAccount) {
+        const existingIg = await db.select().from(socialAccounts)
+          .where(and(eq(socialAccounts.userId, internalUserId), eq(socialAccounts.platform, 'instagram')))
+          .limit(1);
+
+        if (existingIg.length > 0) {
+          await db.update(socialAccounts).set({
+            platformUserId: instagramAccount.id,
+            accessToken: encryptedToken, // Uses the same FB token
+            expiresAt: expiresAt,
+            username: instagramAccount.username,
+            avatarUrl: instagramAccount.profile_picture_url,
+          }).where(eq(socialAccounts.id, existingIg[0].id));
+        } else {
+          await db.insert(socialAccounts).values({
+            userId: internalUserId,
+            platform: 'instagram',
+            platformUserId: instagramAccount.id,
+            accessToken: encryptedToken,
+            expiresAt: expiresAt,
+            username: instagramAccount.username,
+            avatarUrl: instagramAccount.profile_picture_url,
+          });
+        }
+      }
+    }
     console.log('Upsert successful')
   } catch (dbError) {
     console.error('Database upsert failed:', dbError)

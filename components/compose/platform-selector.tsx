@@ -81,9 +81,10 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
               </Avatar>
               <div className={cn(
                 "absolute -bottom-1 -right-1 w-4 h-4 rounded-full border border-background flex items-center justify-center text-white shadow-sm",
-                account.platform === 'twitter' ? "bg-black" : 
-                account.platform === 'instagram' ? "bg-pink-500" : 
-                account.platform === 'linkedin' ? "bg-blue-600" : "bg-primary"
+                account.platform.toLowerCase() === 'twitter' ? "bg-black" : 
+                account.platform.toLowerCase() === 'instagram' ? "bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]" : 
+                account.platform.toLowerCase() === 'linkedin' ? "bg-[#0077b5]" : 
+                account.platform.toLowerCase() === 'facebook' ? "bg-[#1877f2]" : "bg-primary"
               )}>
                 <Icon className="w-2.5 h-2.5" />
               </div>
