@@ -62,7 +62,7 @@ const PLANS = [
       'Analytics essentiels',
       '1 espace de travail',
     ],
-    buttonStyle: 'border-2 border-[#534AB7] text-[#534AB7] bg-white hover:bg-[#534AB7]/5',
+    buttonStyle: 'border-2 border-[#7C3AED] text-[#7C3AED] bg-white hover:bg-[#7C3AED]/5',
   },
   {
     id: 'pro',
@@ -82,7 +82,7 @@ const PLANS = [
       '3 espaces de travail',
     ],
     recommended: true,
-    buttonStyle: 'bg-[#534AB7] text-white hover:bg-[#4339a0]',
+    buttonStyle: 'bg-[#8B5CF6] text-white hover:bg-[#7C3AED]',
   },
   {
     id: 'business',
@@ -148,18 +148,18 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
               key={plan.id}
               whileHover={{ y: -4 }}
               className={`relative bg-white rounded-2xl p-6 flex flex-col transition-all shadow-sm ${
-                isPro ? 'border-2 border-[#534AB7]' : 'border border-gray-100'
+                isPro ? 'border-2 border-[#8B5CF6]' : 'border border-gray-100'
               }`}
             >
               {/* Badges */}
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 items-center w-full">
                 {isPro && (
-                  <div className="bg-[#534AB7] text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-md uppercase tracking-widest">
+                  <div className="bg-[#8B5CF6] text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-md uppercase tracking-widest">
                     Le plus populaire
                   </div>
                 )}
                 {isSelectedPlan && (
-                  <div className="bg-[#534AB7] text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-md uppercase tracking-widest">
+                  <div className="bg-[#7C3AED] text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-md uppercase tracking-widest">
                     TON CHOIX
                   </div>
                 )}
@@ -167,7 +167,7 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
 
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
-                <p className="text-sm italic text-[#534AB7] mt-1 font-serif">
+                <p className="text-sm italic text-[#8B5CF6] mt-1 font-serif">
                   {plan.tagline}
                 </p>
                 

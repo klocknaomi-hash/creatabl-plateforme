@@ -19,6 +19,14 @@ export default async function BillingPage() {
   const isTrial = trialStatus.status === 'trial';
   const trialDaysLeft = trialStatus.daysLeft || 0;
 
+  // Dynamically calculate total trial duration in days
+  const totalDays = user.trialStartedAt && user.trialEndsAt
+    ? Math.max(1, Math.ceil((new Date(user.trialEndsAt).getTime() - new Date(user.trialStartedAt).getTime()) / (1000 * 60 * 60 * 24)))
+    : 7; // Fallback to 7 days if start date is not set
+
+  // Calculate accurate remaining progress ratio
+  const progress = totalDays > 0 ? Math.max(0, Math.min(1, trialDaysLeft / totalDays)) : 0;
+
   return (
     <div className="max-w-[1600px] mx-auto space-y-12 pb-16 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
@@ -28,29 +36,29 @@ export default async function BillingPage() {
         </div>
       </header>
 
-      {/* SECTION TRIAL (KEEP EXISTING) */}
+      {/* SECTION TRIAL */}
       {isTrial && (
         <Card className="border-none shadow-2xl shadow-primary/10 bg-white overflow-hidden rounded-[2rem] ring-1 ring-gray-100">
           <CardContent className="p-8 md:p-10 flex flex-col md:flex-row items-center gap-12">
             <div className="relative flex items-center justify-center flex-shrink-0">
-              <svg width="180" height="180" viewBox="0 0 180 180" className="transform -rotate-90">
-                <circle cx="90" cy="90" r="76" fill="none" stroke="#F8F7FF" strokeWidth="16" />
+              <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#F5F3FF" strokeWidth="10" />
                 <circle
-                  cx="90"
-                  cy="90"
-                  r="76"
+                  cx="60"
+                  cy="60"
+                  r="50"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="16"
-                  strokeDasharray={2 * Math.PI * 76}
-                  strokeDashoffset={2 * Math.PI * 76 * (1 - trialDaysLeft / 7)}
+                  strokeWidth="10"
+                  strokeDasharray={2 * Math.PI * 50}
+                  strokeDashoffset={2 * Math.PI * 50 * (1 - progress)}
                   strokeLinecap="round"
                   className="text-primary transition-all duration-1000 ease-in-out"
                 />
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center transform rotate-90">
-                <span className="text-4xl font-black text-gray-900 leading-none">{trialDaysLeft}</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-2">jours</span>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-3xl font-black text-gray-900 leading-none">{trialDaysLeft}</span>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-1">jours</span>
               </div>
             </div>
 
@@ -77,7 +85,7 @@ export default async function BillingPage() {
                  </div>
                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
                    <Clock className="w-4 h-4 text-primary" />
-                   Expension automatique
+                   Extension automatique
                  </div>
               </div>
             </div>
@@ -94,7 +102,7 @@ export default async function BillingPage() {
       <div className="rounded-2xl bg-gray-50/50 py-8 px-8 text-center border border-gray-100">
         <div className="max-w-2xl mx-auto space-y-4">
           <p className="text-sm font-bold text-gray-600 flex items-center justify-center gap-3">
-            <Lock className="w-5 h-5 text-[#534AB7]" />
+            <Lock className="w-5 h-5 text-[#7C3AED]" />
             Paiements 100% sécurisés via Stripe
           </p>
           <p className="text-xs text-gray-400 leading-relaxed">

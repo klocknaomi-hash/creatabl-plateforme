@@ -35,7 +35,7 @@ export function TrialBanner() {
       </span>
       <button
         onClick={() => router.push("/dashboard/billing")}
-        className="ml-4 bg-white text-[#534AB7] font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-gray-100 transition-colors whitespace-nowrap"
+        className="ml-4 bg-white text-primary font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-gray-100 transition-colors whitespace-nowrap"
       >
         Voir les plans
       </button>

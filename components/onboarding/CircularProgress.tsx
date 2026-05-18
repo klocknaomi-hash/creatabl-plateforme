@@ -32,7 +32,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#534AB7"
+          stroke="#7C3AED"
           strokeWidth={strokeWidth}
           fill="transparent"
           strokeDasharray={circumference}
@@ -41,7 +41,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           className="transition-all duration-500 ease-out"
         />
       </svg>
-      <span className="absolute text-[10px] font-semibold text-[#534AB7]">
+      <span className="absolute text-[10px] font-semibold text-[#7C3AED]">
         {Math.round(percentage)}%
       </span>
     </div>

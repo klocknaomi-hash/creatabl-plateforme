@@ -26,7 +26,7 @@ export const OnboardingChecklist = () => {
     <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-bold text-gray-900">Premiers pas</h3>
-        <span className="text-sm font-semibold text-[#534AB7] bg-[#534AB7]/10 px-3 py-1 rounded-full">
+        <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
           {completedCount}/{CHECKLIST_ITEMS.length}
         </span>
       </div>
@@ -36,13 +36,13 @@ export const OnboardingChecklist = () => {
           <Link
             key={item.id}
             href={item.href}
-            className="flex items-center justify-between p-4 rounded-2xl border border-gray-50 hover:border-[#534AB7]/30 hover:bg-[#534AB7]/5 transition-all group"
+            className="flex items-center justify-between p-4 rounded-2xl border border-gray-50 hover:border-primary/30 hover:bg-primary/5 transition-all group"
           >
             <div className="flex items-center space-x-4">
-              <Circle className="text-gray-300 group-hover:text-[#534AB7] transition-colors" size={20} />
+              <Circle className="text-gray-300 group-hover:text-primary transition-colors" size={20} />
               <span className="text-gray-700 font-medium">{item.label}</span>
             </div>
-            <ChevronRight className="text-gray-400 group-hover:text-[#534AB7] transition-all transform group-hover:translate-x-1" size={18} />
+            <ChevronRight className="text-gray-400 group-hover:text-primary transition-all transform group-hover:translate-x-1" size={18} />
           </Link>
         ))}
       </div>
