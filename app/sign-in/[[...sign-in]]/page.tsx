@@ -6,6 +6,8 @@ export default function Page() {
       <SignIn
         appearance={{ variables: { colorPrimary: '#534AB7' } }}
         fallbackRedirectUrl="/dashboard"
+        routing="path"
+        path="/sign-in"
       />
     </div>
   )
