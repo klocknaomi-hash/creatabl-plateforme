@@ -122,21 +122,67 @@ export default async function AccountsPage({
     redirect('/sign-in');
   }
 
-  const connectedAccounts = await db
+  let connectedAccounts = await db
     .select()
     .from(socialAccounts)
     .where(eq(socialAccounts.userId, user.id));
 
-  const { allowed, current, limit } = await checkPlanLimit(user.clerkId, 'socialAccounts');
-  const limitReached = !allowed;
+  // Migrate legacy accounts on the fly for the server component too!
+  let needsRefetch = false;
+  if (user.facebookAccessToken && !connectedAccounts.some(a => a.platform === 'facebook')) {
+    try {
+      const { encrypt, decrypt } = await import('@/lib/crypto');
+      await db.insert(socialAccounts).values({
+        userId: user.id,
+        platform: 'facebook',
+        platformUserId: user.facebookUserId,
+        accessToken: encrypt(decrypt(user.facebookAccessToken)),
+        username: user.name || 'Facebook User',
+      });
+      needsRefetch = true;
+    } catch (err) {
+      console.error('Failed to migrate legacy Facebook account:', err);
+    }
+  }
+
+  if (user.instagramAccountId && !connectedAccounts.some(a => a.platform === 'instagram')) {
+    try {
+      const { encrypt, decrypt } = await import('@/lib/crypto');
+      await db.insert(socialAccounts).values({
+        userId: user.id,
+        platform: 'instagram',
+        platformUserId: user.instagramAccountId,
+        accessToken: user.facebookAccessToken ? encrypt(decrypt(user.facebookAccessToken)) : null,
+        username: user.name || 'Instagram User',
+      });
+      needsRefetch = true;
+    } catch (err) {
+      console.error('Failed to migrate legacy Instagram account:', err);
+    }
+  }
+
+  if (needsRefetch) {
+    connectedAccounts = await db
+      .select()
+      .from(socialAccounts)
+      .where(eq(socialAccounts.userId, user.id));
+  }
+
+  const plan = (user.plan || user.selectedPlan || 'starter') as string;
+  const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
 
   return (
     <div className="flex-1 space-y-6 max-w-6xl mx-auto w-full">
-      <div className="flex flex-col space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Comptes connectés</h1>
-        <p className="text-muted-foreground">
-          Connecte tes comptes pour programmer et automatiser ton contenu.
-        </p>
+      <div className="flex flex-col space-y-2 md:flex-row md:items-center md:justify-between md:space-y-0">
+        <div className="flex flex-col space-y-1">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Comptes connectés</h1>
+          <p className="text-muted-foreground">
+            Connecte tes comptes pour programmer et automatiser ton contenu.
+          </p>
+        </div>
+        <div className="inline-flex items-center rounded-xl bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
+          {plan === 'business' || plan === 'agency' ? 'Plan Business : Jusqu’à 2 comptes par réseau' : 'Plan Starter/Pro : 1 compte par réseau'}
+        </div>
       </div>
 
       {(success || facebook === 'connected') && (
@@ -151,17 +197,6 @@ export default async function AccountsPage({
           Error: {decodeURIComponent(error)}
         </div>
       )}
-
-      {limitReached && (
-        <Alert variant="destructive" className="bg-destructive/5 border-destructive/20">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Limite de comptes atteinte</AlertTitle>
-          <AlertDescription>
-            Tu as connecté {current} de tes {limit} comptes. 
-            <Link href="/dashboard/billing" className="ml-1 font-semibold underline">Upgrade au Plan Pro</Link> pour en connecter plus.
-          </AlertDescription>
-        </Alert>
-      )}
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {PLATFORMS.map((platform) => {
@@ -170,21 +205,11 @@ export default async function AccountsPage({
           const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
           const isCanvaAccessible = isCanva && (canvaEnabled || canvaTestMode);
           
-          const socialAccount = isCanva 
-            ? null 
-            : connectedAccounts.find((a: any) => a.platform === platform.id);
+          const platformAccounts = isCanva 
+            ? (user.canvaAccessToken ? [{ id: 'canva', username: 'Canva Pro', avatarUrl: null, isCanva: true }] : [])
+            : connectedAccounts.filter((a: any) => a.platform === platform.id);
           
-          let connected = false;
-          if (isCanva) {
-            connected = !!user.canvaAccessToken;
-          } else if (platform.id === 'facebook') {
-            connected = !!(user as any).facebookAccessToken;
-          } else if (platform.id === 'instagram') {
-            connected = !!(user as any).instagramAccessToken;
-          } else {
-            connected = !!socialAccount;
-          }
-          
+          const connected = platformAccounts.length > 0;
           const Icon = platform.icon;
 
           if (isCanva && !isCanvaAccessible && !canvaEnabled) {
@@ -192,69 +217,104 @@ export default async function AccountsPage({
           }
 
           return (
-            <Card key={platform.id} className={`group relative overflow-hidden transition-all hover:shadow-md border-border/50 ${platform.comingSoon ? 'opacity-75' : ''}`}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2.5 rounded-xl ${platform.bgColor} ${platform.color} transition-transform group-hover:scale-110 flex items-center justify-center`}>
-                    <Icon className="h-5 w-5" />
+            <Card key={platform.id} className={cn(
+              "group relative overflow-hidden transition-all hover:shadow-md border-border/50 flex flex-col justify-between",
+              platform.comingSoon && "opacity-60 bg-muted/20 border-dashed"
+            )}>
+              <div>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className={cn(
+                      "p-2.5 rounded-xl transition-transform group-hover:scale-110 flex items-center justify-center",
+                      platform.bgColor,
+                      platform.color
+                    )}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-base font-semibold">
+                        {platform.name}
+                      </CardTitle>
+                    </div>
                   </div>
-                  <div>
-                    <CardTitle className="text-base font-semibold">
-                      {platform.name}
-                    </CardTitle>
-                    {platform.comingSoon && (
-                      <Badge variant="secondary" className="text-[10px] h-4 py-0 leading-none">Bientôt disponible</Badge>
-                    )}
-                  </div>
-                </div>
-                {connected ? (
-                  <Badge variant="default" className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none px-2 py-0.5">
-                    <CheckCircle2 className="mr-1 h-3 w-3" />
-                    Connecté
-                  </Badge>
-                ) : (
-                  <Badge variant="secondary" className="bg-muted/50 text-muted-foreground border-none px-2 py-0.5">
-                    Non connecté
-                  </Badge>
-                )}
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col space-y-4">
-                  <div className="min-h-[40px] flex items-center">
+                  {platform.comingSoon ? (
+                    <Badge variant="secondary" className="bg-muted text-muted-foreground/60 border-none px-2 py-0.5">
+                      Bientôt disponible
+                    </Badge>
+                  ) : connected ? (
+                    <Badge variant="default" className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none px-2 py-0.5">
+                      <CheckCircle2 className="mr-1 h-3 w-3" />
+                      Connecté
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="bg-muted/50 text-muted-foreground border-none px-2 py-0.5">
+                      Non connecté
+                    </Badge>
+                  )}
+                </CardHeader>
+                <CardContent className="pb-4">
+                  <div className="flex flex-col space-y-3 min-h-[50px]">
                     {connected ? (
-                      <div className="flex items-center space-x-3 w-full">
-                        <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
-                          {isCanva ? (
-                            <AvatarFallback className="bg-primary/10 text-primary">
-                              <Palette className="h-5 w-5" />
-                            </AvatarFallback>
-                          ) : (platform.id === 'facebook' || platform.id === 'instagram') ? (
-                            <AvatarFallback className={cn("bg-primary/10", platform.color)}>
-                              <Icon className="h-5 w-5" />
-                            </AvatarFallback>
-                          ) : (
-                            <>
-                              <AvatarImage src={socialAccount?.avatarUrl || ''} />
-                              <AvatarFallback className="bg-muted text-muted-foreground">
-                                {socialAccount?.username?.charAt(0).toUpperCase()}
-                              </AvatarFallback>
-                            </>
-                          )}
-                        </Avatar>
-                        <div className="flex flex-col min-w-0">
-                          <p className="text-sm font-semibold truncate leading-tight">
-                            {isCanva ? 'Canva Pro' : 
-                             platform.id === 'facebook' ? 'Facebook Connecté' :
-                             platform.id === 'instagram' ? 'Instagram Connecté' :
-                             (typeof socialAccount?.username === 'string' ? socialAccount.username : 'Compte connecté')}
-                          </p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {isCanva ? 'Design & Créatif' : 
-                             platform.id === 'facebook' ? 'Meta Account' :
-                             platform.id === 'instagram' ? 'Meta Account' :
-                             (typeof socialAccount?.platformUserId === 'string' ? socialAccount.platformUserId : '')}
-                          </p>
-                        </div>
+                      <div className="space-y-3 w-full">
+                        {platformAccounts.map((account: any, idx: number) => {
+                          const username = account.isCanva
+                            ? 'Canva Pro'
+                            : (platform.id === 'facebook'
+                               ? (account.username || 'Facebook Connecté')
+                               : platform.id === 'instagram'
+                                 ? (account.username ? `@${account.username}` : 'Instagram Connecté')
+                                 : (account.username ? (account.username.startsWith('@') ? account.username : `@${account.username}`) : 'Compte connecté'));
+
+                          const subtitle = account.isCanva
+                            ? 'Design & Créatif'
+                            : (platform.id === 'facebook'
+                               ? 'Meta Account'
+                               : platform.id === 'instagram'
+                                 ? 'Meta Account'
+                                 : (account.platformUserId || 'Compte professionnel'));
+
+                          return (
+                            <div key={account.id || idx} className="flex items-center justify-between border-b border-border/40 pb-2 last:border-0 last:pb-0">
+                              <div className="flex items-center space-x-3 min-w-0 flex-1">
+                                <Avatar className="h-10 w-10 border-2 border-background shadow-sm flex-shrink-0">
+                                  {account.isCanva ? (
+                                    <AvatarFallback className="bg-primary/10 text-primary">
+                                      <Palette className="h-5 w-5" />
+                                    </AvatarFallback>
+                                  ) : (
+                                    <>
+                                      <AvatarImage src={account.avatarUrl || ''} />
+                                      <AvatarFallback className={cn("bg-primary/10 text-primary font-semibold")}>
+                                        {account.username?.charAt(0).toUpperCase() || platform.name.charAt(0)}
+                                      </AvatarFallback>
+                                    </>
+                                  )}
+                                </Avatar>
+                                <div className="flex flex-col min-w-0">
+                                  <p className="text-sm font-semibold truncate leading-tight">
+                                    {username}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground truncate">
+                                    {subtitle}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="ml-2 flex-shrink-0">
+                                {account.isCanva ? (
+                                  <Link 
+                                    href="/api/canva/auth"
+                                    className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), "h-7 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/5")}
+                                  >
+                                    Reconnecter
+                                  </Link>
+                                ) : (
+                                  <DisconnectButton platformId={platform.id} accountId={account.id} />
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     ) : (
                       <p className="text-xs text-muted-foreground leading-relaxed">
@@ -266,46 +326,44 @@ export default async function AccountsPage({
                       </p>
                     )}
                   </div>
-                  
-                  <div className="pt-2">
-                    {connected ? (
-                      isCanva ? (
-                        <Link 
-                          href="/api/canva/auth"
-                          className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), "w-full border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/5")}
-                        >
-                          Reconnecter
-                        </Link>
-                      ) : (
-                        <DisconnectButton platformId={platform.id} />
-                      )
-                    ) : platform.comingSoon ? (
-                      <div className="h-9 flex items-center justify-center rounded-md bg-muted/30 border border-dashed border-border/50">
-                        <p className="text-[11px] text-muted-foreground font-medium italic">
-                          Nous travaillons pour intégrer ce réseau prochainement.
-                        </p>
-                      </div>
-                    ) : (
+                </CardContent>
+              </div>
+
+              {!platform.comingSoon && !isCanva && (
+                <div className="p-6 pt-0 mt-auto border-t border-border/30">
+                  <div className="pt-4">
+                    {(platformAccounts.length === 0 || (maxAccounts > 1 && platformAccounts.length < maxAccounts)) ? (
                       <Link 
-                        href={isCanva ? "/api/canva/auth" : (limitReached ? "#" : `/api/oauth/${platform.id}`)}
+                        href={`/api/oauth/${platform.id}`}
                         className={cn(
-                          buttonVariants({ size: 'sm' }), 
-                          "w-full shadow-sm",
-                          !isCanva && limitReached && "opacity-50 cursor-not-allowed pointer-events-none",
-                          isCanva && canvaTestMode && "bg-[#7F77DD] hover:bg-[#7F77DD]/90"
+                          buttonVariants({ size: 'sm', variant: 'outline' }), 
+                          "w-full shadow-sm gap-2 border-primary/20 text-primary hover:bg-primary/5 hover:text-primary"
                         )}
                       >
-                        {isCanva ? (canvaTestMode ? "Tester Canva" : "Connecter") : (
-                          <>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Connecter
-                          </>
-                        )}
+                        <Plus className="h-4 w-4" />
+                        {platformAccounts.length > 0 ? "Ajouter un compte" : "Connecter un compte"}
                       </Link>
-                    )}
+                    ) : null}
                   </div>
                 </div>
-              </CardContent>
+              )}
+
+              {isCanva && !connected && (
+                <div className="p-6 pt-0 mt-auto border-t border-border/30">
+                  <div className="pt-4">
+                    <Link 
+                      href="/api/canva/auth"
+                      className={cn(
+                        buttonVariants({ size: 'sm' }), 
+                        "w-full shadow-sm",
+                        canvaTestMode && "bg-[#7F77DD] hover:bg-[#7F77DD]/90"
+                      )}
+                    >
+                      Connecter
+                    </Link>
+                  </div>
+                </div>
+              )}
             </Card>
           );
         })}

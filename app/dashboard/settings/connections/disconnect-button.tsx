@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 
 interface DisconnectButtonProps {
   platformId: string;
+  accountId?: string;
 }
 
-export function DisconnectButton({ platformId }: DisconnectButtonProps) {
+export function DisconnectButton({ platformId, accountId }: DisconnectButtonProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
@@ -18,6 +19,10 @@ export function DisconnectButton({ platformId }: DisconnectButtonProps) {
     try {
       const response = await fetch(`/api/oauth/${platformId}/disconnect`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accountId }),
       });
       
       if (response.ok) {
@@ -65,7 +70,7 @@ export function DisconnectButton({ platformId }: DisconnectButtonProps) {
       className="inline-flex h-7 w-full items-center justify-center gap-1 rounded-[min(var(--radius-md),12px)] border border-destructive/20 bg-background px-2.5 text-[0.8rem] font-medium text-destructive transition-all hover:bg-destructive/5 hover:border-destructive/30"
     >
       <Trash2 className="mr-2 h-3.5 w-3.5" />
-      Supprimer
+      Se déconnecter
     </button>
   );
 }

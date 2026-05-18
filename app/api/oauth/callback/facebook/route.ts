@@ -132,55 +132,83 @@ export async function GET(req: NextRequest) {
       const encryptedToken = encrypt(tokenData.access_token);
       const expiresAt = new Date(Date.now() + (tokenData.expires_in || 5184000) * 1000);
 
+      const userRecord = await db.query.users.findFirst({
+        where: eq(users.id, internalUserId),
+      });
+      const plan = (userRecord?.plan || userRecord?.selectedPlan || 'starter') as string;
+      const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
+
       // Save Facebook account to social_accounts
       const existingFb = await db.select().from(socialAccounts)
-        .where(and(eq(socialAccounts.userId, internalUserId), eq(socialAccounts.platform, 'facebook')))
-        .limit(1);
+        .where(and(eq(socialAccounts.userId, internalUserId), eq(socialAccounts.platform, 'facebook')));
 
-      if (existingFb.length > 0) {
+      const existingMatchFb = existingFb.find(a => a.platformUserId === meData.id);
+
+      if (existingMatchFb) {
         await db.update(socialAccounts).set({
-          platformUserId: meData.id,
           accessToken: encryptedToken,
           expiresAt: expiresAt,
           username: meData.name,
           avatarUrl: meData.picture?.data?.url,
-        }).where(eq(socialAccounts.id, existingFb[0].id));
+        }).where(eq(socialAccounts.id, existingMatchFb.id));
       } else {
-        await db.insert(socialAccounts).values({
-          userId: internalUserId,
-          platform: 'facebook',
-          platformUserId: meData.id,
-          accessToken: encryptedToken,
-          expiresAt: expiresAt,
-          username: meData.name,
-          avatarUrl: meData.picture?.data?.url,
-        });
+        if (existingFb.length < maxAccounts) {
+          await db.insert(socialAccounts).values({
+            userId: internalUserId,
+            platform: 'facebook',
+            platformUserId: meData.id,
+            accessToken: encryptedToken,
+            expiresAt: expiresAt,
+            username: meData.name,
+            avatarUrl: meData.picture?.data?.url,
+          });
+        } else {
+          // Replace first one
+          await db.update(socialAccounts).set({
+            platformUserId: meData.id,
+            accessToken: encryptedToken,
+            expiresAt: expiresAt,
+            username: meData.name,
+            avatarUrl: meData.picture?.data?.url,
+          }).where(eq(socialAccounts.id, existingFb[0].id));
+        }
       }
 
       // Save Instagram account to social_accounts if exists
       if (instagramAccount) {
         const existingIg = await db.select().from(socialAccounts)
-          .where(and(eq(socialAccounts.userId, internalUserId), eq(socialAccounts.platform, 'instagram')))
-          .limit(1);
+          .where(and(eq(socialAccounts.userId, internalUserId), eq(socialAccounts.platform, 'instagram')));
 
-        if (existingIg.length > 0) {
+        const existingMatchIg = existingIg.find(a => a.platformUserId === instagramAccount.id);
+
+        if (existingMatchIg) {
           await db.update(socialAccounts).set({
-            platformUserId: instagramAccount.id,
             accessToken: encryptedToken, // Uses the same FB token
             expiresAt: expiresAt,
             username: instagramAccount.username,
             avatarUrl: instagramAccount.profile_picture_url,
-          }).where(eq(socialAccounts.id, existingIg[0].id));
+          }).where(eq(socialAccounts.id, existingMatchIg.id));
         } else {
-          await db.insert(socialAccounts).values({
-            userId: internalUserId,
-            platform: 'instagram',
-            platformUserId: instagramAccount.id,
-            accessToken: encryptedToken,
-            expiresAt: expiresAt,
-            username: instagramAccount.username,
-            avatarUrl: instagramAccount.profile_picture_url,
-          });
+          if (existingIg.length < maxAccounts) {
+            await db.insert(socialAccounts).values({
+              userId: internalUserId,
+              platform: 'instagram',
+              platformUserId: instagramAccount.id,
+              accessToken: encryptedToken,
+              expiresAt: expiresAt,
+              username: instagramAccount.username,
+              avatarUrl: instagramAccount.profile_picture_url,
+            });
+          } else {
+            // Replace first one
+            await db.update(socialAccounts).set({
+              platformUserId: instagramAccount.id,
+              accessToken: encryptedToken,
+              expiresAt: expiresAt,
+              username: instagramAccount.username,
+              avatarUrl: instagramAccount.profile_picture_url,
+            }).where(eq(socialAccounts.id, existingIg[0].id));
+          }
         }
       }
     }

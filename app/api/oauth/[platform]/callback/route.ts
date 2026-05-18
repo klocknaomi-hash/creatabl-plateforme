@@ -75,7 +75,7 @@ export async function GET(
     const encryptedRefreshToken = tokens.refreshToken ? encrypt(tokens.refreshToken) : null;
 
     // Check if account already exists for this platform and user
-    const existing = await db
+    const existingAccounts = await db
       .select()
       .from(socialAccounts)
       .where(
@@ -83,32 +83,50 @@ export async function GET(
           eq(socialAccounts.userId, user.id),
           eq(socialAccounts.platform, platform as any)
         )
-      )
-      .limit(1);
+      );
 
-    if (existing.length > 0) {
+    const plan = (user.plan || user.selectedPlan || 'starter') as string;
+    const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
+
+    const existingMatch = existingAccounts.find(a => a.platformUserId === tokens.platformUserId);
+
+    if (existingMatch) {
       await db
         .update(socialAccounts)
         .set({
-          platformUserId: tokens.platformUserId,
           accessToken: encryptedAccessToken,
           refreshToken: encryptedRefreshToken,
           expiresAt: tokens.expiresAt,
           username: tokens.username,
           avatarUrl: tokens.avatarUrl,
         })
-        .where(eq(socialAccounts.id, existing[0].id));
+        .where(eq(socialAccounts.id, existingMatch.id));
     } else {
-      await db.insert(socialAccounts).values({
-        userId: user.id,
-        platform: platform as any,
-        platformUserId: tokens.platformUserId,
-        accessToken: encryptedAccessToken,
-        refreshToken: encryptedRefreshToken,
-        expiresAt: tokens.expiresAt,
-        username: tokens.username,
-        avatarUrl: tokens.avatarUrl,
-      });
+      if (existingAccounts.length < maxAccounts) {
+        await db.insert(socialAccounts).values({
+          userId: user.id,
+          platform: platform as any,
+          platformUserId: tokens.platformUserId,
+          accessToken: encryptedAccessToken,
+          refreshToken: encryptedRefreshToken,
+          expiresAt: tokens.expiresAt,
+          username: tokens.username,
+          avatarUrl: tokens.avatarUrl,
+        });
+      } else {
+        // Overwrite the first one to avoid blocking
+        await db
+          .update(socialAccounts)
+          .set({
+            platformUserId: tokens.platformUserId,
+            accessToken: encryptedAccessToken,
+            refreshToken: encryptedRefreshToken,
+            expiresAt: tokens.expiresAt,
+            username: tokens.username,
+            avatarUrl: tokens.avatarUrl,
+          })
+          .where(eq(socialAccounts.id, existingAccounts[0].id));
+      }
     }
 
     return NextResponse.redirect(new URL('/dashboard/settings/connections?success=true', request.nextUrl.origin));
