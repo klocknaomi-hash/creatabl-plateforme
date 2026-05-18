@@ -92,6 +92,15 @@ export async function POST(
             eq(socialAccounts.platform, platform as any)
           )
         );
+      } else if (platform === 'canva') {
+        const { users } = await import('@/lib/db/schema');
+        await db.update(users)
+          .set({ 
+            canvaAccessToken: null,
+            canvaRefreshToken: null,
+            canvaTokenExpiresAt: null,
+          })
+          .where(eq(users.id, user.id));
       } else {
         await db
           .delete(socialAccounts)

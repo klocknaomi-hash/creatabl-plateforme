@@ -29,6 +29,7 @@ import {
   PinterestIcon
 } from '@/components/platform-icons';
 import { DisconnectButton } from './disconnect-button';
+import { PlatformCardContent } from './platform-card-content';
 
 export const metadata: Metadata = {
   title: 'Comptes connectés | Creatabl.ia',
@@ -277,139 +278,16 @@ export default async function AccountsPage({
                     </Badge>
                   )}
                 </CardHeader>
-                <CardContent className="pb-4">
-                  <div className="flex flex-col space-y-3 min-h-[50px]">
-                    {connected ? (
-                      <div className="space-y-3 w-full">
-                        {platformAccounts.map((account: any, idx: number) => {
-                          const isActive = idx < maxAccounts;
-
-                          const username = account.isCanva
-                            ? 'Canva Pro'
-                            : (platform.id === 'facebook'
-                               ? (account.username || 'Facebook Connecté')
-                               : platform.id === 'instagram'
-                                 ? (account.username ? `@${account.username}` : 'Instagram Connecté')
-                                 : (account.username ? (account.username.startsWith('@') ? account.username : `@${account.username}`) : 'Compte connecté'));
-
-                          const subtitle = account.isCanva
-                            ? 'Design & Créatif'
-                            : !isActive
-                              ? 'Disponible avec le plan Business'
-                              : (platform.id === 'facebook'
-                                 ? 'Meta Account'
-                                 : platform.id === 'instagram'
-                                   ? 'Meta Account'
-                                   : (account.platformUserId || 'Compte professionnel'));
-
-                          return (
-                            <div key={account.id || idx} className={cn(
-                              "flex flex-col border-b border-border/40 pb-2 last:border-0 last:pb-0 space-y-2",
-                              !isActive && "opacity-60"
-                            )}>
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3 min-w-0 flex-1">
-                                  <Avatar className="h-10 w-10 border-2 border-background shadow-sm flex-shrink-0">
-                                    {account.isCanva ? (
-                                      <AvatarFallback className="bg-primary/10 text-primary">
-                                        <Palette className="h-5 w-5" />
-                                      </AvatarFallback>
-                                    ) : (
-                                      <>
-                                        <AvatarImage src={account.avatarUrl || ''} />
-                                        <AvatarFallback className={cn("bg-primary/10 text-primary font-semibold")}>
-                                          {account.username?.charAt(0).toUpperCase() || platform.name.charAt(0)}
-                                        </AvatarFallback>
-                                      </>
-                                    )}
-                                  </Avatar>
-                                  <div className="flex flex-col min-w-0">
-                                    <div className="flex items-center gap-1.5 min-w-0">
-                                      <p className="text-sm font-semibold truncate leading-tight">
-                                        {username}
-                                      </p>
-                                      {!isActive && (
-                                        <Badge variant="outline" className="text-[9px] h-4 py-0 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5 whitespace-nowrap">
-                                          Business uniquement
-                                        </Badge>
-                                      )}
-                                    </div>
-                                    <p className={cn("text-xs truncate", !isActive ? "text-amber-600 dark:text-amber-400 font-medium" : "text-muted-foreground")}>
-                                      {subtitle}
-                                    </p>
-                                  </div>
-                                </div>
-                                
-                                <div className="ml-2 flex-shrink-0">
-                                  {account.isCanva ? (
-                                    <Link 
-                                      href="/api/canva/auth"
-                                      className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), "h-7 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/5")}
-                                    >
-                                      Reconnecter
-                                    </Link>
-                                  ) : (
-                                    <DisconnectButton platformId={platform.id} accountId={account.id} />
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {isCanva 
-                          ? 'Crée tes visuels Canva directement depuis Creatabl et attache-les à tes posts.'
-                          : platform.comingSoon 
-                            ? 'Nous travaillons pour intégrer ce réseau prochainement.' 
-                            : `Gère ta présence sur ${platform.name} directement depuis Creatabl.`}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
               </div>
 
-              {!platform.comingSoon && !isCanva && (
-                <div className="p-6 pt-0 mt-auto border-t border-border/30 flex flex-col space-y-2">
-                  {hasSuspendedAccounts && (
-                    <div className="mt-3 text-[10px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20 leading-snug">
-                      Passe au plan Business pour réactiver ce compte
-                    </div>
-                  )}
-                  <div className="pt-2">
-                    {(platformAccounts.length === 0 || (maxAccounts > 1 && platformAccounts.length < maxAccounts)) ? (
-                      <Link 
-                        href={`/api/oauth/${platform.id}`}
-                        className={cn(
-                          buttonVariants({ size: 'sm', variant: 'outline' }), 
-                          "w-full shadow-sm gap-2 border-primary/20 text-primary hover:bg-primary/5 hover:text-primary"
-                        )}
-                      >
-                        <Plus className="h-4 w-4" />
-                        {platformAccounts.length > 0 ? "Ajouter un compte" : "Connecter un compte"}
-                      </Link>
-                    ) : null}
-                  </div>
-                </div>
-              )}
-
-              {isCanva && !connected && (
-                <div className="p-6 pt-0 mt-auto border-t border-border/30">
-                  <div className="pt-4">
-                    <Link 
-                      href="/api/canva/auth"
-                      className={cn(
-                        buttonVariants({ size: 'sm' }), 
-                        "w-full shadow-sm",
-                        canvaTestMode && "bg-[#7F77DD] hover:bg-[#7F77DD]/90"
-                      )}
-                    >
-                      Connecter
-                    </Link>
-                  </div>
-                </div>
-              )}
+              <PlatformCardContent
+                platform={platform}
+                initialAccounts={platformAccounts as any}
+                maxAccounts={maxAccounts}
+                isCanva={isCanva}
+                canvaTestMode={canvaTestMode}
+                canvaEnabled={canvaEnabled}
+              />
             </Card>
           );
         })}

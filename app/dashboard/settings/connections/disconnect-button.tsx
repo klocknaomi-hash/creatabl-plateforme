@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, Loader2 } from 'lucide-react';
+import { Link2Off, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface DisconnectButtonProps {
   platformId: string;
   accountId?: string;
+  isCanva?: boolean;
 }
 
-export function DisconnectButton({ platformId, accountId }: DisconnectButtonProps) {
+export function DisconnectButton({ platformId, accountId, isCanva }: DisconnectButtonProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
@@ -42,12 +43,12 @@ export function DisconnectButton({ platformId, accountId }: DisconnectButtonProp
 
   if (isConfirming) {
     return (
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-full animate-in fade-in duration-200">
         <button 
           type="button"
           onClick={() => setIsConfirming(false)}
           disabled={isPending}
-          className="flex-1 h-7 items-center justify-center rounded-[min(var(--radius-md),12px)] border border-border bg-background px-2.5 text-[0.8rem] font-medium transition-all hover:bg-muted disabled:opacity-50"
+          className="flex-1 h-9 items-center justify-center rounded-xl border border-border bg-background px-3 text-xs font-semibold transition-all hover:bg-muted disabled:opacity-50"
         >
           Annuler
         </button>
@@ -55,9 +56,9 @@ export function DisconnectButton({ platformId, accountId }: DisconnectButtonProp
           type="button"
           onClick={handleDisconnect}
           disabled={isPending}
-          className="flex-1 h-7 items-center justify-center rounded-[min(var(--radius-md),12px)] border border-destructive/20 bg-destructive text-destructive-foreground px-2.5 text-[0.8rem] font-medium transition-all hover:bg-destructive/90 disabled:opacity-50"
+          className="flex-1 h-9 items-center justify-center rounded-xl border border-destructive/20 bg-destructive text-destructive-foreground px-3 text-xs font-semibold transition-all hover:bg-destructive/90 disabled:opacity-50"
         >
-          {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Confirmer'}
+          {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin mx-auto" /> : 'Confirmer'}
         </button>
       </div>
     );
@@ -67,10 +68,10 @@ export function DisconnectButton({ platformId, accountId }: DisconnectButtonProp
     <button 
       type="button"
       onClick={() => setIsConfirming(true)}
-      className="inline-flex h-7 w-full items-center justify-center gap-1 rounded-[min(var(--radius-md),12px)] border border-destructive/20 bg-background px-2.5 text-[0.8rem] font-medium text-destructive transition-all hover:bg-destructive/5 hover:border-destructive/30"
+      className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-xl border border-destructive/10 bg-destructive/[0.02] px-3 text-xs font-semibold text-destructive transition-all hover:bg-destructive/5 hover:border-destructive/20"
     >
-      <Trash2 className="mr-2 h-3.5 w-3.5" />
-      Se déconnecter
+      <Link2Off className="h-3.5 w-3.5" />
+      {isCanva ? "Se déconnecter de Canva" : "Se déconnecter du compte"}
     </button>
   );
 }
