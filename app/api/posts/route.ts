@@ -6,6 +6,7 @@ import { inngest } from '@/lib/inngest/client';
 import { eq, and, desc, gte, lte, sql } from 'drizzle-orm';
 import { users as usersTable } from '@/lib/db/schema';
 import { checkPlanLimit } from '@/lib/plan-limits';
+import { publishPostImmediately } from '@/lib/platforms/publisher';
 
 export async function POST(request: NextRequest) {
   const { userId: clerkId } = await auth();
@@ -101,14 +102,20 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 4. Trigger Inngest Event (only if not a draft)
-    if (finalStatus !== 'draft') {
+    // 4. Trigger publishing or schedule event
+    if (finalStatus === 'published') {
+      try {
+        await publishPostImmediately(newPost.id, userRecord.id);
+      } catch (pubError: any) {
+        console.error('Immediate publish error:', pubError);
+      }
+    } else if (finalStatus === 'scheduled') {
       try {
         await inngest.send({
           name: "post/scheduled",
           data: {
             postId: newPost.id,
-            scheduledAt: isImmediate ? null : scheduledDate.toISOString(),
+            scheduledAt: scheduledDate.toISOString(),
           },
         });
       } catch (inngestError) {

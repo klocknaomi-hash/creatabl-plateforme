@@ -3,6 +3,8 @@ import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { posts, users } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
+import { publishPostImmediately } from '@/lib/platforms/publisher';
+import { inngest } from '@/lib/inngest/client';
 
 export async function GET(
   request: NextRequest,
@@ -68,6 +70,27 @@ export async function PATCH(
 
     if (!updatedPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    // Trigger publishing or schedule event based on status update
+    if (status === 'published') {
+      try {
+        await publishPostImmediately(id, userRecord.id);
+      } catch (pubError: any) {
+        console.error('Immediate publish error in PATCH:', pubError);
+      }
+    } else if (status === 'scheduled' && scheduledAt) {
+      try {
+        await inngest.send({
+          name: "post/scheduled",
+          data: {
+            postId: id,
+            scheduledAt: new Date(scheduledAt).toISOString(),
+          },
+        });
+      } catch (inngestError) {
+        console.warn('Inngest event failed to send in PATCH:', inngestError);
+      }
     }
 
     return NextResponse.json(updatedPost);

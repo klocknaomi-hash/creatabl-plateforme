@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { frFR } from "@clerk/localizations";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { UrlCleaner } from "@/components/url-cleaner";
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"] });
@@ -38,6 +39,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <UrlCleaner />
             {children}
             <Toaster />
           </ThemeProvider>

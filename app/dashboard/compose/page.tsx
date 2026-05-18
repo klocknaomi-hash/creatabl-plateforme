@@ -55,6 +55,7 @@ function ComposePageInner() {
   const searchParams = useSearchParams();
   const idParam = searchParams.get("id");
   const dateParam = searchParams.get("date");
+  const duplicateParam = searchParams.get("duplicate");
 
   const [postId, setPostId] = useState<string | null>(idParam);
   const [content, setContent] = useState("");
@@ -82,14 +83,14 @@ function ComposePageInner() {
       }
     }
 
-    const fetchPost = async (id: string) => {
+    const fetchPost = async (id: string, isDuplicating = false) => {
       try {
         const res = await fetch(`/api/posts/${id}`);
         const data = await res.json();
         if (data.post) {
           setContent(data.post.content || "");
           setSelectedPlatforms(data.post.platforms || []);
-          if (data.post.scheduledAt) {
+          if (data.post.scheduledAt && !isDuplicating) {
             setScheduledAt(new Date(data.post.scheduledAt));
           }
           if (data.post.mediaUrls) {
@@ -99,11 +100,13 @@ function ComposePageInner() {
               name: `Media ${i + 1}`
             })));
           }
-          lastSavedRef.current = JSON.stringify({ 
-            content: data.post.content, 
-            platforms: data.post.platforms, 
-            mediaUrls: data.post.mediaUrls 
-          });
+          if (!isDuplicating) {
+            lastSavedRef.current = JSON.stringify({ 
+              content: data.post.content, 
+              platforms: data.post.platforms, 
+              mediaUrls: data.post.mediaUrls 
+            });
+          }
         }
       } catch (err) {
         toast.error("Failed to load post data");
@@ -111,7 +114,9 @@ function ComposePageInner() {
     };
 
     if (idParam) {
-      fetchPost(idParam);
+      fetchPost(idParam, false);
+    } else if (duplicateParam) {
+      fetchPost(duplicateParam, true);
     } else {
       // Fetch latest draft if it exists
       const fetchLatestDraft = async () => {
