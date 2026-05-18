@@ -238,9 +238,6 @@ export default function TarifsPage() {
                   >
                     Essayer {plan.name} — 7j gratuits
                   </Link>
-                  <p className="text-xs text-zinc-400 font-medium">
-                    Essai gratuit 7 jours · Sans carte bancaire
-                  </p>
                 </div>
               </motion.div>
             )

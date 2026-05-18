@@ -245,9 +245,6 @@ export function BillingPlans({ currentPlan, selectedPlan }: BillingPlansProps) {
                 >
                   Choisir ce plan
                 </a>
-                <p className="text-xs text-center text-gray-400 font-medium">
-                  Essai gratuit 7 jours · Sans carte bancaire
-                </p>
               </div>
             </motion.div>
           )
