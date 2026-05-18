@@ -281,7 +281,11 @@ export default async function AccountsPage({
               </div>
 
               <PlatformCardContent
-                platform={platform}
+                platform={{
+                  id: platform.id,
+                  name: platform.name,
+                  comingSoon: platform.comingSoon,
+                }}
                 initialAccounts={platformAccounts as any}
                 maxAccounts={maxAccounts}
                 isCanva={isCanva}
