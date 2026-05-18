@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import { socialAccounts, users } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { cookies } from 'next/headers'
-import { encryptToken } from '@/lib/encryption'
+import { encrypt } from '@/lib/crypto'
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
@@ -106,19 +106,21 @@ export async function GET(req: NextRequest) {
       .values({
         clerkId: userId as string,
         email: '', 
-        facebookAccessToken: tokenData.access_token,
+        facebookAccessToken: encrypt(tokenData.access_token),
         facebookUserId: meData.id,
         facebookPageId: pageId,
         instagramAccountId: instagramAccount?.id || null,
+        instagramAccessToken: encrypt(pageToken || ''),
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({
         target: users.clerkId,
         set: {
-          facebookAccessToken: tokenData.access_token,
+          facebookAccessToken: encrypt(tokenData.access_token),
           facebookUserId: meData.id,
           facebookPageId: pageId,
           instagramAccountId: instagramAccount?.id || null,
+          instagramAccessToken: encrypt(pageToken || ''),
           updatedAt: new Date(),
         }
       })
@@ -127,7 +129,7 @@ export async function GET(req: NextRequest) {
     const internalUserId = userUpdate[0]?.id;
 
     if (internalUserId) {
-      const encryptedToken = encryptToken(tokenData.access_token);
+      const encryptedToken = encrypt(tokenData.access_token);
       const expiresAt = new Date(Date.now() + (tokenData.expires_in || 5184000) * 1000);
 
       // Save Facebook account to social_accounts

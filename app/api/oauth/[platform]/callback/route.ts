@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPlatformClient } from '@/lib/platforms';
 import { db } from '@/lib/db';
 import { socialAccounts } from '@/lib/db/schema';
-import { encryptToken } from '@/lib/encryption';
+import { encrypt } from '@/lib/crypto';
 import { getCurrentUser } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { and, eq } from 'drizzle-orm';
@@ -71,8 +71,8 @@ export async function GET(
     }
 
     // Encrypt tokens
-    const encryptedAccessToken = tokens.accessToken ? encryptToken(tokens.accessToken) : null;
-    const encryptedRefreshToken = tokens.refreshToken ? encryptToken(tokens.refreshToken) : null;
+    const encryptedAccessToken = tokens.accessToken ? encrypt(tokens.accessToken) : null;
+    const encryptedRefreshToken = tokens.refreshToken ? encrypt(tokens.refreshToken) : null;
 
     // Check if account already exists for this platform and user
     const existing = await db

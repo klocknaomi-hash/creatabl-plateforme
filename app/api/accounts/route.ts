@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import { db } from '@/lib/db';
 import { socialAccounts, users } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { encryptToken } from '@/lib/encryption';
+import { encrypt, decrypt } from '@/lib/crypto';
 
 export async function GET(request: NextRequest) {
   const { userId: clerkId } = await auth();
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
           userId: userRecord.id,
           platform: 'facebook',
           platformUserId: userRecord.facebookUserId,
-          accessToken: encryptToken(userRecord.facebookAccessToken),
+          accessToken: encrypt(decrypt(userRecord.facebookAccessToken)),
           username: userRecord.name || 'Facebook User',
         });
         needsRefetch = true;
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
           userId: userRecord.id,
           platform: 'instagram',
           platformUserId: userRecord.instagramAccountId,
-          accessToken: userRecord.facebookAccessToken ? encryptToken(userRecord.facebookAccessToken) : null,
+          accessToken: userRecord.facebookAccessToken ? encrypt(decrypt(userRecord.facebookAccessToken)) : null,
           username: userRecord.name || 'Instagram User',
         });
         needsRefetch = true;

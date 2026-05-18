@@ -37,6 +37,7 @@ export const users = pgTable('users', {
   facebookUserId: text('facebook_user_id'),
   facebookPageId: text('facebook_page_id'),
   instagramAccountId: text('instagram_account_id'),
+  instagramAccessToken: text('instagram_access_token'),
   writingTone: text('writing_tone'),
   genderAgreement: text('gender_agreement'),
   emojiPreference: text('emoji_preference'),

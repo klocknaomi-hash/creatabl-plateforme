@@ -5,7 +5,7 @@ import { socialAccounts, users } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import { getPlatformClient } from '@/lib/platforms';
-import { encryptToken } from '@/lib/encryption';
+import { encrypt } from '@/lib/crypto';
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth();
@@ -66,8 +66,8 @@ export async function GET(req: NextRequest) {
     }
 
     // Encrypt tokens
-    const encryptedAccessToken = tokens.accessToken ? encryptToken(tokens.accessToken) : null;
-    const encryptedRefreshToken = tokens.refreshToken ? encryptToken(tokens.refreshToken) : null;
+    const encryptedAccessToken = tokens.accessToken ? encrypt(tokens.accessToken) : null;
+    const encryptedRefreshToken = tokens.refreshToken ? encrypt(tokens.refreshToken) : null;
 
     // Save to social_accounts
     const existing = await db

@@ -52,7 +52,7 @@ test.describe('Creatabl Onboarding Flow', () => {
 
       await submitButton.click();
       console.log('Submitted sign-up form');
-    } catch (e) {
+    } catch (e: any) {
       await page.screenshot({ path: 'tests/error-sign-up.png' });
       console.log(`Sign-up failed. Screenshot saved. Error: ${e.message}`);
       throw e;
@@ -87,7 +87,7 @@ test.describe('Creatabl Onboarding Flow', () => {
 
       await page.fill('input[name="code"]', code);
       console.log('Entered verification code');
-    } catch (e) {
+    } catch (e: any) {
       console.log('Verification step failed or skipped: ' + e.message);
       if (e.message.includes('timeout')) {
          await page.screenshot({ path: 'tests/error-verification.png' });
@@ -111,7 +111,7 @@ test.describe('Creatabl Onboarding Flow', () => {
       
       await page.click('button[type="submit"]');
       console.log('Submitted Stripe payment');
-    } catch (e) {
+    } catch (e: any) {
       await page.screenshot({ path: 'tests/error-stripe.png' });
       console.log(`Stripe failed. Screenshot saved. Error: ${e.message}`);
       throw e;
@@ -161,7 +161,7 @@ test.describe('Creatabl Onboarding Flow', () => {
       // Final screen: Click "Valider"
       await page.getByRole('button', { name: 'Valider' }).click();
       console.log('Final step completed');
-    } catch (e) {
+    } catch (e: any) {
       await page.screenshot({ path: 'tests/error-onboarding.png' });
       console.log(`Onboarding failed. Screenshot saved. Error: ${e.message}`);
       throw e;
