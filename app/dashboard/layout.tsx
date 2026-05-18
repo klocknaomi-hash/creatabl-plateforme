@@ -2,6 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
 import { OnboardingModal } from '@/components/onboarding/OnboardingModal'
 import { DashboardProviders } from "@/components/dashboard/providers";
 import { SidebarInset } from "@/components/ui/sidebar";
@@ -41,6 +42,28 @@ export default async function DashboardLayout({
         dbUser = await db.query.users.findFirst({
           where: (users, { eq }) => eq(users.clerkId, userId)
         });
+      }
+
+      // Sync Clerk trial info to DB if missing
+      const clerkTrialEndsAt = clerkUser?.publicMetadata?.trialEndsAt as string | undefined;
+      const clerkTrialStartedAt = clerkUser?.publicMetadata?.trialStartedAt as string | undefined;
+      const clerkSelectedPlan = clerkUser?.publicMetadata?.selectedPlan as string | undefined;
+
+      if (dbUser && clerkTrialEndsAt && (!dbUser.trialEndsAt || !dbUser.trialStartedAt)) {
+        try {
+          await db.update(users).set({
+            trialStartedAt: clerkTrialStartedAt ? new Date(clerkTrialStartedAt) : new Date(),
+            trialEndsAt: new Date(clerkTrialEndsAt),
+            selectedPlan: clerkSelectedPlan || dbUser.selectedPlan || 'starter',
+          }).where(eq(users.id, dbUser.id));
+
+          // Refetch updated user
+          dbUser = await db.query.users.findFirst({
+            where: (users, { eq }) => eq(users.clerkId, userId)
+          });
+        } catch (syncError) {
+          console.error('Failed to sync Clerk trial to DB:', syncError);
+        }
       }
     } catch (dbError) {
       console.error('DB upsert error:', dbError)

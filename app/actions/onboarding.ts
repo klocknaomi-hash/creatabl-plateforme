@@ -213,6 +213,7 @@ export async function completeOnboarding() {
     try {
       await db.update(users).set({ 
         plan: "business",
+        trialStartedAt: now,
         trialEndsAt: trialEndsAt,
         onboardingCompletedAt: now,
         onboardingCompleted: true,

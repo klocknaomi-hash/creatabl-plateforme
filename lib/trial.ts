@@ -1,5 +1,5 @@
 export function getTrialStatus(user: {
-  trialStartedAt: Date | null
+  trialStartedAt?: Date | null
   trialEndsAt: Date | null
   isSubscribed: boolean
 }) {
@@ -7,7 +7,7 @@ export function getTrialStatus(user: {
     return { status: 'active', daysLeft: null }
   }
   
-  if (!user.trialStartedAt || !user.trialEndsAt) {
+  if (!user.trialEndsAt) {
     return { status: 'no_trial', daysLeft: null }
   }
   
