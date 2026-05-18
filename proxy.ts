@@ -5,6 +5,8 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/api/stripe/webhook',
+  '/logo.svg',
+  '/post-preview.png',
 ])
 
 export default clerkMiddleware(async (auth, req) => {
@@ -22,5 +24,5 @@ export default clerkMiddleware(async (auth, req) => {
 })
 
 export const config = {
-  matcher: ['/((?!_next|static|favicon.ico).*)'],
+  matcher: ['/((?!_next|static|favicon.ico|.*\\.(?:png|svg|jpg|jpeg|gif|webp)$).*)'],
 }
