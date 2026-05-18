@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { posts, postPlatformResults, socialAccounts } from "@/lib/db/schema";
+import { posts, postPlatformResults, socialAccounts, users } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { getPlatformClient } from "@/lib/platforms";
 import { decryptToken } from "@/lib/encryption";
@@ -41,39 +41,77 @@ export async function publishPostImmediately(postId: string, userId: string) {
     if (result.status === "success") continue;
 
     try {
-      // Fetch social account for this user and platform
-      const account = await db.query.socialAccounts.findFirst({
+      // Fetch all social accounts for this user and platform
+      const allAccounts = await db.query.socialAccounts.findMany({
         where: and(
           eq(socialAccounts.userId, userId),
           eq(socialAccounts.platform, result.platform)
         ),
       });
 
-      if (!account) {
+      if (allAccounts.length === 0) {
         throw new Error(`Social account for ${result.platform} not connected`);
       }
 
-      // Decrypt tokens
-      const decryptedAccount = {
-        ...account,
-        accessToken: account.accessToken ? decryptToken(account.accessToken) : null,
-        refreshToken: account.refreshToken ? decryptToken(account.refreshToken) : null,
-      };
+      // Check user plan to determine active limits
+      const user = await db.query.users.findFirst({
+        where: eq(users.id, userId)
+      });
 
-      const client = getPlatformClient(result.platform);
+      if (!user) {
+        throw new Error("User not found");
+      }
 
-      // Publish content and media to the specific platform
-      const platformPostId = await client.publishPost(
-        decryptedAccount as any,
-        post.content || "",
-        (post.mediaUrls as string[]) || []
-      );
+      // Check trial status
+      const { getTrialStatus } = await import('@/lib/trial');
+      const trialStatus = getTrialStatus({
+        trialStartedAt: user.trialStartedAt,
+        trialEndsAt: user.trialEndsAt,
+        isSubscribed: user.isSubscribed || false,
+      });
+
+      const isTrialActive = trialStatus.status === 'trial';
+      const plan = isTrialActive 
+        ? 'business' 
+        : ((user.plan || user.selectedPlan || 'starter') as string);
+      
+      const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
+
+      // Filter only active accounts
+      const activeAccounts = allAccounts.slice(0, maxAccounts);
+
+      if (activeAccounts.length === 0) {
+        throw new Error(`No active social accounts for ${result.platform} on your current plan`);
+      }
+
+      let lastPlatformPostId = "";
+      
+      // Publish to all active accounts!
+      for (const account of activeAccounts) {
+        // Decrypt tokens
+        const decryptedAccount = {
+          ...account,
+          accessToken: account.accessToken ? decryptToken(account.accessToken) : null,
+          refreshToken: account.refreshToken ? decryptToken(account.refreshToken) : null,
+        };
+
+        const client = getPlatformClient(result.platform);
+
+        // Publish content and media to the specific platform
+        const platformPostId = await client.publishPost(
+          decryptedAccount as any,
+          post.content || "",
+          (post.mediaUrls as string[]) || []
+        );
+        
+        lastPlatformPostId = platformPostId;
+      }
 
       // Update platform result to success
       await db.update(postPlatformResults)
         .set({
           status: "success",
-          platformPostId,
+          platformPostId: lastPlatformPostId,
           publishedAt: new Date(),
           errorMessage: null,
         })

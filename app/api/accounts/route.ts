@@ -65,8 +65,34 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    // Filter only active accounts
+    const { getTrialStatus } = await import('@/lib/trial');
+    const trialStatus = getTrialStatus({
+      trialStartedAt: userRecord.trialStartedAt,
+      trialEndsAt: userRecord.trialEndsAt,
+      isSubscribed: userRecord.isSubscribed || false,
+    });
+
+    const isTrialActive = trialStatus.status === 'trial';
+    const plan = isTrialActive 
+      ? 'business' 
+      : ((userRecord.plan || userRecord.selectedPlan || 'starter') as string);
+    
+    const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
+
+    // Group accounts by platform to calculate their index
+    const platformCounts: Record<string, number> = {};
+    const activeAccounts = accounts.filter(account => {
+      const platform = account.platform;
+      if (!platformCounts[platform]) {
+        platformCounts[platform] = 0;
+      }
+      const index = platformCounts[platform]++;
+      return index < maxAccounts;
+    });
+
     return NextResponse.json({ 
-      accounts,
+      accounts: activeAccounts,
       canvaConnected: !!userRecord.canvaAccessToken
     });
   } catch (error: any) {
