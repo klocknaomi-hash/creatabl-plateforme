@@ -197,14 +197,16 @@ export async function generatePost(options: GeneratePostOptions): Promise<Genera
     action,
     platform,
     tone,
-    provider = (process.env.AI_PROVIDER as AIProvider) ?? "gemini",
   } = options;
+
+  // Always use Gemini for social media post generation
+  let provider: AIProvider = "gemini";
 
   if (!content?.trim()) throw new Error("Content cannot be empty");
 
   const systemPrompt = buildSystemPrompt(action, platform, tone);
 
-  switch (provider) {
+  switch (provider as AIProvider) {
     case "gemini":
       return generateWithGemini(content, systemPrompt);
     case "claude":

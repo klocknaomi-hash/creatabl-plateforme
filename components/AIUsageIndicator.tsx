@@ -25,7 +25,7 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
 
   return (
     <div 
-      className="flex items-center justify-center relative" 
+      className="flex items-center justify-center relative flex-shrink-0" 
       title={tooltip} 
       style={{ cursor: 'default', width: size, height: size }}
     >

@@ -153,7 +153,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
           isHovered ? "border-primary/30 ring-4 ring-primary/5" : "border-border/60"
         )}>
           {/* Magic Badge */}
-          <div className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 mr-1 group overflow-hidden relative">
+          <div className="flex-shrink-0 flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 mr-1 group overflow-hidden relative">
             <motion.div
               animate={{ 
                 rotate: [0, 15, -15, 0],
@@ -179,7 +179,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 flex-shrink-0">
             {/* Main Actions */}
             <TooltipButton
               onClick={() => handleAction("improve")}
@@ -229,7 +229,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                           size="sm"
                           disabled={disabled}
                           className={cn(
-                            "h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all",
+                            "h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex-shrink-0",
                             "hover:bg-primary/5 hover:text-primary active:scale-95"
                           )}
                         />
@@ -274,7 +274,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             {/* Platform Specific */}
             {platform && (
               <>
-                <div className="h-4 w-px bg-border/60 mx-1" />
+                <div className="h-4 w-px bg-border/60 mx-1 flex-shrink-0" />
                 <Tooltip>
                   <TooltipTrigger
                     render={
@@ -284,7 +284,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                         onClick={() => handleAction("optimize_platform")}
                         disabled={disabled}
                         className={cn(
-                          "h-8 px-3 rounded-xl text-xs font-black gap-2 transition-all group",
+                          "h-8 px-2 rounded-xl text-[11px] font-black gap-1.5 transition-all group flex-shrink-0",
                           "border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/40",
                           "shadow-[0_0_15px_-5px_rgba(var(--primary),0.3)]"
                         )}
@@ -293,7 +293,6 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                   >
                     <Smartphone className="size-3.5 transition-transform group-hover:scale-110" />
                     <span className="capitalize">{platform} Ready</span>
-                    <ArrowRight className="size-3 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                   </TooltipTrigger>
                   <TooltipContent>Optimiser spécifiquement pour {platform}</TooltipContent>
                 </Tooltip>
@@ -307,7 +306,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-muted/30 ml-1"
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-muted/30 ml-1 flex-shrink-0"
                 >
                   {saveStatus === "saving" ? (
                     <Loader2 className="size-3 animate-spin text-muted-foreground" />
@@ -323,8 +322,8 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
               )}
             </AnimatePresence>
 
-            <div className="h-4 w-px bg-border/60 mx-1" />
-            <AIUsageIndicator used={usage.used} limit={usage.limit} />
+            <div className="h-4 w-px bg-border/60 mx-1 flex-shrink-0" />
+            <AIUsageIndicator used={usage.used} limit={usage.limit} size={36} />
           </div>
         </div>
         
