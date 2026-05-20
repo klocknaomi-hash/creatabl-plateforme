@@ -254,12 +254,12 @@ export default function TermsPage() {
               </p>
               <div className="pt-2">
                 <a
-                  href="mailto:contact@creatabl-ia.com"
+                  href="mailto:businessesonlinemail@gmail.com"
                   id="contact-email-link"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#7F77DD] hover:text-white border border-[#7F77DD]/20 hover:border-[#7F77DD] bg-[#7F77DD]/5 hover:bg-[#7F77DD]/10 transition-all duration-200 text-sm font-semibold"
                 >
                   <Mail className="w-4 h-4" />
-                  contact@creatabl-ia.com
+                  businessesonlinemail@gmail.com
                 </a>
               </div>
             </section>
