@@ -16,8 +16,13 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Creatabl.ia",
-  description: "Social Media Copilot",
+  title: "Creatabl-IA",
+  description: "AI-powered social media management",
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

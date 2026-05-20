@@ -32,7 +32,7 @@ import { DisconnectButton } from './disconnect-button';
 import { PlatformCardContent } from './platform-card-content';
 
 export const metadata: Metadata = {
-  title: 'Comptes connectés | Creatabl.ia',
+  title: 'Comptes connectés | Creatabl-IA',
   description: 'Gérez vos comptes connectés.',
 };
 

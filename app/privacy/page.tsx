@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Shield, ArrowLeft, Mail } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Creatabl.ia',
+  title: 'Privacy Policy | Creatabl-IA',
   description: 'Privacy Policy and Data Protection guidelines for Creatabl-IA, explaining how we collect, store, and process your data.',
 }
 

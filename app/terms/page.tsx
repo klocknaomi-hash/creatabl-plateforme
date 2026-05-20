@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Scale, ArrowLeft, Mail } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Creatabl.ia',
+  title: 'Terms of Service | Creatabl-IA',
   description: 'Terms of Service and Conditions of Use for Creatabl-IA, the AI-powered social media management copilot.',
 }
 

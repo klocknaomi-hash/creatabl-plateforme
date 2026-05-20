@@ -7,7 +7,7 @@ import { eq, sql } from "drizzle-orm";
 import { SettingsForm } from "./settings-form";
 
 export const metadata: Metadata = {
-  title: "Settings | Creatabl.ia",
+  title: "Settings | Creatabl-IA",
   description: "Manage your account preferences and application settings.",
 };
 
