@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Upload, X, Image as ImageIcon, Loader2, Sparkles, Wand2, Crop, Layers, Palette, Maximize, Scissors, RefreshCcw, Check } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, Sparkles, Wand2, Crop, Layers, Maximize, Scissors, RefreshCcw, Check } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CanvaIcon } from "@/components/platform-icons";

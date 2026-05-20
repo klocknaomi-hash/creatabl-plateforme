@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Plus, Palette } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { DisconnectButton } from './disconnect-button';
 import { CanvaIcon } from '@/components/platform-icons';
@@ -114,9 +114,7 @@ export function PlatformCardContent({
                 )}>
                   <Avatar className="h-14 w-14 border-4 border-background shadow-md flex-shrink-0 mb-3 animate-in zoom-in-50 duration-300">
                     {activeAccount.isCanva ? (
-                      <AvatarFallback className="bg-[#00C4CC]/10 text-[#00C4CC]">
-                        <CanvaIcon className="h-6 w-6" />
-                      </AvatarFallback>
+                      <CanvaIcon className="h-full w-full" />
                     ) : (
                       <>
                         <AvatarImage src={activeAccount.avatarUrl || ''} />

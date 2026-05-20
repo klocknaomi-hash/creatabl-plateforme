@@ -10,8 +10,7 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   CheckCircle2,
-  Plus,
-  Palette
+  Plus
 } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
