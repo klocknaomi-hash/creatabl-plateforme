@@ -26,7 +26,8 @@ import {
   TwitterIcon,
   YoutubeIcon,
   TiktokIcon,
-  PinterestIcon
+  PinterestIcon,
+  CanvaIcon
 } from '@/components/platform-icons';
 import { DisconnectButton } from './disconnect-button';
 import { PlatformCardContent } from './platform-card-content';
@@ -104,7 +105,7 @@ const PLATFORMS: PlatformInfo[] = [
   {
     id: 'canva',
     name: 'Canva',
-    icon: Palette,
+    icon: CanvaIcon,
     color: 'text-[#00C4CC]',
     bgColor: 'bg-[#00C4CC]/10',
     isIntegration: true
