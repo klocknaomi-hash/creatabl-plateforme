@@ -92,8 +92,14 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         }
         setStep("final");
       } else if (step === "final") {
-        const result = await completeOnboarding();
+        const plan = localStorage.getItem('selectedPlan') || 'starter';
+        const billing = localStorage.getItem('selectedBilling') || 'monthly';
+        const result = await completeOnboarding(plan, billing);
         if (result?.success) {
+          localStorage.removeItem('selectedPlan');
+          localStorage.removeItem('selectedBilling');
+          localStorage.removeItem('selected_plan');
+          localStorage.removeItem('selected_billing');
           await user?.reload(); // refresh Clerk user object
           await new Promise(resolve => setTimeout(resolve, 800)); // Delay to ensure metadata is fresh
           router.refresh();

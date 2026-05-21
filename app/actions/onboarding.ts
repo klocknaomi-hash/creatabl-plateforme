@@ -190,7 +190,7 @@ export async function saveEmojiPreference(emojiPreference: string) {
   }
 }
 
-export async function completeOnboarding() {
+export async function completeOnboarding(selectedPlan?: string, selectedBilling?: string) {
   try {
     const { userId } = await auth();
     if (!userId) return { success: false, error: "No userId" };
@@ -199,13 +199,18 @@ export async function completeOnboarding() {
     const now = new Date();
     const trialEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
+    const plan = selectedPlan || "starter";
+    const billing = selectedBilling || "monthly";
+
     // Update Clerk metadata FIRST — this is critical to stop the modal from showing
     await client.users.updateUserMetadata(userId, {
       publicMetadata: { 
         onboardingStep: "done",
         trialStartedAt: now.toISOString(),
         trialEndsAt: trialEndsAt.toISOString(),
-        trialPlan: "business"
+        trialPlan: "business",
+        selectedPlan: plan,
+        selectedBilling: billing,
       }
     });
     
@@ -213,12 +218,14 @@ export async function completeOnboarding() {
     try {
       await db.update(users).set({ 
         plan: "business",
+        selectedPlan: plan,
+        billingCycle: billing,
         trialStartedAt: now,
         trialEndsAt: trialEndsAt,
         onboardingCompletedAt: now,
         onboardingCompleted: true,
       }).where(eq(users.clerkId, userId));
-      console.log('Saved onboarding completion and trial in DB for user', userId);
+      console.log(`Saved onboarding completion and trial in DB for user ${userId} (selectedPlan: ${plan}, billingCycle: ${billing})`);
     } catch (dbErr) {
       console.error("DB update failed but Clerk is updated:", dbErr);
     }

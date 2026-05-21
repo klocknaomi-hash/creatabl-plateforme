@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 
 interface PaywallOverlayProps {
   plan: string | null
+  billingCycle?: string | null
 }
 
 const PLAN_DATA = {
@@ -47,9 +48,11 @@ const PLAN_DATA = {
   }
 }
 
-export function PaywallOverlay({ plan }: PaywallOverlayProps) {
+export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
   const selectedPlanKey = (plan?.toLowerCase() as keyof typeof PLAN_DATA) || 'starter'
   const planData = PLAN_DATA[selectedPlanKey]
+  const currentBilling = billingCycle === 'yearly' ? 'yearly' : 'monthly'
+  const displayPrice = currentBilling === 'yearly' ? planData.annualPrice : planData.price
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 backdrop-blur-md bg-white/60">
@@ -81,12 +84,18 @@ export function PaywallOverlay({ plan }: PaywallOverlayProps) {
               </div>
               <div className="text-right">
                 <div className="flex items-baseline justify-end gap-1">
-                  <span className="text-3xl font-bold text-gray-900">{planData.price}€</span>
+                  <span className="text-3xl font-bold text-gray-900">{displayPrice}€</span>
                   <span className="text-gray-500 font-medium">/mois</span>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">
-                  ou {planData.annualPrice}€/mois en annuel
-                </p>
+                {currentBilling === 'yearly' ? (
+                  <p className="text-xs text-gray-400 mt-1">
+                    soit {parseInt(planData.annualPrice) * 12}€ facturés par an
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-400 mt-1">
+                    ou {planData.annualPrice}€/mois en annuel
+                  </p>
+                )}
               </div>
             </div>
 
@@ -102,7 +111,7 @@ export function PaywallOverlay({ plan }: PaywallOverlayProps) {
             </ul>
 
             <Link 
-              href={`/api/stripe/create-checkout?plan=${selectedPlanKey}&billing=monthly`}
+              href={`/api/stripe/create-checkout?plan=${selectedPlanKey}&billing=${currentBilling}`}
               className="w-full py-4 px-6 bg-[#6366F1] hover:bg-[#4F46E5] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-200"
             >
               Activer le plan {planData.name}

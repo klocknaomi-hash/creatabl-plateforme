@@ -48,6 +48,7 @@ export default async function DashboardLayout({
       const clerkTrialEndsAt = clerkUser?.publicMetadata?.trialEndsAt as string | undefined;
       const clerkTrialStartedAt = clerkUser?.publicMetadata?.trialStartedAt as string | undefined;
       const clerkSelectedPlan = clerkUser?.publicMetadata?.selectedPlan as string | undefined;
+      const clerkSelectedBilling = (clerkUser?.publicMetadata?.selectedBilling || clerkUser?.publicMetadata?.billing) as string | undefined;
 
       if (dbUser && clerkTrialEndsAt && (!dbUser.trialEndsAt || !dbUser.trialStartedAt)) {
         try {
@@ -55,6 +56,7 @@ export default async function DashboardLayout({
             trialStartedAt: clerkTrialStartedAt ? new Date(clerkTrialStartedAt) : new Date(),
             trialEndsAt: new Date(clerkTrialEndsAt),
             selectedPlan: clerkSelectedPlan || dbUser.selectedPlan || 'starter',
+            billingCycle: clerkSelectedBilling || dbUser.billingCycle || 'monthly',
           }).where(eq(users.id, dbUser.id));
 
           // Refetch updated user
@@ -96,7 +98,10 @@ export default async function DashboardLayout({
             {/* Show onboarding if not completed */}
             {showOnboarding && <OnboardingModal />}
             {trialStatus.status === 'expired' && (
-              <PaywallOverlay plan={dbUser?.selectedPlan || 'starter'} />
+              <PaywallOverlay 
+                plan={dbUser?.selectedPlan || 'starter'} 
+                billingCycle={dbUser?.billingCycle || 'monthly'} 
+              />
             )}
           </main>
         </SidebarInset>
