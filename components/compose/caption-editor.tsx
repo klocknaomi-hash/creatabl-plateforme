@@ -32,36 +32,40 @@ const PLATFORM_LIMITS: Record<string, number> = {
 export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDialog, tone, postId }: CaptionEditorProps) {
   const [aiPrompt, setAiPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerateAI = async () => {
-    if (!aiPrompt) {
-      toast.error("Veuillez entrer un prompt pour l'IA");
-      return;
-    }
+    if (!aiPrompt.trim()) return;
 
     setGenerating(true);
+    setError(null);
     try {
-      const res = await fetch("/api/generate-post", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          content: aiPrompt, 
-          action: "generate",
-          platform: selectedPlatforms[0] || "linkedin",
-          tone: tone || "professional"
-        }),
+      const response = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          platform: selectedPlatforms[0] || 'instagram',
+          idea: aiPrompt
+        })
       });
 
-      const data = await res.json();
-      if (data.result) {
-        onChange(data.result);
-        setAiPrompt("");
-        toast.success("Caption IA générée !");
-      } else {
-        throw new Error(data.error || "Failed to generate caption");
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          setError(data.message);
+          return;
+        }
+        setError(data.message || 'Erreur de génération');
+        return;
       }
-    } catch (err: any) {
-      toast.error(err.message);
+
+      // Insert generated text into the caption editor
+      onChange(data.text);
+      setAiPrompt('');
+      toast.success("Caption IA générée !");
+    } catch (err) {
+      setError('Erreur de connexion. Réessaie.');
     } finally {
       setGenerating(false);
     }
@@ -146,6 +150,9 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
           </Button>
         </div>
       </div>
+      {error && (
+        <p className="text-sm text-red-500 mt-2">{error}</p>
+      )}
     </div>
   );
 }

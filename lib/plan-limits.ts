@@ -29,7 +29,7 @@ export const PLAN_LIMITS = {
   },
   business: {
     label: 'Business',
-    posts: 500,
+    posts: 300,
     ai: 300,
     workspaces: 5,
     socialAccounts: 50,
@@ -54,7 +54,7 @@ export const PLAN_LIMITS = {
   },
   agency: {
     label: 'Business',
-    posts: 500,
+    posts: 300,
     ai: 300,
     workspaces: 5,
     socialAccounts: 50,

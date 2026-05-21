@@ -50,8 +50,8 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
       price: "199€",
       description: "Pour les agences et équipes",
       features: [
-        "500 Posts / mois (∞)",
-        "500 Générations IA (∞)",
+        "300 Posts / mois (∞)",
+        "300 Générations IA (∞)",
         "365 Jours Analytics",
         "Multi-comptes équipe",
         "Gestion clients",

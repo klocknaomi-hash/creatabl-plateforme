@@ -32,9 +32,9 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
       case "starter":
         return "You have used your 30 generations this month. Upgrade to Pro for 120 generations/month.";
       case "pro":
-        return "You have used your 120 generations this month. Upgrade to Business for 500 generations/month.";
+        return "You have used your 120 generations this month. Upgrade to Business for 300 generations/month.";
       case "business":
-        return "You have used your 500 generations this month. Contact us for a custom plan.";
+        return "You have used your 300 generations this month. Contact us for a custom plan.";
       default:
         return `You have reached your limit of ${limit} generations this month.`;
     }
