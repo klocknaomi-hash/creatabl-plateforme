@@ -74,6 +74,9 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [usage, setUsage] = useState({ used: 0, limit: 30, plan: "starter" });
   const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
+  const [rateLimitMessage, setRateLimitMessage] = useState<string | null>(null);
+
+  const remaining = Math.max(0, usage.limit - usage.used);
 
   // Fetch initial usage
   useEffect(() => {
@@ -108,6 +111,13 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
     });
 
     if (response) {
+      if (response.rateLimit) {
+        setRateLimitMessage(response.error);
+        return;
+      }
+
+      setRateLimitMessage(null);
+
       if (response.limitReached) {
         setUsage({ used: response.used, limit: response.limit, plan: response.plan });
         setIsLimitModalOpen(true);
@@ -377,6 +387,26 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             <AIUsageIndicator used={usage.used} limit={usage.limit} size={36} />
           </div>
         </div>
+
+        {remaining < 10 && (
+          <div className="text-[11px] text-amber-600 dark:text-amber-500 font-semibold mt-1.5 px-2 flex items-center gap-1">
+            ⏱ {remaining} {remaining <= 1 ? 'génération restante' : 'générations restantes'} aujourd'hui
+          </div>
+        )}
+
+        {rateLimitMessage && (
+          <div style={{
+            background: 'rgba(186,117,23,0.1)',
+            border: '1px solid rgba(186,117,23,0.3)',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            fontSize: '12px',
+            color: '#BA7517',
+            marginTop: '8px',
+          }}>
+            ⏱ {rateLimitMessage}
+          </div>
+        )}
 
         {!access.aiReformulate && (
           <UpgradePrompt

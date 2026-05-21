@@ -12,6 +12,8 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { getTrialStatus } from "@/lib/trial";
 import { TrialBanner } from "@/components/dashboard/TrialBanner";
 import { PaywallOverlay } from "@/components/PaywallOverlay";
+import { PaywallBanner } from "@/components/dashboard/PaywallBanner"
+import { PaywallProvider } from "@/lib/paywall-context"
 
 export default async function DashboardLayout({
   children,
@@ -75,11 +77,25 @@ export default async function DashboardLayout({
     const onboardingStep = clerkUser?.publicMetadata?.onboardingStep
     const showOnboarding = !onboardingStep || onboardingStep !== 'done'
     
-    const trialStatus = dbUser ? getTrialStatus({
-      trialStartedAt: dbUser.trialStartedAt,
-      trialEndsAt: dbUser.trialEndsAt,
-      isSubscribed: dbUser.isSubscribed ?? false,
-    }) : { status: 'no_trial', daysLeft: null };
+    const now = new Date()
+    const trialEndsAt = clerkUser?.publicMetadata?.trialEndsAt 
+      ? new Date(clerkUser.publicMetadata.trialEndsAt as string)
+      : null
+
+    // Check if user has active Stripe subscription
+    let hasActiveSubscription = false
+    try {
+      const trialActive = trialEndsAt && trialEndsAt > now
+      const paidPlan = dbUser?.stripeSubscriptionId != null
+      hasActiveSubscription = !!(trialActive || paidPlan)
+    } catch (e) {
+      hasActiveSubscription = true // fail open, don't block
+    }
+
+    const userEmail = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
+    const showPaywall = !hasActiveSubscription && 
+                        !showOnboarding &&
+                        !userEmail.endsWith('@creatabl-ia.com')
 
     return (
       <DashboardProviders>
@@ -91,13 +107,16 @@ export default async function DashboardLayout({
             <Topbar />
           </ErrorBoundary>
           <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
+            {showPaywall && <PaywallBanner selectedPlan={dbUser?.selectedPlan || undefined} />}
             <TrialBanner />
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
+            <PaywallProvider isLocked={showPaywall} selectedPlan={dbUser?.selectedPlan || null}>
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
+            </PaywallProvider>
             {/* Show onboarding if not completed */}
             {showOnboarding && <OnboardingModal />}
-            {trialStatus.status === 'expired' && (
+            {showPaywall && (
               <PaywallOverlay 
                 plan={dbUser?.selectedPlan || 'starter'} 
                 billingCycle={dbUser?.billingCycle || 'monthly'} 

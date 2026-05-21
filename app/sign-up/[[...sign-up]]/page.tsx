@@ -16,6 +16,28 @@ function SignUpContent() {
     }
   }, [params])
 
+  useEffect(() => {
+    const originalFetch = window.fetch
+    window.fetch = async function (...args) {
+      const response = await originalFetch.apply(this, args)
+      if (response.status === 400 || response.status === 422) {
+        try {
+          const clone = response.clone()
+          const data = await clone.json()
+          if (data.errors && data.errors.some((err: any) => err.code === 'form_identifier_exists')) {
+            window.location.href = '/sign-in?message=account_exists'
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
+      return response
+    }
+    return () => {
+      window.fetch = originalFetch
+    }
+  }, [])
+
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white overflow-x-hidden">
       {/* Left Column - Beautiful Marketing Panel */}
@@ -193,6 +215,13 @@ function SignUpContent() {
             routing="path"
             path="/sign-up"
           />
+
+          <p className="text-sm text-center text-gray-500 mt-4">
+            Déjà un compte ?{' '}
+            <a href="/sign-in" className="text-[#534AB7] font-bold hover:underline">
+              Se connecter
+            </a>
+          </p>
         </div>
       </div>
     </div>

@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { generatePost } from '@/lib/ai-provider';
 import { db } from '@/lib/db';
-import { aiLogs } from '@/lib/db/schema';
+import { aiLogs, users } from '@/lib/db/schema';
 import { getAccess } from '@/lib/get-access';
+import { checkAiRateLimit } from '@/lib/ai-rate-limit';
+import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
   const { userId } = await auth();
@@ -16,6 +18,27 @@ export async function POST(request: NextRequest) {
     return Response.json(
       { error: 'Changer le ton nécessite le plan Pro ou supérieur.' },
       { status: 403 }
+    );
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.clerkId, userId),
+  });
+
+  let planName = (user?.plan || user?.selectedPlan || 'starter').toLowerCase();
+  if (planName === 'free') planName = 'starter';
+  if (planName === 'agency') planName = 'business';
+  const plan = (['starter', 'pro', 'business'].includes(planName) ? planName : 'starter') as 'starter' | 'pro' | 'business';
+
+  const rateLimit = await checkAiRateLimit(userId, plan);
+
+  if (!rateLimit.allowed) {
+    return Response.json(
+      {
+        error: rateLimit.message,
+        retryAt: rateLimit.retryAt,
+      },
+      { status: 429 }
     );
   }
 

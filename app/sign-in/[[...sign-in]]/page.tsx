@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { SignIn } from '@clerk/nextjs'
+import { useSearchParams } from 'next/navigation'
 import { Shield, Heart, MessageCircle, Share2, MoreHorizontal, Repeat2, BarChart2, Bookmark, Send } from 'lucide-react'
 
-export default function Page() {
+function SignInContent() {
   const [activeTab, setActiveTab] = useState<'instagram' | 'twitter' | 'linkedin'>('instagram')
+  const searchParams = useSearchParams()
+  const message = searchParams.get('message')
 
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white overflow-x-hidden">
@@ -186,6 +189,20 @@ export default function Page() {
             </span>
           </div>
 
+          {message === 'account_exists' && (
+            <div className="w-full mb-6 p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-950 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
+              <div className="w-5 h-5 rounded-full bg-[#534AB7]/10 border border-[#534AB7]/25 flex items-center justify-center shrink-0 mt-0.5 animate-pulse">
+                <span className="text-[#534AB7] text-xs font-black">!</span>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-xs text-indigo-950">Compte déjà existant</h4>
+                <p className="text-[11px] text-zinc-600 mt-0.5 leading-relaxed">
+                  Un compte existe déjà avec cette adresse e-mail. Connectez-vous ci-dessous pour accéder à votre espace.
+                </p>
+              </div>
+            </div>
+          )}
+
           <SignIn
             appearance={{
               layout: {
@@ -228,5 +245,13 @@ export default function Page() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-zinc-950 text-white">Chargement...</div>}>
+      <SignInContent />
+    </Suspense>
   )
 }

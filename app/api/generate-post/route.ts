@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { aiLogs, users } from "@/lib/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { getAccess } from "@/lib/get-access";
+import { checkAiRateLimit } from "@/lib/ai-rate-limit";
 
 const PLAN_AI_LIMITS: Record<string, number> = {
   starter: 30,
@@ -31,19 +32,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const plan = (user.selectedPlan || "starter") as keyof typeof PLAN_AI_LIMITS;
-    const limit = PLAN_AI_LIMITS[plan] || PLAN_AI_LIMITS.starter;
-    const currentCount = user.monthlyAiCount || 0;
+    let planName = (user.plan || user.selectedPlan || 'starter').toLowerCase();
+    if (planName === 'free') planName = 'starter';
+    if (planName === 'agency') planName = 'business';
+    const plan = (['starter', 'pro', 'business'].includes(planName) ? planName : 'starter') as 'starter' | 'pro' | 'business';
 
-    // Check limit
-    if (currentCount >= limit) {
-      return NextResponse.json({
-        limitReached: true,
-        used: currentCount,
-        limit: limit,
-        plan: plan
-      }, { status: 200 }); // Status 200 as requested
+    const rateLimit = await checkAiRateLimit(clerkId, plan);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: rateLimit.message,
+          retryAt: rateLimit.retryAt,
+        },
+        { status: 429 }
+      );
     }
+
+    const limit = PLAN_AI_LIMITS[plan] || PLAN_AI_LIMITS.starter;
+    const remaining = rateLimit.remaining !== undefined ? rateLimit.remaining : (limit - 1);
+    const used = limit - remaining;
 
     const body: GeneratePostOptions = await req.json();
 
@@ -76,7 +84,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ 
       result: result.result, 
       provider: result.provider,
-      used: currentCount + 1,
+      used: used,
       limit: limit,
       plan: plan
     });

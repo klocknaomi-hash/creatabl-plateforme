@@ -57,7 +57,7 @@ export const workspaces = pgTable('workspaces', {
 
 export const aiUsage = pgTable('ai_usage', {
   id: uuid('id').defaultRandom().primaryKey(),
-  userId: text('user_id').notNull(),
+  userId: text('user_id').notNull().unique(),
   requestCount: integer('request_count').default(0).notNull(),
   windowStart: timestamp('window_start').defaultNow().notNull(),
   cooldownUntil: timestamp('cooldown_until'),

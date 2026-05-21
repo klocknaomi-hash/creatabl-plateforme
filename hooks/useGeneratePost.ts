@@ -31,6 +31,11 @@ export function useGeneratePost(options?: UseGeneratePostOptions) {
         body: JSON.stringify(params),
       });
 
+      if (response.status === 429) {
+        const data = await response.json();
+        return { rateLimit: true, error: data.error };
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
