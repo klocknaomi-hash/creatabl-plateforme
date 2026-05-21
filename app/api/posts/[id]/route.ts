@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { posts, users } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 import { publishPostImmediately } from '@/lib/platforms/publisher';
 import { inngest } from '@/lib/inngest/client';
+import { checkPlanLimit } from '@/lib/plan-limits';
 
 export async function GET(
   request: NextRequest,
@@ -38,6 +39,11 @@ export async function GET(
   }
 }
 
+async function incrementPostCount(clerkId: string) {
+  await db.update(users)
+    .set({ monthlyPostCount: sql`${users.monthlyPostCount} + 1` })
+    .where(eq(users.clerkId, clerkId));
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -56,6 +62,28 @@ export async function PATCH(
   try {
     const body = await request.json();
     const { content, mediaUrls, platforms, scheduledAt, status } = body;
+
+    const currentPost = await db.query.posts.findFirst({
+      where: and(eq(posts.id, id), eq(posts.userId, userRecord.id)),
+    });
+
+    if (!currentPost) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    if (
+      currentPost.status === 'draft' &&
+      (status === 'published' || status === 'scheduled')
+    ) {
+      const limitCheck = await checkPlanLimit(clerkId!, 'posts');
+      if (!limitCheck.allowed) {
+        return Response.json(
+          { error: limitCheck.message },
+          { status: 403 }
+        );
+      }
+      await incrementPostCount(clerkId!);
+    }
 
     const [updatedPost] = await db.update(posts)
       .set({

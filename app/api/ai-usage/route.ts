@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 const PLAN_AI_LIMITS: Record<string, number> = {
   starter: 30,
   pro: 120,
-  business: 500
+  business: 300
 }
 
 export async function GET() {

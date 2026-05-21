@@ -30,7 +30,7 @@ export const PLAN_LIMITS = {
   business: {
     label: 'Business',
     posts: 500,
-    ai: 500,
+    ai: 300,
     workspaces: 5,
     socialAccounts: 50,
     storageLimit: 20480, // 20GB
@@ -55,7 +55,7 @@ export const PLAN_LIMITS = {
   agency: {
     label: 'Business',
     posts: 500,
-    ai: 500,
+    ai: 300,
     workspaces: 5,
     socialAccounts: 50,
     storageLimit: 20480,

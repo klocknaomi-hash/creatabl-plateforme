@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from "react";
 import { useGeneratePost } from "@/hooks/useGeneratePost";
+import { useAccess } from "@/hooks/useAccess";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { PostPlatform, PostTone, GenerateAction } from "@/lib/ai-provider";
 import { 
   Sparkles, 
@@ -59,6 +61,7 @@ const TONES: { value: PostTone; label: string; icon: string; description: string
 ];
 
 export function AIToolbar({ content, platform, onResult, postId, tone: propTone }: AIToolbarProps) {
+  const access = useAccess();
   const { generate, loading } = useGeneratePost({ 
     onSuccess: (res: string) => {
       onResult(res);
@@ -190,86 +193,134 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
               tooltip="Améliorer le style"
             />
 
-            <TooltipButton
-              onClick={() => handleAction("rewrite")}
-              disabled={disabled}
-              icon={<RotateCcw className="size-3.5 text-blue-500" />}
-              label="Reformuler"
-              loading={loading}
-              tooltip="Reformuler depuis un nouvel angle"
-            />
+            {access.aiReformulate ? (
+              <TooltipButton
+                onClick={() => handleAction("rewrite")}
+                disabled={disabled}
+                icon={<RotateCcw className="size-3.5 text-blue-500" />}
+                label="Reformuler"
+                loading={loading}
+                tooltip="Reformuler depuis un nouvel angle"
+              />
+            ) : (
+              <button
+                disabled
+                title="Disponible à partir du plan Pro"
+                style={{ opacity: 0.4, cursor: 'not-allowed' }}
+                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+              >
+                <RotateCcw className="size-3.5 text-blue-500" />
+                Reformuler 🔒
+              </button>
+            )}
 
-            <TooltipButton
-              onClick={() => handleAction("shorten")}
-              disabled={disabled}
-              icon={<Minimize2 className="size-3.5 text-emerald-500" />}
-              label="Raccourcir"
-              loading={loading}
-              tooltip="Raccourcir le contenu"
-            />
+            {access.aiAdvanced ? (
+              <TooltipButton
+                onClick={() => handleAction("shorten")}
+                disabled={disabled}
+                icon={<Minimize2 className="size-3.5 text-emerald-500" />}
+                label="Raccourcir"
+                loading={loading}
+                tooltip="Raccourcir le contenu"
+              />
+            ) : (
+              <button
+                disabled
+                title="Disponible à partir du plan Pro"
+                style={{ opacity: 0.4, cursor: 'not-allowed' }}
+                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+              >
+                <Minimize2 className="size-3.5 text-emerald-500" />
+                Raccourcir 🔒
+              </button>
+            )}
 
-            <TooltipButton
-              onClick={() => handleAction("lengthen")}
-              disabled={disabled}
-              icon={<Maximize2 className="size-3.5 text-orange-500" />}
-              label="Allonger"
-              loading={loading}
-              tooltip="Allonger le contenu"
-            />
+            {access.aiAdvanced ? (
+              <TooltipButton
+                onClick={() => handleAction("lengthen")}
+                disabled={disabled}
+                icon={<Maximize2 className="size-3.5 text-orange-500" />}
+                label="Allonger"
+                loading={loading}
+                tooltip="Allonger le contenu"
+              />
+            ) : (
+              <button
+                disabled
+                title="Disponible à partir du plan Pro"
+                style={{ opacity: 0.4, cursor: 'not-allowed' }}
+                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+              >
+                <Maximize2 className="size-3.5 text-orange-500" />
+                Allonger 🔒
+              </button>
+            )}
 
             {/* Tone Selector */}
-            <DropdownMenu>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <DropdownMenuTrigger
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          disabled={disabled}
-                          className={cn(
-                            "h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex-shrink-0",
-                            "hover:bg-primary/5 hover:text-primary active:scale-95"
-                          )}
-                        />
-                      }
-                    />
-                  }
-                >
-                  <Type className="size-3.5" />
-                  <span>Ton</span>
-                  <ChevronDown className="size-3 opacity-40" />
-                </TooltipTrigger>
-                <TooltipContent>Changer le ton du post</TooltipContent>
-              </Tooltip>
-              <DropdownMenuContent 
-                align="start" 
-                className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl bg-background/95"
-              >
-                <div className="px-3 py-2 mb-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choisissez une voix</p>
-                </div>
-                {TONES.map((t) => (
-                  <DropdownMenuItem
-                    key={t.value}
-                    onClick={() => handleAction("change_tone", t.value)}
-                    className="rounded-xl text-xs font-semibold gap-3 py-2.5 cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors group"
+            {access.aiTone ? (
+              <DropdownMenu>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={disabled}
+                            className={cn(
+                              "h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex-shrink-0",
+                              "hover:bg-primary/5 hover:text-primary active:scale-95"
+                            )}
+                          />
+                        }
+                      />
+                    }
                   >
-                    <span className="text-lg bg-muted/50 size-8 flex items-center justify-center rounded-lg group-hover:bg-primary/10 transition-colors">{t.icon}</span>
-                    <div className="flex flex-col gap-0.5">
-                      <span>{t.label}</span>
-                      <span className="text-[10px] font-normal text-muted-foreground">{t.description}</span>
-                    </div>
-                    {activeTone === t.value && (
-                      <motion.div layoutId="active-tone" className="ml-auto">
-                        <Check className="size-3.5 text-primary" />
-                      </motion.div>
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <Type className="size-3.5" />
+                    <span>Ton</span>
+                    <ChevronDown className="size-3 opacity-40" />
+                  </TooltipTrigger>
+                  <TooltipContent>Changer le ton du post</TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent 
+                  align="start" 
+                  className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl bg-background/95"
+                >
+                  <div className="px-3 py-2 mb-1">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choisissez une voix</p>
+                  </div>
+                  {TONES.map((t) => (
+                    <DropdownMenuItem
+                      key={t.value}
+                      onClick={() => handleAction("change_tone", t.value)}
+                      className="rounded-xl text-xs font-semibold gap-3 py-2.5 cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors group"
+                    >
+                      <span className="text-lg bg-muted/50 size-8 flex items-center justify-center rounded-lg group-hover:bg-primary/10 transition-colors">{t.icon}</span>
+                      <div className="flex flex-col gap-0.5">
+                        <span>{t.label}</span>
+                        <span className="text-[10px] font-normal text-muted-foreground">{t.description}</span>
+                      </div>
+                      {activeTone === t.value && (
+                        <motion.div layoutId="active-tone" className="ml-auto">
+                          <Check className="size-3.5 text-primary" />
+                        </motion.div>
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <button
+                disabled
+                title="Disponible à partir du plan Pro"
+                style={{ opacity: 0.4, cursor: 'not-allowed' }}
+                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+              >
+                <Type className="size-3.5" />
+                Ton 🔒
+              </button>
+            )}
 
             {/* Platform Specific */}
             {platform && (
@@ -326,6 +377,13 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             <AIUsageIndicator used={usage.used} limit={usage.limit} size={36} />
           </div>
         </div>
+
+        {!access.aiReformulate && (
+          <UpgradePrompt
+            feature="Reformuler"
+            requiredPlan="pro"
+          />
+        )}
         
         <AILimitModal 
           isOpen={isLimitModalOpen} 

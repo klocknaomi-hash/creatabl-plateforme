@@ -4,11 +4,12 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { aiLogs, users } from "@/lib/db/schema";
 import { eq, sql } from "drizzle-orm";
+import { getAccess } from "@/lib/get-access";
 
 const PLAN_AI_LIMITS: Record<string, number> = {
   starter: 30,
   pro: 120,
-  business: 500
+  business: 300
 }
 
 export async function POST(req: NextRequest) {
@@ -16,6 +17,11 @@ export async function POST(req: NextRequest) {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const access = await getAccess();
+    if (!access.aiBasic) {
+      return NextResponse.json({ error: "Générer avec l'IA nécessite le plan Starter ou supérieur." }, { status: 403 });
     }
 
     // Fetch user info

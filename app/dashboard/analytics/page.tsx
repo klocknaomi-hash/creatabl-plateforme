@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import { getAnalyticsData } from "@/lib/analytics";
 import { getCurrentUser } from "@/lib/auth";
 import { subDays, differenceInDays } from "date-fns";
+import { getAccess } from "@/lib/get-access";
 import {
   Card,
   CardContent,
@@ -60,12 +61,14 @@ export default async function AnalyticsPage(props: {
   const user = await getCurrentUser();
   if (!user) redirect("/sign-in");
 
+  const access = await getAccess();
+
   const searchParams = await props.searchParams;
   const fromDate = searchParams.from ? new Date(searchParams.from) : subDays(new Date(), 7);
   const toDate = searchParams.to ? new Date(searchParams.to) : new Date();
 
   const diffDays = differenceInDays(toDate, fromDate);
-  const isLimited = user.plan === "starter" && diffDays > 7;
+  const isLimited = !access.analyticsAdvanced && diffDays > 7;
 
   // If limited, we still fetch data but maybe we only fetch the last 7 days or show a prompt
   const effectiveFrom = isLimited ? subDays(new Date(), 7) : fromDate;

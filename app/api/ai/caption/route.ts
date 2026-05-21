@@ -3,11 +3,20 @@ import { auth } from '@clerk/nextjs/server';
 import { generatePost } from '@/lib/ai-provider';
 import { db } from '@/lib/db';
 import { aiLogs } from '@/lib/db/schema';
+import { getAccess } from '@/lib/get-access';
 
 export async function POST(request: NextRequest) {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const access = await getAccess();
+  if (!access.aiTone) {
+    return Response.json(
+      { error: 'Changer le ton nécessite le plan Pro ou supérieur.' },
+      { status: 403 }
+    );
   }
 
   try {
