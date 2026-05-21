@@ -264,3 +264,20 @@ export const autoReplyLogsRelations = relations(autoReplyLogs, ({ one }) => ({
   }),
 }));
 
+export const workspaceMembers = pgTable(
+  'workspace_members',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    workspaceId: uuid('workspace_id')
+      .notNull()
+      .references(() => workspaces.id),
+    userId: text('user_id').notNull(),
+    role: text('role')
+      .notNull()
+      .default('member'),
+    invitedAt: timestamp('invited_at').defaultNow(),
+    joinedAt: timestamp('joined_at'),
+  }
+);
+
+

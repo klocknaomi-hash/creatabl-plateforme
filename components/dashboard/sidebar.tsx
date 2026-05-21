@@ -39,6 +39,8 @@ import { cn } from "@/lib/utils";
 
 import { useSettings } from "@/lib/settings-context";
 import { getTranslation } from "@/lib/i18n";
+import { WorkspaceSwitcher } from "@/components/dashboard/WorkspaceSwitcher";
+
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -119,6 +121,9 @@ export function AppSidebar() {
 
       {/* ── Navigation ── */}
       <SidebarContent>
+        <div className="group-data-[collapsible=icon]:hidden">
+          <WorkspaceSwitcher />
+        </div>
         {/* Main */}
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
