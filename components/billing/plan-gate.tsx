@@ -53,7 +53,7 @@ export function PlanGate({ children, plan = "pro", showUpgrade = true }: PlanGat
       </CardHeader>
       <CardFooter className="justify-center pb-6">
         <Link 
-          href="/dashboard/billing" 
+          href="https://creatabl-ia.com/tarifs" 
           className={cn(buttonVariants({ variant: "default" }))}
         >
           Upgrade Now

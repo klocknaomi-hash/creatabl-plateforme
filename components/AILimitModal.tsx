@@ -54,7 +54,7 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
         </div>
         <DialogFooter className="flex flex-col sm:flex-row gap-3 w-full mt-4">
           <Button 
-            render={<Link href="/pricing" />}
+            render={<Link href="https://creatabl-ia.com/tarifs" />}
             className="w-full bg-[#7F77DD] hover:bg-[#6a62c5] text-white rounded-xl py-6 h-auto text-base"
           >
             View Plans

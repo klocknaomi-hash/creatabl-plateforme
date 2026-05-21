@@ -83,7 +83,7 @@ function LandingContent() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link 
-              href="/tarifs"
+              href="https://creatabl-ia.com/tarifs"
               className="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2"
             >
               Voir les plans
@@ -154,7 +154,7 @@ function LandingContent() {
               <h4 className="text-sm font-bold uppercase tracking-widest">Produit</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
                 <li><Link href="#features">Fonctionnalités</Link></li>
-                <li><Link href="/tarifs">Tarifs</Link></li>
+                <li><Link href="https://creatabl-ia.com/tarifs">Tarifs</Link></li>
                 <li><Link href="#">Nouveautés</Link></li>
               </ul>
             </div>

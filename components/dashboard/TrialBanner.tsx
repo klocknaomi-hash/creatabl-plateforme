@@ -34,10 +34,10 @@ export function TrialBanner() {
         Choisis ton plan avant la fin de l'essai.
       </span>
       <button
-        onClick={() => router.push("/dashboard/billing")}
+        onClick={() => window.location.href = "https://creatabl-ia.com/tarifs"}
         className="ml-4 bg-white text-primary font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-gray-100 transition-colors whitespace-nowrap"
       >
-        Voir les plans
+        Mettre à niveau
       </button>
     </div>
   )

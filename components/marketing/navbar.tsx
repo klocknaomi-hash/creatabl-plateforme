@@ -25,7 +25,7 @@ function NavbarContent() {
         
         <div className="hidden md:flex items-center gap-10">
           <Link href="/#features" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Fonctionnalités</Link>
-          <Link href="/tarifs" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Tarifs</Link>
+          <Link href="https://creatabl-ia.com/tarifs" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Tarifs</Link>
           <Link href="/#testimonials" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Témoignages</Link>
         </div>
 

@@ -13,19 +13,37 @@ const PLAN_DATA = {
     name: 'Starter',
     price: '49',
     annualPrice: '39',
-    features: ['5 posts par mois', 'IA Standard', '1 compte par réseau']
+    features: [
+      '30 posts / mois',
+      'Assistant IA de rédaction (limité)',
+      'Calendrier éditorial',
+      'Analytics essentiels',
+      'LinkedIn, Instagram, Facebook, X'
+    ]
   },
   pro: {
     name: 'Pro',
     price: '99',
     annualPrice: '79',
-    features: ['20 posts par mois', 'IA Avancée', '3 comptes par réseau']
+    features: [
+      '120 posts / mois',
+      'Assistant IA de rédaction (illimité)',
+      'Suggestions d\'idées IA',
+      'Analytics avancés',
+      'Tout du Starter'
+    ]
   },
   business: {
     name: 'Business',
     price: '199',
     annualPrice: '159',
-    features: ['Illimité', 'Équipe (3 pers.)', 'Support Prioritaire']
+    features: [
+      '300 posts / mois (illimité)',
+      'Tout le plan Pro',
+      'Multi-comptes (jusqu\'à 5)',
+      'Gestion équipe + rôles',
+      'Agent IA avancé'
+    ]
   }
 }
 
@@ -84,7 +102,7 @@ export function PaywallOverlay({ plan }: PaywallOverlayProps) {
             </ul>
 
             <Link 
-              href="/dashboard/billing"
+              href={`/api/stripe/create-checkout?plan=${selectedPlanKey}&billing=monthly`}
               className="w-full py-4 px-6 bg-[#6366F1] hover:bg-[#4F46E5] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-200"
             >
               Activer le plan {planData.name}
@@ -94,7 +112,7 @@ export function PaywallOverlay({ plan }: PaywallOverlayProps) {
 
           <div className="text-center">
             <Link 
-              href="/dashboard/billing" 
+              href="https://creatabl-ia.com/tarifs" 
               className="text-gray-500 hover:text-gray-900 text-sm font-medium flex items-center justify-center gap-1 group"
             >
               Voir tous les plans

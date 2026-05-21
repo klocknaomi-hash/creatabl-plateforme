@@ -213,9 +213,9 @@ export function AppSidebar() {
               </div>
               <Button 
                 className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold py-2 h-auto"
-                render={<Link href="/dashboard/billing" />}
+                render={<Link href="https://creatabl-ia.com/tarifs" />}
               >
-                Voir les plans
+                Mettre à niveau
               </Button>
             </div>
           );

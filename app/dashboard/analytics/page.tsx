@@ -142,7 +142,7 @@ export default async function AnalyticsPage(props: {
           <AlertTitle className="font-bold">Fonctionnalité Pro</AlertTitle>
           <AlertDescription className="flex items-center justify-between">
             <span className="text-sm">Le Plan Starter est limité aux 7 derniers jours d'Analytics. Upgrade au Plan Pro pour l'historique complet.</span>
-            <Link href="/dashboard/billing">
+            <Link href="https://creatabl-ia.com/tarifs">
               <Button size="sm" className="ml-4 font-bold rounded-full">Upgrade</Button>
             </Link>
           </AlertDescription>
