@@ -68,6 +68,7 @@ export function AppSidebar() {
   const navMain = [
     { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
     { title: t.compose, href: "/dashboard/compose", icon: PenLine },
+    { title: "Agent IA", href: "/dashboard/agent-ia", icon: Bot, badge: "NOUVEAU" },
     { title: t.posts, href: "/dashboard/posts", icon: FileText },
     { title: t.calendar, href: "/dashboard/calendar", icon: CalendarDays },
   ];
@@ -151,8 +152,17 @@ export function AppSidebar() {
                     isActive={isActive(item.href)}
                     tooltip={item.title}
                   >
-                    <item.icon />
-                    <span>{item.title}</span>
+                    <item.icon className="size-4 shrink-0" />
+                    {'badge' in item ? (
+                      <span className="flex items-center justify-between w-full">
+                        <span>{item.title}</span>
+                        <span className="ml-auto rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary tracking-wider uppercase">
+                          {item.badge}
+                        </span>
+                      </span>
+                    ) : (
+                      <span>{item.title}</span>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -181,31 +191,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Outils IA */}
-        {access.aiAdvanced && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Outils IA</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    render={<Link href="/dashboard/agent-ia" />}
-                    isActive={isActive("/dashboard/agent-ia")}
-                    tooltip="Agent IA"
-                  >
-                    <Bot className="size-4 shrink-0" />
-                    <span className="flex items-center justify-between w-full">
-                      <span>Agent IA</span>
-                      <span className="ml-auto rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary tracking-wider uppercase">
-                        NOUVEAU
-                      </span>
-                    </span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
 
         {/* Team navigation section */}
         {access.team && (

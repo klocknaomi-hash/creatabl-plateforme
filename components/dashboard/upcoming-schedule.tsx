@@ -58,7 +58,7 @@ export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {
         {upcomingPosts.length > 0 ? (
           <div className="divide-y divide-border/10">
             {upcomingPosts.map((post: any) => {
-              const brand = getPlatformBranding(post.platforms?.[0] || "");
+              const brand = getPlatformBranding((post.platforms ?? [])[0] || "");
               const Icon = brand.icon;
               return (
                 <a 

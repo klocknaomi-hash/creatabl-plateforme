@@ -169,7 +169,7 @@ export async function GET(request: NextRequest) {
 
     let filteredPosts = allPosts;
     if (platform) {
-      filteredPosts = allPosts.filter(p => (p.platforms as string[]).includes(platform));
+      filteredPosts = allPosts.filter(p => ((p.platforms ?? []) as string[]).includes(platform));
     }
 
     return NextResponse.json({ posts: filteredPosts });

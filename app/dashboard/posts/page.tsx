@@ -183,7 +183,7 @@ export default function PostsPage() {
                     
                     {/* Floating Platforms Row */}
                     <div className="absolute bottom-3 left-3 flex gap-1.5">
-                      {post.platforms.map((plt: string) => {
+                    {(post.platforms ?? []).map((plt: string) => {
                         const brand = PLATFORM_BRANDING[plt];
                         const Icon = brand?.icon || ExternalLink;
                         return (
@@ -230,7 +230,7 @@ export default function PostsPage() {
                   <CardContent className="p-6 flex flex-col flex-1 gap-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                         {post.platforms.slice(0, 1).map((plt: string) => {
+                         {(post.platforms ?? []).slice(0, 1).map((plt: string) => {
                             const brand = PLATFORM_BRANDING[plt];
                             const Icon = brand?.icon || ExternalLink;
                             return (
@@ -240,8 +240,8 @@ export default function PostsPage() {
                               </div>
                             );
                          })}
-                         {post.platforms.length > 1 && (
-                           <span className="text-[10px] text-muted-foreground font-bold">+{post.platforms.length - 1} plus</span>
+                         {(post.platforms ?? []).length > 1 && (
+                           <span className="text-[10px] text-muted-foreground font-bold">+{(post.platforms ?? []).length - 1} plus</span>
                          )}
                       </div>
                       

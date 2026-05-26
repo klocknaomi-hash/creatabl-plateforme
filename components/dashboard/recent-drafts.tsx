@@ -73,7 +73,7 @@ export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {
                     {format(new Date(post.createdAt), "MMM d", { locale: fr })}
                   </span>
                   <div className="flex -space-x-1.5">
-                    {post.platforms?.map((p: string) => {
+                    {(post.platforms ?? []).map((p: string) => {
                       const brand = getPlatformBranding(p);
                       const Icon = brand.icon;
                       return (
