@@ -23,9 +23,30 @@ export async function GET() {
     }
 
     const workspace = await getCurrentWorkspace(userId)
-    const members = await db.query.workspaceMembers.findMany({
+    let members = await db.query.workspaceMembers.findMany({
       where: eq(workspaceMembers.workspaceId, workspace.id),
     })
+
+    // If no members exist, auto-add the owner
+    if (members.length === 0) {
+      const ownerUser = await db.query.users.findFirst({
+        where: eq(users.id, workspace.ownerId),
+      })
+      if (ownerUser) {
+        await db.insert(workspaceMembers).values({
+          workspaceId: workspace.id,
+          email: ownerUser.email,
+          userId: ownerUser.id,
+          role: 'owner',
+          status: 'active',
+        })
+
+        // Refetch members
+        members = await db.query.workspaceMembers.findMany({
+          where: eq(workspaceMembers.workspaceId, workspace.id),
+        })
+      }
+    }
 
     // Fetch user profiles for members who have a userId to get their names
     const userIds = members.map(m => m.userId).filter((id): id is string => !!id)
