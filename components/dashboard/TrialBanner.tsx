@@ -32,15 +32,15 @@ export function TrialBanner() {
   if (daysLeft <= 0 || isNaN(daysLeft)) return null
   
   return (
-    <div className="w-full bg-primary text-white px-6 py-3 flex items-center justify-between text-sm">
-      <span>
+    <div className="w-full bg-primary text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-sm shrink-0">
+      <span className="text-[13px] leading-snug">
         Tu bénéficies de toutes les fonctionnalités Business gratuitement 
-        encore <strong>{daysLeft} jour{daysLeft > 1 ? "s" : ""}</strong>. 
+        encore <strong>{daysLeft} jour{daysLeft > 1 ? "s" : ""}</strong>.
         Choisis ton plan avant la fin de l'essai.
       </span>
       <button
         onClick={() => window.location.href = "https://creatabl-ia.com/tarifs"}
-        className="ml-4 bg-white text-primary font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-gray-100 transition-colors whitespace-nowrap"
+        className="bg-white text-primary font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-white/90 transition-colors whitespace-nowrap shrink-0"
       >
         Mettre à niveau
       </button>

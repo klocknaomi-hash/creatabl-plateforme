@@ -124,7 +124,7 @@ export default async function AnalyticsPage(props: {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 max-w-screen-2xl mx-auto w-full">
       <div className="flex flex-col gap-8 border-b border-border/40 pb-10">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Analytics</h1>
@@ -264,18 +264,18 @@ export default async function AnalyticsPage(props: {
         {/* Post Performance Table */}
         <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
-            <CardTitle className="font-black text-lg">Meilleurs posts</CardTitle>
+            <CardTitle className="font-black text-sm">Meilleurs posts</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Détail de vos posts récents</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent border-border/50">
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Réseau</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Caption</TableHead>
-                  <TableHead className="text-right text-[10px] font-black uppercase tracking-widest">Likes</TableHead>
-                  <TableHead className="text-right text-[10px] font-black uppercase tracking-widest">Reach</TableHead>
-                  <TableHead className="text-right text-[10px] font-black uppercase tracking-widest">ER%</TableHead>
+                  <TableHead className="text-xs font-black uppercase tracking-widest">Réseau</TableHead>
+                  <TableHead className="text-xs font-black uppercase tracking-widest">Caption</TableHead>
+                  <TableHead className="text-right text-xs font-black uppercase tracking-widest">Likes</TableHead>
+                  <TableHead className="text-right text-xs font-black uppercase tracking-widest">Reach</TableHead>
+                  <TableHead className="text-right text-xs font-black uppercase tracking-widest">ER%</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

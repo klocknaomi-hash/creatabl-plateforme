@@ -110,9 +110,9 @@ export default async function DashboardLayout({
           <ErrorBoundary>
             <Topbar />
           </ErrorBoundary>
+          <TrialBanner />
           <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
             {showPaywall && <PaywallBanner selectedPlan={dbUser?.selectedPlan || undefined} />}
-            <TrialBanner />
             <PaywallProvider isLocked={showPaywall} selectedPlan={dbUser?.selectedPlan || null}>
               <ErrorBoundary>
                 {children}

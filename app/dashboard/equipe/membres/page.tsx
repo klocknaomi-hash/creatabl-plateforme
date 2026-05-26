@@ -230,7 +230,7 @@ export default function MembresPage() {
   const roleStyles = {
     owner: 'bg-purple-100 text-purple-700 border-purple-200',
     admin: 'bg-blue-100 text-blue-700 border-blue-200',
-    editor: 'bg-[#EEEDFE] text-[#534AB7] border-purple-100',
+    editor: 'bg-primary/10 text-primary border-primary/20',
     viewer: 'bg-amber-100 text-amber-700 border-amber-200'
   }
 
@@ -244,7 +244,7 @@ export default function MembresPage() {
   }
 
   return (
-    <div className="space-y-8 pb-10">
+    <div className="space-y-8 pb-10 max-w-screen-xl mx-auto w-full">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
@@ -258,7 +258,7 @@ export default function MembresPage() {
         </div>
         <button
           onClick={() => setShowInviteModal(true)}
-          className="inline-flex items-center justify-center gap-2 bg-[#534AB7] hover:bg-[#453da3] text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-all shadow-sm shadow-[#534AB7]/10"
+          className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-all shadow-sm shadow-primary/10"
         >
           <UserPlus className="size-4" />
           Inviter un membre
@@ -269,7 +269,7 @@ export default function MembresPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Members */}
         <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center gap-4">
-          <div className="bg-purple-50 p-3 rounded-2xl text-[#534AB7]">
+          <div className="bg-primary/10 p-3 rounded-2xl text-primary">
             <Users className="size-6" />
           </div>
           <div>
@@ -293,7 +293,7 @@ export default function MembresPage() {
 
         {/* Editors */}
         <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center gap-4">
-          <div className="bg-[#EEEDFE] p-3 rounded-2xl text-[#534AB7]">
+          <div className="bg-primary/10 p-3 rounded-2xl text-primary">
             <UserCheck className="size-6" />
           </div>
           <div>
@@ -501,10 +501,10 @@ export default function MembresPage() {
       </div>
 
       {/* FOOTER INFO BOX */}
-      <div className="bg-[#EEEDFE]/40 border border-purple-100/50 rounded-2xl p-4 flex items-center justify-between gap-4">
+      <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <Info className="size-4 text-[#534AB7] shrink-0" />
-          <span className="text-xs font-semibold text-[#534AB7] hover:underline cursor-pointer">
+          <Info className="size-4 text-primary shrink-0" />
+          <span className="text-xs font-semibold text-primary hover:underline cursor-pointer">
             En savoir plus sur les rôles et les permissions
           </span>
         </div>

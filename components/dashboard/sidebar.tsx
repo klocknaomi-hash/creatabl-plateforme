@@ -8,17 +8,16 @@ import {
   LayoutDashboard,
   PenLine,
   CalendarDays,
-  ImageIcon,
   BarChart2,
   Link2,
   CreditCard,
   PenSquare,
   FileText,
-  Settings,
   Clock,
   FolderKanban,
   Users,
-  Bot
+  Bot,
+  Building2,
 } from "lucide-react";
 
 import {
@@ -42,9 +41,9 @@ import { cn } from "@/lib/utils";
 
 import { useSettings } from "@/lib/settings-context";
 import { getTranslation } from "@/lib/i18n";
-import { WorkspaceSwitcher } from "@/components/dashboard/WorkspaceSwitcher";
 import { useAccess } from "@/hooks/useAccess";
 import { isNaomiOrTest } from "@/lib/plans";
+import { useEffect, useState } from "react";
 
 
 export function AppSidebar() {
@@ -54,14 +53,24 @@ export function AppSidebar() {
   const t = getTranslation(language);
   const access = useAccess();
 
+  // Workspace name from localStorage (set by workspace page)
+  const [workspaceName, setWorkspaceName] = useState<string | null>(null);
+  useEffect(() => {
+    const update = () => {
+      const name = localStorage.getItem('current_workspace_name');
+      setWorkspaceName(name);
+    };
+    update();
+    window.addEventListener('storage', update);
+    return () => window.removeEventListener('storage', update);
+  }, []);
+
   const navMain = [
     { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
     { title: t.compose, href: "/dashboard/compose", icon: PenLine },
     { title: t.posts, href: "/dashboard/posts", icon: FileText },
     { title: t.calendar, href: "/dashboard/calendar", icon: CalendarDays },
   ];
-
-
 
   const navContent = [
     { title: t.analytics, href: "/dashboard/analytics", icon: BarChart2 },
@@ -70,6 +79,9 @@ export function AppSidebar() {
   const navSettings = [
     { title: t.accounts, href: "/dashboard/settings/connections", icon: Link2 },
     { title: t.billing, href: "/dashboard/billing", icon: CreditCard },
+    ...(access.multiAccounts
+      ? [{ title: "Workspace", href: "/dashboard/settings/workspace", icon: Building2 }]
+      : []),
   ];
 
   function isActive(href: string) {
@@ -127,9 +139,6 @@ export function AppSidebar() {
 
       {/* ── Navigation ── */}
       <SidebarContent>
-        <div className="group-data-[collapsible=icon]:hidden">
-          <WorkspaceSwitcher />
-        </div>
         {/* Main */}
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -172,29 +181,31 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Outils IA — visible pour tous, mais non fonctionnel (bientôt) */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Outils IA</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                {/* Non cliquable : l'Agent IA n'est pas encore disponible */}
-                <div
-                  className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm cursor-not-allowed opacity-60 select-none"
-                  title="Agent IA — Bientôt disponible"
-                >
-                  <Bot className="size-4 shrink-0 text-muted-foreground" />
-                  <span className="flex items-center justify-between w-full group-data-[collapsible=icon]:hidden">
-                    <span className="text-muted-foreground font-medium">Agent IA</span>
-                    <span className="ml-auto rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 tracking-wider uppercase">
-                      Bientôt
+        {/* Outils IA */}
+        {access.aiAdvanced && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Outils IA</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={<Link href="/dashboard/agent-ia" />}
+                    isActive={isActive("/dashboard/agent-ia")}
+                    tooltip="Agent IA"
+                  >
+                    <Bot className="size-4 shrink-0" />
+                    <span className="flex items-center justify-between w-full">
+                      <span>Agent IA</span>
+                      <span className="ml-auto rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary tracking-wider uppercase">
+                        NOUVEAU
+                      </span>
                     </span>
-                  </span>
-                </div>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {/* Team navigation section */}
         {access.team && (
@@ -250,7 +261,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* ── User Footer ── */}
-      <SidebarFooter className="px-4 py-4 space-y-4 group-data-[collapsible=icon]:px-1">
+      <SidebarFooter className="px-3 py-2 space-y-2 group-data-[collapsible=icon]:px-1">
         {/* Trial Info */}
         {(() => {
           const email = user?.emailAddresses[0]?.emailAddress ?? '';
@@ -271,17 +282,17 @@ export function AppSidebar() {
           if (isNaN(daysLeft) || daysLeft <= 0) return null;
           
           return (
-            <div className="bg-primary/5 rounded-xl p-4 space-y-3 group-data-[collapsible=icon]:hidden">
-              <div className="flex items-center gap-3 text-primary">
-                <div className="bg-primary p-1.5 rounded-lg text-white">
-                  <Clock size={16} />
+            <div className="bg-primary/5 rounded-xl p-3 space-y-2 group-data-[collapsible=icon]:hidden">
+              <div className="flex items-center gap-2 text-primary">
+                <div className="bg-primary p-1 rounded-lg text-white shrink-0">
+                  <Clock size={13} />
                 </div>
-                <span className="text-xs font-bold leading-tight">
-                  Ton essai gratuit termine dans {daysLeft} jour{daysLeft > 1 ? "s" : ""}
+                <span className="text-[11px] font-bold leading-tight">
+                  Essai gratuit : {daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}
                 </span>
               </div>
-              <Button 
-                className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold py-2 h-auto"
+              <Button
+                className="w-full bg-primary hover:bg-primary/90 text-white text-[11px] font-bold h-7"
                 render={<Link href="https://creatabl-ia.com/tarifs" />}
               >
                 Mettre à niveau

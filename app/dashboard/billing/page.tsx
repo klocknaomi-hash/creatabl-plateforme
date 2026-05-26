@@ -29,7 +29,7 @@ export default async function BillingPage() {
   const progress = totalDays > 0 ? Math.max(0, Math.min(1, trialDaysLeft / totalDays)) : 0;
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-12 pb-16 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="max-w-[1600px] mx-auto space-y-12 pb-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
         <div className="space-y-0.5">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Abonnement</h1>

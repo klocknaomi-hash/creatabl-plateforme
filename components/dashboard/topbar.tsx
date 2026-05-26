@@ -20,10 +20,12 @@ const routeTitles: Record<string, string> = {
   "/dashboard/analytics": "Analytics",
   "/dashboard/accounts": "Comptes connectés",
   "/dashboard/billing": "Billing",
-  "/dashboard/settings": "Settings",
+  "/dashboard/settings": "Paramètres",
+  "/dashboard/settings/connections": "Comptes connectés",
+  "/dashboard/settings/workspace": "Espaces de travail",
   "/dashboard/equipe/projets": "Projets de l'équipe",
   "/dashboard/equipe/membres": "Membres de l'équipe",
-  "/dashboard/agent-ia": "Dashboard",
+  "/dashboard/agent-ia": "Agent IA",
 };
 
 export function Topbar() {

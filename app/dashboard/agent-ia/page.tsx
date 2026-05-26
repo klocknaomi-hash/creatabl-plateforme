@@ -54,7 +54,7 @@ export default function AgentIAPage() {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
           Agent IA ✦
         </h1>
         <p className="text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
