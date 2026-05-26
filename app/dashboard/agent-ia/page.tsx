@@ -235,10 +235,12 @@ export default function AgentIAPage() {
             Détectez automatiquement les sujets tendance du moment sur Google Trends, LinkedIn et Instagram, et générez en un clic du contenu engageant et prêt à être planifié grâce à Gemini.
           </CardContent>
           <CardFooter className="justify-center">
-            <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/95 text-white font-semibold rounded-xl transition-all shadow-sm">
-              <a href="https://creatabl-ia.com/tarifs">
-                Passer au plan Business →
-              </a>
+            <Button 
+              render={<a href="https://creatabl-ia.com/tarifs" />}
+              size="lg" 
+              className="w-full bg-primary hover:bg-primary/95 text-white font-semibold rounded-xl transition-all shadow-sm"
+            >
+              Passer au plan Business →
             </Button>
           </CardFooter>
         </Card>

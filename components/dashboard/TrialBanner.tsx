@@ -6,6 +6,10 @@ export function TrialBanner() {
   const { user } = useUser()
   const router = useRouter()
   
+  const email = user?.emailAddresses[0]?.emailAddress ?? ''
+  const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com')
+  if (isTestOrNaomi) return null
+
   const onboardingStep = user?.publicMetadata?.onboardingStep as string
   if (onboardingStep !== "done") return null
 

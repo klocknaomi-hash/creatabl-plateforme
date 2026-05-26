@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { Bell, PenSquare, Settings } from "lucide-react";
+import { Bell, PenSquare, Settings, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { cn } from "@/lib/utils";
+import { useAccess } from "@/hooks/useAccess";
 
 const routeTitles: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -20,12 +21,15 @@ const routeTitles: Record<string, string> = {
   "/dashboard/accounts": "Comptes connectés",
   "/dashboard/billing": "Billing",
   "/dashboard/settings": "Settings",
+  "/dashboard/equipe/projets": "Projets de l'équipe",
+  "/dashboard/equipe/membres": "Membres de l'équipe",
 };
 
 export function Topbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const access = useAccess();
 
   useEffect(() => {
     setMounted(true);
@@ -52,6 +56,19 @@ export function Topbar() {
 
       {/* Actions */}
       <div className="flex items-center gap-1.5">
+        {/* Inviter un membre — visible for Business plan */}
+        {access.team && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push('/dashboard/equipe/membres?invite=true')}
+            className="text-primary border-primary/20 bg-primary/5 hover:bg-primary/10 gap-1.5 hidden sm:inline-flex h-9"
+          >
+            <UserPlus className="size-4" />
+            <span>Inviter un membre</span>
+          </Button>
+        )}
+
         {/* New Post — full button on desktop */}
         <Button
           id="topbar-new-post-btn"

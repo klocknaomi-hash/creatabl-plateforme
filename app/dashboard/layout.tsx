@@ -74,8 +74,11 @@ export default async function DashboardLayout({
       // Continue anyway — don't crash the layout
     }
     
+    const userEmail = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
+    const isTestOrNaomi = userEmail === 'klock.naomi@gmail.com' || userEmail.endsWith('-test@creatabl-ia.com')
+
     const onboardingStep = clerkUser?.publicMetadata?.onboardingStep
-    const showOnboarding = !onboardingStep || onboardingStep !== 'done'
+    const showOnboarding = !isTestOrNaomi && (!onboardingStep || onboardingStep !== 'done')
     
     const now = new Date()
     const trialEndsAt = clerkUser?.publicMetadata?.trialEndsAt 
@@ -92,8 +95,8 @@ export default async function DashboardLayout({
       hasActiveSubscription = true // fail open, don't block
     }
 
-    const userEmail = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
-    const showPaywall = !hasActiveSubscription && 
+    const showPaywall = !isTestOrNaomi &&
+                        !hasActiveSubscription && 
                         !showOnboarding &&
                         !userEmail.endsWith('@creatabl-ia.com')
 
