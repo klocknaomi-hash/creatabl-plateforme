@@ -172,31 +172,29 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Outils IA */}
-        {access.aiAdvanced && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Outils IA</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    render={<Link href="/dashboard/agent-ia" />}
-                    isActive={isActive("/dashboard/agent-ia")}
-                    tooltip="Agent IA"
-                  >
-                    <Bot className="size-4 shrink-0" />
-                    <span className="flex items-center justify-between w-full">
-                      <span>Agent IA</span>
-                      <span className="ml-auto rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary tracking-wider uppercase">
-                        NOUVEAU
-                      </span>
+        {/* Outils IA — visible pour tous, mais non fonctionnel (bientôt) */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Outils IA</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                {/* Non cliquable : l'Agent IA n'est pas encore disponible */}
+                <div
+                  className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm cursor-not-allowed opacity-60 select-none"
+                  title="Agent IA — Bientôt disponible"
+                >
+                  <Bot className="size-4 shrink-0 text-muted-foreground" />
+                  <span className="flex items-center justify-between w-full group-data-[collapsible=icon]:hidden">
+                    <span className="text-muted-foreground font-medium">Agent IA</span>
+                    <span className="ml-auto rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 tracking-wider uppercase">
+                      Bientôt
                     </span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+                  </span>
+                </div>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
         {/* Team navigation section */}
         {access.team && (

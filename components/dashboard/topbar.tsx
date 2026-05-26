@@ -23,6 +23,7 @@ const routeTitles: Record<string, string> = {
   "/dashboard/settings": "Settings",
   "/dashboard/equipe/projets": "Projets de l'équipe",
   "/dashboard/equipe/membres": "Membres de l'équipe",
+  "/dashboard/agent-ia": "Dashboard",
 };
 
 export function Topbar() {
