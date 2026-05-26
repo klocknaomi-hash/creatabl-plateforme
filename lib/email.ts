@@ -1,6 +1,13 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resendApiKey = process.env.RESEND_API_KEY
+const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@creatabl-ia.com'
+
+if (!resendApiKey || resendApiKey.startsWith('re_placeholder') || resendApiKey === 're_...') {
+  console.warn('RESEND_API_KEY is not configured or using a placeholder. Invitation emails will be logged to console instead.')
+}
+
+const resend = new Resend(resendApiKey || 're_dummy_key')
 
 interface SendInvitationParams {
   toEmail: string
@@ -28,6 +35,16 @@ export async function sendTeamInvitation({
   }
 
   const roleLabel = roleLabels[role] || role
+
+  if (!resendApiKey || resendApiKey.startsWith('re_placeholder') || resendApiKey === 're_...') {
+    console.log('--- [MOCK EMAIL SEND] ---')
+    console.log(`To: ${toEmail}`)
+    console.log(`Subject: ${inviterName} vous invite à rejoindre son équipe sur Creatabl.ia`)
+    console.log(`URL: ${inviteUrl}`)
+    console.log(`Role: ${roleLabel}`)
+    console.log('-------------------------')
+    return { success: true, mock: true }
+  }
 
   const html = `
     <!DOCTYPE html>
@@ -80,8 +97,6 @@ export async function sendTeamInvitation({
       </body>
     </html>
   `
-
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@creatabl-ia.com'
 
   try {
     const data = await resend.emails.send({
