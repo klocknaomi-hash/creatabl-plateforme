@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { users, posts, socialAccounts, mediaAssets } from "@/lib/db/schema";
 import { eq, count, and, gte } from "drizzle-orm";
+import { isNaomiOrTest } from "@/lib/plans";
 
 export const PLAN_LIMITS = {
   starter: {
@@ -75,8 +76,8 @@ export async function checkPlanLimit(clerkId: string, feature: 'posts' | 'ai' | 
 
   if (!user) return { allowed: false, message: "User not found" };
 
-  const isTestOrNaomi = user.email === 'klock.naomi@gmail.com' || user.email.endsWith('-test@creatabl-ia.com');
-  const plan = isTestOrNaomi ? 'business' : ((user.selectedPlan || "starter") as PlanType);
+  const isTest = isNaomiOrTest(user.email);
+  const plan = isTest ? 'business' : ((user.selectedPlan || "starter") as PlanType);
   const limits = PLAN_LIMITS[plan];
 
   if (feature === 'posts') {

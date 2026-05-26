@@ -2,6 +2,7 @@ import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { isNaomiOrTest } from './plans'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
@@ -34,8 +35,8 @@ export async function generateCaption({
 }) {
 
   // 1. Check rate limit (skip for test accounts)
-  const isTestOrNaomi = userEmail === 'klock.naomi@gmail.com' || userEmail.endsWith('-test@creatabl-ia.com') || userEmail.endsWith('@creatabl-ia.com');
-  if (!isTestOrNaomi) {
+  const isTest = isNaomiOrTest(userEmail) || userEmail.endsWith('@creatabl-ia.com');
+  if (!isTest) {
     const { checkAndIncrementUsage } = await import('./ai-rate-limit')
     const allowed = await checkAndIncrementUsage(userId)
     if (!allowed) {

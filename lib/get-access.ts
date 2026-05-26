@@ -1,5 +1,5 @@
 import { auth, clerkClient } from '@clerk/nextjs/server'
-import { getPlanAccess, PlanAccess } from '@/lib/plans'
+import { getPlanAccess, PlanAccess, isNaomiOrTest } from '@/lib/plans'
 
 export async function getAccess(): Promise<PlanAccess> {
   const { userId } = await auth()
@@ -9,9 +9,9 @@ export async function getAccess(): Promise<PlanAccess> {
   const user = await client.users.getUser(userId)
   
   const email = user.emailAddresses[0]?.emailAddress ?? ''
-  const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com')
+  const isTest = isNaomiOrTest(email)
   
-  const plan = isTestOrNaomi ? 'business' : ((user.publicMetadata?.plan as string) || 'starter')
+  const plan = isTest ? 'business' : ((user.publicMetadata?.plan as string) || 'starter')
 
   return getPlanAccess(plan)
 }

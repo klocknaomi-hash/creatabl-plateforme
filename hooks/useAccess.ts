@@ -1,16 +1,16 @@
 'use client'
 import { useUser } from '@clerk/nextjs'
-import { getPlanAccess, PlanAccess } from '@/lib/plans'
+import { getPlanAccess, PlanAccess, isNaomiOrTest } from '@/lib/plans'
 
 export function useAccess(): PlanAccess {
   const { user } = useUser()
 
   const email = user?.emailAddresses[0]?.emailAddress ?? ''
-  const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com')
+  const isTest = isNaomiOrTest(email)
 
   // Get plan from user's public metadata
   // This is set by the Stripe webhook after checkout
-  const plan = isTestOrNaomi ? 'business' : ((user?.publicMetadata?.plan as string) || 'starter')
+  const plan = isTest ? 'business' : ((user?.publicMetadata?.plan as string) || 'starter')
 
   return getPlanAccess(plan)
 }

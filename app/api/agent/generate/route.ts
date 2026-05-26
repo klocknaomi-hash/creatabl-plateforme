@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
+import { isNaomiOrTest } from '@/lib/plans'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,9 +35,9 @@ export async function POST(req: Request) {
     const isPremium = plan === 'pro' || plan === 'business' || plan === 'agency'
     const trialEndsAt = dbUser.trialEndsAt
     const trialActive = trialEndsAt && new Date(trialEndsAt) > new Date()
-    const isTestOrNaomi = dbUser.email === 'klock.naomi@gmail.com' || dbUser.email.endsWith('-test@creatabl-ia.com') || dbUser.email.endsWith('@creatabl-ia.com')
+    const isTest = isNaomiOrTest(dbUser.email) || dbUser.email.endsWith('@creatabl-ia.com')
     
-    if (!isPremium && !trialActive && !isTestOrNaomi) {
+    if (!isPremium && !trialActive && !isTest) {
       return NextResponse.json(
         { error: 'Upgrade required to access AI Agent feature' },
         { status: 403 }

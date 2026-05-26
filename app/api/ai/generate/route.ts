@@ -4,6 +4,7 @@ import { generateCaption } from '@/lib/ai-generate'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
+import { isNaomiOrTest } from '@/lib/plans'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,9 +29,9 @@ export async function POST(req: Request) {
     const trialEndsAt = dbUser?.trialEndsAt
     const hasSubscription = dbUser?.stripeSubscriptionId != null
     const trialActive = trialEndsAt && new Date(trialEndsAt) > new Date()
-    const isTestOrNaomi = userEmail === 'klock.naomi@gmail.com' || userEmail.endsWith('-test@creatabl-ia.com') || userEmail.endsWith('@creatabl-ia.com')
+    const isTest = isNaomiOrTest(userEmail) || userEmail.endsWith('@creatabl-ia.com')
 
-    if (!trialActive && !hasSubscription && !isTestOrNaomi) {
+    if (!trialActive && !hasSubscription && !isTest) {
       return NextResponse.json({
         success: false,
         error: 'TRIAL_EXPIRED',

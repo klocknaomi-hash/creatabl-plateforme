@@ -75,3 +75,11 @@ export function getPlanAccess(plan: string): PlanAccess {
     : 'starter'
   return PLAN_CONFIG[validPlan]
 }
+
+export function isNaomiOrTest(email?: string | null): boolean {
+  if (!email) return false;
+  const normalized = email.toLowerCase().trim();
+  return normalized === 'klock.naomi@gmail.com' || 
+         normalized === 'klocknaomi@gmail.com' || 
+         normalized.endsWith('-test@creatabl-ia.com');
+}

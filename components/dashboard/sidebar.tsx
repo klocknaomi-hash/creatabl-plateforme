@@ -44,6 +44,7 @@ import { useSettings } from "@/lib/settings-context";
 import { getTranslation } from "@/lib/i18n";
 import { WorkspaceSwitcher } from "@/components/dashboard/WorkspaceSwitcher";
 import { useAccess } from "@/hooks/useAccess";
+import { isNaomiOrTest } from "@/lib/plans";
 
 
 export function AppSidebar() {
@@ -255,8 +256,7 @@ export function AppSidebar() {
         {/* Trial Info */}
         {(() => {
           const email = user?.emailAddresses[0]?.emailAddress ?? '';
-          const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com');
-          if (isTestOrNaomi) return null;
+          if (isNaomiOrTest(email)) return null;
 
           let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
           

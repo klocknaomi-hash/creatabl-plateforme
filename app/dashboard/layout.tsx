@@ -14,6 +14,7 @@ import { TrialBanner } from "@/components/dashboard/TrialBanner";
 import { PaywallOverlay } from "@/components/PaywallOverlay";
 import { PaywallBanner } from "@/components/dashboard/PaywallBanner"
 import { PaywallProvider } from "@/lib/paywall-context"
+import { isNaomiOrTest } from "@/lib/plans"
 
 export default async function DashboardLayout({
   children,
@@ -75,7 +76,7 @@ export default async function DashboardLayout({
     }
     
     const userEmail = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
-    const isTestOrNaomi = userEmail === 'klock.naomi@gmail.com' || userEmail.endsWith('-test@creatabl-ia.com')
+    const isTestOrNaomi = isNaomiOrTest(userEmail)
 
     const onboardingStep = clerkUser?.publicMetadata?.onboardingStep
     const showOnboarding = !isTestOrNaomi && (!onboardingStep || onboardingStep !== 'done')
