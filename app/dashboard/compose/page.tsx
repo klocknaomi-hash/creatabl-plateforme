@@ -113,7 +113,16 @@ function ComposePageInner() {
       }
     };
 
-    if (idParam) {
+    const contentParam = searchParams.get("content");
+    const platformParam = searchParams.get("platform");
+
+    if (contentParam) {
+      setContent(decodeURIComponent(contentParam));
+      if (platformParam) {
+        const platforms = platformParam.split(",").map(p => p.trim().toLowerCase());
+        setSelectedPlatforms(platforms);
+      }
+    } else if (idParam) {
       fetchPost(idParam, false);
     } else if (duplicateParam) {
       fetchPost(duplicateParam, true);

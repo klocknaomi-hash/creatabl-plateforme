@@ -15,7 +15,10 @@ import {
   PenSquare,
   FileText,
   Settings,
-  Clock
+  Clock,
+  FolderKanban,
+  Users,
+  Bot
 } from "lucide-react";
 
 import {
@@ -40,6 +43,7 @@ import { cn } from "@/lib/utils";
 import { useSettings } from "@/lib/settings-context";
 import { getTranslation } from "@/lib/i18n";
 import { WorkspaceSwitcher } from "@/components/dashboard/WorkspaceSwitcher";
+import { useAccess } from "@/hooks/useAccess";
 
 
 export function AppSidebar() {
@@ -47,6 +51,7 @@ export function AppSidebar() {
   const { user } = useUser();
   const { language } = useSettings();
   const t = getTranslation(language);
+  const access = useAccess();
 
   const navMain = [
     { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
@@ -165,6 +170,63 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Outils IA */}
+        {access.aiAdvanced && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Outils IA</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={<Link href="/dashboard/agent-ia" />}
+                    isActive={isActive("/dashboard/agent-ia")}
+                    tooltip="Agent IA"
+                  >
+                    <Bot className="size-4 shrink-0" />
+                    <span className="flex items-center justify-between w-full">
+                      <span>Agent IA</span>
+                      <span className="ml-auto rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary tracking-wider uppercase">
+                        NOUVEAU
+                      </span>
+                    </span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {/* Team navigation section */}
+        {access.team && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Équipe</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={<Link href="/dashboard/equipe/projets" />}
+                    isActive={isActive("/dashboard/equipe/projets")}
+                    tooltip="Projets"
+                  >
+                    <FolderKanban />
+                    <span>Projets</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={<Link href="/dashboard/equipe/membres" />}
+                    isActive={isActive("/dashboard/equipe/membres")}
+                    tooltip="Membres"
+                  >
+                    <Users />
+                    <span>Membres</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {/* Settings */}
         <SidebarGroup>
