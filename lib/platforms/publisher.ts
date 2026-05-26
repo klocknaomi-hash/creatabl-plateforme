@@ -68,6 +68,7 @@ export async function publishPostImmediately(postId: string, userId: string) {
         trialStartedAt: user.trialStartedAt,
         trialEndsAt: user.trialEndsAt,
         isSubscribed: user.isSubscribed || false,
+        email: user.email,
       });
 
       const isTrialActive = trialStatus.status === 'trial';

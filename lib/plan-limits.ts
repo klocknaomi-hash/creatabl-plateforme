@@ -75,7 +75,8 @@ export async function checkPlanLimit(clerkId: string, feature: 'posts' | 'ai' | 
 
   if (!user) return { allowed: false, message: "User not found" };
 
-  const plan = (user.selectedPlan || "starter") as PlanType;
+  const isTestOrNaomi = user.email === 'klock.naomi@gmail.com' || user.email.endsWith('-test@creatabl-ia.com');
+  const plan = isTestOrNaomi ? 'business' : ((user.selectedPlan || "starter") as PlanType);
   const limits = PLAN_LIMITS[plan];
 
   if (feature === 'posts') {

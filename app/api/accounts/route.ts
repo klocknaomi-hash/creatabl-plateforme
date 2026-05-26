@@ -71,6 +71,7 @@ export async function GET(request: NextRequest) {
       trialStartedAt: userRecord.trialStartedAt,
       trialEndsAt: userRecord.trialEndsAt,
       isSubscribed: userRecord.isSubscribed || false,
+      email: userRecord.email,
     });
 
     const isTrialActive = trialStatus.status === 'trial';

@@ -34,7 +34,8 @@ export async function generateCaption({
 }) {
 
   // 1. Check rate limit (skip for test accounts)
-  if (!userEmail.endsWith('@creatabl-ia.com')) {
+  const isTestOrNaomi = userEmail === 'klock.naomi@gmail.com' || userEmail.endsWith('-test@creatabl-ia.com') || userEmail.endsWith('@creatabl-ia.com');
+  if (!isTestOrNaomi) {
     const { checkAndIncrementUsage } = await import('./ai-rate-limit')
     const allowed = await checkAndIncrementUsage(userId)
     if (!allowed) {

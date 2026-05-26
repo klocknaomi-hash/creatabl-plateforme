@@ -5,10 +5,12 @@ import { getPlanAccess, PlanAccess } from '@/lib/plans'
 export function useAccess(): PlanAccess {
   const { user } = useUser()
 
+  const email = user?.emailAddresses[0]?.emailAddress ?? ''
+  const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com')
+
   // Get plan from user's public metadata
   // This is set by the Stripe webhook after checkout
-  const plan = (user?.publicMetadata?.plan as string)
-    || 'starter'
+  const plan = isTestOrNaomi ? 'business' : ((user?.publicMetadata?.plan as string) || 'starter')
 
   return getPlanAccess(plan)
 }

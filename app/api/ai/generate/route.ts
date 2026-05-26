@@ -28,9 +28,9 @@ export async function POST(req: Request) {
     const trialEndsAt = dbUser?.trialEndsAt
     const hasSubscription = dbUser?.stripeSubscriptionId != null
     const trialActive = trialEndsAt && new Date(trialEndsAt) > new Date()
+    const isTestOrNaomi = userEmail === 'klock.naomi@gmail.com' || userEmail.endsWith('-test@creatabl-ia.com') || userEmail.endsWith('@creatabl-ia.com')
 
-    if (!trialActive && !hasSubscription && 
-        !userEmail.endsWith('@creatabl-ia.com')) {
+    if (!trialActive && !hasSubscription && !isTestOrNaomi) {
       return NextResponse.json({
         success: false,
         error: 'TRIAL_EXPIRED',

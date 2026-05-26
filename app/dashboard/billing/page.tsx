@@ -14,6 +14,7 @@ export default async function BillingPage() {
     trialStartedAt: user.trialStartedAt,
     trialEndsAt: user.trialEndsAt,
     isSubscribed: user.isSubscribed ?? false,
+    email: user.email,
   });
 
   const isTrial = trialStatus.status === 'trial';

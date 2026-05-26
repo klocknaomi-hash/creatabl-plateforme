@@ -34,8 +34,9 @@ export async function POST(req: Request) {
     const isPremium = plan === 'pro' || plan === 'business' || plan === 'agency'
     const trialEndsAt = dbUser.trialEndsAt
     const trialActive = trialEndsAt && new Date(trialEndsAt) > new Date()
+    const isTestOrNaomi = dbUser.email === 'klock.naomi@gmail.com' || dbUser.email.endsWith('-test@creatabl-ia.com') || dbUser.email.endsWith('@creatabl-ia.com')
     
-    if (!isPremium && !trialActive && !dbUser.email.endsWith('@creatabl-ia.com')) {
+    if (!isPremium && !trialActive && !isTestOrNaomi) {
       return NextResponse.json(
         { error: 'Upgrade required to access AI Agent feature' },
         { status: 403 }

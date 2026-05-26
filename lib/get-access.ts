@@ -7,8 +7,11 @@ export async function getAccess(): Promise<PlanAccess> {
 
   const client = await clerkClient()
   const user = await client.users.getUser(userId)
-  const plan = (user.publicMetadata?.plan as string)
-    || 'starter'
+  
+  const email = user.emailAddresses[0]?.emailAddress ?? ''
+  const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com')
+  
+  const plan = isTestOrNaomi ? 'business' : ((user.publicMetadata?.plan as string) || 'starter')
 
   return getPlanAccess(plan)
 }

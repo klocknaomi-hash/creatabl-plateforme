@@ -254,6 +254,10 @@ export function AppSidebar() {
       <SidebarFooter className="px-4 py-4 space-y-4 group-data-[collapsible=icon]:px-1">
         {/* Trial Info */}
         {(() => {
+          const email = user?.emailAddresses[0]?.emailAddress ?? '';
+          const isTestOrNaomi = email === 'klock.naomi@gmail.com' || email.endsWith('-test@creatabl-ia.com');
+          if (isTestOrNaomi) return null;
+
           let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
           
           // Fallback to 7 days from creation if trialEndsAt is missing

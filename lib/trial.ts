@@ -2,7 +2,12 @@ export function getTrialStatus(user: {
   trialStartedAt?: Date | null
   trialEndsAt: Date | null
   isSubscribed: boolean
+  email?: string
 }) {
+  if (user.email === 'klock.naomi@gmail.com' || (user.email && user.email.endsWith('-test@creatabl-ia.com'))) {
+    return { status: 'active', daysLeft: null }
+  }
+
   if (user.isSubscribed) {
     return { status: 'active', daysLeft: null }
   }

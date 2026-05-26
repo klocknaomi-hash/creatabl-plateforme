@@ -174,6 +174,7 @@ export default async function AccountsPage({
     trialStartedAt: user.trialStartedAt,
     trialEndsAt: user.trialEndsAt,
     isSubscribed: user.isSubscribed || false,
+    email: user.email,
   });
 
   const isTrialActive = trialStatus.status === 'trial';
