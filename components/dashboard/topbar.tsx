@@ -12,6 +12,8 @@ import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useAccess } from "@/hooks/useAccess";
 
+import { NotificationsPopover } from "@/components/dashboard/notifications-popover";
+
 const routeTitles: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/dashboard/posts": "Posts",
@@ -93,14 +95,8 @@ export function Topbar() {
           <PenSquare />
         </Button>
 
-        {/* Notification bell (placeholder) */}
-        <button
-          id="topbar-notification-bell"
-          className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }))}
-          aria-label="Notifications"
-        >
-          <Bell />
-        </button>
+        {/* Notifications */}
+        <NotificationsPopover />
 
         {/* Theme toggle */}
         <ThemeToggle />

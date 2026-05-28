@@ -27,6 +27,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
+import { NotificationsPopover } from '@/components/dashboard/notifications-popover'
 
 interface Member {
   id: string
@@ -297,15 +298,7 @@ export default function MembresPage() {
           </button>
           
           {/* Notifications Bell */}
-          <button 
-            onClick={() => toast.info("Vous avez 2 nouvelles notifications.")}
-            className="relative p-2 rounded-full border border-gray-100 hover:bg-gray-50 text-gray-600 hover:text-gray-800 transition-all cursor-pointer bg-white"
-          >
-            <Bell className="size-4.5" />
-            <span className="absolute -top-1 -right-1 size-4 bg-[#534AB7] rounded-full text-white text-[9px] font-bold flex items-center justify-center border border-white">
-              2
-            </span>
-          </button>
+          <NotificationsPopover className="rounded-full border border-gray-100 bg-white hover:bg-gray-50 size-9.5 flex items-center justify-center text-gray-600 hover:text-gray-800 shadow-none font-normal shrink-0" />
           
           {/* Connected User Avatar */}
           <img 
