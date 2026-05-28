@@ -16,8 +16,7 @@ import {
   FolderKanban,
   Users,
   Building2,
-  Lightbulb,
-  Plus,
+  Bot,
 } from "lucide-react";
 
 import {
@@ -67,9 +66,10 @@ export function AppSidebar() {
 
   const navMain: { title: string; href: string; icon: any; badge?: string }[] = [
     { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
+    { title: t.compose, href: "/dashboard/compose", icon: PenSquare },
+    { title: "Agent IA", href: "/dashboard/agent-ia", icon: Bot },
     { title: t.posts, href: "/dashboard/posts", icon: FileText },
     { title: t.calendar, href: "/dashboard/calendar", icon: CalendarDays },
-    { title: "Idées IA", href: "/dashboard/agent-ia", icon: Lightbulb },
   ];
 
   const navContent = [
@@ -123,15 +123,15 @@ export function AppSidebar() {
       </SidebarHeader>
 
       {/* ── New Post CTA ── */}
-      <div className="px-3 pb-3 group-data-[collapsible=icon]:px-1">
+      <div className="px-2 pb-2 group-data-[collapsible=icon]:px-1">
         <Button
           id="sidebar-new-post-btn"
-          className="w-full justify-start gap-2 bg-[#534AB7] hover:bg-[#453da3] text-white font-bold rounded-xl h-10 px-3 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0 border-transparent shadow-sm"
+          className="w-full justify-start gap-2 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
           render={<Link href="/dashboard/compose" />}
           size="sm"
         >
-          <Plus className="size-4 shrink-0" />
-          <span className="group-data-[collapsible=icon]:hidden">Créer un post</span>
+          <PenSquare className="size-4 shrink-0" />
+          <span className="group-data-[collapsible=icon]:hidden">{t.newPost}</span>
         </Button>
       </div>
 
