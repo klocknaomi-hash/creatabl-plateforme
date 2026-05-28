@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
+import { NotificationsPopover } from '@/components/dashboard/notifications-popover'
 
 // Interfaces
 interface CommentItem {
@@ -606,13 +607,27 @@ export default function ProjetsPage() {
             </h1>
             <p className="text-sm text-gray-500 mt-1">Organisez et collaborez sur vos contenus.</p>
           </div>
-          <button
-            onClick={() => router.push('/dashboard/equipe/membres?invite=true')}
-            className="inline-flex items-center justify-center gap-2 bg-[#EEEDFE] hover:bg-[#dedcfb] text-[#534AB7] border border-purple-100 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
-          >
-            <UserPlus className="size-4" />
-            Inviter un membre
-          </button>
+          
+          <div className="flex items-center gap-3.5 self-end sm:self-auto">
+            <button
+              onClick={() => router.push('/dashboard/equipe/membres?invite=true')}
+              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#534AB7]/5 text-[#534AB7] border border-[#534AB7]/20 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
+            >
+              <UserPlus className="size-4 text-[#534AB7]" />
+              Inviter un membre
+            </button>
+            
+            {/* Notifications Bell */}
+            <NotificationsPopover className="rounded-full border border-gray-100 bg-white hover:bg-gray-50 size-9.5 flex items-center justify-center text-gray-600 hover:text-gray-800 shadow-none font-normal shrink-0" />
+            
+            {/* Connected User Avatar */}
+            <img 
+              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces&q=80" 
+              alt="Naomi K."
+              className="size-9.5 rounded-full border border-gray-200 object-cover cursor-pointer hover:opacity-90 transition-all"
+              onClick={() => toast.info("Connecté en tant que Naomi K.")}
+            />
+          </div>
         </div>
 
         {/* TABS & VIEW CONTROLS */}

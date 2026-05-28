@@ -47,8 +47,9 @@ export function Topbar() {
       .sort((a, b) => b[0].length - a[0].length)[0]?.[1] ?? "Dashboard";
 
   const isMembresPage = pathname === "/dashboard/equipe/membres";
+  const isProjetsPage = pathname === "/dashboard/equipe/projets";
 
-  if (!mounted || isMembresPage) {
+  if (!mounted || isMembresPage || isProjetsPage) {
     return null;
   }
 
