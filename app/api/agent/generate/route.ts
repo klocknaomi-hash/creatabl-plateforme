@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 
     // 3. Read body parameters
     const body = await req.json()
-    const { trend } = body
+    const { trend, source } = body
 
     if (!trend) {
       return NextResponse.json(
@@ -74,6 +74,14 @@ export async function POST(req: Request) {
     const prompt = `
 Tu es un expert en marketing sur les réseaux sociaux. Tu écris uniquement en français.
 La tendance du moment est: "${trend}"
+Source de cette tendance: "${source || 'Google Trends'}"
+
+${source === 'YouTube' ? 
+  "Cette tendance vient de YouTube — génère des idées de contenu vidéo et de posts qui s'inspirent de ce format." : ''}
+${source?.includes('Reddit') ? 
+  "Cette tendance vient de Reddit — génère des idées de posts authentiques et conversationnels qui engagent la communauté." : ''}
+${source === 'Google' || source === 'Google Trends' ? 
+  "Cette tendance est générale — génère des idées de posts informatifs et éducatifs." : ''}
 
 Génère 3 idées de posts différentes basées sur cette tendance. Pour chaque idée, donne:
 - Un titre accrocheur (title)

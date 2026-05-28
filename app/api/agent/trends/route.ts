@@ -1,91 +1,147 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const geo = searchParams.get('geo') || process.env.GOOGLE_TRENDS_GEO || 'FR'
-  const cacheTtlStr = process.env.GOOGLE_TRENDS_CACHE_TTL
-  const cacheTtl = cacheTtlStr ? parseInt(cacheTtlStr, 10) : 3600
+export async function GET(req: NextRequest) {
+  const geo = process.env.GOOGLE_TRENDS_GEO || 'FR'
 
+  const [googleTrends, redditTrends, youtubeTrends] =
+    await Promise.allSettled([
+      fetchGoogleTrends(geo),
+      fetchRedditTrends(),
+      fetchYoutubeTrends(),
+    ])
+
+  const trends = [
+    ...(googleTrends.status === 'fulfilled'
+      ? googleTrends.value : []),
+    ...(redditTrends.status === 'fulfilled'
+      ? redditTrends.value : []),
+    ...(youtubeTrends.status === 'fulfilled'
+      ? youtubeTrends.value : []),
+  ]
+
+  return NextResponse.json({
+    trends: trends.slice(0, 12),
+    sources: ['Google Trends', 'Reddit', 'YouTube'],
+    updatedAt: new Date().toISOString(),
+  })
+}
+
+// ─── Google Trends ───
+async function fetchGoogleTrends(geo: string) {
   try {
     const res = await fetch(
       `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${geo}`,
-      { 
-        next: { revalidate: cacheTtl },
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-      }
+      { next: { revalidate: 3600 } }
     )
-    
-    if (!res.ok) {
-      throw new Error(`Google Trends RSS responded with status: ${res.status}`)
-    }
-
     const xml = await res.text()
+    const titles = xml.match(
+      /<title><!\[CDATA\[(.*?)\]\]><\/title>/g
+    ) || []
 
-    // Parse XML to extract trending topics
-    const trends = parseGoogleTrendsXML(xml)
-
-    return NextResponse.json({ trends })
-  } catch (error) {
-    console.error('Failed to fetch Google Trends. Returning fallback mock trends.', error)
-    // Fallback mock trends if API fails
-    return NextResponse.json({
-      trends: [
-        {
-          title: '#MarketingIA',
-          platform: 'LinkedIn',
-          growth: '+245%',
-          status: 'Très viral'
-        },
-        {
-          title: '#ContentCreator',
-          platform: 'Instagram',
-          growth: '+120%',
-          status: 'Viral'
-        },
-        {
-          title: '#SmallBusiness',
-          platform: 'TikTok',
-          growth: '+88%',
-          status: 'En hausse'
-        },
-        {
-          title: '#Productivité',
-          platform: 'LinkedIn',
-          growth: '+63%',
-          status: 'En hausse'
-        },
-      ]
-    })
+    return titles.slice(1, 4).map((t, i) => ({
+      title: t.replace(
+        /<title><!\[CDATA\[|\]\]><\/title>/g, ''
+      ),
+      platform: 'Google',
+      source: 'Google Trends',
+      growth: ['+245%', '+180%', '+120%'][i],
+      status: ['Très viral', 'Viral', 'En hausse'][i],
+      category: 'Tendance',
+    }))
+  } catch {
+    return []
   }
 }
 
-function parseGoogleTrendsXML(xml: string) {
-  // Extract text from <title> tags. They can be <title>Topic</title> or <title><![CDATA[Topic]]></title>
-  const items = xml.match(/<title>(.*?)<\/title>/g) || []
-  
-  // Clean titles
-  const cleaned = items.map(item => {
-    let title = item.replace(/<\/?title>/g, '') // remove <title> and </title>
-    title = title.replace(/<!\[CDATA\[|\]\]>/g, '') // remove CDATA wrappers
-    return title.trim()
-  })
+// ─── Reddit ───
+async function fetchRedditTrends() {
+  try {
+    const subreddits = [
+      'marketing',
+      'socialmedia',
+      'entrepreneur',
+      'contentcreation',
+    ]
 
-  // The first title in RSS feed is usually the feed title (e.g. "Daily Trends"), so we skip it
-  // Get up to 4 items
-  const trendTitles = cleaned.filter(t => t && t !== 'Daily Trends' && !t.includes('Trending Searches')).slice(0, 4)
+    const results = await Promise.all(
+      subreddits.slice(0, 2).map(async sub => {
+        const res = await fetch(
+          `https://www.reddit.com/r/${sub}/hot.json?limit=3`,
+          {
+            headers: {
+              'User-Agent': process.env.REDDIT_USER_AGENT
+                || 'Creatabl/1.0',
+            },
+            next: { revalidate: 3600 },
+          }
+        )
+        const data = await res.json()
+        return data.data?.children?.map(
+          (post: any) => ({
+            title: '#' + post.data.title
+              .split(' ')
+              .slice(0, 3)
+              .join('')
+              .replace(/[^a-zA-Z0-9]/g, ''),
+            fullTitle: post.data.title,
+            platform: 'Reddit',
+            source: `r/${sub}`,
+            growth: `+${post.data.score
+              .toString()
+              .slice(0, 2)}%`,
+            status: post.data.score > 1000
+              ? 'Viral' : 'En hausse',
+            category: 'Discussion',
+            url: `https://reddit.com${post.data.permalink}`,
+          })
+        ) || []
+      })
+    )
 
-  if (trendTitles.length === 0) {
-    throw new Error("No trends found in XML")
+    return results.flat().slice(0, 4)
+  } catch {
+    return []
   }
+}
 
-  return trendTitles.map((title, i) => ({
-    title: title.startsWith('#') ? title : `#${title.replace(/\s+/g, '')}`,
-    platform: ['LinkedIn', 'Instagram', 'TikTok', 'LinkedIn'][i % 4],
-    growth: ['+245%', '+120%', '+88%', '+63%'][i % 4],
-    status: ['Très viral', 'Viral', 'En hausse', 'En hausse'][i % 4],
-  }))
+// ─── YouTube ───
+async function fetchYoutubeTrends() {
+  try {
+    if (!process.env.YOUTUBE_API_KEY) return []
+
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?` +
+      `part=snippet,statistics` +
+      `&chart=mostPopular` +
+      `&regionCode=FR` +
+      `&videoCategoryId=22` +
+      `&maxResults=4` +
+      `&key=${process.env.YOUTUBE_API_KEY}`,
+      { next: { revalidate: 3600 } }
+    )
+    const data = await res.json()
+
+    return data.items?.map((video: any) => ({
+      title: '#' + video.snippet.title
+        .split(' ')
+        .slice(0, 2)
+        .join('')
+        .replace(/[^a-zA-Z0-9]/g, ''),
+      fullTitle: video.snippet.title,
+      platform: 'YouTube',
+      source: 'YouTube Trending',
+      growth: `+${Math.floor(
+        parseInt(video.statistics.viewCount) / 10000
+      )}%`,
+      status: parseInt(video.statistics.viewCount)
+        > 100000 ? 'Très viral' : 'En hausse',
+      category: 'Vidéo',
+      thumbnail: video.snippet.thumbnails?.medium?.url,
+      url: `https://youtube.com/watch?v=${video.id}`,
+    })) || []
+  } catch {
+    return []
+  }
 }

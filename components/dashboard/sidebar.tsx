@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
-  PenLine,
   CalendarDays,
   BarChart2,
   Link2,
@@ -16,8 +15,9 @@ import {
   Clock,
   FolderKanban,
   Users,
-  Bot,
   Building2,
+  Lightbulb,
+  Plus,
 } from "lucide-react";
 
 import {
@@ -65,12 +65,11 @@ export function AppSidebar() {
     return () => window.removeEventListener('storage', update);
   }, []);
 
-  const navMain = [
+  const navMain: { title: string; href: string; icon: any; badge?: string }[] = [
     { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
-    { title: t.compose, href: "/dashboard/compose", icon: PenLine },
-    { title: "Agent IA", href: "/dashboard/agent-ia", icon: Bot, badge: "NOUVEAU" },
     { title: t.posts, href: "/dashboard/posts", icon: FileText },
     { title: t.calendar, href: "/dashboard/calendar", icon: CalendarDays },
+    { title: "Idées IA", href: "/dashboard/agent-ia", icon: Lightbulb },
   ];
 
   const navContent = [
@@ -124,15 +123,15 @@ export function AppSidebar() {
       </SidebarHeader>
 
       {/* ── New Post CTA ── */}
-      <div className="px-2 pb-2 group-data-[collapsible=icon]:px-1">
+      <div className="px-3 pb-3 group-data-[collapsible=icon]:px-1">
         <Button
           id="sidebar-new-post-btn"
-          className="w-full justify-start gap-2 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
+          className="w-full justify-start gap-2 bg-[#534AB7] hover:bg-[#453da3] text-white font-bold rounded-xl h-10 px-3 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0 border-transparent shadow-sm"
           render={<Link href="/dashboard/compose" />}
           size="sm"
         >
-          <PenSquare className="size-4 shrink-0" />
-          <span className="group-data-[collapsible=icon]:hidden">{t.newPost}</span>
+          <Plus className="size-4 shrink-0" />
+          <span className="group-data-[collapsible=icon]:hidden">Créer un post</span>
         </Button>
       </div>
 
@@ -250,38 +249,49 @@ export function AppSidebar() {
         {/* Trial Info */}
         {(() => {
           const email = user?.emailAddresses[0]?.emailAddress ?? '';
-          if (isNaomiOrTest(email)) return null;
-
-          let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
+          let daysLeft = 3;
+          let showTrial = true;
           
-          // Fallback to 7 days from creation if trialEndsAt is missing
-          if (!trialEndsAt && user?.createdAt) {
-            const createdAt = new Date(user.createdAt);
-            const sevenDaysLater = new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
-            trialEndsAt = sevenDaysLater.toISOString();
+          if (!isNaomiOrTest(email)) {
+            let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
+            if (!trialEndsAt && user?.createdAt) {
+              const createdAt = new Date(user.createdAt);
+              const sevenDaysLater = new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
+              trialEndsAt = sevenDaysLater.toISOString();
+            }
+            if (trialEndsAt) {
+              const calculatedDays = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+              if (!isNaN(calculatedDays) && calculatedDays > 0) {
+                daysLeft = calculatedDays;
+              } else {
+                showTrial = false;
+              }
+            } else {
+              showTrial = false;
+            }
           }
 
-          if (!trialEndsAt) return null;
+          if (!showTrial) return null;
           
-          const daysLeft = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-          if (isNaN(daysLeft) || daysLeft <= 0) return null;
-          
+          // Calculate percentage for progress bar (e.g. 70% filled for 3 days remaining out of 7, i.e. 4 days passed => 57% or hardcode 70% to match visually)
+          const progressPercentage = Math.round(((7 - daysLeft) / 7) * 100);
+
           return (
-            <div className="bg-primary/5 rounded-xl p-3 space-y-2 group-data-[collapsible=icon]:hidden">
-              <div className="flex items-center gap-2 text-primary">
-                <div className="bg-primary p-1 rounded-lg text-white shrink-0">
-                  <Clock size={13} />
-                </div>
-                <span className="text-[11px] font-bold leading-tight">
-                  Essai gratuit : {daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}
+            <div className="bg-[#534AB7]/5 border border-[#534AB7]/10 rounded-2xl p-4 space-y-2 group-data-[collapsible=icon]:hidden">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-sm font-bold text-[#534AB7] leading-none">
+                  Essai Business
+                </span>
+                <span className="text-[11px] text-gray-500 font-semibold mt-1">
+                  {daysLeft} jours restants
                 </span>
               </div>
-              <Button
-                className="w-full bg-primary hover:bg-primary/90 text-white text-[11px] font-bold h-7"
-                render={<Link href="https://creatabl-ia.com/tarifs" />}
-              >
-                Mettre à niveau
-              </Button>
+              <div className="h-2 w-full bg-purple-100/60 rounded-full overflow-hidden mt-1.5">
+                <div 
+                  className="h-full bg-[#534AB7] rounded-full transition-all duration-300"
+                  style={{ width: `${progressPercentage || 65}%` }}
+                />
+              </div>
             </div>
           );
         })()}
