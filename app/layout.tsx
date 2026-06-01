@@ -16,12 +16,49 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Creatabl-IA",
-  description: "AI-powered social media management",
+  metadataBase: new URL('https://app.creatabl-ia.com'),
+  
+  title: {
+    default: 'Creatabl.ia — Dashboard',
+    template: '%s | Creatabl.ia',
+  },
+  
+  description: 'Créez, planifiez et analysez tous vos réseaux sociaux sur une seule interface.',
+  
   icons: {
-    icon: "/logo.svg",
-    shortcut: "/logo.svg",
-    apple: "/logo.svg",
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
+    shortcut: '/favicon.ico',
+  },
+  
+  openGraph: {
+    title: 'Creatabl.ia — Dashboard',
+    description: 'Créez, planifiez et analysez tous vos réseaux sociaux.',
+    url: 'https://app.creatabl-ia.com',
+    siteName: 'Creatabl.ia',
+    images: [
+      {
+        url: '/logo.png',
+        width: 800,
+        height: 600,
+        alt: 'Creatabl.ia logo',
+      },
+    ],
+    locale: 'fr_FR',
+    type: 'website',
+  },
+  
+  twitter: {
+    card: 'summary',
+    title: 'Creatabl.ia',
+    description: 'Créez, planifiez et analysez tous vos réseaux sociaux.',
+    images: ['/logo.png'],
   },
 };
 
