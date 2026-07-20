@@ -13,31 +13,48 @@ interface PlanCardsProps {
 export function PlanCards({ currentPlan }: PlanCardsProps) {
   const plans = [
     {
+      id: "free",
+      name: "Free",
+      price: "0€",
+      description: "Gratuit sans limite de temps",
+      features: [
+        "20 Posts / mois",
+        "20 Générations IA",
+        "1 Compte réseau social",
+        "Analytics essentiels",
+        "Sans carte bancaire",
+      ],
+      icon: <Zap className="w-5 h-5 text-gray-500" />,
+      cta: "Plan actuel",
+      highlight: false,
+    },
+    {
       id: "starter",
       name: "Starter",
-      price: "0€",
-      description: "Essai gratuit de 7 jours",
+      price: "49€",
+      description: "14 jours d'essai gratuit (CB)",
       features: [
         "30 Posts / mois",
         "30 Générations IA",
-        "7 Jours Analytics",
+        "Integration Canva",
+        "Analytics essentiels",
         "Support standard",
       ],
       icon: <Zap className="w-5 h-5 text-blue-500" />,
-      cta: "Plan actuel",
+      cta: "Passer au Starter",
       highlight: false,
     },
     {
       id: "pro",
       name: "Pro",
       price: "99€",
-      description: "Pour booster ta croissance",
+      description: "14 jours d'essai gratuit (CB)",
       features: [
         "120 Posts / mois",
         "120 Générations IA",
-        "90 Jours Analytics",
         "Reformuler & Tons IA",
         "Analytics avancés",
+        "Integration Canva",
         "Support prioritaire",
       ],
       icon: <Sparkles className="w-5 h-5 text-purple-500" />,
@@ -48,13 +65,13 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
       id: "business",
       name: "Business",
       price: "199€",
-      description: "Pour les agences et équipes",
+      description: "14 jours d'essai gratuit (CB)",
       features: [
-        "300 Posts / mois (∞)",
-        "300 Générations IA (∞)",
+        "300 Posts / mois",
+        "300 Générations IA",
+        "Multi-comptes (5 comptes)",
+        "Gestion équipe + rôles",
         "365 Jours Analytics",
-        "Multi-comptes équipe",
-        "Gestion clients",
         "Manager dédié",
       ],
       icon: <Building2 className="w-5 h-5 text-emerald-500" />,
@@ -64,7 +81,7 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
   ];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {plans.map((plan) => (
         <Card 
           key={plan.id} 
@@ -112,6 +129,11 @@ export function PlanCards({ currentPlan }: PlanCardsProps) {
               className="w-full" 
               variant={plan.id === currentPlan ? "outline" : plan.highlight ? "default" : "secondary"}
               disabled={plan.id === currentPlan}
+              onClick={() => {
+                if (plan.id !== currentPlan && plan.id !== 'free') {
+                  window.location.href = `/api/stripe/create-checkout?plan=${plan.id}&billing=monthly`
+                }
+              }}
             >
               {plan.id === currentPlan ? "Ton plan actuel" : plan.cta}
             </Button>

@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
-import { Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 interface PaywallOverlayProps {
@@ -49,10 +50,22 @@ const PLAN_DATA = {
 }
 
 export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
+  const [downgrading, setDowngrading] = useState(false)
   const selectedPlanKey = (plan?.toLowerCase() as keyof typeof PLAN_DATA) || 'starter'
   const planData = PLAN_DATA[selectedPlanKey]
   const currentBilling = billingCycle === 'yearly' ? 'yearly' : 'monthly'
   const displayPrice = currentBilling === 'yearly' ? planData.annualPrice : planData.price
+
+  const handleDowngradeFree = async () => {
+    setDowngrading(true)
+    try {
+      await fetch('/api/user/init-free', { method: 'POST' })
+      window.location.reload()
+    } catch (e) {
+      console.error('Failed to downgrade to free:', e)
+      setDowngrading(false)
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 backdrop-blur-md bg-white/60">
@@ -66,14 +79,13 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Ton essai gratuit est terminé !
           </h2>
-          <p className="text-gray-600 leading-relaxed">
-            Tu as exploré Creatabl pendant 7 jours. 
-            C&apos;est maintenant le moment de continuer l&apos;aventure avec un abonnement. 
-            Toutes tes données et tes posts sont bien conservés — rien n&apos;est perdu !
+          <p className="text-gray-600 leading-relaxed text-sm">
+            Tu as exploré Creatabl pendant 14 jours. 
+            Découvre nos abonnements ou continue gratuitement avec 20 posts par mois !
           </p>
         </div>
 
-        <div className="p-8">
+        <div className="p-6 sm:p-8">
           <div className="bg-[#F8F7FF] rounded-2xl p-6 border border-[#EEEDFE] mb-6">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -85,7 +97,7 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
               <div className="text-right">
                 <div className="flex items-baseline justify-end gap-1">
                   <span className="text-3xl font-bold text-gray-900">{displayPrice}€</span>
-                  <span className="text-gray-500 font-medium">/mois</span>
+                  <span className="text-gray-500 font-medium text-sm">/mois</span>
                 </div>
                 {currentBilling === 'yearly' ? (
                   <p className="text-xs text-gray-400 mt-1">
@@ -110,13 +122,30 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
               ))}
             </ul>
 
-            <Link 
-              href={`/api/stripe/create-checkout?plan=${selectedPlanKey}&billing=${currentBilling}`}
-              className="w-full py-4 px-6 bg-[#6366F1] hover:bg-[#4F46E5] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-200"
-            >
-              Activer le plan {planData.name}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+            <div className="space-y-3">
+              <Link 
+                href={`/api/stripe/create-checkout?plan=${selectedPlanKey}&billing=${currentBilling}`}
+                className="w-full py-3.5 px-6 bg-[#6366F1] hover:bg-[#4F46E5] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-200 text-sm"
+              >
+                Activer le plan {planData.name}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <button
+                onClick={handleDowngradeFree}
+                disabled={downgrading}
+                className="w-full py-3 px-6 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-sm shadow-sm"
+              >
+                {downgrading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
+                    Bascule vers le plan Free...
+                  </>
+                ) : (
+                  'Continuer en Free (20 posts/mois)'
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="text-center">

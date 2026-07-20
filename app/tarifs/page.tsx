@@ -47,6 +47,25 @@ const SOCIAL_ICONS = {
 
 const PLANS = [
   {
+    id: 'free',
+    name: 'Free',
+    tagline: 'Pour découvrir la plateforme sans engagement',
+    monthlyPrice: 0,
+    yearlyMonthly: 0,
+    yearlyTotal: 0,
+    yearlySavings: 0,
+    postsPerMonth: '20 posts / mois',
+    socials: ['linkedin', 'instagram'],
+    features: [
+      'Assistant IA de rédaction (base)',
+      'Calendrier éditorial',
+      'Analytics essentiels',
+      'Sans carte bancaire',
+    ],
+    recommended: false,
+    buttonStyle: 'border-[#38BDF8] text-[#38BDF8] bg-white hover:bg-[#38BDF8]/5',
+  },
+  {
     id: 'starter',
     name: 'Starter',
     tagline: 'Pour les solopreneurs qui démarrent',
@@ -60,6 +79,7 @@ const PLANS = [
       'Assistant IA de rédaction (limité)',
       'Calendrier éditorial',
       'Analytics essentiels',
+      'Intégration Canva',
     ],
     recommended: false,
     buttonStyle: 'border-[#7C3AED] text-[#7C3AED] bg-white hover:bg-[#7C3AED]/5',
@@ -91,7 +111,7 @@ const PLANS = [
     yearlyMonthly: 159,
     yearlyTotal: 1908,
     yearlySavings: 480,
-    postsPerMonth: 'Illimité',
+    postsPerMonth: '300 posts / mois',
     socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
     features: [
       'Tout le plan Pro',
@@ -128,7 +148,7 @@ export default function TarifsPage() {
             Tarifs simples et transparents
           </h1>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-            7 jours d&apos;essai gratuit sur tous les plans. Sans carte bancaire.
+            14 jours d&apos;essai gratuit sur les plans payants • Plan Free disponible sans limite.
           </p>
         </div>
 
@@ -159,7 +179,7 @@ export default function TarifsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {PLANS.map((plan) => {
             const displayPrice = billing === 'monthly' ? plan.monthlyPrice : plan.yearlyMonthly
 
@@ -167,9 +187,9 @@ export default function TarifsPage() {
               <motion.div
                 key={plan.id}
                 whileHover={{ y: -8 }}
-                className={`relative bg-white rounded-[2rem] p-10 flex flex-col transition-all ${
+                className={`relative bg-white rounded-[2rem] p-8 flex flex-col transition-all ${
                   plan.recommended
-                    ? 'border-[3px] border-[#8B5CF6] scale-105 z-10'
+                    ? 'border-[3px] border-[#8B5CF6] scale-105 z-10 shadow-2xl'
                     : 'border-transparent'
                 }`}
               >
@@ -181,38 +201,38 @@ export default function TarifsPage() {
 
                 <div className="mb-8">
                   <h3 className="text-3xl font-black text-black mb-1">{plan.name}</h3>
-                  <p className="text-lg italic text-[#8B5CF6] mb-8 font-serif leading-tight">
+                  <p className="text-sm italic text-[#8B5CF6] mb-6 font-serif leading-tight">
                     {plan.tagline}
                   </p>
                   
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-6xl font-black text-black tracking-tight">{displayPrice}€</span>
-                    <span className="text-zinc-400 font-bold text-lg">/mois</span>
+                    <span className="text-5xl font-black text-black tracking-tight">{displayPrice}€</span>
+                    <span className="text-zinc-400 font-bold text-base">/mois</span>
                   </div>
-                  <p className="text-sm text-zinc-400 font-medium">
+                  <p className="text-xs text-zinc-400 font-medium">
                     par utilisateur et par mois
                   </p>
                 </div>
 
-                <div className="space-y-8 flex-1">
+                <div className="space-y-6 flex-1">
                   {/* Posts Section */}
                   <div>
-                    <h4 className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest mb-4">
+                    <h4 className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-3">
                       Génération de posts
                     </h4>
-                    <div className="flex items-center gap-3 text-black font-bold">
-                      <Check className="w-5 h-5 text-green-500 stroke-[3]" />
+                    <div className="flex items-center gap-2.5 text-black font-bold text-sm">
+                      <Check className="w-4 h-4 text-green-500 stroke-[3]" />
                       {plan.postsPerMonth}
                     </div>
                   </div>
 
                   {/* Features Section */}
                   <div>
-                    <h4 className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest mb-4">
+                    <h4 className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-3">
                       Fonctionnalités
                     </h4>
                     
-                    <div className="flex gap-2.5 mb-6">
+                    <div className="flex gap-2 mb-4">
                       {Object.entries(SOCIAL_ICONS).map(([key, icon]) => (
                         <div key={key} className={plan.socials.includes(key) ? '' : 'opacity-20'}>
                           {icon}
@@ -220,10 +240,10 @@ export default function TarifsPage() {
                       ))}
                     </div>
 
-                    <ul className="space-y-4">
+                    <ul className="space-y-3">
                       {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-3 text-black text-[15px] font-bold">
-                          <Check className="w-5 h-5 text-green-500 stroke-[3] mt-0.5 flex-shrink-0" />
+                        <li key={i} className="flex items-start gap-2.5 text-black text-sm font-bold">
+                          <Check className="w-4 h-4 text-green-500 stroke-[3] mt-0.5 flex-shrink-0" />
                           {feature}
                         </li>
                       ))}
@@ -231,12 +251,12 @@ export default function TarifsPage() {
                   </div>
                 </div>
 
-                <div className="mt-12 space-y-4 text-center">
+                <div className="mt-8 space-y-4 text-center">
                   <Link
                     href={`https://app.creatabl-ia.com/sign-up?plan=${plan.id}&billing=${billing}`}
-                    className={`w-full py-5 px-6 rounded-full font-black text-lg flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 ${plan.buttonStyle} border-2`}
+                    className={`w-full py-4 px-4 rounded-full font-black text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 ${plan.buttonStyle} border-2`}
                   >
-                    Essayer {plan.name} — 7j gratuits
+                    {plan.id === 'free' ? 'Commencer gratuitement' : `Essayer ${plan.name} — 14j gratuits`}
                   </Link>
                 </div>
               </motion.div>

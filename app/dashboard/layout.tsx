@@ -34,8 +34,8 @@ export default async function DashboardLayout({
         clerkId: userId,
         email: clerkUser?.emailAddresses[0]?.emailAddress ?? '',
         name: clerkUser?.fullName ?? '',
-        plan: 'starter',
-        selectedPlan: 'starter',
+        plan: 'free',
+        selectedPlan: 'free',
       }).onConflictDoNothing().returning()
       
       dbUser = newUser;

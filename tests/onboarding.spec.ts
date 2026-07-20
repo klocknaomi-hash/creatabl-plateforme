@@ -13,7 +13,7 @@ test.describe('Creatabl Onboarding Flow', () => {
     console.log('Navigated to landing page');
 
     // 2. Click the first plan CTA button
-    const cta = page.locator('text=Essai 7 jours').first();
+    const cta = page.locator('text=Essai 14 jours').first();
     await cta.click();
     console.log('Clicked CTA button');
 
@@ -169,7 +169,7 @@ test.describe('Creatabl Onboarding Flow', () => {
 
     // 8. Final Verification
     await expect(page.locator('text=Premiers pas')).toBeVisible({ timeout: 15000 });
-    await expect(page.locator('text=Ton essai gratuit termine dans 7 jours')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=14 jours')).toBeVisible({ timeout: 15000 });
     console.log('Final verification passed!');
   });
 });

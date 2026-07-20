@@ -1,4 +1,4 @@
-export type Plan = 'starter' | 'pro' | 'business'
+export type Plan = 'free' | 'starter' | 'pro' | 'business'
 
 export type PlanAccess = {
   // IA
@@ -25,6 +25,20 @@ export type PlanAccess = {
 }
 
 export const PLAN_CONFIG: Record<Plan, PlanAccess> = {
+  free: {
+    aiBasic: true,
+    aiAdvanced: false,
+    aiReformulate: false,
+    aiTone: false,
+    aiSuggestions: false,
+    analyticsBasic: true,
+    analyticsAdvanced: false,
+    multiAccounts: false,
+    maxAccounts: 1,
+    team: false,
+    maxPostsPerMonth: 20,
+    canvaIntegration: false,
+  },
   starter: {
     aiBasic: true,
     aiAdvanced: false,
@@ -72,7 +86,7 @@ export const PLAN_CONFIG: Record<Plan, PlanAccess> = {
 export function getPlanAccess(plan: string): PlanAccess {
   const validPlan = (plan as Plan) in PLAN_CONFIG
     ? (plan as Plan)
-    : 'starter'
+    : 'free'
   return PLAN_CONFIG[validPlan]
 }
 

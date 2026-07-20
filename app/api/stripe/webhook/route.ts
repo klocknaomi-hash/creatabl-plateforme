@@ -143,24 +143,42 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Handle payment failed
+  // Handle payment failed — fallback to free plan
   if (event.type === 'invoice.payment_failed') {
     const invoice = event.data.object as Stripe.Invoice;
     const customerId = invoice.customer as string;
 
     await db.update(users)
-      .set({ subscriptionStatus: 'past_due' })
+      .set({ 
+        subscriptionStatus: 'past_due',
+        plan: 'free',
+      })
       .where(eq(users.stripeCustomerId, customerId));
 
-    console.log(`⚠️ Payment failed for customer ${customerId}`);
+    console.log(`⚠️ Payment failed for customer ${customerId} — fallback to free plan`);
   }
 
-  // Handle trial ending soon (3 days before)
+  // Handle subscription canceled / deleted — fallback to free plan
+  if (event.type === 'customer.subscription.deleted') {
+    const subscription = event.data.object as Stripe.Subscription;
+    const customerId = subscription.customer as string;
+
+    await db.update(users)
+      .set({
+        plan: 'free',
+        subscriptionStatus: 'active',
+        trialEndsAt: null,
+      })
+      .where(eq(users.stripeCustomerId, customerId));
+
+    console.log(`ℹ️ Subscription canceled for customer ${customerId} — converted to free plan`);
+  }
+
+  // Handle trial ending soon (Stripe fires this 3 days before trial ends -> Day 11 of 14)
   if (event.type === 'customer.subscription.trial_will_end') {
     const subscription = event.data.object as Stripe.Subscription;
     const userId = subscription.metadata?.userId;
-    console.log(`⏰ Trial ending soon for user ${userId}`);
-    // TODO: send reminder email here
+    console.log(`⏰ Trial ending soon for user ${userId} (Day 11 reminder)`);
   }
 
   return NextResponse.json({ received: true });

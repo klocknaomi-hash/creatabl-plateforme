@@ -16,11 +16,11 @@ export function TrialBanner() {
 
   let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined
   
-  // Fallback to 7 days from creation if trialEndsAt is missing
+  // Fallback to 14 days from creation if trialEndsAt is missing
   if (!trialEndsAt && user?.createdAt) {
     const createdAt = new Date(user.createdAt)
-    const sevenDaysLater = new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000)
-    trialEndsAt = sevenDaysLater.toISOString()
+    const fourteenDaysLater = new Date(createdAt.getTime() + 14 * 24 * 60 * 60 * 1000)
+    trialEndsAt = fourteenDaysLater.toISOString()
   }
 
   if (!trialEndsAt) return null

@@ -42,15 +42,15 @@ export const PLAN_LIMITS = {
   },
   // Aliases for compatibility
   free: {
-    label: 'Starter',
-    posts: 30,
-    ai: 30,
+    label: 'Free',
+    posts: 20,
+    ai: 20,
     workspaces: 1,
-    socialAccounts: 3,
-    storageLimit: 100,
+    socialAccounts: 1,
+    storageLimit: 50,
     analyticsDays: 7,
     recurringPosts: false,
-    canvaIntegration: true,
+    canvaIntegration: false,
     price: 0,
   },
   agency: {
@@ -77,7 +77,7 @@ export async function checkPlanLimit(clerkId: string, feature: 'posts' | 'ai' | 
   if (!user) return { allowed: false, message: "User not found" };
 
   const isTest = isNaomiOrTest(user.email);
-  const plan = isTest ? 'business' : ((user.selectedPlan || "starter") as PlanType);
+  const plan = isTest ? 'business' : ((user.plan || user.selectedPlan || "free") as PlanType);
   const limits = PLAN_LIMITS[plan];
 
   if (feature === 'posts') {

@@ -77,9 +77,10 @@ export async function POST(req: Request) {
           clerkId: id,
           email,
           name,
-          plan: 'starter',
-          selectedPlan: 'starter',
-          trialEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days trial
+          plan: 'free',
+          selectedPlan: 'free',
+          subscriptionStatus: 'active',
+          trialEndsAt: null,
         }).onConflictDoUpdate({
           target: users.clerkId,
           set: {
@@ -97,7 +98,7 @@ export async function POST(req: Request) {
       const { id, email_addresses, first_name, last_name, public_metadata } = evt.data;
       const email = email_addresses?.[0]?.email_address;
       const name = [first_name, last_name].filter(Boolean).join(' ') || null;
-      const plan = (public_metadata?.plan as any) || 'starter';
+      const plan = (public_metadata?.plan as any) || 'free';
 
       if (id && email) {
         console.log('Updating user in DB:', { id, email, name, plan });

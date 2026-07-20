@@ -48,9 +48,10 @@ export async function GET(req: NextRequest) {
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
+    payment_method_collection: 'always',
     line_items: [{ price: prices.data[0].id, quantity: 1 }],
     subscription_data: {
-      trial_period_days: 7,
+      trial_period_days: 14,
       metadata: { userId, plan, billing },
     },
     success_url: `https://app.creatabl-ia.com/dashboard`,

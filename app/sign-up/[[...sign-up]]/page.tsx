@@ -159,7 +159,7 @@ function SignUpContent() {
         {/* Footer info */}
         <div className="flex items-center gap-2 text-[10px] xl:text-[11px] text-zinc-500 relative z-10 font-medium mt-auto">
           <Users className="w-4 h-4 text-[#534AB7]" />
-          <span>Essai gratuit de 7 jours • Aucune carte bancaire requise</span>
+          <span>Essai gratuit de 14 jours sur les plans payants • Plan Free sans limite</span>
         </div>
       </div>
 
@@ -206,12 +206,13 @@ function SignUpContent() {
                 footerActionText: "text-sm text-gray-500",
                 footerActionLink: "text-[#534AB7] hover:text-[#453da3] font-bold transition-colors",
                 dividerLine: "bg-gray-100",
-                dividerText: "text-gray-400 text-xs font-semibold bg-white px-3",
+                dividerText: "text-gray-400 text-xs font-semibold bg-[#ffffff] px-3",
                 identityPreviewText: "text-gray-900",
                 identityPreviewEditButtonIcon: "text-[#534AB7]"
               }
             }}
-            fallbackRedirectUrl="/dashboard"
+            fallbackRedirectUrl="/sign-up/success"
+            forceRedirectUrl="/sign-up/success"
             routing="path"
             path="/sign-up"
           />
