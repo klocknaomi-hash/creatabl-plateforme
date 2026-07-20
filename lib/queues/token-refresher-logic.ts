@@ -18,8 +18,6 @@ export async function processTokenRefresh() {
       )
     );
 
-  console.log(`Found ${accountsToRefresh.length} accounts to refresh`);
-
   for (const account of accountsToRefresh) {
     try {
       const client = getPlatformClient(account.platform);
@@ -32,8 +30,6 @@ export async function processTokenRefresh() {
         refreshToken: newTokens.refreshToken ? encryptToken(newTokens.refreshToken) : account.refreshToken,
         expiresAt: newTokens.expiresAt,
       }).where(eq(socialAccounts.id, account.id));
-      
-      console.log(`Successfully refreshed token for ${account.platform} (User: ${account.userId})`);
     } catch (error) {
       console.error(`Failed to refresh token for account ${account.id} (${account.platform}):`, error);
     }

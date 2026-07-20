@@ -11,5 +11,4 @@ export async function setupScheduledJobs() {
       },
     }
   );
-  console.log('Scheduled periodic token refresh job');
 }
