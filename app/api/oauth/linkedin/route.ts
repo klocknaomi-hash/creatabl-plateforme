@@ -3,17 +3,12 @@ import crypto from 'crypto'
 import { getPlatformClient } from '@/lib/platforms'
 
 export async function GET(req: NextRequest) {
-  console.log('LINKEDIN REDIRECT URI:', process.env.LINKEDIN_REDIRECT_URI)
-  console.log('LINKEDIN CLIENT ID:', process.env.LINKEDIN_CLIENT_ID ? 'SET' : 'MISSING')
-
   try {
     const client = getPlatformClient('linkedin')
     const state = crypto.randomBytes(16).toString('hex')
     
     const authUrlData = await client.getAuthorizationUrl({ state })
     const authUrl = typeof authUrlData === 'string' ? authUrlData : authUrlData.url
-
-    console.log('FULL LINKEDIN URL:', authUrl.toString())
 
     const response = NextResponse.redirect(authUrl)
     

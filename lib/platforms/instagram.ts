@@ -10,7 +10,6 @@ export class InstagramClient implements PlatformClient {
 
   getAuthorizationUrl(params?: { state?: string }): string {
     const scope = 'public_profile,email,instagram_basic,instagram_content_publish,instagram_manage_comments,pages_show_list,pages_read_engagement';
-    console.log('Instagram Redirect URI:', this.redirectUri);
     return `https://www.facebook.com/v18.0/dialog/oauth?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=code&state=${params?.state || ''}`;
   }
 

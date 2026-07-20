@@ -9,7 +9,6 @@ import { encrypt } from '@/lib/crypto';
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth();
-  console.log('LinkedIn Callback userId:', userId);
 
   if (!userId) {
     return NextResponse.redirect(new URL('/sign-in', req.nextUrl.origin));
@@ -37,24 +36,18 @@ export async function GET(req: NextRequest) {
   const cookieStore = await cookies();
   const storedState = cookieStore.get('linkedin_oauth_state')?.value;
 
-  console.log('LinkedIn State check - URL:', state);
-  console.log('LinkedIn State check - Cookie:', storedState);
-
-  // For now, we bypass state check for debugging as requested in Facebook pattern
-  /*
-  if (state !== storedState) {
-    console.error('LinkedIn State mismatch:', { state, storedState });
-    return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
+  if (!state || !storedState || state !== storedState) {
+    return NextResponse.redirect(
+      new URL(
+        '/dashboard/accounts?error=invalid_state',
+        process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin
+      )
+    );
   }
-  */
 
   try {
     const client = getPlatformClient('linkedin');
-    
-    // getTokens handles the exchange and profile fetch
-    console.log('Exchanging LinkedIn code for tokens...');
     const tokens = await client.getTokens(code);
-    console.log('LinkedIn tokens received for:', tokens.username);
 
     // Get internal user ID
     const userRecord = await db.query.users.findFirst({
@@ -105,8 +98,6 @@ export async function GET(req: NextRequest) {
         avatarUrl: tokens.avatarUrl,
       });
     }
-
-    console.log('LinkedIn account saved successfully');
 
     const response = NextResponse.redirect(
       new URL('/dashboard/settings/connections?success=true&linkedin=connected', req.nextUrl.origin)

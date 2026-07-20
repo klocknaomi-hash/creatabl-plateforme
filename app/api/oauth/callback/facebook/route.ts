@@ -8,9 +8,6 @@ import { encrypt } from '@/lib/crypto'
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
-  console.log('Callback userId:', userId)
-  console.log('Callback cookies:', 
-    req.cookies.getAll().map(c => c.name))
 
   if (!userId) return NextResponse.redirect(
     new URL('/sign-in', req.nextUrl.origin)
@@ -30,25 +27,23 @@ export async function GET(req: NextRequest) {
   const cookieStore = await cookies()
   const storedState = cookieStore.get('fb_state')?.value
 
-  console.log('State from URL:', state)
-  console.log('Stored state cookie:', storedState)
-  console.log('Match:', state === storedState)
-
-  console.log('State check - URL:', state)
-  console.log('State check - Cookie:', storedState)
-  console.log('Bypassing state check for debug')
-
-  /*
-  if (state !== storedState) {
-    console.error('State mismatch:', { state, storedState })
-    return NextResponse.json(
-      { error: 'Invalid state' },
-      { status: 400 }
+  if (!state || !storedState || state !== storedState) {
+    return NextResponse.redirect(
+      new URL(
+        '/dashboard/accounts?error=invalid_state',
+        process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin
+      )
     )
   }
-  */
 
-  const appId = process.env.FACEBOOK_APP_ID || '1306176321466122'
+  const appId = process.env.FACEBOOK_APP_ID
+  if (!appId) {
+    return Response.json(
+      { error: 'Facebook not configured' },
+      { status: 500 }
+    )
+  }
+
   const redirectUri = `${req.nextUrl.origin}/api/oauth/callback/facebook`
   
   // Exchange code for access token
@@ -63,9 +58,6 @@ export async function GET(req: NextRequest) {
   )
 
   const tokenData = await tokenRes.json()
-
-  console.log('Token exchange status:', tokenRes.status)
-  console.log('Token exchange response:', JSON.stringify(tokenData))
 
   if (!tokenData.access_token) {
     console.error('Token exchange failed:', JSON.stringify(tokenData))
@@ -100,7 +92,6 @@ export async function GET(req: NextRequest) {
   }
 
   // Save to Neon using Upsert
-  console.log('Upserting user tokens for:', userId)
   try {
     const userUpdate = await db.insert(users)
       .values({
@@ -110,7 +101,7 @@ export async function GET(req: NextRequest) {
         facebookUserId: meData.id,
         facebookPageId: pageId,
         instagramAccountId: instagramAccount?.id || null,
-        instagramAccessToken: encrypt(pageToken || ''),
+        instagramAccessToken: pageToken ? encrypt(pageToken) : null,
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({
@@ -120,7 +111,7 @@ export async function GET(req: NextRequest) {
           facebookUserId: meData.id,
           facebookPageId: pageId,
           instagramAccountId: instagramAccount?.id || null,
-          instagramAccessToken: encrypt(pageToken || ''),
+          instagramAccessToken: pageToken ? encrypt(pageToken) : null,
           updatedAt: new Date(),
         }
       })
@@ -212,7 +203,6 @@ export async function GET(req: NextRequest) {
         }
       }
     }
-    console.log('Upsert successful')
   } catch (dbError) {
     console.error('Database upsert failed:', dbError)
   }

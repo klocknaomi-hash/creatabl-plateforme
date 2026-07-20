@@ -10,7 +10,6 @@ export class FacebookClient implements PlatformClient {
 
   getAuthorizationUrl(params?: { state?: string }): string {
     const scope = 'public_profile,email,pages_show_list,pages_read_engagement,pages_manage_posts';
-    console.log('Facebook Redirect URI:', this.redirectUri);
     return `https://www.facebook.com/v18.0/dialog/oauth?client_id=${this.clientId}&redirect_uri=${encodeURIComponent(this.redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=code&state=${params?.state || ''}`;
   }
 

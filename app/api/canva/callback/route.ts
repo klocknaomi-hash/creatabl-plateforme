@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
+import { encrypt } from '@/lib/crypto'
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
   const codeVerifier =
     cookieStore.get('canva_code_verifier')?.value
 
-  if (state !== storedState) {
+  if (!state || !storedState || state !== storedState) {
     return NextResponse.json(
       { error: 'Invalid state' },
       { status: 400 }
@@ -72,8 +73,8 @@ export async function GET(req: NextRequest) {
 
   await db.update(users)
     .set({
-      canvaAccessToken: tokenData.access_token,
-      canvaRefreshToken: tokenData.refresh_token,
+      canvaAccessToken: encrypt(tokenData.access_token),
+      canvaRefreshToken: tokenData.refresh_token ? encrypt(tokenData.refresh_token) : null,
       canvaTokenExpiresAt: expiresAt,
     })
     .where(eq(users.clerkId, userId))
