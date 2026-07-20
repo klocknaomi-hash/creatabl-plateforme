@@ -23,7 +23,7 @@ export default async function BillingPage() {
   // Dynamically calculate total trial duration in days
   const totalDays = user.trialStartedAt && user.trialEndsAt
     ? Math.max(1, Math.ceil((new Date(user.trialEndsAt).getTime() - new Date(user.trialStartedAt).getTime()) / (1000 * 60 * 60 * 24)))
-    : 7; // Fallback to 7 days if start date is not set
+    : 14; // Fallback to 14 days if start date is not set
 
   // Calculate accurate remaining progress ratio
   const progress = totalDays > 0 ? Math.max(0, Math.min(1, trialDaysLeft / totalDays)) : 0;

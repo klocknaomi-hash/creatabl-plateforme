@@ -6,7 +6,7 @@ async function run() {
   console.log("Fetching accounts...");
   const accounts = await getCachedAccounts(clerkId);
   console.log("Accounts:", accounts);
-  
+
   console.log("Fetching stats...");
   const stats = await getDashboardStats(clerkId);
   console.log("Stats:", stats);

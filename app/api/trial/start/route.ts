@@ -28,7 +28,7 @@ export async function POST(req: Request) {
 
   const now = new Date();
   const trialEndsAt = new Date();
-  trialEndsAt.setDate(now.getDate() + 7);
+  trialEndsAt.setDate(now.getDate() + 14);
 
   await db
     .update(users)

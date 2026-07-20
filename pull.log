@@ -1,0 +1,14 @@
+Vercel CLI 54.7.1 (Node.js 25.9.0)
+{
+  "status": "error",
+  "reason": "not_linked",
+  "message": "Your codebase isn't linked to a project on Vercel. Run vercel link to begin. Use --yes for non-interactive; use --scope or --project to specify team or project.",
+  "next": [
+    {
+      "command": "vercel link --scope <scope> --environment=production production.env --yes"
+    },
+    {
+      "command": "vercel env pull --environment=production production.env --yes"
+    }
+  ]
+}

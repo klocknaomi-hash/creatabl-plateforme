@@ -2,3 +2,13 @@
 > creatabl-ia@0.1.0 dev
 > next dev
 
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.86:3000
+- Environments: .env.local
+✓ Ready in 377ms
+Redis not configured, worker not created
+Post Publisher Worker initialized
+Redis not configured, worker not created
+Token Refresher Worker initialized
+

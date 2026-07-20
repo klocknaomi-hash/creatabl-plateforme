@@ -249,32 +249,33 @@ export function AppSidebar() {
         {/* Trial Info */}
         {(() => {
           const email = user?.emailAddresses[0]?.emailAddress ?? '';
-          let daysLeft = 3;
+          const currentPlan = (user?.publicMetadata?.plan as string) || 'starter';
+          
+          if (currentPlan === 'free' || isNaomiOrTest(email)) return null;
+          
+          let daysLeft = 14;
           let showTrial = true;
           
-          if (!isNaomiOrTest(email)) {
-            let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
-            if (!trialEndsAt && user?.createdAt) {
-              const createdAt = new Date(user.createdAt);
-              const sevenDaysLater = new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
-              trialEndsAt = sevenDaysLater.toISOString();
-            }
-            if (trialEndsAt) {
-              const calculatedDays = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-              if (!isNaN(calculatedDays) && calculatedDays > 0) {
-                daysLeft = calculatedDays;
-              } else {
-                showTrial = false;
-              }
+          let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
+          if (!trialEndsAt && user?.createdAt) {
+            const createdAt = new Date(user.createdAt);
+            const fourteenDaysLater = new Date(createdAt.getTime() + 14 * 24 * 60 * 60 * 1000);
+            trialEndsAt = fourteenDaysLater.toISOString();
+          }
+          if (trialEndsAt) {
+            const calculatedDays = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+            if (!isNaN(calculatedDays) && calculatedDays > 0) {
+              daysLeft = calculatedDays;
             } else {
               showTrial = false;
             }
+          } else {
+            showTrial = false;
           }
 
           if (!showTrial) return null;
           
-          // Calculate percentage for progress bar (e.g. 70% filled for 3 days remaining out of 7, i.e. 4 days passed => 57% or hardcode 70% to match visually)
-          const progressPercentage = Math.round(((7 - daysLeft) / 7) * 100);
+          const progressPercentage = Math.max(0, Math.min(100, Math.round(((14 - daysLeft) / 14) * 100)));
 
           return (
             <div className="bg-[#534AB7]/5 border border-[#534AB7]/10 rounded-2xl p-4 space-y-2 group-data-[collapsible=icon]:hidden">
@@ -283,13 +284,13 @@ export function AppSidebar() {
                   Essai Business
                 </span>
                 <span className="text-[11px] text-gray-500 font-semibold mt-1">
-                  {daysLeft} jours restants
+                  {daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}
                 </span>
               </div>
               <div className="h-2 w-full bg-purple-100/60 rounded-full overflow-hidden mt-1.5">
                 <div 
                   className="h-full bg-[#534AB7] rounded-full transition-all duration-300"
-                  style={{ width: `${progressPercentage || 65}%` }}
+                  style={{ width: `${progressPercentage}%` }}
                 />
               </div>
             </div>

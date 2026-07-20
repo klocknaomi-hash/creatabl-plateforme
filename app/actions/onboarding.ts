@@ -197,7 +197,7 @@ export async function completeOnboarding(selectedPlan?: string, selectedBilling?
 
     const client = await clerkClient();
     const now = new Date();
-    const trialEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
 
     const plan = selectedPlan || "starter";
     const billing = selectedBilling || "monthly";
