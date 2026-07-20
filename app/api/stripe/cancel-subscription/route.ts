@@ -36,7 +36,8 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    const cancelsAt = new Date(subscription.current_period_end * 1000);
+    const currentPeriodEnd = (subscription as any).current_period_end || (subscription as any).cancel_at || (Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60);
+    const cancelsAt = new Date(currentPeriodEnd * 1000);
 
     // Update DB user
     await db
