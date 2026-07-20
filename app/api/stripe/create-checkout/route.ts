@@ -10,6 +10,17 @@ export const dynamic = 'force-dynamic';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function GET(req: NextRequest) {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.STRIPE_SECRET_KEY?.startsWith('sk_test_')
+  ) {
+    console.error('WARNING: Using Stripe test mode in production');
+    return Response.json(
+      { error: 'Payment system not properly configured' },
+      { status: 500 }
+    );
+  }
+
   const { userId } = await auth();
 
   if (!userId) {
