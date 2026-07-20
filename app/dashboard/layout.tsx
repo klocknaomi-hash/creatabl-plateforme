@@ -15,6 +15,7 @@ import { PaywallOverlay } from "@/components/PaywallOverlay";
 import { PaywallBanner } from "@/components/dashboard/PaywallBanner"
 import { PaywallProvider } from "@/lib/paywall-context"
 import { isNaomiOrTest } from "@/lib/plans"
+import { CancellationBanner } from '@/components/dashboard/CancellationBanner';
 
 export default async function DashboardLayout({
   children,
@@ -110,6 +111,7 @@ export default async function DashboardLayout({
           <ErrorBoundary>
             <Topbar />
           </ErrorBoundary>
+          <CancellationBanner cancelsAt={dbUser?.cancelsAt} />
           <TrialBanner />
           <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
             {showPaywall && <PaywallBanner selectedPlan={dbUser?.selectedPlan || undefined} />}

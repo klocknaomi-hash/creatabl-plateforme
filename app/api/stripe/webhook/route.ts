@@ -86,6 +86,12 @@ export async function POST(req: NextRequest) {
 
     const plan = subscription.metadata?.plan || 'starter';
     const billing = subscription.metadata?.billing || 'monthly';
+    const isCanceling = subscription.cancel_at_period_end;
+    const cancelsAtDate = isCanceling
+      ? (subscription.cancel_at
+          ? new Date(subscription.cancel_at * 1000)
+          : (subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null))
+      : null;
 
     let userQuery = eq(users.stripeCustomerId, customerId);
     if (targetClerkId) {
@@ -99,7 +105,9 @@ export async function POST(req: NextRequest) {
           stripeSubscriptionId: subscription.id,
           stripeCustomerId: customerId,
           trialEndsAt: null, // clear trial
-          subscriptionStatus: 'active',
+          subscriptionStatus: isCanceling ? 'canceling' : 'active',
+          cancelAtPeriodEnd: isCanceling,
+          cancelsAt: cancelsAtDate,
           isSubscribed: true,
         })
         .where(userQuery);
@@ -111,16 +119,20 @@ export async function POST(req: NextRequest) {
             plan: plan,
             trialEndsAt: null,
             subscriptionActive: true,
-            billing: billing
+            billing: billing,
+            cancelAtPeriodEnd: isCanceling,
+            cancelsAt: cancelsAtDate ? cancelsAtDate.toISOString() : null,
           }
         });
       }
-      console.log(`✅ Subscription activated for customer ${customerId}, plan ${plan}`);
+      console.log(`✅ Subscription updated for customer ${customerId}, plan ${plan}, canceling: ${isCanceling}`);
     } else {
       const updateData: any = {
         stripeCustomerId: customerId,
         stripeSubscriptionId: subscription.id,
-        subscriptionStatus: subscription.status,
+        subscriptionStatus: isCanceling ? 'canceling' : subscription.status,
+        cancelAtPeriodEnd: isCanceling,
+        cancelsAt: cancelsAtDate,
       };
 
       if (subscription.trial_end) {
@@ -136,6 +148,8 @@ export async function POST(req: NextRequest) {
           publicMetadata: {
             plan: plan,
             billing: billing,
+            cancelAtPeriodEnd: isCanceling,
+            cancelsAt: cancelsAtDate ? cancelsAtDate.toISOString() : null,
           },
         });
       }
@@ -163,13 +177,33 @@ export async function POST(req: NextRequest) {
     const subscription = event.data.object as Stripe.Subscription;
     const customerId = subscription.customer as string;
 
+    const dbUser = await db.query.users.findFirst({
+      where: eq(users.stripeCustomerId, customerId)
+    });
+
     await db.update(users)
       .set({
         plan: 'free',
-        subscriptionStatus: 'active',
+        selectedPlan: 'free',
+        subscriptionStatus: 'canceled',
+        isSubscribed: false,
         trialEndsAt: null,
+        cancelAtPeriodEnd: false,
+        cancelsAt: null,
       })
       .where(eq(users.stripeCustomerId, customerId));
+
+    if (dbUser?.clerkId) {
+      await (await clerkClient()).users.updateUserMetadata(dbUser.clerkId, {
+        publicMetadata: {
+          plan: 'free',
+          selectedPlan: 'free',
+          subscriptionActive: false,
+          cancelAtPeriodEnd: false,
+          cancelsAt: null,
+        }
+      });
+    }
 
     console.log(`ℹ️ Subscription canceled for customer ${customerId} — converted to free plan`);
   }

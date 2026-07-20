@@ -53,6 +53,7 @@ const PLANS = [
     name: 'Free',
     tagline: 'Pour découvrir Creatabl sans engagement',
     monthlyPrice: 0,
+    yearlyMonthly: 0,
     subtext: 'POUR TOUJOURS',
     postsPerMonth: '20 posts / mois',
     socials: ['linkedin', 'instagram'],
@@ -70,6 +71,7 @@ const PLANS = [
     name: 'Starter',
     tagline: 'Pour les solopreneurs qui démarrent',
     monthlyPrice: 49,
+    yearlyMonthly: 39,
     subtext: 'PAR UTILISATEUR ET PAR MOIS',
     postsPerMonth: '50 posts / mois',
     socials: ['linkedin', 'instagram', 'facebook', 'twitter'],
@@ -88,6 +90,7 @@ const PLANS = [
     name: 'Pro',
     tagline: 'Pour les créateurs actifs qui veulent scaler',
     monthlyPrice: 99,
+    yearlyMonthly: 79,
     subtext: 'PAR UTILISATEUR ET PAR MOIS',
     postsPerMonth: '120 posts / mois',
     socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
@@ -107,6 +110,7 @@ const PLANS = [
     name: 'Business',
     tagline: 'Pour les agences et équipes marketing',
     monthlyPrice: 199,
+    yearlyMonthly: 159,
     subtext: 'PAR UTILISATEUR ET PAR MOIS',
     postsPerMonth: '300 posts / mois',
     socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
@@ -125,6 +129,9 @@ const PLANS = [
 
 export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
   const [loading, setLoading] = useState<string | null>(null)
+  const [billing, setBilling] = useState<'monthly' | 'yearly'>(
+    billingCycle === 'yearly' ? 'yearly' : 'monthly'
+  )
 
   const handleSelectPlan = async (planId: string) => {
     setLoading(planId)
@@ -139,7 +146,7 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
       return
     }
 
-    window.location.href = `/api/stripe/create-checkout?plan=${planId}&billing=monthly`
+    window.location.href = `/api/stripe/create-checkout?plan=${planId}&billing=${billing}`
   }
 
   return (
@@ -149,8 +156,8 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="bg-[#05010d] rounded-3xl border border-zinc-800 max-w-[1400px] w-full p-6 md:p-10 shadow-2xl my-8 overflow-hidden"
       >
-        <div className="text-center mb-10 space-y-3">
-          <span className="text-4xl inline-block mb-2">🎊</span>
+        <div className="text-center mb-6 space-y-3">
+          <span className="text-4xl inline-block mb-1">🎊</span>
           <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
             Ton essai gratuit est terminé !
           </h2>
@@ -159,8 +166,37 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
           </p>
         </div>
 
+        {/* Toggle mensuel / annuel */}
+        <div className="flex justify-center mb-8">
+          <div className="bg-[#110c1d] p-1.5 rounded-full flex items-center gap-1">
+            <button
+              onClick={() => setBilling('monthly')}
+              className={`px-8 py-2.5 rounded-full text-sm font-bold transition-all ${
+                billing === 'monthly' ? 'bg-white text-black shadow-lg' : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              Mensuel
+            </button>
+            <button
+              onClick={() => setBilling('yearly')}
+              className={`px-8 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
+                billing === 'yearly' ? 'bg-white text-black shadow-lg' : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              Annuel
+              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                billing === 'yearly' ? 'bg-zinc-100 text-black' : 'bg-zinc-800 text-zinc-400'
+              }`}>
+                -20%
+              </span>
+            </button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch">
           {PLANS.map((planItem) => {
+            const displayPrice = billing === 'monthly' ? planItem.monthlyPrice : planItem.yearlyMonthly
+
             return (
               <motion.div
                 key={planItem.id}
@@ -183,10 +219,15 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
                     {planItem.tagline}
                   </p>
                   
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-5xl font-black text-black tracking-tight">{planItem.monthlyPrice}€</span>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-5xl font-black text-black tracking-tight">{displayPrice}€</span>
                     <span className="text-zinc-400 font-bold text-base">/mois</span>
                   </div>
+                  {billing === 'yearly' && planItem.id !== 'free' && (
+                    <p className="text-xs text-gray-500 font-semibold mb-2">
+                      soit {planItem.yearlyMonthly * 12}€/an
+                    </p>
+                  )}
                   <p className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
                     {planItem.subtext}
                   </p>
@@ -242,7 +283,7 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
                     )}
                   </button>
                   <p className="text-xs text-zinc-400 font-medium">
-                    {planItem.ctaSubtext}
+                    {planItem.id === 'free' || billing === 'monthly' ? 'Sans engagement' : 'Avec engagement — 12 mois'}
                   </p>
                 </div>
               </motion.div>

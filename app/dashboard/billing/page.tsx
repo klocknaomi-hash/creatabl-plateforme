@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Lock, Clock, CheckCircle2 } from "lucide-react";
 import { getTrialStatus } from "@/lib/trial";
 import { BillingPlans } from "./billing-plans";
+import { SubscriptionManager } from "@/components/billing/SubscriptionManager";
 
 export default async function BillingPage() {
   const user = await getCurrentUser();
@@ -36,6 +37,15 @@ export default async function BillingPage() {
           <p className="text-sm text-muted-foreground">Gère ton plan et consulte tes jours d'essai.</p>
         </div>
       </header>
+
+      {/* SECTION MANAGED SUBSCRIPTION (RESILIER / REACTIVER) */}
+      <SubscriptionManager
+        plan={user.plan || 'starter'}
+        subscriptionStatus={user.subscriptionStatus}
+        cancelAtPeriodEnd={user.cancelAtPeriodEnd}
+        cancelsAt={user.cancelsAt}
+        hasStripeSubscription={!!user.stripeSubscriptionId}
+      />
 
       {/* SECTION TRIAL */}
       {isTrial && (
@@ -115,3 +125,4 @@ export default async function BillingPage() {
     </div>
   );
 }
+

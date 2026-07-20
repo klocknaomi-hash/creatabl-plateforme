@@ -209,10 +209,15 @@ export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsPr
                     {plan.tagline}
                   </p>
                   
-                  <div className="flex items-baseline gap-2 mb-2">
+                  <div className="flex items-baseline gap-2 mb-1">
                     <span className="text-5xl font-black text-black tracking-tight">{displayPrice}€</span>
                     <span className="text-zinc-400 font-bold text-base">/mois</span>
                   </div>
+                  {billing === 'yearly' && plan.id !== 'free' && (
+                    <p className="text-xs text-gray-500 font-semibold mb-2">
+                      soit {plan.yearlyMonthly * 12}€/an
+                    </p>
+                  )}
                   <p className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
                     {plan.subtext}
                   </p>
@@ -270,7 +275,7 @@ export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsPr
                     )}
                   </button>
                   <p className="text-xs text-zinc-400 font-medium">
-                    {plan.ctaSubtext}
+                    {plan.id === 'free' || billing === 'monthly' ? 'Sans engagement' : 'Avec engagement — 12 mois'}
                   </p>
                 </div>
               </motion.div>

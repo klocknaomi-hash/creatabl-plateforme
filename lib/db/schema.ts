@@ -25,6 +25,8 @@ export const users = pgTable('users', {
   stripeSubscriptionId: text('stripe_subscription_id'),
   subscriptionStatus: text('subscription_status').default('trialing'),
   isSubscribed: boolean("is_subscribed").default(false),
+  cancelAtPeriodEnd: boolean('cancel_at_period_end').default(false),
+  cancelsAt: timestamp('cancels_at'),
   paddleCustomerId: text("paddle_customer_id"), // Deprecated in favor of Stripe
   profileType: text("profile_type"),
   clientType: text('client_type'),
