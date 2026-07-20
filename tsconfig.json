@@ -31,5 +31,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "scratch", "temp-canva-test"]
+  "exclude": ["node_modules", "tests", ".next", "scratch", "temp-canva-test"]
 }
