@@ -86,12 +86,9 @@ export async function POST(req: NextRequest) {
 
     const plan = subscription.metadata?.plan || 'starter';
     const billing = subscription.metadata?.billing || 'monthly';
-    const isCanceling = subscription.cancel_at_period_end;
-    const cancelsAtDate = isCanceling
-      ? (subscription.cancel_at
-          ? new Date(subscription.cancel_at * 1000)
-          : (subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null))
-      : null;
+    const isCanceling = (subscription as any).cancel_at_period_end;
+    const cancelAtTS = (subscription as any).cancel_at || (subscription as any).current_period_end;
+    const cancelsAtDate = isCanceling && cancelAtTS ? new Date(cancelAtTS * 1000) : null;
 
     let userQuery = eq(users.stripeCustomerId, customerId);
     if (targetClerkId) {
