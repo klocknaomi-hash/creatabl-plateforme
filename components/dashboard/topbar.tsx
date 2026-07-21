@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 import { Bell, PenSquare, Settings, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -59,7 +59,7 @@ export function Topbar() {
       <h1 className="text-base font-semibold truncate flex-1">{title}</h1>
 
       {/* Actions */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         {/* Inviter un membre — visible for Business plan */}
         {access.team && (
           <Button
@@ -95,6 +95,26 @@ export function Topbar() {
         >
           <PenSquare />
         </Button>
+
+        {/* Organization Switcher */}
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/dashboard/settings/workspace"
+          afterLeaveOrganizationUrl="/dashboard"
+          afterSelectOrganizationUrl="/dashboard"
+          appearance={{
+            variables: {
+              colorPrimary: '#7C3AED',
+              borderRadius: '0.75rem',
+            },
+            elements: {
+              rootBox: 'flex items-center shrink-0',
+              organizationSwitcherTrigger:
+                'flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-border/60 bg-muted/30 hover:bg-muted/70 text-xs font-semibold text-foreground transition-all max-w-[180px] sm:max-w-[220px] truncate',
+              organizationPreviewAvatarBox: 'size-5 rounded-md shrink-0',
+              organizationSwitcherTriggerIcon: 'size-3.5 text-muted-foreground shrink-0',
+            },
+          }}
+        />
 
         {/* Notifications */}
         <NotificationsPopover />

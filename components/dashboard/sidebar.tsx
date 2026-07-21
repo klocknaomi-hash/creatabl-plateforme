@@ -251,17 +251,12 @@ export function AppSidebar() {
           const email = user?.emailAddresses[0]?.emailAddress ?? '';
           const currentPlan = (user?.publicMetadata?.plan as string) || 'starter';
           
-          if (currentPlan === 'free' || isNaomiOrTest(email)) return null;
+          if (currentPlan === 'free' || user?.publicMetadata?.isSubscribed || user?.publicMetadata?.subscriptionStatus === 'active' || isNaomiOrTest(email)) return null;
           
           let daysLeft = 14;
           let showTrial = true;
           
           let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
-          if (!trialEndsAt && user?.createdAt) {
-            const createdAt = new Date(user.createdAt);
-            const fourteenDaysLater = new Date(createdAt.getTime() + 14 * 24 * 60 * 60 * 1000);
-            trialEndsAt = fourteenDaysLater.toISOString();
-          }
           if (trialEndsAt) {
             const calculatedDays = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
             if (!isNaN(calculatedDays) && calculatedDays > 0) {

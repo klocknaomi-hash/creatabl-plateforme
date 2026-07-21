@@ -3,13 +3,13 @@ import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { posts, postPlatformResults, mediaAssets } from '@/lib/db/schema';
 import { inngest } from '@/lib/inngest/client';
-import { eq, and, desc, gte, lte, sql } from 'drizzle-orm';
+import { eq, and, or, desc, gte, lte, sql } from 'drizzle-orm';
 import { users as usersTable } from '@/lib/db/schema';
 import { checkPlanLimit } from '@/lib/plan-limits';
 import { publishPostImmediately } from '@/lib/platforms/publisher';
 
 export async function POST(request: NextRequest) {
-  const { userId: clerkId } = await auth();
+  const { userId: clerkId, orgId } = await auth();
   if (!clerkId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
     // 1. Create Post
     const [newPost] = await db.insert(posts).values({
       userId: userRecord.id,
+      organizationId: orgId || null,
       content,
       mediaUrls,
       platforms,
@@ -92,6 +93,7 @@ export async function POST(request: NextRequest) {
         if (!existing) {
           await db.insert(mediaAssets).values({
             userId: userRecord.id,
+            organizationId: orgId || null,
             url: file.url,
             fileId: file.fileId,
             name: file.name,
@@ -135,7 +137,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const { userId: clerkId } = await auth();
+  const { userId: clerkId, orgId } = await auth();
   if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const userRecord = await db.query.users.findFirst({
@@ -148,11 +150,14 @@ export async function GET(request: NextRequest) {
   const platform = searchParams.get('platform');
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
-  const limit = parseInt(searchParams.get('limit') || '20');
+  const limit = parseInt(searchParams.get('limit') || '50');
   const offset = parseInt(searchParams.get('offset') || '0');
 
   try {
-    const filters = [eq(posts.userId, userRecord.id)];
+    const filters = orgId
+      ? [or(eq(posts.organizationId, orgId), eq(posts.userId, userRecord.id))]
+      : [eq(posts.userId, userRecord.id)];
+
     if (status) filters.push(eq(posts.status, status as any));
     if (startDate) filters.push(gte(posts.scheduledAt, new Date(startDate)));
     if (endDate) filters.push(lte(posts.scheduledAt, new Date(endDate)));

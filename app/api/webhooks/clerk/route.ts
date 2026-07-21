@@ -2,8 +2,8 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { users } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { users, posts, postPlatformResults, socialAccounts, mediaAssets, autoReplyRules } from '@/lib/db/schema'
+import { eq, inArray } from 'drizzle-orm'
 
 export async function POST(req: Request) {
   console.log('Webhook received');
@@ -108,6 +108,36 @@ export async function POST(req: Request) {
           plan,
         }).where(eq(users.clerkId, id));
         console.log('DB update successful');
+      }
+    }
+
+    if (eventType === 'organization.deleted') {
+      const { id: orgId } = evt.data;
+      console.log('Organization deleted event received for orgId:', orgId);
+
+      if (orgId) {
+        // 1. Delete auto reply rules for this organization
+        await db.delete(autoReplyRules).where(eq(autoReplyRules.organizationId, orgId));
+
+        // 2. Find posts associated with this organization and delete their platform results first
+        const orgPosts = await db.query.posts.findMany({
+          where: eq(posts.organizationId, orgId),
+          columns: { id: true },
+        });
+
+        if (orgPosts.length > 0) {
+          const postIds = orgPosts.map((p) => p.id);
+          await db.delete(postPlatformResults).where(inArray(postPlatformResults.postId, postIds));
+          await db.delete(posts).where(eq(posts.organizationId, orgId));
+        }
+
+        // 3. Delete social accounts for this organization
+        await db.delete(socialAccounts).where(eq(socialAccounts.organizationId, orgId));
+
+        // 4. Delete media assets for this organization
+        await db.delete(mediaAssets).where(eq(mediaAssets.organizationId, orgId));
+
+        console.log(`Cascade deletion completed for organization: ${orgId}`);
       }
     }
 

@@ -69,6 +69,7 @@ export const aiUsage = pgTable('ai_usage', {
 export const socialAccounts = pgTable('social_accounts', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id).notNull(),
+  organizationId: text('organization_id'),
   platform: platformEnum('platform').notNull(),
   platformUserId: text('platform_user_id'),
   accessToken: text('access_token'), // Encrypted
@@ -81,6 +82,7 @@ export const socialAccounts = pgTable('social_accounts', {
 export const posts = pgTable('posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id).notNull(),
+  organizationId: text('organization_id'),
   content: text('content').notNull(),
   mediaUrls: jsonb('media_urls'),
   platforms: jsonb('platforms'),
@@ -108,6 +110,7 @@ export const postPlatformResults = pgTable('post_platform_results', {
 export const autoReplyRules = pgTable('auto_reply_rules', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id).notNull(),
+  organizationId: text('organization_id'),
   socialAccountId: uuid('social_account_id').references(() => socialAccounts.id).notNull(),
   triggerType: triggerTypeEnum('trigger_type').notNull(),
   keywords: jsonb('keywords'),
@@ -134,6 +137,7 @@ export const autoReplyLogs = pgTable('auto_reply_logs', {
 export const mediaAssets = pgTable('media_assets', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id).notNull(),
+  organizationId: text('organization_id'),
   url: text('url').notNull(),
   fileId: text('file_id').unique().notNull(),
   name: text('name').notNull(),
