@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { buildIdeateurPrompt } from '@/lib/ai/prompts'
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -62,52 +63,48 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
-      generationConfig: {
-        maxOutputTokens: 1000,
-        responseMimeType: 'application/json',
-        temperature: 0.75,
+    const prompt = buildIdeateurPrompt(trend, source || 'Google Trends')
+
+    let maxTokens = 1000
+    let attempts = 0
+    const maxAttempts = 2
+    let text = ""
+    let finishReason = ""
+
+    while (attempts < maxAttempts) {
+      attempts++
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash',
+        generationConfig: {
+          maxOutputTokens: maxTokens,
+          responseMimeType: 'application/json',
+          temperature: 0.75,
+        }
+      })
+
+      const result = await model.generateContent(prompt)
+      text = result.response.text()
+      const candidate = result.response.candidates?.[0]
+      finishReason = candidate?.finishReason || ""
+
+      // Check if truncated
+      const isTruncated = finishReason === "MAX_TOKENS"
+      
+      // Also verify it is valid JSON
+      let isValidJson = false
+      try {
+        const clean = text.replace(/```json|```/g, '').trim()
+        JSON.parse(clean)
+        isValidJson = true
+      } catch (e) {}
+
+      if ((isTruncated || !isValidJson) && attempts < maxAttempts) {
+        console.warn(`[Gemini Agent] Generation truncated or invalid JSON (finishReason: ${finishReason}, isValidJson: ${isValidJson}). Retrying with 2048 tokens...`)
+        maxTokens = 2048
+        continue
       }
-    })
-
-    const prompt = `
-Tu es un expert en marketing sur les réseaux sociaux. Tu écris uniquement en français.
-La tendance du moment est: "${trend}"
-Source de cette tendance: "${source || 'Google Trends'}"
-
-${source === 'YouTube' ? 
-  "Cette tendance vient de YouTube — génère des idées de contenu vidéo et de posts qui s'inspirent de ce format." : ''}
-${source?.includes('Reddit') ? 
-  "Cette tendance vient de Reddit — génère des idées de posts authentiques et conversationnels qui engagent la communauté." : ''}
-${source === 'Google' || source === 'Google Trends' ? 
-  "Cette tendance est générale — génère des idées de posts informatifs et éducatifs." : ''}
-
-Génère 3 idées de posts différentes basées sur cette tendance. Pour chaque idée, donne:
-- Un titre accrocheur (title)
-- Un texte de post de 150 à 200 mots (content)
-- 3-5 hashtags pertinents (hashtags)
-- La plateforme recommandée (platform - doit être soit 'LinkedIn', 'Instagram', ou 'TikTok')
-- Le meilleur moment pour publier (bestTime - ex. "Jeudi · 9h00")
-- Un score d'engagement estimé de l'IA (score - entier entre 75 et 99)
-
-Réponds uniquement en JSON valide avec ce format:
-{
-  "ideas": [
-    {
-      "title": "Titre de l'idée",
-      "content": "Contenu complet rédigé avec accroche et mise en forme...",
-      "hashtags": ["#tag1", "#tag2", "#tag3"],
-      "platform": "LinkedIn",
-      "bestTime": "Mardi · 14h30",
-      "score": 92
+      break
     }
-  ]
-}
-`
-
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
 
     try {
       const clean = text.replace(/```json|```/g, '').trim()

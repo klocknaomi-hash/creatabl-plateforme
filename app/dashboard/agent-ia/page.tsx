@@ -253,15 +253,16 @@ export default function AgentIAPage() {
     setLoading(true)
     setRedacteurResult('')
     try {
-      const prompt = `Rédige un post pour ${redacteurPlatform.toUpperCase()} destiné à une audience de: "${redacteurAudience || 'générale'}". Sujet: "${redacteurTopic}".`
       const res = await fetch('/api/generate-post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: prompt,
+          content: redacteurTopic,
           action: 'generate',
           platform: redacteurPlatform,
-          tone: redacteurTone
+          tone: redacteurTone,
+          agentId: 'redacteur',
+          audience: redacteurAudience
         })
       })
       const data = await res.json()
@@ -316,14 +317,15 @@ export default function AgentIAPage() {
     setLoading(true)
     setSeoResult('')
     try {
-      const prompt = `Post original:\n${seoOriginalText}\n\nMots-clés cibles: ${seoKeywords}`
       const res = await fetch('/api/generate-post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: prompt,
+          content: seoOriginalText,
           action: 'improve',
-          tone: 'professional'
+          tone: 'professional',
+          agentId: 'seo',
+          keywords: seoKeywords
         })
       })
       const data = await res.json()

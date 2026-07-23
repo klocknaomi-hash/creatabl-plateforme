@@ -3,6 +3,8 @@ import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { isNaomiOrTest } from './plans'
+import { buildCaptionPrompt } from './ai/prompts'
+import { endsWithPunctuationOrHashtag, truncateToLastCompleteSentence } from './ai/utils'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
@@ -77,46 +79,56 @@ export async function generateCaption({
     lots: "Utilise plusieurs emojis expressifs (4+).",
   }
 
-  // 4. Build the full prompt
-  const systemPrompt = `Tu es un expert en marketing digital et création de contenu pour les réseaux sociaux. Tu écris uniquement en français.
+  // 4. Build the system prompt using prompts.ts
+  const systemPrompt = buildCaptionPrompt(platform, idea, {
+    tone: writingTone,
+    gender: genderAgreement,
+    emojis: emojiPreference,
+  });
 
-RÉSEAU CIBLE : ${platform.toUpperCase()}
-LIMITE DE CARACTÈRES : ${PLATFORM_LIMITS[platform]} caractères maximum
-CONSEIL PLATEFORME : ${PLATFORM_TIPS[platform]}
+  const userPrompt = `Génère une légende optimisée pour ${platform} sur ce sujet. Respecte scrupuleusement la structure demandée (Accroche + Corps + CTA + Hashtags).`;
 
-STYLE D'ÉCRITURE :
-- Ton : ${toneMap[writingTone as keyof typeof toneMap] || toneMap.professional}
-- Genre : ${genderMap[genderAgreement as keyof typeof genderMap] || genderMap.none}
-- Emojis : ${emojiMap[emojiPreference as keyof typeof emojiMap] || emojiMap.moderate}
-
-RÈGLES STRICTES :
-- Écris UNIQUEMENT la légende finale, rien d'autre
-- Pas de guillemets autour du texte
-- Pas d'explication, pas de commentaire
-- Respecte la limite de caractères
-- Inclus 2-4 hashtags pertinents à la fin (sauf LinkedIn max 3)
-- Commence par une accroche forte qui donne envie de lire la suite`
-
-  const userPrompt = `Idée / sujet du post : ${idea}
-
-Génère une légende optimisée pour ${platform}.`
-
-  // 5. Call Gemini
+  // 5. Call Gemini with retry logic
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-2.5-flash',
-      generationConfig: {
-        maxOutputTokens: 500,
-        temperature: 0.8,
+    let maxTokens = 1024;
+    let attempts = 0;
+    const maxAttempts = 2;
+    let generated = "";
+
+    while (attempts < maxAttempts) {
+      attempts++;
+      const model = genAI.getGenerativeModel({ 
+        model: 'gemini-2.5-flash',
+        generationConfig: {
+          maxOutputTokens: maxTokens,
+          temperature: 0.8,
+        }
+      });
+
+      const result = await model.generateContent([
+        { text: systemPrompt },
+        { text: userPrompt }
+      ]);
+
+      generated = result.response.text() || "";
+      const candidate = result.response.candidates?.[0];
+      const finishReason = candidate?.finishReason;
+
+      const isTruncatedReason = finishReason === "MAX_TOKENS";
+      const endsCorrectly = endsWithPunctuationOrHashtag(generated);
+
+      if ((isTruncatedReason || !endsCorrectly) && attempts < maxAttempts) {
+        console.warn(`[Gemini Caption] Truncated (finishReason: ${finishReason}, endsCorrectly: ${endsCorrectly}). Retrying with 2048 tokens...`);
+        maxTokens = 2048;
+        continue;
       }
-    })
 
-    const result = await model.generateContent([
-      { text: systemPrompt },
-      { text: userPrompt }
-    ])
-
-    const generated = result.response.text()
+      if (isTruncatedReason || !endsCorrectly) {
+        console.warn(`[Gemini Caption] Still truncated after retry. Truncating to last complete sentence.`);
+        generated = truncateToLastCompleteSentence(generated);
+      }
+      break;
+    }
 
     if (!generated || generated.trim().length === 0) {
       return {

@@ -3,6 +3,9 @@
 // Provider interchangeable : gemini | claude | openai
 // Pour switcher : changer AI_PROVIDER dans .env.local
 
+import { buildCaptionPrompt, buildRedacteurPrompt, buildSeoPrompt } from "./ai/prompts";
+import { endsWithPunctuationOrHashtag, truncateToLastCompleteSentence } from "./ai/utils";
+
 export type AIProvider = "gemini" | "claude" | "openai";
 
 export type PostTone = "professional" | "storytelling" | "viral" | "educational" | "conversational";
@@ -27,6 +30,9 @@ export interface GeneratePostOptions {
   platform?: PostPlatform;
   tone?: PostTone;
   provider?: AIProvider;
+  agentId?: "redacteur" | "seo";
+  audience?: string;
+  keywords?: string;
 }
 
 export interface GeneratePostResult {
@@ -36,7 +42,30 @@ export interface GeneratePostResult {
 }
 
 // Builds the system prompt according to the action
-function buildSystemPrompt(action: GenerateAction, platform?: PostPlatform, tone?: PostTone): string {
+function buildSystemPrompt(
+  content: string,
+  action: GenerateAction,
+  platform?: PostPlatform,
+  tone?: PostTone,
+  agentId?: "redacteur" | "seo",
+  audience?: string,
+  keywords?: string
+): string {
+  // If Agent IA Rédacteur is used
+  if (agentId === "redacteur") {
+    return buildRedacteurPrompt(platform || "linkedin", content, tone || "professional", audience || "générale");
+  }
+
+  // If Agent IA Optimiseur SEO is used
+  if (agentId === "seo") {
+    return buildSeoPrompt(content, keywords || "");
+  }
+
+  // If it's a general caption generation ("Créer un post")
+  if (action === "generate") {
+    return buildCaptionPrompt(platform || "linkedin", content, { tone });
+  }
+
   const platformGuide: Record<PostPlatform, string> = {
     linkedin: "LinkedIn: Professional and 'thought leadership' tone. Structure: Impactful hook, development with bullet points for readability, conclusion with an open question. Max 3 relevant hashtags. No excessive emojis.",
     instagram: "Instagram: Visual and narrative tone. Structure: Captivating first line (hook), generous use of emojis for structure, clear call to action. Frequent line breaks. 10-15 hashtags hidden at the bottom.",
@@ -90,32 +119,59 @@ async function generateWithGemini(
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY missing in .env.local");
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ parts: [{ text: userContent }] }],
-        generationConfig: {
-          temperature: 0.8,
-          maxOutputTokens: 1024,
-        },
-      }),
-    }
-  );
+  let maxTokens = 1024;
+  let attempts = 0;
+  const maxAttempts = 2;
+  let resultText = "";
+  let tokensUsed = 0;
 
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(`Gemini error: ${err.error?.message || response.statusText}`);
+  while (attempts < maxAttempts) {
+    attempts++;
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: [{ parts: [{ text: userContent }] }],
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: maxTokens,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(`Gemini error: ${err.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    const candidate = data.candidates?.[0];
+    resultText = candidate?.content?.parts?.[0]?.text ?? "";
+    tokensUsed = data.usageMetadata?.totalTokenCount;
+    const finishReason = candidate?.finishReason;
+
+    const isTruncatedReason = finishReason === "MAX_TOKENS";
+    const endsCorrectly = endsWithPunctuationOrHashtag(resultText);
+
+    if ((isTruncatedReason || !endsCorrectly) && attempts < maxAttempts) {
+      console.warn(`[Gemini Provider] Caption truncated (finishReason: ${finishReason}, endsCorrectly: ${endsCorrectly}). Retrying with 2048 tokens...`);
+      maxTokens = 2048;
+      continue;
+    }
+
+    if (isTruncatedReason || !endsCorrectly) {
+      console.warn(`[Gemini Provider] Still truncated after retry. Truncating to last complete sentence.`);
+      resultText = truncateToLastCompleteSentence(resultText);
+    }
+    
+    break;
   }
 
-  const data = await response.json();
-  const result = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-  const tokensUsed = data.usageMetadata?.totalTokenCount;
-
-  return { result: result.trim(), provider: "gemini", tokensUsed };
+  return { result: resultText.trim(), provider: "gemini", tokensUsed };
 }
 
 // Claude (Anthropic)
@@ -197,6 +253,9 @@ export async function generatePost(options: GeneratePostOptions): Promise<Genera
     action,
     platform,
     tone,
+    agentId,
+    audience,
+    keywords,
   } = options;
 
   // Always use Gemini for social media post generation
@@ -204,7 +263,7 @@ export async function generatePost(options: GeneratePostOptions): Promise<Genera
 
   if (!content?.trim()) throw new Error("Content cannot be empty");
 
-  const systemPrompt = buildSystemPrompt(action, platform, tone);
+  const systemPrompt = buildSystemPrompt(content, action, platform, tone, agentId, audience, keywords);
 
   switch (provider as AIProvider) {
     case "gemini":
