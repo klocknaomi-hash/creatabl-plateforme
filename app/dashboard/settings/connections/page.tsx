@@ -30,6 +30,7 @@ import {
 } from '@/components/platform-icons';
 import { DisconnectButton } from './disconnect-button';
 import { PlatformCardContent } from './platform-card-content';
+import { FEATURES } from '@/lib/config/features';
 
 export const metadata: Metadata = {
   title: 'Comptes connectés | Creatabl-IA',
@@ -226,18 +227,18 @@ export default async function AccountsPage({
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {PLATFORMS.map((platform) => {
           const isCanva = platform.id === 'canva';
-          const canvaEnabled = process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
-          const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
+          const canvaEnabled = FEATURES.canvaEnabled && process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
+          const canvaTestMode = FEATURES.canvaEnabled && process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
           const isCanvaAccessible = isCanva && (canvaEnabled || canvaTestMode);
           
           const platformAccounts = isCanva 
-            ? (user.canvaAccessToken ? [{ id: 'canva', username: 'Canva Pro', avatarUrl: null, isCanva: true }] : [])
+            ? (FEATURES.canvaEnabled && user.canvaAccessToken ? [{ id: 'canva', username: 'Canva Pro', avatarUrl: null, isCanva: true }] : [])
             : connectedAccounts.filter((a: any) => a.platform === platform.id);
           
           const connected = platformAccounts.length > 0;
           const Icon = platform.icon;
 
-          if (isCanva && !isCanvaAccessible && !canvaEnabled) {
+          if (isCanva && (!FEATURES.canvaEnabled || (!isCanvaAccessible && !canvaEnabled))) {
             platform.comingSoon = true;
           }
 

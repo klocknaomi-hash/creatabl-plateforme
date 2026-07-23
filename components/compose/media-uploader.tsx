@@ -6,6 +6,7 @@ import { Upload, X, Image as ImageIcon, Loader2, Sparkles, Wand2, Crop, Layers, 
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CanvaIcon } from "@/components/platform-icons";
+import { FEATURES } from "@/lib/config/features";
 import { 
   Dialog, 
   DialogContent, 
@@ -263,8 +264,8 @@ interface MediaLimit {
 
 export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemove, onTransform, canvaConnected }: MediaUploaderProps) {
   const [uploading, setUploading] = useState(false);
-  const canvaEnabled = process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
-  const canvaTestMode = process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
+  const canvaEnabled = FEATURES.canvaEnabled && process.env.NEXT_PUBLIC_CANVA_ENABLED === 'true';
+  const canvaTestMode = FEATURES.canvaEnabled && process.env.NEXT_PUBLIC_CANVA_TEST_MODE === 'true';
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getStrictestLimit = (): MediaLimit => {
@@ -441,7 +442,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
                 )}>
                   <div className="absolute -top-2 -right-2 z-10">
                     <Badge className="bg-[#7F77DD] hover:bg-[#7F77DD]/90 text-white border-none text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm">
-                      Soon
+                      Bientôt disponible
                     </Badge>
                   </div>
 
