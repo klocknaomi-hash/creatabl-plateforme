@@ -1,4 +1,4 @@
-import { db } from '@/lib/db'
+import { db, dbTransactional } from '@/lib/db'
 import { aiUsage, users, aiLogs } from '@/lib/db/schema'
 import { eq, sql } from 'drizzle-orm'
 
@@ -146,7 +146,7 @@ export async function checkAndIncrementUsage(clerkId: string): Promise<boolean> 
   }
 
   // Increment monthlyAiCount and log for analytics/billing
-  await db.transaction(async (tx) => {
+  await dbTransactional.transaction(async (tx) => {
     await tx.update(users)
       .set({ monthlyAiCount: sql`${users.monthlyAiCount} + 1` })
       .where(eq(users.clerkId, clerkId))

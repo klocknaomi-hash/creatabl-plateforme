@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generatePost, GeneratePostOptions } from "@/lib/ai-provider";
 import { auth } from "@clerk/nextjs/server";
-import { db } from "@/lib/db";
+import { db, dbTransactional } from "@/lib/db";
 import { aiLogs, users } from "@/lib/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { getAccess } from "@/lib/get-access";
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     const result = await generatePost(body);
 
     // Increment counter and log action
-    await db.transaction(async (tx) => {
+    await dbTransactional.transaction(async (tx) => {
       await tx.insert(aiLogs).values({
         userId: clerkId,
         action: body.action,
