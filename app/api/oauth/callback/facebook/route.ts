@@ -123,11 +123,7 @@ export async function GET(req: NextRequest) {
       const encryptedToken = encrypt(tokenData.access_token);
       const expiresAt = new Date(Date.now() + (tokenData.expires_in || 5184000) * 1000);
 
-      const userRecord = await db.query.users.findFirst({
-        where: eq(users.id, internalUserId),
-      });
-      const plan = (userRecord?.plan || userRecord?.selectedPlan || 'starter') as string;
-      const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
+      const { checkPlanLimit } = await import('@/lib/plans/check-limit');
 
       // Save Facebook account to social_accounts
       const existingFb = await db.select().from(socialAccounts)
@@ -143,7 +139,8 @@ export async function GET(req: NextRequest) {
           avatarUrl: meData.picture?.data?.url,
         }).where(eq(socialAccounts.id, existingMatchFb.id));
       } else {
-        if (existingFb.length < maxAccounts) {
+        const limitResult = await checkPlanLimit(userId as string, 'connectedAccounts');
+        if (limitResult.allowed) {
           await db.insert(socialAccounts).values({
             userId: internalUserId,
             platform: 'facebook',
@@ -154,14 +151,9 @@ export async function GET(req: NextRequest) {
             avatarUrl: meData.picture?.data?.url,
           });
         } else {
-          // Replace first one
-          await db.update(socialAccounts).set({
-            platformUserId: meData.id,
-            accessToken: encryptedToken,
-            expiresAt: expiresAt,
-            username: meData.name,
-            avatarUrl: meData.picture?.data?.url,
-          }).where(eq(socialAccounts.id, existingFb[0].id));
+          return NextResponse.redirect(
+            new URL('/dashboard/settings/connections?error=limit_reached&limit=connectedAccounts&upgradeUrl=%2Fpricing', req.nextUrl.origin)
+          );
         }
       }
 
@@ -180,7 +172,8 @@ export async function GET(req: NextRequest) {
             avatarUrl: instagramAccount.profile_picture_url,
           }).where(eq(socialAccounts.id, existingMatchIg.id));
         } else {
-          if (existingIg.length < maxAccounts) {
+          const limitResult = await checkPlanLimit(userId as string, 'connectedAccounts');
+          if (limitResult.allowed) {
             await db.insert(socialAccounts).values({
               userId: internalUserId,
               platform: 'instagram',
@@ -191,14 +184,9 @@ export async function GET(req: NextRequest) {
               avatarUrl: instagramAccount.profile_picture_url,
             });
           } else {
-            // Replace first one
-            await db.update(socialAccounts).set({
-              platformUserId: instagramAccount.id,
-              accessToken: encryptedToken,
-              expiresAt: expiresAt,
-              username: instagramAccount.username,
-              avatarUrl: instagramAccount.profile_picture_url,
-            }).where(eq(socialAccounts.id, existingIg[0].id));
+            return NextResponse.redirect(
+              new URL('/dashboard/settings/connections?error=limit_reached&limit=connectedAccounts&upgradeUrl=%2Fpricing', req.nextUrl.origin)
+            );
           }
         }
       }

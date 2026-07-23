@@ -85,9 +85,6 @@ export async function GET(
         )
       );
 
-    const plan = (user.plan || user.selectedPlan || 'starter') as string;
-    const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
-
     const existingMatch = existingAccounts.find(a => a.platformUserId === tokens.platformUserId);
 
     if (existingMatch) {
@@ -102,7 +99,10 @@ export async function GET(
         })
         .where(eq(socialAccounts.id, existingMatch.id));
     } else {
-      if (existingAccounts.length < maxAccounts) {
+      const { checkPlanLimit } = await import('@/lib/plans/check-limit');
+      const limitResult = await checkPlanLimit(user.clerkId, 'connectedAccounts');
+      
+      if (limitResult.allowed) {
         await db.insert(socialAccounts).values({
           userId: user.id,
           platform: platform as any,
@@ -114,18 +114,9 @@ export async function GET(
           avatarUrl: tokens.avatarUrl,
         });
       } else {
-        // Overwrite the first one to avoid blocking
-        await db
-          .update(socialAccounts)
-          .set({
-            platformUserId: tokens.platformUserId,
-            accessToken: encryptedAccessToken,
-            refreshToken: encryptedRefreshToken,
-            expiresAt: tokens.expiresAt,
-            username: tokens.username,
-            avatarUrl: tokens.avatarUrl,
-          })
-          .where(eq(socialAccounts.id, existingAccounts[0].id));
+        return NextResponse.redirect(
+          new URL(`/dashboard/settings/connections?error=limit_reached&limit=connectedAccounts&upgradeUrl=%2Fpricing`, request.nextUrl.origin)
+        );
       }
     }
 

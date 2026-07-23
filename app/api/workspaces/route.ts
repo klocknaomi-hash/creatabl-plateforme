@@ -2,7 +2,7 @@ import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { workspaces, users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { getAccess } from '@/lib/get-access'
+import { checkPlanLimit } from '@/lib/plans/check-limit'
 
 export async function GET() {
   const { userId } = await auth()
@@ -31,12 +31,18 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const access = await getAccess()
-  if (!access.multiAccounts) {
+  // Check workspace limit dynamically
+  const limitResult = await checkPlanLimit(userId, 'workspaces');
+  if (!limitResult.allowed) {
     return Response.json(
-      { error: 'Multi-comptes nécessite le plan Business.' },
-      { status: 403 }
-    )
+      {
+        error: "limit_reached",
+        limit: "workspaces",
+        upgradeUrl: "/pricing",
+        message: `Limite de workspaces atteinte (${limitResult.current}/${limitResult.limit}). Passe au plan supérieur pour continuer.`
+      },
+      { status: 402 }
+    );
   }
 
   // Resolve Clerk userId to DB UUID
@@ -45,17 +51,6 @@ export async function POST(req: Request) {
   })
   if (!user) {
     return Response.json({ error: 'User not found' }, { status: 404 })
-  }
-
-  const existing = await db.query.workspaces.findMany({
-    where: eq(workspaces.ownerId, user.id),
-  })
-
-  if (existing.length >= 5) {
-    return Response.json(
-      { error: 'Maximum 5 workspaces atteint.' },
-      { status: 403 }
-    )
   }
 
   const { name } = await req.json()

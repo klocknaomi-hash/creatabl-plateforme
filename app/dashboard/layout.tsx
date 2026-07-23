@@ -16,6 +16,7 @@ import { PaywallBanner } from "@/components/dashboard/PaywallBanner"
 import { PaywallProvider } from "@/lib/paywall-context"
 import { isNaomiOrTest } from "@/lib/plans"
 import { CancellationBanner } from '@/components/dashboard/CancellationBanner';
+import { headers } from 'next/headers';
 
 export default async function DashboardLayout({
   children,
@@ -77,30 +78,51 @@ export default async function DashboardLayout({
     }
     
     const userEmail = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
-    const isTestOrNaomi = isNaomiOrTest(userEmail)
+    const isTestOrNaomi = isNaomiOrTest(userEmail) || userEmail.endsWith('@creatabl-ia.com')
 
     const onboardingStep = clerkUser?.publicMetadata?.onboardingStep
     const showOnboarding = !isTestOrNaomi && (!onboardingStep || onboardingStep !== 'done')
     
     const now = new Date()
-    const trialEndsAt = clerkUser?.publicMetadata?.trialEndsAt 
-      ? new Date(clerkUser.publicMetadata.trialEndsAt as string)
-      : null
+    const trialEndsAt = dbUser?.trialEndsAt ? new Date(dbUser.trialEndsAt) : null
 
-    // Check if user has active Stripe subscription
-    let hasActiveSubscription = false
+    // Check access permissions
+    let isAccessAllowed = false
     try {
+      const isFreePlan = dbUser?.plan === 'free'
       const trialActive = trialEndsAt && trialEndsAt > now
-      const paidPlan = dbUser?.stripeSubscriptionId != null
-      hasActiveSubscription = !!(trialActive || paidPlan)
+      const hasSubscription = dbUser?.stripeSubscriptionId != null && 
+        (dbUser.subscriptionStatus === 'active' || 
+         dbUser.subscriptionStatus === 'trialing' || 
+         dbUser.subscriptionStatus === 'canceling')
+      
+      isAccessAllowed = !!(isTestOrNaomi || isFreePlan || trialActive || hasSubscription)
     } catch (e) {
-      hasActiveSubscription = true // fail open, don't block
+      isAccessAllowed = true // fail open, don't block
     }
 
-    const showPaywall = !isTestOrNaomi &&
-                        !hasActiveSubscription && 
-                        !showOnboarding &&
-                        !userEmail.endsWith('@creatabl-ia.com')
+    const shouldRedirectToUpgrade = !isAccessAllowed && !showOnboarding
+
+    // Read the pathname header from middleware
+    const headersList = await headers()
+    const pathname = headersList.get('x-pathname') || ''
+
+    if (shouldRedirectToUpgrade && pathname !== '/dashboard/upgrade-required') {
+      redirect('/dashboard/upgrade-required')
+    }
+
+    // Full-screen rendering for the upgrade-required page
+    if (pathname === '/dashboard/upgrade-required') {
+      return (
+        <DashboardProviders>
+          <ErrorBoundary>
+            <main className="min-h-screen w-full bg-[#05010d] flex items-center justify-center">
+              {children}
+            </main>
+          </ErrorBoundary>
+        </DashboardProviders>
+      )
+    }
 
     return (
       <DashboardProviders>
@@ -114,20 +136,13 @@ export default async function DashboardLayout({
           <CancellationBanner cancelsAt={dbUser?.cancelsAt} />
           <TrialBanner />
           <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
-            {showPaywall && <PaywallBanner selectedPlan={dbUser?.selectedPlan || undefined} />}
-            <PaywallProvider isLocked={showPaywall} selectedPlan={dbUser?.selectedPlan || null}>
+            <PaywallProvider isLocked={false} selectedPlan={dbUser?.selectedPlan || null}>
               <ErrorBoundary>
                 {children}
               </ErrorBoundary>
             </PaywallProvider>
             {/* Show onboarding if not completed */}
             {showOnboarding && <OnboardingModal />}
-            {showPaywall && (
-              <PaywallOverlay 
-                plan={dbUser?.selectedPlan || 'starter'} 
-                billingCycle={dbUser?.billingCycle || 'monthly'} 
-              />
-            )}
           </main>
         </SidebarInset>
       </DashboardProviders>

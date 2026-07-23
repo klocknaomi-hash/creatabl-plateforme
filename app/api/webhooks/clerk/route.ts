@@ -72,15 +72,17 @@ export async function POST(req: Request) {
       const name = [first_name, last_name].filter(Boolean).join(' ') || null;
 
       if (email) {
+        const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
         console.log('Inserting/Updating user in DB:', { id, email, name });
         await db.insert(users).values({
           clerkId: id,
           email,
           name,
-          plan: 'free',
-          selectedPlan: 'free',
-          subscriptionStatus: 'active',
-          trialEndsAt: null,
+          plan: 'business',
+          selectedPlan: 'starter',
+          subscriptionStatus: 'trialing',
+          trialStartedAt: new Date(),
+          trialEndsAt: trialEndsAt,
         }).onConflictDoUpdate({
           target: users.clerkId,
           set: {

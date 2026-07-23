@@ -6,6 +6,7 @@ import { aiLogs, users } from "@/lib/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { getAccess } from "@/lib/get-access";
 import { checkAiRateLimit } from "@/lib/ai-rate-limit";
+import { checkPlanLimit } from "@/lib/plans/check-limit";
 
 const PLAN_AI_LIMITS: Record<string, number> = {
   starter: 30,
@@ -23,6 +24,20 @@ export async function POST(req: NextRequest) {
     const access = await getAccess();
     if (!access.aiBasic) {
       return NextResponse.json({ error: "Générer avec l'IA nécessite le plan Starter ou supérieur." }, { status: 403 });
+    }
+
+    // Check monthly plan limit first
+    const monthlyLimitResult = await checkPlanLimit(clerkId, 'aiGenerations');
+    if (!monthlyLimitResult.allowed) {
+      return NextResponse.json(
+        {
+          error: "limit_reached",
+          limit: "aiGenerations",
+          upgradeUrl: "/pricing",
+          message: `Limite mensuelle de générations IA atteinte (${monthlyLimitResult.current}/${monthlyLimitResult.limit}). Passe au plan supérieur pour continuer.`
+        },
+        { status: 402 }
+      );
     }
 
     // Fetch user info

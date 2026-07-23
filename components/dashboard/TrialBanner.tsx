@@ -36,15 +36,18 @@ export function TrialBanner() {
   
   const trialPlanName = ((user?.publicMetadata?.trialPlan as string) || currentPlan || 'Business').toUpperCase()
 
+  const bannerText = daysLeft <= 3
+    ? `Votre essai gratuit se termine dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""}, choisissez votre plan.`
+    : `Essai ${trialPlanName} — ${daysLeft} jour${daysLeft > 1 ? "s" : ""} restant${daysLeft > 1 ? "s" : ""}. Choisis ton plan avant la fin de l'essai.`
+
   return (
-    <div className="w-full bg-primary text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-sm shrink-0">
+    <div className="w-full bg-[#ef4444] text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-sm shrink-0 font-medium">
       <span className="text-[13px] leading-snug">
-        Essai <strong>{trialPlanName}</strong> — <strong>{daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}</strong>.
-        Choisis ton plan avant la fin de l'essai.
+        ⚠️ <strong>{bannerText}</strong>
       </span>
       <button
-        onClick={() => router.push('/dashboard/billing')}
-        className="bg-white text-primary font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-white/90 transition-colors whitespace-nowrap shrink-0"
+        onClick={() => router.push('/pricing')}
+        className="bg-white text-[#ef4444] font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-white/90 transition-colors whitespace-nowrap shrink-0"
       >
         Mettre à niveau
       </button>

@@ -5,7 +5,7 @@ import { posts, postPlatformResults, mediaAssets } from '@/lib/db/schema';
 import { inngest } from '@/lib/inngest/client';
 import { eq, and, or, desc, gte, lte, sql } from 'drizzle-orm';
 import { users as usersTable } from '@/lib/db/schema';
-import { checkPlanLimit } from '@/lib/plan-limits';
+import { checkPlanLimit } from '@/lib/plans/check-limit';
 import { publishPostImmediately } from '@/lib/platforms/publisher';
 
 export async function POST(request: NextRequest) {
@@ -25,12 +25,14 @@ export async function POST(request: NextRequest) {
   // Check limits (if not a draft)
   const body = await request.clone().json();
   if (body.status !== 'draft') {
-    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'posts');
+    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'postsPerMonth');
     if (!allowed) {
       return NextResponse.json({ 
-        error: `Limite de posts mensuelle atteinte. Tu as utilisé ${current} sur ${limit} posts. Passe au plan Pro pour en avoir plus.`,
-        limitReached: true
-      }, { status: 403 });
+        error: "limit_reached",
+        limit: "postsPerMonth",
+        upgradeUrl: "/pricing",
+        message: `Limite de posts mensuelle atteinte. Tu as utilisé ${current} sur ${limit} posts. Passe au plan supérieur pour continuer.`
+      }, { status: 402 });
     }
   }
 

@@ -11,6 +11,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/clerk',
   '/sign-up/success',
   '/tarifs',
+  '/pricing',
   '/privacy',
   '/terms',
   '/logo.svg',
@@ -20,7 +21,14 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isPublicRoute(req)) return NextResponse.next()
+  // 1. Redirection /pricing -> /tarifs
+  if (req.nextUrl.pathname === '/pricing') {
+    return NextResponse.redirect(new URL('/tarifs', req.url))
+  }
+
+  if (isPublicRoute(req)) {
+    return NextResponse.next()
+  }
 
   const { userId } = await auth()
 
@@ -30,7 +38,15 @@ export default clerkMiddleware(async (auth, req) => {
     )
   }
 
-  return NextResponse.next()
+  // 2. Transmettre le pathname actuel via un header x-pathname
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set('x-pathname', req.nextUrl.pathname)
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 })
 
 export const config = {

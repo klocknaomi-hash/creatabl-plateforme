@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 import { workspaceMembers, users } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { getCurrentWorkspace } from '@/lib/workspaces'
-import { getAccess } from '@/lib/get-access'
+import { checkPlanLimit } from '@/lib/plans/check-limit'
 import { sendTeamInvitation } from '@/lib/email'
 import crypto from 'crypto'
 
@@ -14,8 +14,8 @@ export async function GET() {
       return Response.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
-    const access = await getAccess()
-    if (!access.team) {
+    const limitResult = await checkPlanLimit(userId, 'teamMembers');
+    if (limitResult.limit <= 1) {
       return Response.json(
         { error: 'Gestion équipe nécessite le plan Business.' },
         { status: 403 }
@@ -86,12 +86,17 @@ export async function POST(req: Request) {
       return Response.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
-    const access = await getAccess()
-    if (!access.team) {
+    const limitResult = await checkPlanLimit(userId, 'teamMembers');
+    if (!limitResult.allowed) {
       return Response.json(
-        { error: 'Gestion équipe nécessite le plan Business.' },
-        { status: 403 }
-      )
+        {
+          error: "limit_reached",
+          limit: "teamMembers",
+          upgradeUrl: "/pricing",
+          message: `Limite de membres d'équipe atteinte (${limitResult.current}/${limitResult.limit}). Passe au plan supérieur pour continuer.`
+        },
+        { status: 402 }
+      );
     }
 
     const { email, role } = await req.json()

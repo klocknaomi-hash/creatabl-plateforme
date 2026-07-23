@@ -1,4 +1,4 @@
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
@@ -14,6 +14,7 @@ export async function POST() {
   const email = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
   const name = clerkUser?.fullName ?? null
 
+  // Update DB User
   await db.insert(users)
     .values({
       clerkId: userId,
@@ -33,6 +34,22 @@ export async function POST() {
         trialEndsAt: null,
       },
     })
+
+  // Sync to Clerk metadata to avoid overwrite
+  try {
+    const client = await clerkClient()
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: {
+        plan: 'free',
+        selectedPlan: 'free',
+        trialEndsAt: null,
+        trialStartedAt: null,
+        subscriptionActive: true,
+      }
+    })
+  } catch (clerkErr) {
+    console.error('Failed to update Clerk metadata in init-free:', clerkErr)
+  }
 
   return Response.json({ success: true })
 }
