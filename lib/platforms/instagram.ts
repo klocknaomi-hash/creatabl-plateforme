@@ -1,8 +1,8 @@
 import { PlatformClient, SocialAccount } from './index';
 
 export class InstagramClient implements PlatformClient {
-  private clientId = process.env.FACEBOOK_CLIENT_ID!;
-  private clientSecret = process.env.FACEBOOK_CLIENT_SECRET!;
+  private clientId = process.env.FACEBOOK_APP_ID!;
+  private clientSecret = process.env.FACEBOOK_APP_SECRET!;
   private get redirectUri() {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
     return `${baseUrl}/api/oauth/instagram/callback`;

@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  const appId = process.env.FACEBOOK_CLIENT_ID
+  const appId = process.env.FACEBOOK_APP_ID
   if (!appId) {
     return Response.json(
       { error: 'Facebook not configured' },
