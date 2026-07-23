@@ -110,7 +110,7 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
         size="sm"
         onClick={(e) => {
           e.stopPropagation();
-          router.push("/dashboard/accounts");
+          router.push("/dashboard/settings/connections");
         }}
         className="h-[52px] px-4 rounded-xl border-2 border-dashed border-muted-foreground/30 hover:border-foreground hover:bg-foreground hover:text-background transition-all gap-2 group"
       >

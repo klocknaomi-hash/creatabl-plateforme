@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   if (error) {
     console.error('Canva OAuth error:', error)
     return NextResponse.redirect(
-      new URL('/dashboard?canva=error',
+      new URL(`/dashboard/settings/connections?error=${encodeURIComponent(error)}`,
         process.env.NEXT_PUBLIC_APP_URL!)
     )
   }
@@ -33,9 +33,9 @@ export async function GET(req: NextRequest) {
     cookieStore.get('canva_code_verifier')?.value
 
   if (!state || !storedState || state !== storedState) {
-    return NextResponse.json(
-      { error: 'Invalid state' },
-      { status: 400 }
+    return NextResponse.redirect(
+      new URL('/dashboard/settings/connections?error=invalid_state',
+        process.env.NEXT_PUBLIC_APP_URL!)
     )
   }
 
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
   if (!tokenData.access_token) {
     console.error('Token exchange failed:', tokenData)
     return NextResponse.redirect(
-      new URL('/dashboard?canva=token_error',
+      new URL('/dashboard/settings/connections?error=token_error',
         process.env.NEXT_PUBLIC_APP_URL!)
     )
   }
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
     .where(eq(users.clerkId, userId))
 
   const response = NextResponse.redirect(
-    new URL('/dashboard?canva=connected',
+    new URL('/dashboard/settings/connections?success=true',
       process.env.NEXT_PUBLIC_APP_URL!)
   )
   response.cookies.delete('canva_code_verifier')

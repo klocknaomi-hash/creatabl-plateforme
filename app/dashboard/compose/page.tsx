@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { 
   Sparkles,
   Send,
@@ -69,6 +70,7 @@ function ComposePageInner() {
   const [generating, setGenerating] = useState(false);
   const [canvaConnected, setCanvaConnected] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [hasAccounts, setHasAccounts] = useState<boolean | null>(null);
   const lastSavedRef = useRef<string>("");
 
   // Handle Initial Load
@@ -163,8 +165,10 @@ function ComposePageInner() {
         if (data.canvaConnected) {
           setCanvaConnected(true);
         }
+        setHasAccounts(data.accounts && data.accounts.length > 0);
       } catch (err) {
         console.error("Failed to fetch connections", err);
+        setHasAccounts(false);
       }
     };
     fetchConnections();
@@ -293,6 +297,44 @@ function ComposePageInner() {
       setGenerating(false);
     }
   };
+
+  if (hasAccounts === null) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
+      </div>
+    );
+  }
+
+  if (hasAccounts === false) {
+    return (
+      <div className="flex flex-col gap-4 w-full max-w-full mx-auto pb-16 overflow-x-hidden animate-in fade-in duration-500">
+        {/* Refined Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2 w-full">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Créer un post</h1>
+            </div>
+            <p className="text-sm text-muted-foreground">Créez et programmez votre contenu social</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center 
+          h-64 text-center border border-dashed border-gray-200 
+          rounded-2xl p-8 w-full mt-4 bg-background">
+          <p className="font-medium text-gray-500 mb-1">
+            Connecte tes réseaux sociaux
+          </p>
+          <p className="text-sm text-gray-400 mb-4">
+            Connectez au moins un réseau social pour créer et publier du contenu.
+          </p>
+          <Link href="/dashboard/settings/connections" className="bg-[#534AB7] text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-[#453da3] transition-colors">
+            Se connecter
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-full mx-auto pb-16 overflow-x-hidden">

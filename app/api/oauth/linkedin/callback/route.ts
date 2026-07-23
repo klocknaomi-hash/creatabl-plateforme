@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
   if (!state || !storedState || state !== storedState) {
     return NextResponse.redirect(
       new URL(
-        '/dashboard/accounts?error=invalid_state',
+        '/dashboard/settings/connections?error=invalid_state',
         process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin
       )
     );
