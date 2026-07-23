@@ -13,6 +13,14 @@ export async function GET(req: NextRequest) {
     new URL('/sign-in', req.nextUrl.origin)
   )
 
+  const { checkActiveAccess } = await import('@/lib/plans/check-active')
+  const activeCheck = await checkActiveAccess(userId)
+  if (!activeCheck.allowed) {
+    return NextResponse.redirect(
+      new URL(`/dashboard/settings/connections?error=trial_expired&message=${encodeURIComponent("Ton essai gratuit est terminé. Choisis un forfait pour continuer.")}`, req.nextUrl.origin)
+    );
+  }
+
   const { searchParams } = req.nextUrl
   const code = searchParams.get('code')
   const state = searchParams.get('state')

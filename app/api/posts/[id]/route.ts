@@ -5,7 +5,8 @@ import { posts, users } from '@/lib/db/schema';
 import { eq, and, sql } from 'drizzle-orm';
 import { publishPostImmediately } from '@/lib/platforms/publisher';
 import { inngest } from '@/lib/inngest/client';
-import { checkPlanLimit } from '@/lib/plan-limits';
+import { checkPlanLimit } from '@/lib/plans/check-limit';
+import { checkActiveAccess } from '@/lib/plans/check-active';
 
 export async function GET(
   request: NextRequest,
@@ -57,6 +58,15 @@ export async function PATCH(
   });
   if (!userRecord) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
+  // Check active trial or subscription
+  const activeCheck = await checkActiveAccess(clerkId);
+  if (!activeCheck.allowed) {
+    return NextResponse.json({
+      error: "trial_expired",
+      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+    }, { status: 403 });
+  }
+
   const { id } = await params;
 
   try {
@@ -75,11 +85,16 @@ export async function PATCH(
       currentPost.status === 'draft' &&
       (status === 'published' || status === 'scheduled')
     ) {
-      const limitCheck = await checkPlanLimit(clerkId!, 'posts');
+      const limitCheck = await checkPlanLimit(clerkId!, 'postsPerMonth');
       if (!limitCheck.allowed) {
         return Response.json(
-          { error: limitCheck.message },
-          { status: 403 }
+          {
+            error: "limit_reached",
+            limit: "postsPerMonth",
+            upgradeUrl: "/pricing",
+            message: "Limite de posts mensuelle atteinte. Passe au plan supérieur pour continuer."
+          },
+          { status: 402 }
         );
       }
       await incrementPostCount(clerkId!);

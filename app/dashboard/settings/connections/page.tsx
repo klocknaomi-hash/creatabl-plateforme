@@ -183,7 +183,9 @@ export default async function AccountsPage({
     ? 'business' 
     : ((user.plan || user.selectedPlan || 'starter') as string);
 
-  const maxAccounts = (plan === 'business' || plan === 'agency') ? 2 : 1;
+  const { PLAN_LIMITS } = await import('@/lib/plans/limits');
+  const limits = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS] || PLAN_LIMITS.free;
+  const maxAccounts = limits.connectedAccounts === -1 ? 999 : limits.connectedAccounts;
 
   return (
     <div className="flex-1 space-y-6 max-w-6xl mx-auto w-full">
@@ -195,7 +197,9 @@ export default async function AccountsPage({
           </p>
         </div>
         <div className="inline-flex items-center rounded-xl bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
-          {plan === 'business' || plan === 'agency' ? 'Plan Business : Jusqu’à 2 comptes par réseau' : 'Plan Starter/Pro : 1 compte par réseau'}
+          {limits.connectedAccounts === -1
+            ? `Comptes connectés : ${connectedAccounts.length} / Illimité`
+            : `Comptes connectés : ${connectedAccounts.length} / ${limits.connectedAccounts}`}
         </div>
       </div>
 

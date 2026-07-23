@@ -6,11 +6,21 @@ import { mediaAssets, users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 import { checkPlanLimit } from '@/lib/plan-limits';
+import { checkActiveAccess } from '@/lib/plans/check-active';
 
 export async function POST(request: NextRequest) {
   const { userId: clerkId } = await auth();
   if (!clerkId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Check active trial or subscription
+  const activeCheck = await checkActiveAccess(clerkId);
+  if (!activeCheck.allowed) {
+    return NextResponse.json({
+      error: "trial_expired",
+      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+    }, { status: 403 });
   }
 
   // Storage check

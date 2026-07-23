@@ -4,6 +4,7 @@ import { workspaceMembers, users } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { getCurrentWorkspace } from '@/lib/workspaces'
 import { checkPlanLimit } from '@/lib/plans/check-limit'
+import { checkActiveAccess } from '@/lib/plans/check-active'
 import { sendTeamInvitation } from '@/lib/email'
 import crypto from 'crypto'
 
@@ -12,6 +13,14 @@ export async function GET() {
     const { userId } = await auth()
     if (!userId) {
       return Response.json({ error: 'Non autorisé' }, { status: 401 })
+    }
+
+    const activeCheck = await checkActiveAccess(userId);
+    if (!activeCheck.allowed) {
+      return Response.json({
+        error: "trial_expired",
+        message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+      }, { status: 403 });
     }
 
     const limitResult = await checkPlanLimit(userId, 'teamMembers');
@@ -84,6 +93,14 @@ export async function POST(req: Request) {
     const { userId } = await auth()
     if (!userId) {
       return Response.json({ error: 'Non autorisé' }, { status: 401 })
+    }
+
+    const activeCheck = await checkActiveAccess(userId);
+    if (!activeCheck.allowed) {
+      return Response.json({
+        error: "trial_expired",
+        message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+      }, { status: 403 });
     }
 
     const limitResult = await checkPlanLimit(userId, 'teamMembers');

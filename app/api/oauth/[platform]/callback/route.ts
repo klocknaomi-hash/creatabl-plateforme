@@ -30,6 +30,14 @@ export async function GET(
     return NextResponse.redirect(new URL('/sign-in', request.nextUrl.origin));
   }
 
+  const { checkActiveAccess } = await import('@/lib/plans/check-active');
+  const activeCheck = await checkActiveAccess(user.clerkId);
+  if (!activeCheck.allowed) {
+    return NextResponse.redirect(
+      new URL(`/dashboard/settings/connections?error=trial_expired&message=${encodeURIComponent("Ton essai gratuit est terminé. Choisis un forfait pour continuer.")}`, request.nextUrl.origin)
+    );
+  }
+
   try {
     const client = getPlatformClient(platform);
     const cookieStore = await cookies();

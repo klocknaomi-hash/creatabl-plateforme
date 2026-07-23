@@ -7,6 +7,7 @@ import { eq, sql } from "drizzle-orm";
 import { getAccess } from "@/lib/get-access";
 import { checkAiRateLimit } from "@/lib/ai-rate-limit";
 import { checkPlanLimit } from "@/lib/plans/check-limit";
+import { checkActiveAccess } from "@/lib/plans/check-active";
 
 const PLAN_AI_LIMITS: Record<string, number> = {
   starter: 30,
@@ -19,6 +20,15 @@ export async function POST(req: NextRequest) {
     const { userId: clerkId } = await auth();
     if (!clerkId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check active trial or subscription
+    const activeCheck = await checkActiveAccess(clerkId);
+    if (!activeCheck.allowed) {
+      return NextResponse.json({
+        error: "trial_expired",
+        message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+      }, { status: 403 });
     }
 
     const access = await getAccess();

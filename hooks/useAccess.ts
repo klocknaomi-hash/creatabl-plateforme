@@ -9,8 +9,12 @@ export function useAccess(): PlanAccess {
   const isTest = isNaomiOrTest(email)
 
   // Get plan from user's public metadata
-  // This is set by the Stripe webhook after checkout
-  const plan = isTest ? 'business' : ((user?.publicMetadata?.plan as string) || 'starter')
+  const trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined
+  const isTrialActive = trialEndsAt && new Date(trialEndsAt) > new Date()
+
+  const plan = isTest || isTrialActive
+    ? 'business'
+    : ((user?.publicMetadata?.plan as string) || 'starter')
 
   return getPlanAccess(plan)
 }

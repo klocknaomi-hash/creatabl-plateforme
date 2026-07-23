@@ -57,10 +57,24 @@ interface GeneratedIdea {
   score: number
 }
 
+import { useAccess } from '@/hooks/useAccess'
+import { PaywallOverlay } from '@/components/PaywallOverlay'
+
 export default function AgentIAPage() {
   const { user } = useUser()
   const router = useRouter()
+  const access = useAccess()
   const firstName = user?.firstName || 'Naomi'
+
+  if (!access.aiAdvanced) {
+    const currentPlan = (user?.publicMetadata?.plan as string) || 'free'
+    const billingCycle = (user?.publicMetadata?.billing as string) || 'monthly'
+    return (
+      <div className="w-full flex justify-center py-6">
+        <PaywallOverlay plan={currentPlan} billingCycle={billingCycle} />
+      </div>
+    )
+  }
 
   // Dashboard Page State
   const [searchQuery, setSearchQuery] = useState('')

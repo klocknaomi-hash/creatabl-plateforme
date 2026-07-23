@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server'
 import { generateCaption } from '@/lib/ai-generate'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
-import { isNaomiOrTest } from '@/lib/plans'
+import { eq, sql } from 'drizzle-orm'
+import { checkPlanLimit } from '@/lib/plans/check-limit'
+import { checkActiveAccess } from '@/lib/plans/check-active'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,22 +22,26 @@ export async function POST(req: Request) {
     const user = await currentUser()
     const userEmail = user?.emailAddresses[0]?.emailAddress || ''
 
-    // Check if trial expired and no subscription
-    const dbUser = await db.query.users.findFirst({
-      where: eq(users.clerkId, userId)
-    })
-
-    const trialEndsAt = dbUser?.trialEndsAt
-    const hasSubscription = dbUser?.stripeSubscriptionId != null
-    const trialActive = trialEndsAt && new Date(trialEndsAt) > new Date()
-    const isTest = isNaomiOrTest(userEmail) || userEmail.endsWith('@creatabl-ia.com')
-
-    if (!trialActive && !hasSubscription && !isTest) {
+    // Check active trial or subscription
+    const activeCheck = await checkActiveAccess(userId);
+    if (!activeCheck.allowed) {
       return NextResponse.json({
         success: false,
         error: 'TRIAL_EXPIRED',
         message: 'Ton essai est terminé. Choisis un forfait pour continuer.'
       }, { status: 403 })
+    }
+
+    // Check monthly plan limit
+    const limitCheck = await checkPlanLimit(userId, 'aiGenerations');
+    if (!limitCheck.allowed) {
+      return NextResponse.json({
+        success: false,
+        error: 'limit_reached',
+        limit: 'aiGenerations',
+        upgradeUrl: '/pricing',
+        message: `Limite mensuelle de générations IA atteinte (${limitCheck.current}/${limitCheck.limit}). Passe au plan supérieur pour continuer.`
+      }, { status: 402 })
     }
 
     const body = await req.json()
@@ -67,6 +72,11 @@ export async function POST(req: Request) {
       const status = result.error === 'RATE_LIMIT' ? 429 : 500
       return NextResponse.json(result, { status })
     }
+
+    // Increment AI count
+    await db.update(users)
+      .set({ monthlyAiCount: sql`${users.monthlyAiCount} + 1` })
+      .where(eq(users.clerkId, userId));
 
     return NextResponse.json(result)
 

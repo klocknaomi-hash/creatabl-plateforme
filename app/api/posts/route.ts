@@ -6,6 +6,7 @@ import { inngest } from '@/lib/inngest/client';
 import { eq, and, or, desc, gte, lte, sql } from 'drizzle-orm';
 import { users as usersTable } from '@/lib/db/schema';
 import { checkPlanLimit } from '@/lib/plans/check-limit';
+import { checkActiveAccess } from '@/lib/plans/check-active';
 import { publishPostImmediately } from '@/lib/platforms/publisher';
 
 export async function POST(request: NextRequest) {
@@ -20,6 +21,15 @@ export async function POST(request: NextRequest) {
 
   if (!userRecord) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
+
+  // Check active trial or subscription
+  const activeCheck = await checkActiveAccess(clerkId);
+  if (!activeCheck.allowed) {
+    return NextResponse.json({
+      error: "trial_expired",
+      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+    }, { status: 403 });
   }
 
   // Check limits (if not a draft)

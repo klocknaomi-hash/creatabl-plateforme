@@ -1,4 +1,4 @@
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
@@ -70,6 +70,22 @@ export default async function DashboardLayout({
           });
         } catch (syncError) {
           console.error('Failed to sync Clerk trial to DB:', syncError);
+        }
+      } else if (dbUser && dbUser.trialEndsAt && !clerkTrialEndsAt) {
+        try {
+          const client = await clerkClient();
+          await client.users.updateUserMetadata(userId, {
+            publicMetadata: {
+              trialStartedAt: dbUser.trialStartedAt ? dbUser.trialStartedAt.toISOString() : new Date().toISOString(),
+              trialEndsAt: dbUser.trialEndsAt.toISOString(),
+              selectedPlan: dbUser.selectedPlan || 'starter',
+              billing: dbUser.billingCycle || 'monthly',
+              onboardingStep: dbUser.onboardingCompleted ? 'done' : undefined,
+            }
+          });
+          console.log(`Synced DB trial to Clerk metadata for user ${userId}`);
+        } catch (clerkSyncError) {
+          console.error('Failed to sync DB trial to Clerk:', clerkSyncError);
         }
       }
     } catch (dbError) {

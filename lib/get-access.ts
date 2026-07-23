@@ -11,7 +11,12 @@ export async function getAccess(): Promise<PlanAccess> {
   const email = user.emailAddresses[0]?.emailAddress ?? ''
   const isTest = isNaomiOrTest(email)
   
-  const plan = isTest ? 'business' : ((user.publicMetadata?.plan as string) || 'starter')
+  const plan = isTest || (
+    user.publicMetadata?.trialEndsAt && 
+    new Date(user.publicMetadata.trialEndsAt as string) > new Date()
+  )
+    ? 'business'
+    : ((user.publicMetadata?.plan as string) || 'starter')
 
   return getPlanAccess(plan)
 }

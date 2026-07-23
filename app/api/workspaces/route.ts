@@ -3,11 +3,20 @@ import { db } from '@/lib/db'
 import { workspaces, users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { checkPlanLimit } from '@/lib/plans/check-limit'
+import { checkActiveAccess } from '@/lib/plans/check-active'
 
 export async function GET() {
   const { userId } = await auth()
   if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const activeCheck = await checkActiveAccess(userId);
+  if (!activeCheck.allowed) {
+    return Response.json({
+      error: "trial_expired",
+      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+    }, { status: 403 });
   }
 
   // Resolve Clerk userId to DB UUID
@@ -29,6 +38,14 @@ export async function POST(req: Request) {
   const { userId } = await auth()
   if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const activeCheck = await checkActiveAccess(userId);
+  if (!activeCheck.allowed) {
+    return Response.json({
+      error: "trial_expired",
+      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+    }, { status: 403 });
   }
 
   // Check workspace limit dynamically

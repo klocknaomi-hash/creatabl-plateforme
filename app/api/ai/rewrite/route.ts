@@ -5,12 +5,34 @@ import { getAccess } from '@/lib/get-access';
 import { checkAiRateLimit } from '@/lib/ai-rate-limit';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
+import { checkPlanLimit } from '@/lib/plans/check-limit';
+import { checkActiveAccess } from '@/lib/plans/check-active';
 
 export async function POST(request: NextRequest) {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Check active trial or subscription
+  const activeCheck = await checkActiveAccess(userId);
+  if (!activeCheck.allowed) {
+    return NextResponse.json({
+      error: "trial_expired",
+      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+    }, { status: 403 });
+  }
+
+  // Check monthly plan limit
+  const limitCheck = await checkPlanLimit(userId, 'aiGenerations');
+  if (!limitCheck.allowed) {
+    return NextResponse.json({
+      error: "limit_reached",
+      limit: "aiGenerations",
+      upgradeUrl: "/pricing",
+      message: `Limite mensuelle de générations IA atteinte (${limitCheck.current}/${limitCheck.limit}). Passe au plan supérieur pour continuer.`
+    }, { status: 402 });
   }
 
   const access = await getAccess();
@@ -49,6 +71,12 @@ export async function POST(request: NextRequest) {
     }
 
     const rewritten = await rewriteCaption(caption, tone || 'professional');
+
+    // Increment AI count in DB
+    await db.update(users)
+      .set({ monthlyAiCount: sql`${users.monthlyAiCount} + 1` })
+      .where(eq(users.clerkId, userId));
+
     return NextResponse.json({ rewritten });
   } catch (error: any) {
     console.error('AI Rewrite error:', error);
