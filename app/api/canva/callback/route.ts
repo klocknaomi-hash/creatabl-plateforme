@@ -82,12 +82,14 @@ export async function GET(req: NextRequest) {
 
   console.log('Canva OAuth Success! Token saved for user:', userId, 'Rows updated:', updateResult.rowCount ?? 1);
 
+  const returnTo = cookieStore.get('canva_return_to')?.value || '/dashboard/settings/connections?success=true';
+
   const response = NextResponse.redirect(
-    new URL('/dashboard/settings/connections?success=true',
-      process.env.NEXT_PUBLIC_APP_URL!)
+    new URL(returnTo, process.env.NEXT_PUBLIC_APP_URL!)
   )
   response.cookies.delete('canva_code_verifier')
   response.cookies.delete('canva_state')
+  response.cookies.delete('canva_return_to')
 
   return response
 }

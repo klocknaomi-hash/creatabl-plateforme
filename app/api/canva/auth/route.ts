@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const codeVerifier = crypto
     .randomBytes(64)
     .toString('base64url')
@@ -30,9 +30,19 @@ export async function GET() {
     state,
   })
 
+  const { searchParams } = new URL(req.url)
+  const returnTo = searchParams.get('returnTo') || '/dashboard/settings/connections?success=true'
+
   const authUrl = `https://www.canva.com/api/oauth/authorize?${params}`
 
   const response = NextResponse.redirect(authUrl)
+
+  response.cookies.set('canva_return_to', returnTo, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    maxAge: 600,
+  })
 
   response.cookies.set('canva_code_verifier', codeVerifier, {
     httpOnly: true,

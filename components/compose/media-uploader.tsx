@@ -397,7 +397,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
           </CanvaDesignPicker>
         ) : (
           <a 
-            href="/api/canva/auth"
+            href="/api/canva/auth?returnTo=/dashboard/compose"
             className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva hover:border-[#00C4CC]/40 hover:bg-[#00C4CC]/[0.03] hover:shadow-sm"
           >
             <div className="absolute -top-2 -right-2 z-10">
@@ -415,7 +415,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
         )
       ) : canvaTestMode ? (
         <a 
-          href="/api/canva/auth"
+          href="/api/canva/auth?returnTo=/dashboard/compose"
           className={cn(
             "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva",
             canvaConnected ? "opacity-100 grayscale-0" : "opacity-50 grayscale hover:opacity-80 hover:grayscale-0"
