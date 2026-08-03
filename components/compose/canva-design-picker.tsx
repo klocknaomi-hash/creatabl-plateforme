@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCcw, ImagePlus } from "lucide-react";
+import { Loader2, RefreshCcw, ImagePlus, Search } from "lucide-react";
 import { toast } from "sonner";
 import { CanvaIcon } from "@/components/platform-icons";
+import { Input } from "@/components/ui/input";
 
 interface CanvaDesign {
   id: string;
@@ -25,6 +26,7 @@ export function CanvaDesignPicker({ children, onUpload }: CanvaDesignPickerProps
   const [designs, setDesigns] = useState<CanvaDesign[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const [exportingId, setExportingId] = useState<string | null>(null);
 
@@ -134,19 +136,32 @@ export function CanvaDesignPicker({ children, onUpload }: CanvaDesignPickerProps
       ) : (
         <DialogTrigger>{children}</DialogTrigger>
       )}
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader className="flex flex-row items-center justify-between pr-8 border-b pb-4 mb-4">
-          <DialogTitle className="flex items-center gap-2">
-            <CanvaIcon size={24} />
-            Mes designs Canva
-          </DialogTitle>
-          <div className="flex items-center gap-2">
-            <Button size="sm" variant="outline" className="gap-2" onClick={fetchDesigns} disabled={loading}>
-              <RefreshCcw className={`size-3 ${loading ? "animate-spin" : ""}`} />
-              Actualiser
-            </Button>
+      <DialogContent className="max-w-5xl h-[85vh] p-0 flex flex-col overflow-hidden bg-background">
+        <div className="p-6 border-b bg-background z-10 flex-shrink-0">
+          <DialogHeader className="flex flex-row items-center justify-between mb-4">
+            <DialogTitle className="flex items-center gap-3 text-2xl font-bold">
+              <CanvaIcon size={28} />
+              Mes designs Canva
+            </DialogTitle>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" className="gap-2" onClick={fetchDesigns} disabled={loading}>
+                <RefreshCcw className={`size-3 ${loading ? "animate-spin" : ""}`} />
+                Actualiser
+              </Button>
+            </div>
+          </DialogHeader>
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Rechercher un design..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 bg-muted/50"
+            />
           </div>
-        </DialogHeader>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-6 bg-muted/10">
         
         {loading ? (
           <div className="flex flex-col items-center justify-center p-12 gap-4">
@@ -168,44 +183,65 @@ export function CanvaDesignPicker({ children, onUpload }: CanvaDesignPickerProps
           <div className="flex flex-col items-center justify-center p-12 text-center">
             <p className="text-sm text-muted-foreground">Vous n'avez aucun design sur Canva.</p>
           </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-            {designs.map(design => {
-              const thumbnailUrl = design.thumbnail?.url || design.urls?.thumbnail;
-              
-              return (
-                <div key={design.id} className="group relative rounded-xl border bg-muted/20 overflow-hidden flex flex-col aspect-[4/3]">
-                  {thumbnailUrl ? (
-                    <img src={thumbnailUrl} alt={design.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full bg-muted flex items-center justify-center">
-                      <CanvaIcon className="w-8 h-8 opacity-20" />
-                    </div>
-                  )}
-                  
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 gap-2">
-                    <Button 
-                      size="sm" 
-                      className="w-full text-[10px] h-7 px-2 bg-[#00C4CC] hover:bg-[#00C4CC]/90 text-white"
-                      disabled={exportingId !== null}
-                      onClick={() => handleExport(design.id)}
-                    >
-                      {exportingId === design.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
+        ) : (() => {
+          const filteredDesigns = designs.filter(d => d.title?.toLowerCase().includes(searchQuery.toLowerCase()));
+          
+          if (filteredDesigns.length === 0) {
+            return (
+              <div className="flex flex-col items-center justify-center p-12 text-center h-full">
+                <p className="text-sm text-muted-foreground">Aucun design ne correspond à votre recherche.</p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredDesigns.map(design => {
+                const thumbnailUrl = design.thumbnail?.url || design.urls?.thumbnail;
+                
+                return (
+                  <div key={design.id} className="group flex flex-col gap-3">
+                    <div className="relative rounded-2xl border border-border/50 bg-background shadow-sm overflow-hidden aspect-[4/3] transition-all group-hover:shadow-md group-hover:border-[#00C4CC]/50">
+                      {thumbnailUrl ? (
+                        <img src={thumbnailUrl} alt={design.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                       ) : (
-                        <>
-                          <ImagePlus className="size-3 mr-1" />
-                          Importer
-                        </>
+                        <div className="w-full h-full bg-muted/50 flex items-center justify-center">
+                          <CanvaIcon className="w-10 h-10 opacity-20" />
+                        </div>
                       )}
-                    </Button>
+                      
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
+                        <Button 
+                          className="bg-[#00C4CC] hover:bg-[#00C4CC]/90 text-white shadow-lg font-bold px-6"
+                          disabled={exportingId !== null}
+                          onClick={() => handleExport(design.id)}
+                        >
+                          {exportingId === design.id ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Exportation...
+                            </>
+                          ) : (
+                            <>
+                              <ImagePlus className="w-4 h-4 mr-2" />
+                              Importer
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="px-1">
+                      <p className="text-sm font-semibold truncate text-foreground/90">{design.title || "Design sans titre"}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Mis à jour {new Date(design.updated_at).toLocaleDateString()}</p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+                );
+              })}
+            </div>
+          );
+        })()}
+        </div>
       </DialogContent>
     </Dialog>
   );
