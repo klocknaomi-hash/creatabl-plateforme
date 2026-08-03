@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
     cookieStore.get('canva_code_verifier')?.value
 
   if (!state || !storedState || state !== storedState) {
+    console.error('Canva OAuth error: invalid_state', { stateReceived: state, storedState });
     return NextResponse.redirect(
       new URL('/dashboard/settings/connections?error=invalid_state',
         process.env.NEXT_PUBLIC_APP_URL!)
@@ -71,13 +72,15 @@ export async function GET(req: NextRequest) {
     Date.now() + tokenData.expires_in * 1000
   )
 
-  await db.update(users)
+  const updateResult = await db.update(users)
     .set({
       canvaAccessToken: encrypt(tokenData.access_token),
       canvaRefreshToken: tokenData.refresh_token ? encrypt(tokenData.refresh_token) : null,
       canvaTokenExpiresAt: expiresAt,
     })
     .where(eq(users.clerkId, userId))
+
+  console.log('Canva OAuth Success! Token saved for user:', userId, 'Rows updated:', updateResult.rowCount ?? 1);
 
   const response = NextResponse.redirect(
     new URL('/dashboard/settings/connections?success=true',

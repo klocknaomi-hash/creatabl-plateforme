@@ -22,17 +22,24 @@ export async function GET() {
       }
     })
 
+    const status = response.status
+    const statusText = response.statusText
+    const responseText = await response.text()
+    
+    console.log('--- CANVA API DIAGNOSTIC ---')
+    console.log(`Status: ${status} ${statusText}`)
+    console.log(`Body: ${responseText}`)
+    console.log('-----------------------------')
+
     if (!response.ok) {
-      const errorData = await response.json()
-      console.error('Canva designs API error:', errorData)
-      return NextResponse.json({ error: 'Failed to fetch designs' }, { status: response.status })
+      console.error('Canva designs API error:', responseText)
+      return NextResponse.json({ error: 'Failed to fetch designs', details: responseText }, { status: response.status })
     }
 
-    const data = await response.json()
-
+    const data = JSON.parse(responseText)
     return NextResponse.json(data)
   } catch (error) {
     console.error('Error in Canva designs route:', error)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal Server Error', details: String(error) }, { status: 500 })
   }
 }
