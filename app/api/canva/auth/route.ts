@@ -20,6 +20,7 @@ export async function GET() {
     scope: [
       'design:content:read',
       'design:content:write',
+      'design:meta:read',
       'asset:read',
       'asset:write',
       'profile:read'
