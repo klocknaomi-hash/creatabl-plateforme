@@ -5,11 +5,11 @@ import { db } from '@/lib/db';
 import { mediaAssets, users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
-import { checkPlanLimit } from '@/lib/plan-limits';
+import { checkPlanLimit } from '@/lib/plans/check-limit';
 import { checkActiveAccess } from '@/lib/plans/check-active';
 
 export async function POST(request: NextRequest) {
-  const { userId: clerkId } = await auth();
+  const { userId: clerkId, orgId } = await auth();
   if (!clerkId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Storage check
-  const storageStatus = await checkPlanLimit(clerkId, 'storageLimit');
+  const storageStatus = await checkPlanLimit(clerkId, 'storageLimit', orgId);
   if (!storageStatus.allowed) {
     return NextResponse.json({ 
       error: "You’ve reached your media storage limit for your current plan." 

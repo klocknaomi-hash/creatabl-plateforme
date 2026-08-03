@@ -10,7 +10,7 @@ import crypto from 'crypto'
 
 export async function GET() {
   try {
-    const { userId } = await auth()
+    const { userId, orgId } = await auth()
     if (!userId) {
       return Response.json({ error: 'Non autorisé' }, { status: 401 })
     }
@@ -23,7 +23,7 @@ export async function GET() {
       }, { status: 403 });
     }
 
-    const limitResult = await checkPlanLimit(userId, 'teamMembers');
+    const limitResult = await checkPlanLimit(userId, 'teamMembers', orgId);
     if (limitResult.limit <= 1) {
       return Response.json(
         { error: 'Gestion équipe nécessite le plan Business.' },
@@ -90,7 +90,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await auth()
+    const { userId, orgId } = await auth()
     if (!userId) {
       return Response.json({ error: 'Non autorisé' }, { status: 401 })
     }
@@ -103,7 +103,7 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
-    const limitResult = await checkPlanLimit(userId, 'teamMembers');
+    const limitResult = await checkPlanLimit(userId, 'teamMembers', orgId);
     if (!limitResult.allowed) {
       return Response.json(
         {

@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CreditCard, ArrowUpRight } from "lucide-react";
 import { UsageMetrics } from "./current-usage";
-import { PlanType } from "@/lib/plan-limits";
+import { PlanType } from "@/lib/plans/limits";
 
 interface SubscriptionCardProps {
   usageData: any;

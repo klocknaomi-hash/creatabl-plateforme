@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { users, posts, socialAccounts, autoReplyRules } from "@/lib/db/schema";
 import { eq, count, and, gte } from "drizzle-orm";
-import { PLAN_LIMITS, PlanType } from "./plan-limits";
+import { PLAN_LIMITS, PlanType } from "./plans/limits";
 
 export async function getUsage(clerkId: string) {
   const user = await db.query.users.findFirst({

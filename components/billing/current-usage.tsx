@@ -1,6 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
-import { PlanType } from "@/lib/plan-limits";
+import { PlanType } from "@/lib/plans/limits";
 
 interface UsageProps {
   data: {

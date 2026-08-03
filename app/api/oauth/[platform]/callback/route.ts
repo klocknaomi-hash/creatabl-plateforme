@@ -107,8 +107,10 @@ export async function GET(
         })
         .where(eq(socialAccounts.id, existingMatch.id));
     } else {
+      const { auth } = await import('@clerk/nextjs/server');
+      const { orgId } = await auth();
       const { checkPlanLimit } = await import('@/lib/plans/check-limit');
-      const limitResult = await checkPlanLimit(user.clerkId, 'connectedAccounts');
+      const limitResult = await checkPlanLimit(user.clerkId, 'connectedAccounts', orgId);
       
       if (limitResult.allowed) {
         await db.insert(socialAccounts).values({

@@ -12,7 +12,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { userId: clerkId } = await auth();
+  const { userId: clerkId, orgId } = await auth();
   if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const userRecord = await db.query.users.findFirst({
@@ -24,7 +24,9 @@ export async function GET(
 
   try {
     const post = await db.query.posts.findFirst({
-      where: and(eq(posts.id, id), eq(posts.userId, userRecord.id)),
+      where: orgId
+        ? and(eq(posts.id, id), eq(posts.organizationId, orgId))
+        : and(eq(posts.id, id), eq(posts.userId, userRecord.id)),
       with: {
         platformResults: true,
       },
@@ -50,7 +52,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { userId: clerkId } = await auth();
+  const { userId: clerkId, orgId } = await auth();
   if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const userRecord = await db.query.users.findFirst({
@@ -74,7 +76,9 @@ export async function PATCH(
     const { content, mediaUrls, platforms, scheduledAt, status } = body;
 
     const currentPost = await db.query.posts.findFirst({
-      where: and(eq(posts.id, id), eq(posts.userId, userRecord.id)),
+      where: orgId
+        ? and(eq(posts.id, id), eq(posts.organizationId, orgId))
+        : and(eq(posts.id, id), eq(posts.userId, userRecord.id)),
     });
 
     if (!currentPost) {
@@ -85,7 +89,7 @@ export async function PATCH(
       currentPost.status === 'draft' &&
       (status === 'published' || status === 'scheduled')
     ) {
-      const limitCheck = await checkPlanLimit(clerkId!, 'postsPerMonth');
+      const limitCheck = await checkPlanLimit(clerkId!, 'postsPerMonth', orgId);
       if (!limitCheck.allowed) {
         return Response.json(
           {
@@ -108,7 +112,11 @@ export async function PATCH(
         scheduledAt: scheduledAt ? new Date(scheduledAt) : undefined,
         status,
       })
-      .where(and(eq(posts.id, id), eq(posts.userId, userRecord.id)))
+      .where(
+        orgId
+          ? and(eq(posts.id, id), eq(posts.organizationId, orgId))
+          : and(eq(posts.id, id), eq(posts.userId, userRecord.id))
+      )
       .returning();
 
     if (!updatedPost) {
@@ -146,7 +154,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { userId: clerkId } = await auth();
+  const { userId: clerkId, orgId } = await auth();
   if (!clerkId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const userRecord = await db.query.users.findFirst({
@@ -158,7 +166,11 @@ export async function DELETE(
 
   try {
     const [deletedPost] = await db.delete(posts)
-      .where(and(eq(posts.id, id), eq(posts.userId, userRecord.id)))
+      .where(
+        orgId
+          ? and(eq(posts.id, id), eq(posts.organizationId, orgId))
+          : and(eq(posts.id, id), eq(posts.userId, userRecord.id))
+      )
       .returning();
 
     if (!deletedPost) {

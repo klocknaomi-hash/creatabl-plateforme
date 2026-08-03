@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles } from "lucide-react";
-import { PlanType } from "@/lib/plan-limits";
+import { PlanType } from "@/lib/plans/limits";
 
 interface PremiumBenefitsProps {
   plan: PlanType;

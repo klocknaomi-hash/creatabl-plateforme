@@ -179,7 +179,7 @@ export default function ProjetsPage() {
   const fetchRealPosts = async () => {
     setLoadingPosts(true)
     try {
-      const res = await fetch('/api/team/projects')
+      const res = await fetch('/api/posts')
       if (res.ok) {
         const data = await res.json()
         const fetchedPosts: PostItem[] = (Array.isArray(data) ? data : data.posts || []).map((p: any) => {
@@ -195,9 +195,9 @@ export default function ProjetsPage() {
             ? new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
             : 'Sans date'
 
-          const assignedMember = teamMembers[0] || {
-            name: user?.fullName || 'Membre',
-            imageUrl: user?.imageUrl || '',
+          const assignedMember = teamMembers.find(m => m.id === p.user?.clerkId) || {
+            name: p.user?.name || 'Membre',
+            imageUrl: '',
           }
 
           return {
@@ -320,38 +320,44 @@ export default function ProjetsPage() {
   }
 
   // Handle adding new post
-  const handleAddPostSubmit = (e: React.FormEvent) => {
+  const handleAddPostSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newPostTitle.trim()) return
 
     setSubmittingPost(true)
-    setTimeout(() => {
-      const selectedAssignee = teamMembers.find(m => m.id === newPostAssignee || m.name === newPostAssignee)
-      const assigneeName = selectedAssignee ? selectedAssignee.name : (user?.fullName || 'Membre')
-      const assigneeAvatar = selectedAssignee ? selectedAssignee.imageUrl : user?.imageUrl
-      
-      const newPost: PostItem = {
-        id: `p-${Date.now()}`,
-        title: newPostTitle.trim(),
-        category: newPostCategory.trim() || 'Contenu',
-        assigneeName,
-        assigneeAvatar,
-        status: newPostStatus,
-        dueDate: newPostDueDate ? convertFromInputDate(newPostDueDate) : 'Aujourd\'hui',
-        platforms: newPostPlatforms.length > 0 ? newPostPlatforms : ['instagram'],
-        commentCount: 0,
-        imageUrl: '',
-        comments: []
+    const statusMap = {
+      todo: 'draft',
+      inprogress: 'scheduled',
+      done: 'published',
+    }
+    try {
+      const res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: newPostTitle.trim(),
+          platforms: newPostPlatforms.length > 0 ? newPostPlatforms : ['instagram'],
+          scheduledAt: newPostDueDate ? new Date(newPostDueDate).toISOString() : new Date().toISOString(),
+          status: statusMap[newPostStatus],
+        })
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to create post")
       }
 
-      setPosts(prev => [newPost, ...prev])
       setNewPostTitle('')
       setNewPostCategory('')
       setNewPostPlatforms([])
       setShowAddModal(false)
-      setSubmittingPost(false)
       toast.success("Projet créé avec succès.")
-    }, 400)
+      fetchRealPosts()
+    } catch (err) {
+      console.error(err)
+      toast.error("Erreur lors de la création du projet.")
+    } finally {
+      setSubmittingPost(false)
+    }
   }
 
   const toggleModalPlatform = (plat: string) => {
@@ -362,17 +368,46 @@ export default function ProjetsPage() {
     }
   }
 
-  const handleDeletePost = (id: string) => {
+  const handleDeletePost = async (id: string) => {
     setActiveDropdownId(null)
-    setPosts(prev => prev.filter(p => p.id !== id))
-    setSelectedPostIds(prev => prev.filter(item => item !== id))
-    toast.success("Post supprimé du board.")
+    try {
+      const res = await fetch(`/api/posts/${id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) {
+        throw new Error("Failed to delete post")
+      }
+      toast.success("Post supprimé du board.")
+      fetchRealPosts()
+      setSelectedPostIds(prev => prev.filter(item => item !== id))
+    } catch (err) {
+      console.error(err)
+      toast.error("Erreur lors de la suppression.")
+    }
   }
 
-  const handleUpdateStatus = (id: string, nextStatus: PostItem['status']) => {
+  const handleUpdateStatus = async (id: string, nextStatus: PostItem['status']) => {
     setActiveDropdownId(null)
-    setPosts(prev => prev.map(p => p.id === id ? { ...p, status: nextStatus } : p))
-    toast.success(`Statut mis à jour !`)
+    const statusMap = {
+      todo: 'draft',
+      inprogress: 'scheduled',
+      done: 'published',
+    }
+    try {
+      const res = await fetch(`/api/posts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: statusMap[nextStatus] }),
+      })
+      if (!res.ok) {
+        throw new Error("Failed to update status")
+      }
+      toast.success(`Statut mis à jour !`)
+      fetchRealPosts()
+    } catch (err) {
+      console.error(err)
+      toast.error("Erreur lors de la mise à jour du statut.")
+    }
   }
 
   const handleToggleSelectPost = (id: string) => {
@@ -391,16 +426,41 @@ export default function ProjetsPage() {
     }
   }
 
-  const handleBulkDelete = () => {
-    setPosts(prev => prev.filter(p => !selectedPostIds.includes(p.id)))
-    setSelectedPostIds([])
-    toast.success("Posts sélectionnés supprimés.")
+  const handleBulkDelete = async () => {
+    try {
+      await Promise.all(selectedPostIds.map(id =>
+        fetch(`/api/posts/${id}`, { method: 'DELETE' })
+      ))
+      toast.success("Posts sélectionnés supprimés.")
+      fetchRealPosts()
+      setSelectedPostIds([])
+    } catch (err) {
+      console.error(err)
+      toast.error("Erreur lors de la suppression.")
+    }
   }
 
-  const handleBulkStatusChange = (status: PostItem['status']) => {
-    setPosts(prev => prev.map(p => selectedPostIds.includes(p.id) ? { ...p, status } : p))
-    setSelectedPostIds([])
-    toast.success("Statut des posts mis à jour.")
+  const handleBulkStatusChange = async (status: PostItem['status']) => {
+    const statusMap = {
+      todo: 'draft',
+      inprogress: 'scheduled',
+      done: 'published',
+    }
+    try {
+      await Promise.all(selectedPostIds.map(id =>
+        fetch(`/api/posts/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: statusMap[status] }),
+        })
+      ))
+      toast.success("Statut des posts mis à jour.")
+      fetchRealPosts()
+      setSelectedPostIds([])
+    } catch (err) {
+      console.error(err)
+      toast.error("Erreur lors de la mise à jour.")
+    }
   }
 
   const handleMemberClick = (memberName: string) => {
@@ -436,11 +496,33 @@ export default function ProjetsPage() {
     toast.success("Commentaire ajouté !")
   }
 
-  const handleSavePostDetails = () => {
+  const handleSavePostDetails = async () => {
     if (!editingPost) return
-    setPosts(prev => prev.map(p => p.id === editingPost.id ? editingPost : p))
-    setEditingPost(null)
-    toast.success("Post enregistré avec succès.")
+    const statusMap = {
+      todo: 'draft',
+      inprogress: 'scheduled',
+      done: 'published',
+    }
+    try {
+      const res = await fetch(`/api/posts/${editingPost.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: editingPost.title,
+          status: statusMap[editingPost.status],
+          scheduledAt: convertToInputDate(editingPost.dueDate),
+        })
+      })
+      if (!res.ok) {
+        throw new Error("Failed to update post details")
+      }
+      toast.success("Post enregistré avec succès.")
+      setEditingPost(null)
+      fetchRealPosts()
+    } catch (err) {
+      console.error(err)
+      toast.error("Erreur lors de la sauvegarde du post.")
+    }
   }
 
   const getCalendarCells = () => {
@@ -691,7 +773,7 @@ export default function ProjetsPage() {
               <div className="size-16 rounded-full bg-[#7F77DD]/10 text-[#7F77DD] flex items-center justify-center mx-auto mb-2">
                 <FolderKanban className="size-8 text-[#7F77DD]" />
               </div>
-              <h2 className="text-2xl font-extrabold text-[#111827]">Aucun projet en cours</h2>
+              <h2 className="text-2xl font-extrabold text-[#111827]">Aucun projet pour le moment</h2>
               <p className="text-[#6B7280] text-sm max-w-sm mx-auto leading-relaxed">
                 Créez votre premier post pour commencer à organiser votre équipe.
               </p>
@@ -700,7 +782,7 @@ export default function ProjetsPage() {
                   href="/dashboard/compose"
                   className="inline-flex items-center gap-2 bg-[#7F77DD] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#7F77DD]/20"
                 >
-                  + Créer un post
+                  Créer votre premier projet
                 </a>
               </div>
             </div>

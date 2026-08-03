@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 import { encrypt } from '@/lib/crypto'
 
 export async function GET(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, orgId } = await auth()
 
   if (!userId) return NextResponse.redirect(
     new URL('/sign-in', req.nextUrl.origin)
@@ -147,7 +147,7 @@ export async function GET(req: NextRequest) {
           avatarUrl: meData.picture?.data?.url,
         }).where(eq(socialAccounts.id, existingMatchFb.id));
       } else {
-        const limitResult = await checkPlanLimit(userId as string, 'connectedAccounts');
+        const limitResult = await checkPlanLimit(userId as string, 'connectedAccounts', orgId);
         if (limitResult.allowed) {
           await db.insert(socialAccounts).values({
             userId: internalUserId,
@@ -180,7 +180,7 @@ export async function GET(req: NextRequest) {
             avatarUrl: instagramAccount.profile_picture_url,
           }).where(eq(socialAccounts.id, existingMatchIg.id));
         } else {
-          const limitResult = await checkPlanLimit(userId as string, 'connectedAccounts');
+          const limitResult = await checkPlanLimit(userId as string, 'connectedAccounts', orgId);
           if (limitResult.allowed) {
             await db.insert(socialAccounts).values({
               userId: internalUserId,

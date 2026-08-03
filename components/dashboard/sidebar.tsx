@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser, OrganizationSwitcher } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -121,6 +121,28 @@ export function AppSidebar() {
         </Link>
         <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
       </SidebarHeader>
+
+      {/* ── Organization Switcher ── */}
+      <div className="px-2 pb-2 group-data-[collapsible=icon]:hidden">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/dashboard/settings/workspace"
+          afterLeaveOrganizationUrl="/dashboard"
+          afterSelectOrganizationUrl="/dashboard"
+          appearance={{
+            variables: {
+              colorPrimary: '#7C3AED',
+              borderRadius: '0.75rem',
+            },
+            elements: {
+              rootBox: 'flex w-full items-center shrink-0',
+              organizationSwitcherTrigger:
+                'flex w-full items-center justify-between gap-2 px-3 py-2 rounded-xl border border-border/60 bg-muted/30 hover:bg-muted/70 text-xs font-semibold text-foreground transition-all truncate',
+              organizationPreviewAvatarBox: 'size-5 rounded-md shrink-0',
+              organizationSwitcherTriggerIcon: 'size-3.5 text-muted-foreground shrink-0',
+            },
+          }}
+        />
+      </div>
 
       {/* ── New Post CTA ── */}
       <div className="px-2 pb-2 group-data-[collapsible=icon]:px-1">

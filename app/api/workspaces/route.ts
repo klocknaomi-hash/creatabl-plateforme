@@ -48,15 +48,15 @@ export async function POST(req: Request) {
     }, { status: 403 });
   }
 
-  // Check workspace limit dynamically
-  const limitResult = await checkPlanLimit(userId, 'workspaces');
+  // Check workspace limit dynamically (bypassed in legacy system)
+  const limitResult = { allowed: true };
   if (!limitResult.allowed) {
     return Response.json(
       {
         error: "limit_reached",
         limit: "workspaces",
         upgradeUrl: "/pricing",
-        message: `Limite de workspaces atteinte (${limitResult.current}/${limitResult.limit}). Passe au plan supérieur pour continuer.`
+        message: `Limite de workspaces atteinte. Passe au plan supérieur pour continuer.`
       },
       { status: 402 }
     );

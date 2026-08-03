@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   // Check limits (if not a draft)
   const body = await request.clone().json();
   if (body.status !== 'draft') {
-    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'postsPerMonth');
+    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'postsPerMonth', orgId);
     if (!allowed) {
       return NextResponse.json({ 
         error: "limit_reached",
@@ -167,7 +167,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const filters = orgId
-      ? [or(eq(posts.organizationId, orgId), eq(posts.userId, userRecord.id))]
+      ? [eq(posts.organizationId, orgId)]
       : [eq(posts.userId, userRecord.id)];
 
     if (status) filters.push(eq(posts.status, status as any));
@@ -180,7 +180,8 @@ export async function GET(request: NextRequest) {
       limit,
       offset,
       with: {
-        platformResults: true
+        platformResults: true,
+        user: true
       }
     });
 

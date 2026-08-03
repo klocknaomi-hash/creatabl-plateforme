@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { checkPlanLimit } from '@/lib/plan-limits';
 import { PlanGate } from '@/components/billing/plan-gate';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';

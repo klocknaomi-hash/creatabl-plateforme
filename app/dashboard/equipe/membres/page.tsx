@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useUser, useOrganization } from '@clerk/nextjs'
+import { useUser, useOrganization, useClerk } from '@clerk/nextjs'
 import { useAccess } from '@/hooks/useAccess'
 import {
   Users,
@@ -45,6 +45,7 @@ interface MemberRow {
 
 export default function MembresPage() {
   const { user } = useUser()
+  const { openCreateOrganization } = useClerk()
   const { organization, memberships, invitations, isLoaded } = useOrganization({
     memberships: {
       pageSize: 50,
@@ -66,9 +67,26 @@ export default function MembresPage() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [activeRoleDropdown, setActiveRoleDropdown] = useState<string | null>(null)
 
+  const handleOpenInviteModal = () => {
+    if (!organization) {
+      toast.info("Veuillez créer ou rejoindre une organisation pour inviter des membres.")
+      openCreateOrganization?.()
+      return
+    }
+    setShowInviteModal(true)
+  }
+
   // Derive real active members from Clerk
   const activeMembers: MemberRow[] = useMemo(() => {
     if (memberships?.data && memberships.data.length > 0) {
+      // Find the oldest membership to identify the organization owner/creator
+      const sortedMemberships = [...memberships.data].sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : Infinity
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : Infinity
+        return timeA - timeB
+      })
+      const oldestMembershipId = sortedMemberships[0]?.id
+
       return memberships.data.map((m) => {
         const userData = m.publicUserData
         const firstName = userData?.firstName || ''
@@ -77,15 +95,22 @@ export default function MembresPage() {
         const fullName = [firstName, lastName].filter(Boolean).join(' ')
         const name = fullName || (identifier ? identifier.split('@')[0] : 'Membre')
         const email = identifier || ''
-        const isOwner = m.role === 'org:admin'
+        const isOwner = m.id === oldestMembershipId
         const isYou = userData?.userId === user?.id || (email && email.toLowerCase() === user?.primaryEmailAddress?.emailAddress.toLowerCase())
+
+        let role: 'owner' | 'admin' | 'editor' | 'viewer' = 'editor'
+        if (isOwner) {
+          role = 'owner'
+        } else if (m.role === 'org:admin') {
+          role = 'admin'
+        }
 
         return {
           id: m.id,
-          userId: userData?.userId || m.id,
+          userId: userData?.userId || null,
           email: email || user?.primaryEmailAddress?.emailAddress || '',
           name: isYou ? `${name} (Vous)` : name,
-          role: (isOwner ? 'owner' : 'editor') as 'owner' | 'admin' | 'editor' | 'viewer',
+          role,
           status: 'active' as const,
           avatarUrl: userData?.imageUrl || '',
           joinedAt: m.createdAt ? new Date(m.createdAt).toISOString() : null,
@@ -110,25 +135,27 @@ export default function MembresPage() {
     }
 
     return []
-  }, [memberships, user])
+  }, [memberships, user, organization])
 
   // Derive pending invitations from Clerk
   const pendingInvitations: MemberRow[] = useMemo(() => {
     if (invitations?.data && invitations.data.length > 0) {
-      return invitations.data.map((inv) => {
-        return {
-          id: inv.id,
-          userId: null,
-          email: inv.emailAddress,
-          name: inv.emailAddress.split('@')[0],
-          role: (inv.role === 'org:admin' ? 'admin' : 'editor') as 'owner' | 'admin' | 'editor' | 'viewer',
-          status: 'pending' as const,
-          invitedAt: inv.createdAt ? new Date(inv.createdAt).toISOString() : null,
-          joinedAt: null,
-          avatarUrl: '',
-          clerkInvitation: inv,
-        }
-      })
+      return invitations.data
+        .filter((inv) => inv.status === 'pending')
+        .map((inv) => {
+          return {
+            id: inv.id,
+            userId: null,
+            email: inv.emailAddress,
+            name: inv.emailAddress.split('@')[0],
+            role: (inv.role === 'org:admin' ? 'admin' : 'editor') as 'owner' | 'admin' | 'editor' | 'viewer',
+            status: 'pending' as const,
+            invitedAt: inv.createdAt ? new Date(inv.createdAt).toISOString() : null,
+            joinedAt: null,
+            avatarUrl: '',
+            clerkInvitation: inv,
+          }
+        })
     }
     return []
   }, [invitations])
@@ -139,7 +166,7 @@ export default function MembresPage() {
 
   useEffect(() => {
     if (hasInviteParam) {
-      setShowInviteModal(true)
+      handleOpenInviteModal()
       const newUrl = window.location.pathname
       window.history.replaceState({}, '', newUrl)
     }
@@ -246,7 +273,7 @@ export default function MembresPage() {
   }
 
   // Calculated Stat Counts
-  const totalCount = allMembers.length
+  const totalCount = activeMembers.length
   const adminCount = activeMembers.filter(m => m.role === 'admin' || m.role === 'owner').length
   const editorCount = activeMembers.filter(m => m.role === 'editor' || m.role === 'viewer').length
   const invitedCount = pendingInvitations.length
@@ -286,7 +313,7 @@ export default function MembresPage() {
         </p>
         <div className="pt-2">
           <button
-            onClick={() => setShowInviteModal(true)}
+            onClick={handleOpenInviteModal}
             className="inline-flex items-center gap-2 bg-[#7F77DD] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#7F77DD]/20 cursor-pointer"
           >
             + Inviter un membre
@@ -312,7 +339,7 @@ export default function MembresPage() {
         
         <div className="flex items-center gap-3.5 self-end sm:self-auto">
           <button
-            onClick={() => setShowInviteModal(true)}
+            onClick={handleOpenInviteModal}
             className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#534AB7]/5 text-[#534AB7] border border-[#534AB7]/20 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
           >
             <UserPlus className="size-4 text-[#534AB7]" />
@@ -399,18 +426,22 @@ export default function MembresPage() {
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
               <Crown className="size-4 text-[#7C3AED]" />
-              Vous êtes actuellement le seul membre de cette organisation
+              {organization 
+                ? "Vous êtes actuellement le seul membre de cette organisation" 
+                : "Vous utilisez actuellement votre espace personnel"}
             </h3>
             <p className="text-xs text-gray-500 max-w-lg">
-              Invitez vos collaborateurs pour commencer à créer des contenus et gérer vos projets en équipe.
+              {organization 
+                ? "Invitez vos collaborateurs pour commencer à créer des contenus et gérer vos projets en équipe." 
+                : "Pour inviter des collaborateurs et collaborer sur des projets en équipe, créez ou rejoignez une organisation."}
             </p>
           </div>
           <button
-            onClick={() => setShowInviteModal(true)}
+            onClick={handleOpenInviteModal}
             className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm shrink-0"
           >
             <UserPlus className="size-4" />
-            Inviter votre équipe
+            {organization ? "Inviter votre équipe" : "Créer une organisation"}
           </button>
         </div>
       )}
@@ -471,8 +502,8 @@ export default function MembresPage() {
                       <div className="relative inline-block text-left">
                         <button
                           onClick={() => {
-                            if (isYou && member.role === 'owner') {
-                              toast.error("Vous ne pouvez pas modifier votre propre rôle de propriétaire.");
+                            if (member.role === 'owner') {
+                              toast.error("Le rôle du propriétaire de l'organisation ne peut pas être modifié.");
                               return;
                             }
                             if (isPending) return;
@@ -483,7 +514,7 @@ export default function MembresPage() {
                           }`}
                         >
                           <span>{displayRole}</span>
-                          {!isPending && !isYou && <ChevronDown className="size-3 opacity-60" />}
+                          {!isPending && member.role !== 'owner' && !isYou && <ChevronDown className="size-3 opacity-60" />}
                         </button>
                         
                         {activeRoleDropdown === member.id && !isPending && (
