@@ -49,11 +49,15 @@ export const PinterestIcon = ({ className }: { className?: string }) => (
 export function CanvaIcon({ size, className }: { size?: number; className?: string }) {
   const s = size || 24;
   return (
-    <img 
-      src="https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg" 
-      alt="Canva" 
-      className={className} 
-      style={{ width: s, height: s }} 
-    />
+    <svg width={s} height={s} viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <defs>
+        <linearGradient id="canvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00C4CC"/>
+          <stop offset="100%" stopColor="#7D2AE8"/>
+        </linearGradient>
+      </defs>
+      <circle cx="256" cy="256" r="256" fill="url(#canvaGrad)"/>
+      <path d="M346.7 301.6c-4.4 7-10 13.3-16.7 18.7-27.4 21.8-67.6 28-98.8 15.2-12.7-5.2-24-12.8-33.1-22.3-9-9.5-15.6-20.7-19.1-32.9-3.5-12.2-4.1-25.1-1.7-37.6 2.4-12.5 7.6-24.3 15.2-34.5 12.8-17.2 31-29.3 52.3-34.9 21.2-5.6 44.1-4 64.2 4.4 7.5 3.1 14.3 7.3 20.3 12.4l19.9-46.7c-10.7-8.3-22.6-15.1-35.3-20.1-28.7-11.4-60.8-14.3-91.1-8.2-30.3 6.1-58.1 20.2-80.1 40.7-21.9 20.5-37.5 46.8-44.9 75.8-7.4 29.1-6.1 59.8 3.8 88.2 9.9 28.4 27.6 53.6 50.8 72.8 23.2 19.2 51 31.9 80.5 36.6 29.4 4.7 60.1 1.4 88.7-9.4 20-7.5 38.3-18.7 54.1-32.7l-29.3-46.5z" fill="white"/>
+    </svg>
   );
 }
