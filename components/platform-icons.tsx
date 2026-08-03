@@ -47,20 +47,13 @@ export const PinterestIcon = ({ className }: { className?: string }) => (
 );
 
 export function CanvaIcon({ size, className }: { size?: number; className?: string }) {
-  const s = size || undefined;
+  const s = size || 24;
   return (
-    <svg width={s} height={s} viewBox="0 0 24 24" 
-         fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      <defs>
-        <linearGradient id="canvaGrad" 
-          x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00C4CC"/>
-          <stop offset="100%" stopColor="#7D2AE8"/>
-        </linearGradient>
-      </defs>
-      <circle cx="12" cy="12" r="12" fill="url(#canvaGrad)"/>
-      <path d="M14.994 15.956c-.316.18-.7.28-1.099.28-1.395 0-2.376-1.02-2.376-2.481 0-1.56 1.06-2.664 2.508-2.664.372 0 .728.088 1.02.248l.384-1.152a3.48 3.48 0 00-1.476-.308c-2.22 0-3.876 1.584-3.876 3.924 0 2.208 1.476 3.648 3.588 3.648.612 0 1.212-.144 1.692-.396l-.365-1.099z" 
-        fill="white"/>
-    </svg>
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg" 
+      alt="Canva" 
+      className={className} 
+      style={{ width: s, height: s }} 
+    />
   );
 }
