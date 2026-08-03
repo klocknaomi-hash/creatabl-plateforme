@@ -414,32 +414,45 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
           </a>
         )
       ) : canvaTestMode ? (
-        <a 
-          href="/api/canva/auth?returnTo=/dashboard/compose"
-          className={cn(
-            "relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva",
-            canvaConnected ? "opacity-100 grayscale-0" : "opacity-50 grayscale hover:opacity-80 hover:grayscale-0"
-          )}
-        >
-          <div className="absolute -top-2 -right-2 z-10">
-            <Badge className={cn(
-              "text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm",
-              canvaConnected ? "bg-[#00C4CC] text-white border-none" : "bg-[#7F77DD] text-white border-none"
-            )}>
-              {canvaConnected ? "Connected" : "Soon (Test)"}
-            </Badge>
-          </div>
+        canvaConnected ? (
+          <CanvaDesignPicker onUpload={onUpload}>
+            <button
+              type="button"
+              className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva opacity-100 grayscale-0"
+            >
+              <div className="absolute -top-2 -right-2 z-10">
+                <Badge className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm bg-[#00C4CC] text-white border-none">
+                  Connected
+                </Badge>
+              </div>
 
-          <div className={cn(
-            "size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center",
-            canvaConnected && "bg-[#00C4CC]/10 border-[#00C4CC]/20"
-          )}>
-            <CanvaIcon className={cn("size-4 text-muted-foreground/60", canvaConnected && "text-[#00C4CC]")} />
-          </div>
-          <span className={cn("text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2", canvaConnected && "text-[#00C4CC]")}>
-            {canvaConnected ? "Canva Connecté" : "Canva"}
-          </span>
-        </a>
+              <div className="size-8 rounded-lg bg-[#00C4CC]/10 border-[#00C4CC]/20 border flex items-center justify-center">
+                <CanvaIcon className="size-4 text-[#00C4CC]" />
+              </div>
+              <span className="text-[8px] font-black uppercase tracking-widest text-[#00C4CC] mt-2">
+                Canva Connecté
+              </span>
+            </button>
+          </CanvaDesignPicker>
+        ) : (
+          <a 
+            href="/api/canva/auth?returnTo=/dashboard/compose"
+            className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva opacity-50 grayscale hover:opacity-80 hover:grayscale-0"
+          >
+            <div className="absolute -top-2 -right-2 z-10">
+              <Badge className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm bg-[#7F77DD] text-white border-none">
+                Soon (Test)
+              </Badge>
+            </div>
+
+            <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center">
+              <CanvaIcon className="size-4 text-muted-foreground/60" />
+            </div>
+            <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">
+              Canva
+            </span>
+          </a>
+        )
       ) : (
         <TooltipProvider>
           <Tooltip>
