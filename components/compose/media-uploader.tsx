@@ -471,7 +471,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">
               Canva
             </span>
-          </a>
+          </button>
         )
       ) : (
         <TooltipProvider>
