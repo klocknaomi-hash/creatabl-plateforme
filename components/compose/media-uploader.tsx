@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { CanvaIcon } from "@/components/platform-icons";
 import { FEATURES } from "@/lib/config/features";
 import { CanvaDesignPicker } from "./canva-design-picker";
+import { CanvaConnectModal } from "./canva-connect-modal";
 import { 
   Dialog, 
   DialogContent, 
@@ -418,23 +419,24 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             </button>
           </CanvaDesignPicker>
         ) : (
-          <button 
-            type="button"
-            onClick={openCanvaAuthPopup}
-            className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva hover:border-[#00C4CC]/40 hover:bg-[#00C4CC]/[0.03] hover:shadow-sm"
-          >
-            <div className="absolute -top-2 -right-2 z-10">
-              <Badge variant="secondary" className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider bg-[#00C4CC]/10 text-[#00C4CC] border-2 border-background shadow-sm">
-                New
-              </Badge>
-            </div>
-            <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center transition-transform group-hover/canva:scale-110">
-              <CanvaIcon size={16} className="text-muted-foreground/60 group-hover/canva:text-[#00C4CC] transition-colors" />
-            </div>
-            <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">
-              Canva
-            </span>
-          </button>
+          <CanvaConnectModal onConnect={openCanvaAuthPopup}>
+            <button 
+              type="button"
+              className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva hover:border-[#00C4CC]/40 hover:bg-[#00C4CC]/[0.03] hover:shadow-sm w-full"
+            >
+              <div className="absolute -top-2 -right-2 z-10">
+                <Badge variant="secondary" className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider bg-[#00C4CC]/10 text-[#00C4CC] border-2 border-background shadow-sm">
+                  New
+                </Badge>
+              </div>
+              <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center transition-transform group-hover/canva:scale-110">
+                <CanvaIcon size={16} className="text-muted-foreground/60 group-hover/canva:text-[#00C4CC] transition-colors" />
+              </div>
+              <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">
+                Canva
+              </span>
+            </button>
+          </CanvaConnectModal>
         )
       ) : null}
     </div>
