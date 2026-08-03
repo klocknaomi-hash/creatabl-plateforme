@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, RefreshCcw, ImagePlus } from "lucide-react";
 import { toast } from "sonner";
 import { CanvaIcon } from "@/components/platform-icons";
 
@@ -140,18 +140,10 @@ export function CanvaDesignPicker({ children, onUpload }: CanvaDesignPickerProps
             <CanvaIcon size={24} />
             Mes designs Canva
           </DialogTitle>
-          <div className="flex gap-2 items-center">
-            <Button variant="outline" size="sm" onClick={fetchDesigns} disabled={loading} className="gap-2">
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className={loading ? "animate-spin" : ""}><path d="M1.84998 7.49998C1.84998 4.66458 4.05979 2.23981 6.89734 1.92253L6.84752 0.928323C3.40742 1.31385 0.849976 4.22596 0.849976 7.49998C0.849976 10.662 3.25054 13.5295 6.53934 14.0734L6.70274 13.0864C3.93121 12.6276 1.84998 10.2858 1.84998 7.49998ZM13.15 7.49998C13.15 10.3354 10.9402 12.7602 8.10266 13.0775L8.15248 14.0717C11.5926 13.6861 14.15 10.774 14.15 7.49998C14.15 4.33796 11.7495 1.47053 8.46066 0.926593L8.29726 1.91357C11.0688 2.37241 13.15 4.71424 13.15 7.49998Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
-              Rafraîchir
-            </Button>
-            <Button 
-              size="sm" 
-              className="gap-2 bg-[#8B3DFF] hover:bg-[#8B3DFF]/90 text-white"
-              onClick={() => window.open('https://www.canva.com/create', 'canvaEditor', 'width=1100,height=800,top=100,left=200')}
-            >
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2.75C8 2.47386 7.77614 2.25 7.5 2.25C7.22386 2.25 7 2.47386 7 2.75V7H2.75C2.47386 7 2.25 7.22386 2.25 7.5C2.25 7.77614 2.47386 8 2.75 8H7V12.25C7 12.5261 7.22386 12.75 7.5 12.75C7.77614 12.75 8 12.5261 8 12.25V8H12.25C12.5261 8 12.75 7.77614 12.75 7.5C12.75 7.22386 12.5261 7 12.25 7H8V2.75Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
-              Créer sur Canva
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="outline" className="gap-2" onClick={fetchDesigns} disabled={loading}>
+              <RefreshCcw className={`size-3 ${loading ? "animate-spin" : ""}`} />
+              Actualiser
             </Button>
           </div>
         </DialogHeader>
@@ -192,33 +184,22 @@ export function CanvaDesignPicker({ children, onUpload }: CanvaDesignPickerProps
                   )}
                   
                   {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-3 gap-1">
-                    <p className="text-white text-[10px] font-bold text-center line-clamp-2 mb-2">{design.title}</p>
-                    <div className="flex w-full gap-2">
-                      <Button 
-                        size="sm" 
-                        variant="secondary"
-                        className="w-full text-[10px] h-7 px-2"
-                        onClick={() => {
-                          const url = design.urls?.edit_url || design.urls?.view_url || `https://www.canva.com/design/${design.id}/edit`;
-                          window.open(url, 'canvaEditor', 'width=1100,height=800,top=100,left=200');
-                        }}
-                      >
-                        Éditer
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        className="w-full text-[10px] h-7 px-2 bg-[#00C4CC] hover:bg-[#00C4CC]/90 text-white"
-                        disabled={exportingId !== null}
-                        onClick={() => handleExport(design.id)}
-                      >
-                        {exportingId === design.id ? (
-                          <Loader2 className="w-3 h-3 animate-spin" />
-                        ) : (
-                          "Importer"
-                        )}
-                      </Button>
-                    </div>
+                  <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 gap-2">
+                    <Button 
+                      size="sm" 
+                      className="w-full text-[10px] h-7 px-2 bg-[#00C4CC] hover:bg-[#00C4CC]/90 text-white"
+                      disabled={exportingId !== null}
+                      onClick={() => handleExport(design.id)}
+                    >
+                      {exportingId === design.id ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : (
+                        <>
+                          <ImagePlus className="size-3 mr-1" />
+                          Importer
+                        </>
+                      )}
+                    </Button>
                   </div>
                 </div>
               );
