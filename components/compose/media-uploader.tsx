@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Image as ImageIcon, Loader2, Sparkles, Wand2, Crop, Layers, Maximize, Scissors, RefreshCcw, Check } from "lucide-react";
 import { toast } from "sonner";
@@ -338,6 +338,24 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
     }
   };
 
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data === 'canva_auth_success') {
+        window.location.reload();
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  const openCanvaAuthPopup = () => {
+    const width = 600;
+    const height = 700;
+    const left = (window.innerWidth / 2) - (width / 2);
+    const top = (window.innerHeight / 2) - (height / 2);
+    window.open('/api/canva/auth?popup=true', 'canvaAuth', `width=${width},height=${height},top=${top},left=${left}`);
+  };
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
       {/* Existing Media */}
@@ -396,8 +414,9 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             </button>
           </CanvaDesignPicker>
         ) : (
-          <a 
-            href="/api/canva/auth?returnTo=/dashboard/compose"
+          <button 
+            type="button"
+            onClick={openCanvaAuthPopup}
             className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva hover:border-[#00C4CC]/40 hover:bg-[#00C4CC]/[0.03] hover:shadow-sm"
           >
             <div className="absolute -top-2 -right-2 z-10">
@@ -411,7 +430,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">
               Canva
             </span>
-          </a>
+          </button>
         )
       ) : canvaTestMode ? (
         canvaConnected ? (
@@ -435,8 +454,9 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             </button>
           </CanvaDesignPicker>
         ) : (
-          <a 
-            href="/api/canva/auth?returnTo=/dashboard/compose"
+          <button 
+            type="button"
+            onClick={openCanvaAuthPopup}
             className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva opacity-50 grayscale hover:opacity-80 hover:grayscale-0"
           >
             <div className="absolute -top-2 -right-2 z-10">

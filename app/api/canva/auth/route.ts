@@ -32,12 +32,20 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url)
   const returnTo = searchParams.get('returnTo') || '/dashboard/settings/connections?success=true'
+  const isPopup = searchParams.get('popup') === 'true'
 
   const authUrl = `https://www.canva.com/api/oauth/authorize?${params}`
 
   const response = NextResponse.redirect(authUrl)
 
   response.cookies.set('canva_return_to', returnTo, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    maxAge: 600,
+  })
+
+  response.cookies.set('canva_is_popup', isPopup ? 'true' : 'false', {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',

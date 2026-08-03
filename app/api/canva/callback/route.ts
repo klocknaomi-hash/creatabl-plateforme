@@ -83,13 +83,39 @@ export async function GET(req: NextRequest) {
   console.log('Canva OAuth Success! Token saved for user:', userId, 'Rows updated:', updateResult.rowCount ?? 1);
 
   const returnTo = cookieStore.get('canva_return_to')?.value || '/dashboard/settings/connections?success=true';
+  const isPopup = cookieStore.get('canva_is_popup')?.value === 'true';
 
-  const response = NextResponse.redirect(
-    new URL(returnTo, process.env.NEXT_PUBLIC_APP_URL!)
-  )
+  let response: NextResponse;
+
+  if (isPopup) {
+    // If it was opened in a popup, close it and send message to opener
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head><title>Connexion Canva réussie</title></head>
+        <body>
+          <p>Connexion réussie, vous pouvez fermer cette fenêtre.</p>
+          <script>
+            if (window.opener) {
+              window.opener.postMessage('canva_auth_success', '*');
+              window.close();
+            }
+          </script>
+        </body>
+      </html>
+    `;
+    response = new NextResponse(html, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' }
+    });
+  } else {
+    response = NextResponse.redirect(new URL(returnTo, process.env.NEXT_PUBLIC_APP_URL!));
+  }
+
   response.cookies.delete('canva_code_verifier')
   response.cookies.delete('canva_state')
   response.cookies.delete('canva_return_to')
+  response.cookies.delete('canva_is_popup')
 
   return response
 }

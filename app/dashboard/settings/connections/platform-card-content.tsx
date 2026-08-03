@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -43,6 +43,24 @@ export function PlatformCardContent({
   canvaEnabled,
 }: PlatformCardContentProps) {
   const [selectedIdx, setSelectedIdx] = useState(0);
+
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data === 'canva_auth_success') {
+        window.location.reload();
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  const openCanvaAuthPopup = () => {
+    const width = 600;
+    const height = 700;
+    const left = (window.innerWidth / 2) - (width / 2);
+    const top = (window.innerHeight / 2) - (height / 2);
+    window.open('/api/canva/auth?popup=true', 'canvaAuth', `width=${width},height=${height},top=${top},left=${left}`);
+  };
 
   const connected = initialAccounts.length > 0;
   const activeAccount = initialAccounts[selectedIdx] || initialAccounts[0] || null;
@@ -188,15 +206,15 @@ export function PlatformCardContent({
           )}
 
           {isCanva && !connected && (
-            <Link
-              href="/api/canva/auth"
+            <button
+              onClick={openCanvaAuthPopup}
               className={cn(
                 buttonVariants({ size: 'sm' }),
                 'w-full shadow-sm h-9 rounded-xl font-semibold border-none text-white transition-all bg-[#00C4CC] hover:bg-[#00C4CC]/90'
               )}
             >
               Connecter
-            </Link>
+            </button>
           )}
         </div>
       )}
