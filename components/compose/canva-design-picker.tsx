@@ -136,7 +136,7 @@ export function CanvaDesignPicker({ children, onUpload }: CanvaDesignPickerProps
       ) : (
         <DialogTrigger>{children}</DialogTrigger>
       )}
-      <DialogContent className="max-w-[90vw] w-[1200px] h-[85vh] p-0 flex flex-col overflow-hidden bg-background rounded-xl">
+      <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-[1200px] w-full h-[85vh] p-0 flex flex-col overflow-hidden bg-background rounded-xl">
         <div className="p-6 border-b bg-background z-10 flex-shrink-0 flex flex-row items-center justify-between">
           <DialogTitle className="flex items-center gap-2 text-xl font-bold">
             Canva

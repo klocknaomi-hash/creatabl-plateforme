@@ -77,8 +77,8 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
             </div>
             <CardContent className="p-0">
               {mediaFiles.length > 0 ? (
-                <div className="relative aspect-square bg-muted">
-                  <img src={mediaFiles[0].url} alt="" className="w-full h-full object-cover" />
+                <div className="relative bg-black/5 flex items-center justify-center border-y border-border/40 overflow-hidden">
+                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto max-h-[500px] object-contain" />
                   {mediaFiles.length > 1 && (
                     <div className="absolute top-3 right-3 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">
                       1/{mediaFiles.length}
@@ -136,10 +136,10 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                     )}>
                       {mediaFiles.slice(0, 4).map((media, i) => (
                         <div key={i} className={cn(
-                          "relative aspect-video bg-muted",
-                          mediaFiles.length === 3 && i === 0 && "row-span-2 aspect-auto"
+                          "relative flex items-center justify-center bg-black/5 overflow-hidden",
+                          mediaFiles.length === 3 && i === 0 && "row-span-2"
                         )}>
-                          <img src={media.url} alt="" className="w-full h-full object-cover" />
+                          <img src={media.url} alt="" className="w-full h-auto max-h-[400px] object-contain" />
                         </div>
                       ))}
                     </div>
@@ -180,7 +180,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               </p>
               {mediaFiles.length > 0 && (
                 <div className="bg-muted border-y border-border/40">
-                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto object-cover max-h-[400px]" />
+                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto max-h-[500px] object-contain" />
                 </div>
               )}
               <div className="p-3">
@@ -224,7 +224,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               </p>
               {mediaFiles.length > 0 && (
                 <div className="bg-muted border-y border-border/40">
-                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto object-cover max-h-[400px]" />
+                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto max-h-[500px] object-contain" />
                 </div>
               )}
               <div className="p-3">
