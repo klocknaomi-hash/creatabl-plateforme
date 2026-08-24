@@ -50,7 +50,7 @@ const PLANS = [
     monthlyPrice: 0,
     yearlyMonthly: 0,
     subtext: 'POUR TOUJOURS',
-    postsPerMonth: '20 posts / mois',
+    postsPerMonth: '20 générations IA / mois',
     socials: ['linkedin', 'instagram'],
     features: [
       'Assistant IA de rédaction (basique)',
@@ -67,7 +67,7 @@ const PLANS = [
     monthlyPrice: 49,
     yearlyMonthly: 39,
     subtext: 'PAR UTILISATEUR ET PAR MOIS',
-    postsPerMonth: '30 posts / mois',
+    postsPerMonth: '30 générations IA / mois',
     socials: ['linkedin', 'instagram', 'facebook', 'twitter'],
     features: [
       'Assistant IA de rédaction (limité)',
@@ -85,8 +85,8 @@ const PLANS = [
     monthlyPrice: 99,
     yearlyMonthly: 79,
     subtext: 'PAR UTILISATEUR ET PAR MOIS',
-    postsPerMonth: '120 posts / mois',
-    socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
+    postsPerMonth: '120 générations IA / mois',
+    socials: ['linkedin', 'instagram', 'facebook', 'twitter'],
     features: [
       'Tout du Starter',
       'Assistant IA de rédaction (illimité)',
@@ -104,8 +104,8 @@ const PLANS = [
     monthlyPrice: 199,
     yearlyMonthly: 159,
     subtext: 'PAR UTILISATEUR ET PAR MOIS',
-    postsPerMonth: '300 posts / mois',
-    socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
+    postsPerMonth: '300 générations IA / mois',
+    socials: ['linkedin', 'instagram', 'facebook', 'twitter'],
     features: [
       'Tout le plan Pro',
       'Multi-comptes (jusqu\'à 5)',

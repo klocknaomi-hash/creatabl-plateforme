@@ -27,6 +27,7 @@ interface PostPreviewProps {
 export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps) {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [activeTab, setActiveTab] = useState<string>("");
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     fetch("/api/accounts")
@@ -42,7 +43,8 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
     if (platforms.length > 0 && (!activeTab || !platforms.includes(activeTab))) {
       setActiveTab(platforms[0]);
     }
-  }, [platforms]);
+    setIsExpanded(false); // Reset expansion when changing tabs
+  }, [platforms, activeTab]);
 
   if (platforms.length === 0) {
     return (
@@ -78,7 +80,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
             <CardContent className="p-0">
               {mediaFiles.length > 0 ? (
                 <div className="relative bg-black/5 flex items-center justify-center border-y border-border/40 overflow-hidden">
-                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto max-h-[500px] object-contain" />
+                  <img src={mediaFiles[0].url} alt="" className="w-full aspect-square object-cover" />
                   {mediaFiles.length > 1 && (
                     <div className="absolute top-3 right-3 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">
                       1/{mediaFiles.length}
@@ -93,18 +95,25 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               <div className="p-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Heart className="w-5 h-5 hover:text-red-500 transition-colors" />
-                    <MessageCircle className="w-5 h-5" />
-                    <Share2 className="w-5 h-5" />
+                    <Heart className="w-6 h-6 hover:text-red-500 transition-colors" />
+                    <MessageCircle className="w-6 h-6" />
+                    <Share2 className="w-6 h-6" />
                   </div>
-                  <Bookmark className="w-5 h-5" />
+                  <Bookmark className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[12px] font-bold">1,234 Likes</p>
-                  <p className="text-[12px] leading-snug">
-                    <span className="font-bold mr-1.5">{username}</span>
-                    {content || "Votre caption..."}
-                  </p>
+                  <p className="text-[13px] font-bold">1,234 Likes</p>
+                  <div>
+                    <p className={cn("text-[13px] leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
+                      <span className="font-bold mr-1.5">{username}</span>
+                      {content || "Votre caption..."}
+                    </p>
+                    {content && content.length > 100 && !isExpanded && (
+                      <button onClick={() => setIsExpanded(true)} className="text-muted-foreground text-[13px] hover:text-foreground mt-1">
+                        Voir plus
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -125,13 +134,9 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                     <span className="font-bold text-[14px]">{username}</span>
                     <span className="text-muted-foreground text-[14px]">@{username.toLowerCase()} · 1m</span>
                   </div>
-                  <p className="text-[14px] text-foreground leading-snug whitespace-pre-wrap">
-                    {content || "Quoi de neuf ?"}
-                  </p>
-                  
                   {mediaFiles.length > 0 && (
                     <div className={cn(
-                      "mt-2 rounded-xl overflow-hidden border border-border/60 grid gap-0.5",
+                      "mt-2 mb-2 rounded-xl overflow-hidden border border-border/60 grid gap-0.5",
                       mediaFiles.length === 1 ? "grid-cols-1" : "grid-cols-2"
                     )}>
                       {mediaFiles.slice(0, 4).map((media, i) => (
@@ -139,11 +144,22 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                           "relative flex items-center justify-center bg-black/5 overflow-hidden",
                           mediaFiles.length === 3 && i === 0 && "row-span-2"
                         )}>
-                          <img src={media.url} alt="" className="w-full h-auto max-h-[400px] object-contain" />
+                          <img src={media.url} alt="" className="w-full aspect-[4/5] object-cover" />
                         </div>
                       ))}
                     </div>
                   )}
+
+                  <div>
+                    <p className={cn("text-[14px] text-foreground leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-4")}>
+                      {content || "Quoi de neuf ?"}
+                    </p>
+                    {content && content.length > 150 && !isExpanded && (
+                      <button onClick={() => setIsExpanded(true)} className="text-blue-500 hover:underline text-[14px] mt-1">
+                        Afficher plus
+                      </button>
+                    )}
+                  </div>
                   
                   <div className="flex items-center justify-between mt-3 text-muted-foreground max-w-[300px]">
                     <MessageCircle className="w-4 h-4" />
@@ -175,14 +191,21 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               </div>
             </div>
             <CardContent className="p-0">
-              <p className="px-3 pb-3 text-[14px] leading-tight whitespace-pre-wrap">
-                {content || "Quoi de neuf ?"}
-              </p>
               {mediaFiles.length > 0 && (
                 <div className="bg-muted border-y border-border/40">
-                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto max-h-[500px] object-contain" />
+                  <img src={mediaFiles[0].url} alt="" className="w-full aspect-square object-cover" />
                 </div>
               )}
+              <div className="p-3">
+                <p className={cn("pb-2 text-[14px] leading-tight whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
+                  {content || "Quoi de neuf ?"}
+                </p>
+                {content && content.length > 100 && !isExpanded && (
+                  <button onClick={() => setIsExpanded(true)} className="text-muted-foreground font-bold hover:underline text-[14px] mb-2">
+                    Voir plus
+                  </button>
+                )}
+              </div>
               <div className="p-3">
                 <div className="flex items-center justify-between text-muted-foreground text-[12px] mb-2 border-b border-border/40 pb-2">
                   <div className="flex items-center gap-1">
@@ -219,14 +242,21 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               </div>
             </div>
             <CardContent className="p-0">
-              <p className="px-3 pb-3 text-[14px] leading-snug whitespace-pre-wrap">
-                {content || "De quoi voulez-vous discuter ?"}
-              </p>
               {mediaFiles.length > 0 && (
-                <div className="bg-muted border-y border-border/40">
-                  <img src={mediaFiles[0].url} alt="" className="w-full h-auto max-h-[500px] object-contain" />
+                <div className="bg-muted border-y border-border/40 mb-3">
+                  <img src={mediaFiles[0].url} alt="" className="w-full aspect-square object-cover" />
                 </div>
               )}
+              <div className="px-3">
+                <p className={cn("text-[14px] leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
+                  {content || "De quoi voulez-vous discuter ?"}
+                </p>
+                {content && content.length > 100 && !isExpanded && (
+                  <button onClick={() => setIsExpanded(true)} className="text-muted-foreground font-semibold hover:underline text-[14px] mt-1 mb-2">
+                    ...voir plus
+                  </button>
+                )}
+              </div>
               <div className="p-3">
                 <div className="flex items-center gap-1 text-muted-foreground text-[11px] mb-3">
                   <span className="text-blue-600 font-bold">👍 45</span>

@@ -380,7 +380,7 @@ function ComposePageInner() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6 items-start w-full">
         {/* Left Column: Composition Sections */}
         <div className="min-w-0 flex-1 space-y-4">
           {/* Platforms Card */}
@@ -461,7 +461,7 @@ function ComposePageInner() {
         </div>
 
         {/* Right Column: Live Preview */}
-        <aside className="hidden lg:block w-80 flex-shrink-0 sticky top-20 space-y-3">
+        <aside className="hidden lg:block w-[400px] flex-shrink-0 sticky top-20 space-y-3">
           <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest px-2">Preview</h3>
           <PostPreview 
             content={content} 
