@@ -245,36 +245,6 @@ export function SettingsForm({ initialSettings, user, hasData, isBusiness = fals
               </Select>
             </div>
 
-            {/* Language & Locale */}
-            <div className="grid md:grid-cols-2 gap-10 pt-10 border-t border-border/40">
-              <div className="space-y-4">
-                <Label className="text-sm font-semibold">Langue</Label>
-                <Select items={{ en: "English (US)", es: "Español", fr: "Français" }} value={settings.language} onValueChange={(v) => handleSelect('language', v)}>
-                  <SelectTrigger className="h-11 bg-white border-[#878399] rounded-[12px] px-4 text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">English (US)</SelectItem>
-                    <SelectItem value="es">Español</SelectItem>
-                    <SelectItem value="fr">Français</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-4">
-                <Label className="text-sm font-semibold">Région</Label>
-                <Select items={{ US: "États-Unis", FR: "France", UK: "Royaume-Uni", ES: "Espagne" }} value={settings.locale} onValueChange={(v) => handleSelect('locale', v)}>
-                  <SelectTrigger className="h-11 bg-white border-[#878399] rounded-[12px] px-4 text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="US">États-Unis</SelectItem>
-                    <SelectItem value="FR">France</SelectItem>
-                    <SelectItem value="UK">Royaume-Uni</SelectItem>
-                    <SelectItem value="ES">Espagne</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
           </CardContent>
         </Card>
 

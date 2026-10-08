@@ -33,13 +33,25 @@ export async function GET(req: NextRequest) {
   const billing = req.nextUrl.searchParams.get('billing') || 'monthly';
 
   // Update user's selected plan in DB
+  let trialEndsAt: Date | null = null;
   try {
-    await db.update(users)
+    const [dbUser] = await db.update(users)
       .set({ selectedPlan: plan })
-      .where(eq(users.clerkId, userId));
+      .where(eq(users.clerkId, userId))
+      .returning({ trialEndsAt: users.trialEndsAt });
+    trialEndsAt = dbUser?.trialEndsAt ?? null;
   } catch (err) {
     console.error('Error updating selectedPlan in create-checkout:', err);
   }
+
+  // Un seul essai par compte : l'essai démarre à l'inscription. Stripe ne
+  // facture qu'à sa fin s'il reste des jours (Stripe exige au moins 48 h) ;
+  // après l'essai, ou pour un compte Free, le paiement est immédiat.
+  const minTrialEnd = Date.now() + 48 * 60 * 60 * 1000;
+  const trialEnd =
+    trialEndsAt && trialEndsAt.getTime() > minTrialEnd
+      ? Math.floor(trialEndsAt.getTime() / 1000)
+      : undefined;
 
   // Lookup key format: "starter_monthly", "pro_yearly", etc.
   const lookupKey = `${plan}_${billing}`;
@@ -62,7 +74,7 @@ export async function GET(req: NextRequest) {
     payment_method_collection: 'always',
     line_items: [{ price: prices.data[0].id, quantity: 1 }],
     subscription_data: {
-      trial_period_days: 14,
+      ...(trialEnd ? { trial_end: trialEnd } : {}),
       metadata: { userId, plan, billing },
     },
     success_url: `https://app.creatabl-ia.com/dashboard`,
