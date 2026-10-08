@@ -82,7 +82,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider localization={frFR}>
+    <ClerkProvider
+      localization={{
+        ...frFR,
+        // Textes ajoutés par Clerk et pas encore traduits dans frFR.
+        formFieldInputPlaceholder__signUpPassword: "Créez un mot de passe",
+      }}
+    >
       <html
         lang="fr"
         suppressHydrationWarning

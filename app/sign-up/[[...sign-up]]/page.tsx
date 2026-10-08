@@ -217,12 +217,6 @@ function SignUpContent() {
             path="/sign-up"
           />
 
-          <p className="text-sm text-center text-[#6B6780] mt-4">
-            Déjà un compte ?{' '}
-            <a href="/sign-in" className="text-[#7225E3] font-bold hover:underline">
-              Se connecter
-            </a>
-          </p>
         </div>
       </div>
     </div>
