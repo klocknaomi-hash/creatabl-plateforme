@@ -186,7 +186,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     <opt.icon size={20} />
                   </div>
                   <div>
-                    <p className="font-bold">{opt.title}</p>
+                    <p className="font-semibold">{opt.title}</p>
                     <p className="text-sm opacity-70">{opt.subtitle}</p>
                   </div>
                 </button>
@@ -207,7 +207,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
             <div className="space-y-4 pt-4">
               <button 
                 onClick={() => router.push("/dashboard/settings/connections")}
-                className="w-full bg-[#7225E3] text-white py-4 rounded-xl font-bold hover:bg-[#5B1BB8] transition-colors"
+                className="w-full bg-[#7225E3] text-white py-4 rounded-xl font-semibold hover:bg-[#5B1BB8] transition-colors"
               >
                 Connecter mes réseaux
               </button>
@@ -272,7 +272,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     <button
                       type="button"
                       onClick={() => document.getElementById('logo-upload')?.click()}
-                      className="text-sm text-[#7225E3] font-bold hover:underline text-left"
+                      className="text-sm text-[#7225E3] font-semibold hover:underline text-left"
                     >
                       Importer une image
                     </button>
@@ -318,7 +318,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   }`}
                 >
                   <div className="flex-1">
-                    <p className="font-bold">{opt.title}</p>
+                    <p className="font-semibold">{opt.title}</p>
                     <p className="text-sm opacity-70">{opt.subtitle}</p>
                   </div>
                   {formData.writingTone === opt.id && <Check size={20} />}
@@ -351,7 +351,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                         : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
                     }`}
                   >
-                    <p className="font-bold">{opt.title}</p>
+                    <p className="font-semibold">{opt.title}</p>
                   </button>
                 ))}
               </div>
@@ -382,7 +382,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                         : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
                     }`}
                   >
-                    <p className="font-bold">{opt.title}</p>
+                    <p className="font-semibold">{opt.title}</p>
                   </button>
                 ))}
               </div>
@@ -433,7 +433,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               <div className="flex flex-col w-full gap-3">
                 <button 
                   onClick={() => setShowConfirmClose(false)}
-                  className="w-full py-4 bg-[#7225E3] text-white rounded-xl font-bold hover:bg-[#5B1BB8] transition-all"
+                  className="w-full py-4 bg-[#7225E3] text-white rounded-xl font-semibold hover:bg-[#5B1BB8] transition-all"
                 >
                   Continuer le paramétrage
                 </button>
@@ -452,7 +452,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         <div className="px-8 pt-8 flex justify-between items-start">
           <div>
             {step !== 0 && step !== "final" && (
-              <p className="text-xs font-bold text-gray-400">
+              <p className="text-xs font-semibold text-gray-400">
                 STEP {step}/6
               </p>
             )}
@@ -495,7 +495,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                 <button
                   onClick={handleBack}
                   disabled={loading}
-                  className="flex-1 py-4 rounded-xl font-bold text-lg border-2 border-gray-100 text-gray-400 hover:bg-gray-50 transition-all"
+                  className="flex-1 py-4 rounded-xl font-semibold text-lg border-2 border-gray-100 text-gray-400 hover:bg-gray-50 transition-all"
                 >
                   Précédent
                 </button>

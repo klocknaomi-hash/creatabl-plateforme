@@ -1,5 +1,6 @@
 'use client'
 
+import { toast } from 'sonner'
 import { useState, useEffect } from 'react'
 import { useAccess } from '@/hooks/useAccess'
 import { Plus, ChevronDown, Loader2 } from 'lucide-react'
@@ -53,7 +54,7 @@ export function WorkspaceSwitcher() {
       })
       if (!res.ok) {
         const errData = await res.json()
-        alert(errData.error || 'Erreur lors de la création')
+        toast.error(errData.error || 'Erreur lors de la création')
         return
       }
       const workspace = await res.json()
@@ -82,7 +83,7 @@ export function WorkspaceSwitcher() {
   return (
     <div className="px-4 py-3 border-b border-white/5 space-y-2">
       <div className="flex justify-between items-center">
-        <p className="text-xs font-bold text-white/40">
+        <p className="text-xs font-semibold text-white/40">
           Espace de travail
         </p>
       </div>

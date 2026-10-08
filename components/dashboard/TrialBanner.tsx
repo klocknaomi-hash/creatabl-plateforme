@@ -1,69 +1,112 @@
 "use client"
-import { useUser } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
-import { Sparkles as SparklesIcon, Timer as TimerIcon } from "lucide-react"
 
-import { isNaomiOrTest } from "@/lib/plans"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { Sparkles, Timer, X } from "lucide-react"
 
-export function TrialBanner() {
-  const { user } = useUser()
-  const router = useRouter()
-  
-  const email = user?.emailAddresses[0]?.emailAddress ?? ''
-  if (isNaomiOrTest(email)) return null
+export type TrialInfo = {
+  startedAt: string | null
+  endsAt: string
+  trialPlan: string
+  selectedPlan: string | null
+  scheduledCount?: number
+}
 
-  const currentPlan = (user?.publicMetadata?.plan as string) || (user?.publicMetadata?.selectedPlan as string) || 'starter'
-  if (currentPlan === 'free' || user?.publicMetadata?.plan === 'free') return null
+const PLAN_NAMES: Record<string, string> = { free: "Free", starter: "Starter", pro: "Pro", business: "Business", agency: "Business" }
+const planName = (p?: string | null) => (p ? PLAN_NAMES[p.toLowerCase()] ?? p : null)
 
-  const onboardingStep = user?.publicMetadata?.onboardingStep as string
-  if (onboardingStep !== "done") return null
+const DAY = 24 * 60 * 60 * 1000
+const DISMISS_KEY = "creatabl_trial_banner_dismissed"
 
-  let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined
-  
-  // Baseline: 14 days from creation if trialEndsAt is missing
-  if (!trialEndsAt && user?.createdAt) {
-    const createdAt = new Date(user.createdAt)
-    const fourteenDaysLater = new Date(createdAt.getTime() + 14 * 24 * 60 * 60 * 1000)
-    trialEndsAt = fourteenDaysLater.toISOString()
-  }
+// Calcul depuis les données du compte : début de l'essai, date de fin, plan d'essai
+// et plan choisi. Rien n'est fixé en dur.
+export function computeTrial(trial: TrialInfo, now = new Date()) {
+  const end = new Date(trial.endsAt)
+  const start = trial.startedAt ? new Date(trial.startedAt) : new Date(end.getTime() - 14 * DAY)
+  const msLeft = end.getTime() - now.getTime()
+  const daysLeft = Math.ceil(msLeft / DAY)
+  const totalDays = Math.max(1, Math.round((end.getTime() - start.getTime()) / DAY))
+  const elapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft))
+  const endsToday = end.toDateString() === now.toDateString()
+  const tomorrow = new Date(now.getTime() + DAY)
+  const endsTomorrow = end.toDateString() === tomorrow.toDateString()
+  return { end, daysLeft, totalDays, elapsed, endsToday, endsTomorrow, expired: msLeft <= 0 }
+}
 
-  if (!trialEndsAt) return null
-  
-  const daysLeft = Math.ceil(
-    (new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-  )
-  
-  if (daysLeft <= 0 || isNaN(daysLeft)) return null
-  
-  const trialPlanName = ((user?.publicMetadata?.trialPlan as string) || currentPlan || 'Business').toUpperCase()
+// Bannière d'essai du design system (TrialBanner). Même position et mêmes couleurs :
+// lavande, puis ambre à 2 jours ou moins avec la conséquence concrète.
+export function TrialBanner({ trial, now, demo = false }: { trial: TrialInfo | null; now?: Date; demo?: boolean }) {
+  const [dismissedToday, setDismissedToday] = useState(!demo)
 
-  const bannerText = daysLeft <= 3
-    ? `Votre essai gratuit se termine dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""}, choisissez votre plan.`
-    : `Essai ${trialPlanName} — ${daysLeft} jour${daysLeft > 1 ? "s" : ""} restant${daysLeft > 1 ? "s" : ""}. Choisissez votre plan avant la fin de l'essai.`
+  useEffect(() => {
+    if (demo) return
+    try {
+      setDismissedToday(localStorage.getItem(DISMISS_KEY) === new Date().toDateString())
+    } catch {
+      setDismissedToday(false)
+    }
+  }, [demo])
 
-  const urgent = daysLeft <= 3
+  if (!trial || dismissedToday) return null
+  const t = computeTrial(trial, now)
+  if (t.expired) return null
+
+  const trialName = planName(trial.trialPlan) ?? "Business"
+  const chosen = planName(trial.selectedPlan)
+  const urgent = t.daysLeft <= 2
+  const endLabel = t.end.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+
+  const title = t.endsToday
+    ? `Votre essai ${trialName} se termine aujourd'hui`
+    : t.endsTomorrow
+      ? `Votre essai ${trialName} se termine demain`
+      : `Essai ${trialName} : il vous reste ${t.daysLeft} jours`
+
+  const scheduled = trial.scheduledCount ?? 0
+  const detail = urgent
+    ? scheduled > 0
+      ? `Choisissez un plan avant le ${endLabel} : sinon vos ${scheduled} post${scheduled > 1 ? "s" : ""} programmé${scheduled > 1 ? "s" : ""} seront suspendus.`
+      : `Choisissez un plan avant le ${endLabel} pour garder l'accès à vos outils.`
+    : `Toutes les fonctionnalités ${trialName} sont ouvertes jusqu'au ${endLabel}.${chosen ? ` Ensuite : plan ${chosen}, celui que vous avez choisi.` : ""}`
 
   return (
-    <div
-      role="status"
-      className={`w-full px-4 py-2.5 md:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3 text-sm shrink-0 border-b ${
-        urgent ? "bg-[#FDF2DF] border-[#F4DDB3] text-[#14121F]" : "bg-[#F3EEFD] border-[#E7DCFC] text-[#14121F]"
-      }`}
-    >
-      <span className="flex items-center gap-2 text-[14px] leading-snug">
-        {urgent ? (
-          <TimerIcon className="size-[18px] shrink-0 text-[#8A4B00]" aria-hidden="true" />
-        ) : (
-          <SparklesIcon className="size-[18px] shrink-0 text-[#7225E3]" aria-hidden="true" />
-        )}
-        <strong className="font-semibold">{bannerText}</strong>
-      </span>
-      <button
-        onClick={() => router.push('/pricing')}
-        className="rounded-full bg-[#7225E3] px-4 h-9 text-sm font-semibold text-white hover:bg-[#5B1BB8] transition-colors whitespace-nowrap shrink-0"
-      >
-        Mettre à niveau
-      </button>
+    <div className={demo ? undefined : "px-4 pt-4 md:px-6 lg:px-8"}>
+      <div className={`cr-trial${urgent ? " cr-trial--urgent" : ""}`} role="status">
+        <span className="cr-trial-ico">
+          {urgent ? <Timer size={20} aria-hidden="true" /> : <Sparkles size={20} aria-hidden="true" />}
+        </span>
+        <div className="min-w-0 flex-1">
+          <strong>{title}</strong>
+          <p>{detail}</p>
+        </div>
+        <div className="cr-trial-actions">
+          <div
+            className="cr-bar hidden sm:block"
+            role="progressbar"
+            aria-valuenow={t.elapsed}
+            aria-valuemin={0}
+            aria-valuemax={t.totalDays}
+            aria-label="Jours d'essai écoulés"
+          >
+            <span style={{ width: `${Math.round((t.elapsed / t.totalDays) * 100)}%` }} />
+          </div>
+          <Link href="/dashboard/billing" className="cr-btn cr-btn--primary cr-btn--sm">
+            {chosen ? `Confirmer ${chosen}` : "Choisir un plan"}
+          </Link>
+          <button
+            type="button"
+            className="cr-iconbtn"
+            style={{ width: 32, height: 32 }}
+            aria-label="Masquer jusqu'à demain"
+            onClick={() => {
+              try { localStorage.setItem(DISMISS_KEY, new Date().toDateString()) } catch {}
+              setDismissedToday(true)
+            }}
+          >
+            <X size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

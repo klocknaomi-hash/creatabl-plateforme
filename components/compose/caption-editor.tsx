@@ -90,7 +90,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
               
               return (
                 <div className={cn(
-                  "text-[11px] font-bold transition-colors",
+                  "text-xs font-semibold transition-colors",
                   isOver ? "text-destructive animate-pulse" : "text-muted-foreground"
                 )}>
                   {content.length} / {minLimit}
@@ -119,7 +119,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       {/* AI Prompt Block */}
       <div className="p-3.5 rounded-xl border border-dashed border-border bg-muted/5 flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
+          <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
             Générer avec l'IA <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
           </span>
           <Button 

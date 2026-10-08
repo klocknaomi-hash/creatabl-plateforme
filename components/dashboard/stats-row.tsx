@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Eye, Heart, CalendarClock, FileText } from "lucide-react";
+import { Eye, Heart, Send } from "lucide-react";
 import { getDashboardStats, getCachedUserSettings, getCachedAccounts } from "@/lib/dashboard-data";
 import { getTranslation } from "@/lib/i18n";
 
@@ -46,61 +46,61 @@ export async function StatsRow() {
 
 const nf = new Intl.NumberFormat("fr-FR");
 
-export function StatsRowView({ summary, upcomingCount, hasPosts, t }: StatsRowProps) {
-  // StatCard du design system : uniquement des chiffres réels, « — » tant qu'il n'y a pas de données.
+export function StatsRowView({ summary, hasPosts }: StatsRowProps) {
+  // « Performances sur 30 jours » (DashboardPage du design system) : portée, engagement,
+  // posts publiés. « — » tant qu'il n'y a pas de données, rien n'est inventé.
+  const published = Number(summary.totalPosts || 0);
   const cards = [
     {
       id: "stat-total-reach",
-      label: t.totalReach,
+      label: "Portée",
       icon: Eye,
       value: hasPosts ? nf.format(Number(summary.totalReach || 0)) : "—",
-      context: hasPosts ? "Toutes plateformes" : "Après votre premier post",
-      href: "/dashboard/analytics",
+      context: hasPosts ? "Personnes touchées, tous réseaux" : "Pas encore de données",
       empty: !hasPosts,
     },
     {
       id: "stat-engagement",
-      label: t.engagement,
+      label: "Taux d'engagement",
       icon: Heart,
       value: hasPosts ? `${Number(summary.avgEngagementRate || 0).toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %` : "—",
-      context: hasPosts ? "Taux moyen" : "Après votre premier post",
-      href: "/dashboard/analytics",
+      context: hasPosts ? "Moyenne de vos posts" : "Pas encore de données",
       empty: !hasPosts,
     },
     {
-      id: "stat-scheduled",
-      label: t.scheduled,
-      icon: CalendarClock,
-      value: nf.format(Number(upcomingCount || 0)),
-      context: "Posts à venir",
-      href: "/dashboard/calendar",
-      empty: false,
-    },
-    {
-      id: "stat-drafts",
-      label: "Brouillons",
-      icon: FileText,
-      value: nf.format(Number(summary.totalDrafts || 0)),
-      context: "Prêts à finaliser",
-      href: "/dashboard/posts?status=draft",
-      empty: false,
+      id: "stat-published",
+      label: "Posts publiés",
+      icon: Send,
+      value: hasPosts ? nf.format(published) : "—",
+      context: hasPosts ? "Sur les 30 derniers jours" : "Pas encore de données",
+      empty: !hasPosts,
     },
   ];
 
   return (
-    <section className="ap-stats" aria-label="Indicateurs">
-      {cards.map((card) => (
-        <Link key={card.id} id={card.id} href={card.href} className="cr-stat">
-          <span className="cr-stat-label">
-            <card.icon size={18} aria-hidden="true" />
-            {card.label}
-          </span>
-          <span className={`cr-stat-value${card.empty ? " is-empty" : ""}`}>{card.value}</span>
-          <div className="cr-stat-foot">
-            <span>{card.context}</span>
-          </div>
-        </Link>
-      ))}
+    <section className="grid gap-3" aria-labelledby="perf-title">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 id="perf-title" className="font-heading text-lg font-semibold text-[#14121F]">Performances sur 30 jours</h2>
+        {hasPosts ? (
+          <Link href="/dashboard/analytics" className="cr-link">Voir l&apos;analytique</Link>
+        ) : (
+          <span className="text-sm text-[#6B6780]">Disponibles 24 heures après votre premier post</span>
+        )}
+      </div>
+      <div className="ap-stats ap-stats--3">
+        {cards.map((card) => (
+          <article key={card.id} id={card.id} className="cr-stat">
+            <span className="cr-stat-label">
+              <card.icon size={18} aria-hidden="true" />
+              {card.label}
+            </span>
+            <span className={`cr-stat-value${card.empty ? " is-empty" : ""}`}>{card.value}</span>
+            <div className="cr-stat-foot">
+              <span>{card.context}</span>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

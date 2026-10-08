@@ -27,9 +27,16 @@ interface SettingsFormProps {
   initialSettings: any;
   user: any;
   hasData?: boolean;
+  isBusiness?: boolean;
 }
 
-export function SettingsForm({ initialSettings, user, hasData }: SettingsFormProps) {
+const AUTOMATIONS = [
+  { id: "autoPublish", label: "Publication automatique", desc: "Les posts validés partent seuls à l'heure prévue, sans confirmation." },
+  { id: "enableAutoReplies", label: "Réponses automatiques aux commentaires", desc: "L'IA propose et publie des réponses selon vos règles." },
+  { id: "clientApproval", label: "Validation par un client", desc: "Chaque post passe « À valider » avant de pouvoir être programmé." },
+];
+
+export function SettingsForm({ initialSettings, user, hasData, isBusiness = false }: SettingsFormProps) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
@@ -129,7 +136,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             )}>
               <div className="flex items-center gap-3 ml-2">
                 <div className="h-px bg-border flex-1" />
-                <span className="text-xs font-bold text-[#6B6780] whitespace-nowrap">Abonnements liés</span>
+                <span className="text-xs font-semibold text-[#6B6780] whitespace-nowrap">Abonnements liés</span>
                 <div className="h-px bg-border flex-1" />
               </div>
 
@@ -148,7 +155,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                     )}
                   >
                     <div className="space-y-1">
-                      <Label htmlFor={item.id} className="text-sm font-bold cursor-pointer">{item.label}</Label>
+                      <Label htmlFor={item.id} className="text-sm font-semibold cursor-pointer">{item.label}</Label>
                       <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
                     </div>
                     <Switch 
@@ -163,6 +170,53 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             </div>
           </CardContent>
         </Card>
+
+        {/* AUTOMATISATIONS (BUSINESS) */}
+        <section className="ap-panel" aria-labelledby="states-title">
+          <div className="ap-panel-head">
+            <div>
+              <h2 id="states-title">États de l&apos;interface</h2>
+              <p className="text-sm text-[#4B4B63]">Alertes, statuts, boutons et Post Cards avec des données d&apos;exemple.</p>
+            </div>
+            <Link href="/dashboard/etats" className="cr-btn cr-btn--secondary cr-btn--sm">Voir les états</Link>
+          </div>
+        </section>
+
+        <section className="ap-panel" aria-labelledby="automations-title">
+          <div className="ap-panel-head">
+            <div>
+              <h2 id="automations-title">Automatisations</h2>
+              <p className="text-sm text-[#4B4B63]">Réglages avancés pour les équipes et les agences.</p>
+            </div>
+            <span className="cr-badge cr-badge--violet cr-badge--plain">Plan Business</span>
+          </div>
+          <div className="ap-panel-body grid gap-3">
+            {!isBusiness && (
+              <div className="cr-alert cr-alert--info" role="status">
+                <div className="min-w-0 flex-1">
+                  <strong>Disponible avec le plan Business</strong>
+                  <p>Passez au plan Business pour automatiser la publication, les réponses et la validation client.</p>
+                </div>
+                <Link href="/dashboard/billing" className="cr-btn cr-btn--secondary cr-btn--sm self-center">Voir les plans</Link>
+              </div>
+            )}
+            {AUTOMATIONS.map((item) => (
+              <div key={item.id} className="flex items-center justify-between gap-4 rounded-[12px] border border-[#E8E6F0] px-4 py-3">
+                <div className="space-y-0.5">
+                  <Label htmlFor={item.id} className={cn("text-sm font-semibold", !isBusiness && "text-[#6B6780]")}>{item.label}</Label>
+                  <p className="text-sm text-[#4B4B63]">{item.desc}</p>
+                </div>
+                <Switch
+                  id={item.id}
+                  checked={isBusiness && !!settings[item.id]}
+                  onCheckedChange={() => handleToggle(item.id)}
+                  disabled={!isBusiness}
+                  aria-label={item.label}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* PREFERENCES SECTION */}
         <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
@@ -275,7 +329,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
           <CardContent className="p-8 space-y-6">
             <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-2xl border border-destructive/10">
               <div className="space-y-1">
-                <Label className="text-sm font-bold text-destructive">Exporter vos données personnelles</Label>
+                <Label className="text-sm font-semibold text-destructive">Exporter vos données personnelles</Label>
                 <p className="text-xs text-muted-foreground font-medium max-w-md">Téléchargez une archive complète de vos posts, analytics et paramètres de compte au format JSON.</p>
               </div>
               <Button 
@@ -283,7 +337,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                 size="sm" 
                 disabled={!hasData || exporting}
                 onClick={handleExport}
-                className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all font-bold px-5"
+                className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all font-semibold px-5"
               >
                 {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Exporter les données"}
               </Button>

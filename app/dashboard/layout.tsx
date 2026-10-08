@@ -1,8 +1,8 @@
 import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
-import { users } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { users, posts } from '@/lib/db/schema'
+import { and, count, eq } from 'drizzle-orm'
 import { OnboardingModal } from '@/components/onboarding/OnboardingModal'
 import { DashboardProviders } from "@/components/dashboard/providers";
 import { SidebarInset } from "@/components/ui/sidebar";
@@ -10,7 +10,7 @@ import { AppSidebar } from "@/components/dashboard/sidebar";
 import { Topbar } from "@/components/dashboard/topbar";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { getTrialStatus } from "@/lib/trial";
-import { TrialBanner } from "@/components/dashboard/TrialBanner";
+import { TrialBanner, type TrialInfo } from "@/components/dashboard/TrialBanner";
 import { PaywallOverlay } from "@/components/PaywallOverlay";
 import { PaywallBanner } from "@/components/dashboard/PaywallBanner"
 import { PaywallProvider } from "@/lib/paywall-context"
@@ -117,6 +117,29 @@ export default async function DashboardLayout({
       isAccessAllowed = true // fail open, don't block
     }
 
+    // Bannière d'essai : uniquement pendant un essai réel (dates en base), jamais pour
+    // le plan Free, un abonné ou un compte de test.
+    let trialInfo: TrialInfo | null = null
+    try {
+      const subscribed = !!dbUser?.isSubscribed || dbUser?.subscriptionStatus === 'active'
+      const onPaidTrial = (dbUser?.selectedPlan || dbUser?.plan || 'free') !== 'free'
+      if (!isTestOrNaomi && !showOnboarding && !subscribed && onPaidTrial && trialEndsAt && trialEndsAt > now && dbUser) {
+        const scheduled = await db
+          .select({ value: count() })
+          .from(posts)
+          .where(and(eq(posts.userId, dbUser.id), eq(posts.status, 'scheduled')))
+        trialInfo = {
+          startedAt: dbUser.trialStartedAt ? new Date(dbUser.trialStartedAt).toISOString() : null,
+          endsAt: trialEndsAt.toISOString(),
+          trialPlan: (clerkUser?.publicMetadata?.trialPlan as string) || 'business',
+          selectedPlan: dbUser.selectedPlan || null,
+          scheduledCount: Number(scheduled[0]?.value ?? 0),
+        }
+      }
+    } catch (e) {
+      console.error('Trial banner data error:', e)
+    }
+
     const shouldRedirectToUpgrade = !isAccessAllowed && !showOnboarding
 
     // Read the pathname header from middleware
@@ -150,7 +173,7 @@ export default async function DashboardLayout({
             <Topbar />
           </ErrorBoundary>
           <CancellationBanner cancelsAt={dbUser?.cancelsAt} />
-          <TrialBanner />
+          <TrialBanner trial={trialInfo} />
           <main className="relative flex flex-1 flex-col bg-[#F8F7FC] p-4 md:p-6 lg:p-8 dark:bg-transparent">
             <PaywallProvider isLocked={false} selectedPlan={dbUser?.selectedPlan || null}>
               <ErrorBoundary>

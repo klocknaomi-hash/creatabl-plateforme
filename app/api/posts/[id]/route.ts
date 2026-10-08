@@ -96,7 +96,7 @@ export async function PATCH(
             error: "limit_reached",
             limit: "postsPerMonth",
             upgradeUrl: "/pricing",
-            message: "Tu as utilisé tous tes crédits du mois. Ils se renouvellent le 1er du mois, ou passe au plan supérieur pour continuer."
+            message: `Vous avez utilisé tous vos crédits de la période. Ils se renouvellent ${limitCheck.period ? `le ${limitCheck.period.resetAt.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}` : 'à la prochaine échéance'}, ou passez au plan supérieur pour continuer.`
           },
           { status: 402 }
         );

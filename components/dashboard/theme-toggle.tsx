@@ -2,8 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
@@ -16,19 +14,19 @@ export function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return <div className="size-8" />;
+    return <div className="size-10" />;
   }
 
   return (
     <button
       id="topbar-theme-toggle"
-      className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }))}
-      aria-label="Toggle theme"
+      className="cr-iconbtn"
+      aria-label={theme === "dark" ? "Passer au thème clair" : "Passer au thème sombre"}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      {/* Sun shown in dark mode, Moon shown in light mode */}
-      <Sun className="block dark:hidden" />
-      <Moon className="hidden dark:block" />
+      {/* Lune en thème clair (passer au sombre), soleil en thème sombre */}
+      <Moon size={20} className="block dark:hidden" aria-hidden="true" />
+      <Sun size={20} className="hidden dark:block" aria-hidden="true" />
     </button>
   );
 }

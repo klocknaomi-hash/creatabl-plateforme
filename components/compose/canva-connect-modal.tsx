@@ -69,7 +69,7 @@ export function CanvaConnectModal({ children, onConnect }: CanvaConnectModalProp
                   setOpen(false);
                   onConnect();
                 }} 
-                className="w-full bg-[#00C4CC] hover:bg-[#00C4CC]/90 text-white shadow-md font-bold py-6 rounded-xl text-base transition-all hover:shadow-lg"
+                className="w-full bg-[#00C4CC] hover:bg-[#00C4CC]/90 text-white shadow-md font-semibold py-6 rounded-xl text-base transition-all hover:shadow-lg"
               >
                 + Connecter à Canva
               </Button>

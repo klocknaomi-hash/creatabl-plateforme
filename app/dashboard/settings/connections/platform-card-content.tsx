@@ -136,7 +136,7 @@ export function PlatformCardContent({
                     ) : (
                       <>
                         <AvatarImage src={activeAccount.avatarUrl || ''} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold text-base">
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold text-base">
                           {activeAccount.username?.charAt(0).toUpperCase() || platform.name.charAt(0)}
                         </AvatarFallback>
                       </>
@@ -145,11 +145,11 @@ export function PlatformCardContent({
 
                   <div className="space-y-1 w-full px-2">
                     <div className="flex items-center justify-center gap-1.5 min-w-0">
-                      <p className="text-sm font-bold truncate leading-tight max-w-[85%] text-foreground">
+                      <p className="text-sm font-semibold truncate leading-tight max-w-[85%] text-foreground">
                         {username}
                       </p>
                       {!isActive && (
-                        <Badge variant="outline" className="text-[9px] h-4 py-0 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5 font-bold">
+                        <Badge variant="outline" className="text-xs h-4 py-0 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5 font-semibold">
                           Suspendu
                         </Badge>
                       )}

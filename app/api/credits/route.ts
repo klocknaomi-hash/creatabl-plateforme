@@ -5,7 +5,8 @@ import { currentCreditPeriod } from "@/lib/plans/credits";
 
 export const dynamic = "force-dynamic";
 
-// Crédits du mois : 1 crédit = 1 post programmé ou publié. Renouvelés le 1er du mois.
+// Crédits de la période : 1 crédit = 1 post programmé ou publié. Renouvelés à la date
+// anniversaire du compte (voir currentCreditPeriod).
 export async function GET() {
   const { userId, orgId } = await auth();
   if (!userId) {
@@ -17,7 +18,7 @@ export async function GET() {
       checkPlanLimit(userId, "postsPerMonth", orgId),
       checkPlanLimit(userId, "aiGenerations", orgId),
     ]);
-    const { resetAt } = currentCreditPeriod();
+    const resetAt = ("period" in posts && posts.period ? posts.period : currentCreditPeriod()).resetAt;
     const unlimited = posts.limit === -1;
 
     return NextResponse.json({

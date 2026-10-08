@@ -61,8 +61,8 @@ export function getPlatformClient(platform: string): PlatformClient {
 }
 
 export const PLATFORM_BRANDING: Record<string, { color: string, icon: any, label: string, bg: string, border: string, glow: string }> = {
-  instagram: { color: "text-[#E1306C]", icon: Instagram, label: "Instagram", bg: "bg-[#E1306C]/10", border: "border-border/50", glow: "shadow-none" },
-  linkedin: { color: "text-[#0077B5]", icon: Linkedin, label: "LinkedIn", bg: "bg-[#0077B5]/10", border: "border-border/50", glow: "shadow-none" },
+  instagram: { color: "text-[#E4405F]", icon: Instagram, label: "Instagram", bg: "bg-[#E4405F]/10", border: "border-border/50", glow: "shadow-none" },
+  linkedin: { color: "text-[#0A66C2]", icon: Linkedin, label: "LinkedIn", bg: "bg-[#0A66C2]/10", border: "border-border/50", glow: "shadow-none" },
   facebook: { color: "text-[#1877F2]", icon: Facebook, label: "Facebook", bg: "bg-[#1877F2]/10", border: "border-border/50", glow: "shadow-none" },
   twitter: { color: "text-foreground", icon: Twitter, label: "X", bg: "bg-muted/30", border: "border-border/50", glow: "shadow-none" },
   youtube: { color: "text-[#FF0000]", icon: YoutubeIcon, label: "YouTube", bg: "bg-[#FF0000]/10", border: "border-border/50", glow: "shadow-none" },

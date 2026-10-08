@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { CircleHelp, Search, Settings, UserPlus } from "lucide-react";
+import { CircleHelp, CreditCard, Search, Settings, UserPlus } from "lucide-react";
 
 import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { NotificationsPopover } from "@/components/dashboard/notifications-popover";
@@ -72,13 +72,18 @@ export function Topbar() {
         </a>
         <NotificationsPopover />
         <ThemeToggle />
-        <span style={{ marginLeft: 8, display: "inline-flex" }}>
+        <span style={{ marginLeft: 8, display: "inline-flex", width: 32, height: 32 }}>
           <UserButton appearance={{ elements: { avatarBox: "size-8" } }}>
             <UserButton.MenuItems>
               <UserButton.Link
                 label="Paramètres"
                 labelIcon={<Settings className="size-4" />}
                 href="/dashboard/settings"
+              />
+              <UserButton.Link
+                label="Abonnement"
+                labelIcon={<CreditCard className="size-4" />}
+                href="/dashboard/billing"
               />
               <UserButton.Action label="manageAccount" />
             </UserButton.MenuItems>

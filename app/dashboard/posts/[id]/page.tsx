@@ -34,8 +34,8 @@ import {
 } from "@/components/platform-icons";
 
 const PLATFORM_BRANDING: Record<string, { color: string, icon: any, label: string, bg: string, border: string, glow: string }> = {
-  instagram: { color: "text-[#E1306C]", icon: Instagram, label: "Instagram", bg: "bg-[#E1306C]/10", border: "border-border/50", glow: "shadow-none" },
-  linkedin: { color: "text-[#0077B5]", icon: Linkedin, label: "LinkedIn", bg: "bg-[#0077B5]/10", border: "border-border/50", glow: "shadow-none" },
+  instagram: { color: "text-[#E4405F]", icon: Instagram, label: "Instagram", bg: "bg-[#E4405F]/10", border: "border-border/50", glow: "shadow-none" },
+  linkedin: { color: "text-[#0A66C2]", icon: Linkedin, label: "LinkedIn", bg: "bg-[#0A66C2]/10", border: "border-border/50", glow: "shadow-none" },
   facebook: { color: "text-[#1877F2]", icon: Facebook, label: "Facebook", bg: "bg-[#1877F2]/10", border: "border-border/50", glow: "shadow-none" },
   twitter: { color: "text-foreground", icon: Twitter, label: "X", bg: "bg-muted/30", border: "border-border/50", glow: "shadow-none" },
   youtube: { color: "text-[#FF0000]", icon: YoutubeIcon, label: "YouTube", bg: "bg-[#FF0000]/10", border: "border-border/50", glow: "shadow-none" },
@@ -66,6 +66,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useConfirm } from "@/components/ds/confirm";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -85,8 +86,9 @@ export default function PostDetailPage() {
 
   const { data, error, isLoading, mutate } = useSWR(`/api/posts/${id}`, fetcher);
 
+  const confirmDialog = useConfirm();
   const handleDelete = async () => {
-    if (!confirm("Voulez-vous vraiment supprimer ce post ?")) return;
+    if (!(await confirmDialog({ title: "Supprimer ce post ?", description: "Le post sera supprimé de Creatabl. Les publications déjà en ligne restent sur les réseaux.", confirmLabel: "Supprimer le post" }))) return;
 
     setDeleting(true);
     try {
@@ -208,7 +210,7 @@ export default function PostDetailPage() {
             <Button 
               variant="outline" 
               onClick={() => router.push(`/dashboard/compose?duplicate=${post.id}`)}
-              className="rounded-xl shadow-sm gap-2 font-bold text-xs"
+              className="rounded-xl shadow-sm gap-2 font-semibold text-xs"
             >
               <Copy className="size-4 text-indigo-500" />
               <span>Réutiliser</span>
@@ -217,17 +219,17 @@ export default function PostDetailPage() {
             <Button 
               variant="outline" 
               onClick={() => router.push(`/dashboard/compose?id=${post.id}`)}
-              className="rounded-xl shadow-sm gap-2 font-bold text-xs"
+              className="rounded-xl shadow-sm gap-2 font-semibold text-xs"
             >
               <Edit3 className="size-4 text-blue-500" />
               <span>Modifier</span>
             </Button>
           )}
           <Button 
-            variant="destructive" 
+            variant="destructive-soft" 
             onClick={handleDelete}
             disabled={deleting}
-            className="rounded-xl shadow-sm gap-2 font-bold text-xs"
+            className="rounded-xl shadow-sm gap-2 font-semibold text-xs"
           >
             {deleting ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
             <span>Supprimer</span>
@@ -259,7 +261,7 @@ export default function PostDetailPage() {
                       <div 
                         key={plt} 
                         className={cn(
-                          "flex items-center gap-2 px-3 py-1.5 rounded-2xl border border-border/20 text-xs font-bold shadow-sm",
+                          "flex items-center gap-2 px-3 py-1.5 rounded-2xl border border-border/20 text-xs font-semibold shadow-sm",
                           brand.bg, brand.color
                         )}
                       >
@@ -337,20 +339,20 @@ export default function PostDetailPage() {
                                 <PlatformIcon className="size-4.5" />
                               </div>
                               <div>
-                                <p className="text-sm font-bold capitalize">{brand.label}</p>
+                                <p className="text-sm font-semibold capitalize">{brand.label}</p>
                                 <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                                   {result.status === 'success' ? (
-                                    <span className="text-emerald-500 font-bold flex items-center gap-1">
+                                    <span className="text-emerald-500 font-semibold flex items-center gap-1">
                                       <CheckCircle2 className="size-3" />
                                       Publié
                                     </span>
                                   ) : result.status === 'failed' ? (
-                                    <span className="text-destructive font-bold flex items-center gap-1" title={result.errorMessage}>
+                                    <span className="text-destructive font-semibold flex items-center gap-1" title={result.errorMessage}>
                                       <XCircle className="size-3" />
                                       Échec
                                     </span>
                                   ) : (
-                                    <span className="text-yellow-500 font-bold flex items-center gap-1">
+                                    <span className="text-yellow-500 font-semibold flex items-center gap-1">
                                       <Clock className="size-3" />
                                       En attente
                                     </span>
@@ -364,7 +366,7 @@ export default function PostDetailPage() {
 
                             {/* Individual Platform KPIs */}
                             {result.status === 'success' && (
-                              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-bold text-foreground/80">
+                              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-foreground/80">
                                 <div className="flex items-center gap-1.5">
                                   <Heart className="size-3.5 text-red-500" />
                                   <span>{result.likes}</span>
@@ -384,7 +386,7 @@ export default function PostDetailPage() {
                                 {result.platformPostId && (
                                   <a 
                                     href={`#`} // Ideally would point to direct link, or placeholder
-                                    className="text-[10px] text-violet-600 hover:underline flex items-center gap-1 font-bold pl-2"
+                                    className="text-xs text-violet-600 hover:underline flex items-center gap-1 font-semibold pl-2"
                                   >
                                     <ExternalLink className="size-3" />
                                     Voir

@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useConfirm } from "@/components/ds/confirm";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -69,8 +70,9 @@ function PostsList() {
 
   const { data, error, isLoading, mutate } = useSWR(`/api/posts?${queryParams.toString()}`, fetcher);
 
+  const confirmDialog = useConfirm();
   const handleDelete = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer ce post ?")) return;
+    if (!(await confirmDialog({ title: "Supprimer ce post ?", description: "Le post sera supprimé de Creatabl. Les publications déjà en ligne restent sur les réseaux.", confirmLabel: "Supprimer le post" }))) return;
 
     try {
       const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
@@ -189,6 +191,7 @@ function PostsList() {
                 status={post.status}
                 date={post.publishedAt || post.scheduledAt || post.createdAt}
                 mediaUrl={post.mediaUrls?.[0]}
+                errorMessage={post.platformResults?.find((r: any) => r.status === "failed")?.errorMessage}
                 actions={
                   <span className="cr-post-more" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                     <DropdownMenu>

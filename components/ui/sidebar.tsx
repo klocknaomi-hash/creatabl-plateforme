@@ -307,7 +307,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
     <main
       data-slot="sidebar-inset"
       className={cn(
-        "relative flex w-full min-w-0 flex-1 flex-col bg-background",
+        "relative flex w-full min-w-0 flex-1 flex-col bg-[#F8F7FC] dark:bg-background",
         className
       )}
       {...props}

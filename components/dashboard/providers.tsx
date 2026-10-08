@@ -2,13 +2,16 @@
 
 import { SettingsProvider } from "@/lib/settings-context";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { ConfirmProvider } from "@/components/ds/confirm";
 
 export function DashboardProviders({ children }: { children: React.ReactNode }) {
   return (
     <SettingsProvider>
-      <SidebarProvider>
-        {children}
-      </SidebarProvider>
+      <ConfirmProvider>
+        <SidebarProvider>
+          {children}
+        </SidebarProvider>
+      </ConfirmProvider>
     </SettingsProvider>
   );
 }

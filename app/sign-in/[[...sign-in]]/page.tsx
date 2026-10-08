@@ -22,7 +22,7 @@ function SignInContent() {
         <div className="flex items-center gap-2.5 relative z-10 select-none">
           <img src="/logo.png" className="w-8 h-8 shrink-0" alt="creatabl.ia logo" />
           <span className="text-2xl font-bold tracking-tight text-white lowercase">
-            creatabl<span className="font-serif italic">.ia</span>
+            creatabl<span className="font-playfair italic">.ia</span>
           </span>
         </div>
 
@@ -185,7 +185,7 @@ function SignInContent() {
           <div className="lg:hidden flex items-center gap-2.5 mb-8 select-none">
             <img src="/logo.png" className="w-7 h-7 shrink-0" alt="creatabl.ia logo" />
             <span className="text-xl font-bold tracking-tight text-zinc-900 lowercase">
-              creatabl<span className="font-serif italic text-zinc-950">.ia</span>
+              creatabl<span className="font-playfair italic text-zinc-950">.ia</span>
             </span>
           </div>
 

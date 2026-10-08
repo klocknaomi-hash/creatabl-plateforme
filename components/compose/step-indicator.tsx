@@ -32,7 +32,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
               
               <div 
                 className={cn(
-                  "size-10 rounded-full flex items-center justify-center text-sm font-bold z-10 transition-all duration-300 border-2",
+                  "size-10 rounded-full flex items-center justify-center text-sm font-semibold z-10 transition-all duration-300 border-2",
                   isCompleted ? "bg-primary border-primary text-primary-foreground" : 
                   isActive ? "bg-background border-primary text-primary shadow-[0_0_15px_rgba(var(--primary),0.3)]" : 
                   "bg-background border-border text-muted-foreground"
@@ -41,7 +41,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
                 {isCompleted ? <Check className="size-5" /> : stepNumber}
               </div>
               <span className={cn(
-                "mt-2 text-xs font-bold transition-colors duration-300",
+                "mt-2 text-xs font-semibold transition-colors duration-300",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}>
                 {step}

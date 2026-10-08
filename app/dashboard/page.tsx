@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { currentUser } from "@clerk/nextjs/server";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { DashboardIntro } from "@/components/dashboard/dashboard-intro";
 import { StatsRow } from "@/components/dashboard/stats-row";
 import { ActiveChannels } from "@/components/dashboard/active-channels";
 import { AudienceActivity } from "@/components/dashboard/audience-activity";
@@ -17,11 +17,7 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto grid w-full max-w-[1180px] content-start gap-6 pb-12">
       <Suspense fallback={<Skeleton className="h-16 w-72" />}>
-        <DashboardHeader />
-      </Suspense>
-
-      <Suspense fallback={<StatsRowSkeleton />}>
-        <StatsRow />
+        <DashboardIntro />
       </Suspense>
 
       <div className="ap-grid">
@@ -38,6 +34,10 @@ export default async function DashboardPage() {
         </div>
       </div>
 
+      <Suspense fallback={<StatsRowSkeleton />}>
+        <StatsRow />
+      </Suspense>
+
       <Suspense fallback={<Skeleton className="h-[420px] w-full rounded-[12px]" />}>
         <AudienceActivity />
       </Suspense>
@@ -49,21 +49,10 @@ export default async function DashboardPage() {
   );
 }
 
-async function DashboardHeader() {
-  const user = await currentUser().catch(() => null);
-  const firstName = user?.firstName?.trim();
-  return (
-    <header className="ap-hello">
-      <h1>{firstName ? `Bonjour ${firstName}` : "Tableau de bord"}</h1>
-      <p>Suivez vos publications à venir, vos brouillons et vos résultats sur tous vos réseaux.</p>
-    </header>
-  );
-}
-
 function StatsRowSkeleton() {
   return (
     <div className="ap-stats">
-      {[1, 2, 3, 4].map((i) => (
+      {[1, 2, 3].map((i) => (
         <Skeleton key={i} className="h-[136px] rounded-[12px]" />
       ))}
     </div>

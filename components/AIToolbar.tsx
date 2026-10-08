@@ -217,7 +217,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 disabled
                 title="Disponible à partir du plan Pro"
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
-                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+                className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
                 <RotateCcw className="size-3.5 text-blue-500" />
                 Reformuler 🔒
@@ -238,7 +238,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 disabled
                 title="Disponible à partir du plan Pro"
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
-                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+                className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
                 <Minimize2 className="size-3.5 text-emerald-500" />
                 Raccourcir 🔒
@@ -259,7 +259,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 disabled
                 title="Disponible à partir du plan Pro"
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
-                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+                className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
                 <Maximize2 className="size-3.5 text-orange-500" />
                 Allonger 🔒
@@ -279,7 +279,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                             size="sm"
                             disabled={disabled}
                             className={cn(
-                              "h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex-shrink-0",
+                              "h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex-shrink-0",
                               "hover:bg-primary/5 hover:text-primary active:scale-95"
                             )}
                           />
@@ -325,7 +325,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 disabled
                 title="Disponible à partir du plan Pro"
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
-                className="h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
+                className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
                 <Type className="size-3.5" />
                 Ton 🔒
@@ -345,7 +345,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                         onClick={() => handleAction("optimize_platform")}
                         disabled={disabled}
                         className={cn(
-                          "h-8 px-2 rounded-xl text-[11px] font-bold gap-1.5 transition-all group flex-shrink-0",
+                          "h-8 px-2 rounded-xl text-xs font-semibold gap-1.5 transition-all group flex-shrink-0",
                           "border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/40",
                           "shadow-[0_0_15px_-5px_rgba(var(--primary),0.3)]"
                         )}
@@ -376,7 +376,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                   ) : (
                     <div className="size-1.5 rounded-full bg-destructive" />
                   )}
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-tighter">
                     {saveStatus === "saving" ? "Enregistrement" : saveStatus === "saved" ? "Enregistré" : "Erreur"}
                   </span>
                 </motion.div>
@@ -452,7 +452,7 @@ function TooltipButton({
             onClick={onClick}
             disabled={disabled}
             className={cn(
-              "h-8 px-2.5 rounded-xl text-xs font-bold gap-1.5 transition-all group",
+              "h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all group",
               "hover:bg-primary/5 hover:text-primary active:scale-95"
             )}
           />
