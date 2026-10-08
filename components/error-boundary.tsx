@@ -32,7 +32,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
           <p className="font-medium">Something went wrong.</p>
           <p className="text-sm opacity-80">This component could not be rendered.</p>
           {this.state.error && (
-            <pre className="mt-2 text-[10px] bg-black/10 p-2 rounded overflow-auto max-h-32 font-mono">
+            <pre className="mt-2 text-xs bg-black/10 p-2 rounded overflow-auto max-h-32 font-mono">
               {this.state.error.message}
             </pre>
           )}

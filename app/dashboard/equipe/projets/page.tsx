@@ -261,7 +261,7 @@ export default function ProjetsPage() {
     switch (platform.toLowerCase()) {
       case 'instagram':
         return (
-          <span className="size-5 rounded-md bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm" title="Instagram">
+          <span className="size-5 rounded-md bg-gradient-to-tr from-[#8A4B00] via-[#B42318] to-[#7225E3] flex items-center justify-center text-white shrink-0 shadow-sm" title="Instagram">
             <svg className="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
@@ -312,7 +312,7 @@ export default function ProjetsPage() {
         )
       default:
         return (
-          <span className="size-5 rounded-md bg-gray-500 flex items-center justify-center text-white shrink-0 shadow-sm">
+          <span className="size-5 rounded-md bg-[#6B6780] flex items-center justify-center text-white shrink-0 shadow-sm">
             <Layers className="size-3" />
           </span>
         )
@@ -585,16 +585,16 @@ export default function ProjetsPage() {
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
           <div>
-            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-[#14121F] flex items-center gap-2">
               Projets de l'équipe
               <div className="group relative">
-                <HelpCircle className="size-4 text-gray-400 cursor-pointer hover:text-gray-650 transition-colors" />
-                <div className="absolute left-0 bottom-6 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg w-56 font-normal shadow-lg z-30">
+                <HelpCircle className="size-4 text-[#6B6780] cursor-pointer hover:text-[#4B4B63] transition-colors" />
+                <div className="absolute left-0 bottom-6 hidden group-hover:block bg-[#14121F] text-white text-xs p-2 rounded-lg w-56 font-normal shadow-lg z-30">
                   Gérez vos contenus éditoriaux, assignez les tâches et planifiez vos publications sur les réseaux sociaux.
                 </div>
               </div>
             </h2>
-            <p className="text-sm text-gray-500 mt-1">Organisez et collaborez sur vos contenus.</p>
+            <p className="text-sm text-[#6B6780] mt-1">Organisez et collaborez sur vos contenus.</p>
           </div>
           
           <div className="flex items-center gap-3.5 self-end sm:self-auto">
@@ -607,14 +607,14 @@ export default function ProjetsPage() {
             </button>
             
             {/* Notifications Bell */}
-            <NotificationsPopover className="rounded-full border border-gray-100 bg-white hover:bg-gray-50 size-9.5 flex items-center justify-center text-gray-600 hover:text-gray-800 shadow-none font-normal shrink-0" />
+            <NotificationsPopover className="rounded-full border border-[#E8E6F0] bg-white hover:bg-[#F8F7FC] size-9.5 flex items-center justify-center text-[#4B4B63] hover:text-[#14121F] shadow-none font-normal shrink-0" />
             
             {/* Connected User Avatar */}
             {user?.imageUrl && (
               <img 
                 src={user.imageUrl} 
                 alt={user.fullName || "User"}
-                className="size-9.5 rounded-full border border-gray-200 object-cover cursor-pointer hover:opacity-90 transition-all"
+                className="size-9.5 rounded-full border border-[#E8E6F0] object-cover cursor-pointer hover:opacity-90 transition-all"
                 onClick={() => toast.info(`Connecté en tant que ${user.fullName || user.firstName}`)}
               />
             )}
@@ -622,14 +622,14 @@ export default function ProjetsPage() {
         </div>
 
         {/* TABS & VIEW CONTROLS */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100 pb-1">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#E8E6F0] pb-1">
           
           {/* VIEW TABS */}
           <div className="flex gap-6">
             <button 
               onClick={() => setViewMode('list')}
               className={`flex items-center gap-1.5 pb-3 font-bold text-xs border-b-2 transition-all cursor-pointer ${
-                viewMode === 'list' ? 'text-[#7225E3] border-[#7225E3]' : 'text-gray-400 hover:text-gray-600 border-transparent'
+                viewMode === 'list' ? 'text-[#7225E3] border-[#7225E3]' : 'text-[#6B6780] hover:text-[#4B4B63] border-transparent'
               }`}
             >
               <List className="size-4" />
@@ -638,7 +638,7 @@ export default function ProjetsPage() {
             <button 
               onClick={() => setViewMode('calendar')}
               className={`flex items-center gap-1.5 pb-3 font-bold text-xs border-b-2 transition-all cursor-pointer ${
-                viewMode === 'calendar' ? 'text-[#7225E3] border-[#7225E3]' : 'text-gray-400 hover:text-gray-600 border-transparent'
+                viewMode === 'calendar' ? 'text-[#7225E3] border-[#7225E3]' : 'text-[#6B6780] hover:text-[#4B4B63] border-transparent'
               }`}
             >
               <Calendar className="size-4" />
@@ -647,7 +647,7 @@ export default function ProjetsPage() {
             <button 
               onClick={() => setViewMode('kanban')}
               className={`flex items-center gap-1.5 pb-3 font-bold text-xs border-b-2 transition-all cursor-pointer ${
-                viewMode === 'kanban' ? 'text-[#7225E3] border-[#7225E3]' : 'text-gray-400 hover:text-gray-600 border-transparent'
+                viewMode === 'kanban' ? 'text-[#7225E3] border-[#7225E3]' : 'text-[#6B6780] hover:text-[#4B4B63] border-transparent'
               }`}
             >
               <FolderKanban className="size-4" />
@@ -665,11 +665,11 @@ export default function ProjetsPage() {
                 placeholder="Rechercher..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-4 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all w-full min-w-[130px]"
+                className="bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl pl-8 pr-4 py-1.5 text-xs text-[#14121F] placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all w-full min-w-[130px]"
               />
-              <Search className="size-3.5 text-gray-400 absolute left-2.5 top-2 pointer-events-none" />
+              <Search className="size-3.5 text-[#6B6780] absolute left-2.5 top-2 pointer-events-none" />
               {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                <button onClick={() => setSearchQuery('')} className="absolute right-2 top-2 text-[#6B6780] hover:text-[#4B4B63]">
                   <X className="size-3" />
                 </button>
               )}
@@ -679,10 +679,10 @@ export default function ProjetsPage() {
             <div className="relative">
               <button 
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 bg-[#F8F7FC] border border-[#E8E6F0] px-3 py-1.5 rounded-xl text-xs font-semibold text-[#4B4B63] hover:bg-[#F8F7FC] transition-all cursor-pointer"
               >
                 <span>{categoryFilter === 'all' ? 'Tous les projets' : categoryFilter}</span>
-                <ChevronDown className="size-3.5 text-gray-500" />
+                <ChevronDown className="size-3.5 text-[#6B6780]" />
               </button>
 
               <AnimatePresence>
@@ -693,20 +693,20 @@ export default function ProjetsPage() {
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 5 }}
-                      className="absolute right-0 mt-1 w-44 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-20"
+                      className="absolute right-0 mt-1 w-44 bg-white border border-[#E8E6F0] rounded-xl shadow-lg py-1 z-20"
                     >
                       <button
                         onClick={() => { setCategoryFilter('all'); setShowCategoryDropdown(false); }}
-                        className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-50 ${categoryFilter === 'all' ? 'text-[#7225E3] bg-purple-50/50' : 'text-gray-700'}`}
+                        className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-[#F8F7FC] ${categoryFilter === 'all' ? 'text-[#7225E3] bg-[#F3EEFD]/50' : 'text-[#4B4B63]'}`}
                       >
                         Tous les projets
                       </button>
-                      <div className="border-t border-gray-100 my-1" />
+                      <div className="border-t border-[#E8E6F0] my-1" />
                       {categoriesList.map(cat => (
                         <button
                           key={cat}
                           onClick={() => { setCategoryFilter(cat); setShowCategoryDropdown(false); }}
-                          className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-50 ${categoryFilter === cat ? 'text-[#7225E3] bg-purple-50/50' : 'text-gray-700'}`}
+                          className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-[#F8F7FC] ${categoryFilter === cat ? 'text-[#7225E3] bg-[#F3EEFD]/50' : 'text-[#4B4B63]'}`}
                         >
                           {cat}
                         </button>
@@ -718,16 +718,16 @@ export default function ProjetsPage() {
             </div>
 
             {/* Grid/List quick toggle */}
-            <div className="flex border border-gray-200 rounded-xl overflow-hidden bg-gray-50 shrink-0">
+            <div className="flex border border-[#E8E6F0] rounded-xl overflow-hidden bg-[#F8F7FC] shrink-0">
               <button 
                 onClick={() => setViewMode('list')}
-                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#7225E3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#7225E3] shadow-sm' : 'text-[#6B6780] hover:text-[#4B4B63]'}`}
               >
                 <List className="size-3.5" />
               </button>
               <button 
                 onClick={() => setViewMode('kanban')}
-                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'kanban' ? 'bg-white text-[#7225E3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'kanban' ? 'bg-white text-[#7225E3] shadow-sm' : 'text-[#6B6780] hover:text-[#4B4B63]'}`}
               >
                 <Grid className="size-3.5" />
               </button>
@@ -737,18 +737,18 @@ export default function ProjetsPage() {
 
         {/* ACTIVE FILTER / DYNAMIC CHIPS BAR */}
         {(selectedMemberName || categoryFilter !== 'all') && (
-          <div className="flex items-center gap-2 flex-wrap text-xs bg-purple-50/40 p-2.5 rounded-xl border border-purple-100/50">
-            <span className="text-gray-500 font-medium">Filtres actifs :</span>
+          <div className="flex items-center gap-2 flex-wrap text-xs bg-[#F3EEFD]/40 p-2.5 rounded-xl border border-[#E7DCFC]/50">
+            <span className="text-[#6B6780] font-medium">Filtres actifs :</span>
             {categoryFilter !== 'all' && (
-              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-semibold px-2 py-0.5 rounded-lg shadow-sm">
+              <span className="inline-flex items-center gap-1 bg-white border border-[#E7DCFC] text-[#7225E3] font-semibold px-2 py-0.5 rounded-lg shadow-sm">
                 Projet: {categoryFilter}
-                <X className="size-3 cursor-pointer hover:text-red-500" onClick={() => setCategoryFilter('all')} />
+                <X className="size-3 cursor-pointer hover:text-[#B42318]" onClick={() => setCategoryFilter('all')} />
               </span>
             )}
             {selectedMemberName && (
-              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-semibold px-2 py-0.5 rounded-lg shadow-sm">
+              <span className="inline-flex items-center gap-1 bg-white border border-[#E7DCFC] text-[#7225E3] font-semibold px-2 py-0.5 rounded-lg shadow-sm">
                 Membre: {selectedMemberName}
-                <X className="size-3 cursor-pointer hover:text-red-500" onClick={() => setSelectedMemberName(null)} />
+                <X className="size-3 cursor-pointer hover:text-[#B42318]" onClick={() => setSelectedMemberName(null)} />
               </span>
             )}
             <button 
@@ -769,7 +769,7 @@ export default function ProjetsPage() {
             </div>
           ) : posts.length === 0 ? (
             /* EMPTY STATE */
-            <div className="bg-white border border-gray-100 rounded-3xl p-16 text-center space-y-4 my-6 shadow-sm max-w-2xl mx-auto">
+            <div className="bg-white border border-[#E8E6F0] rounded-3xl p-16 text-center space-y-4 my-6 shadow-sm max-w-2xl mx-auto">
               <div className="size-16 rounded-full bg-[#8A38F5]/10 text-[#8A38F5] flex items-center justify-center mx-auto mb-2">
                 <FolderKanban className="size-8 text-[#8A38F5]" />
               </div>
@@ -792,13 +792,13 @@ export default function ProjetsPage() {
               {viewMode === 'list' && (
                 <div className="space-y-4">
                   {/* TABLE HEADER ROW */}
-                  <div className="flex items-center px-4 py-2 text-xs font-semibold text-gray-400 gap-4 bg-gray-50 border border-gray-100 rounded-xl">
+                  <div className="flex items-center px-4 py-2 text-xs font-semibold text-[#6B6780] gap-4 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl">
                     <div className="flex shrink-0">
                       <input 
                         type="checkbox" 
                         checked={filteredPosts.length > 0 && filteredPosts.every(p => selectedPostIds.includes(p.id))}
                         onChange={handleToggleSelectAll}
-                        className="size-4 rounded border-gray-300 text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
+                        className="size-4 rounded border-[#878399] text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
                       />
                     </div>
                     <div className="flex-1 min-w-0">Post / Titre</div>
@@ -814,14 +814,14 @@ export default function ProjetsPage() {
                   {(activeFilter === 'all' || activeFilter === 'todo') && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
-                        <span className="size-2 rounded-full bg-amber-500" />
-                        <span className="text-xs font-semibold text-gray-800">À faire</span>
-                        <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
+                        <span className="size-2 rounded-full bg-[#8A4B00]" />
+                        <span className="text-xs font-semibold text-[#14121F]">À faire</span>
+                        <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 py-0.5 rounded-md">
                           {todoPosts.length}
                         </span>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-                        <div className="divide-y divide-gray-100">
+                      <div className="bg-white border border-[#E8E6F0] rounded-2xl shadow-sm overflow-hidden">
+                        <div className="divide-y divide-[#E8E6F0]">
                           {todoPosts.map(post => (
                             <PostRow 
                               key={post.id} 
@@ -837,7 +837,7 @@ export default function ProjetsPage() {
                             />
                           ))}
                           {todoPosts.length === 0 && (
-                            <div className="p-6 text-center text-xs text-gray-400 font-medium bg-gray-50/50">Aucun contenu à faire.</div>
+                            <div className="p-6 text-center text-xs text-[#6B6780] font-medium bg-[#F8F7FC]/50">Aucun contenu à faire.</div>
                           )}
                         </div>
                       </div>
@@ -848,14 +848,14 @@ export default function ProjetsPage() {
                   {(activeFilter === 'all' || activeFilter === 'inprogress') && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
-                        <span className="size-2 rounded-full bg-blue-500" />
-                        <span className="text-xs font-semibold text-gray-800">En cours</span>
-                        <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
+                        <span className="size-2 rounded-full bg-[#1F5BB8]" />
+                        <span className="text-xs font-semibold text-[#14121F]">En cours</span>
+                        <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 py-0.5 rounded-md">
                           {inprogressPosts.length}
                         </span>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-                        <div className="divide-y divide-gray-100">
+                      <div className="bg-white border border-[#E8E6F0] rounded-2xl shadow-sm overflow-hidden">
+                        <div className="divide-y divide-[#E8E6F0]">
                           {inprogressPosts.map(post => (
                             <PostRow 
                               key={post.id} 
@@ -871,7 +871,7 @@ export default function ProjetsPage() {
                             />
                           ))}
                           {inprogressPosts.length === 0 && (
-                            <div className="p-6 text-center text-xs text-gray-400 font-medium bg-gray-50/50">Aucun contenu en cours de rédaction.</div>
+                            <div className="p-6 text-center text-xs text-[#6B6780] font-medium bg-[#F8F7FC]/50">Aucun contenu en cours de rédaction.</div>
                           )}
                         </div>
                       </div>
@@ -882,14 +882,14 @@ export default function ProjetsPage() {
                   {(activeFilter === 'all' || activeFilter === 'done') && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
-                        <span className="size-2 rounded-full bg-green-500" />
-                        <span className="text-xs font-semibold text-gray-800">Terminé</span>
-                        <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
+                        <span className="size-2 rounded-full bg-[#0E7445]" />
+                        <span className="text-xs font-semibold text-[#14121F]">Terminé</span>
+                        <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 py-0.5 rounded-md">
                           {donePosts.length}
                         </span>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-                        <div className="divide-y divide-gray-100">
+                      <div className="bg-white border border-[#E8E6F0] rounded-2xl shadow-sm overflow-hidden">
+                        <div className="divide-y divide-[#E8E6F0]">
                           {donePosts.map(post => (
                             <PostRow 
                               key={post.id} 
@@ -905,7 +905,7 @@ export default function ProjetsPage() {
                             />
                           ))}
                           {donePosts.length === 0 && (
-                            <div className="p-6 text-center text-xs text-gray-400 font-medium bg-gray-50/50">Aucun contenu terminé.</div>
+                            <div className="p-6 text-center text-xs text-[#6B6780] font-medium bg-[#F8F7FC]/50">Aucun contenu terminé.</div>
                           )}
                         </div>
                       </div>
@@ -915,7 +915,7 @@ export default function ProjetsPage() {
                   {/* ADD POST BUTTON */}
                   <button
                     onClick={() => router.push('/dashboard/compose')}
-                    className="w-full flex items-center justify-center gap-1.5 py-3 border border-dashed border-[#7225E3]/30 hover:border-[#7225E3] bg-purple-50/10 hover:bg-[#F3EEFD]/40 text-xs text-[#7225E3] font-semibold rounded-2xl transition-all cursor-pointer active:scale-99 shadow-sm"
+                    className="w-full flex items-center justify-center gap-1.5 py-3 border border-dashed border-[#7225E3]/30 hover:border-[#7225E3] bg-[#F3EEFD]/10 hover:bg-[#F3EEFD]/40 text-xs text-[#7225E3] font-semibold rounded-2xl transition-all cursor-pointer active:scale-99 shadow-sm"
                   >
                     <Plus className="size-4" />
                     Ajouter un post
@@ -925,24 +925,24 @@ export default function ProjetsPage() {
 
               {/* VIEW: CALENDAR */}
               {viewMode === 'calendar' && (
-                <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 space-y-4">
+                <div className="bg-white border border-[#E8E6F0] rounded-2xl shadow-sm p-4 space-y-4">
                   {/* CALENDAR CONTROLS */}
-                  <div className="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                    <button onClick={() => navigateMonth('prev')} className="p-1 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
-                      <ChevronLeft className="size-4 text-gray-600" />
+                  <div className="flex justify-between items-center bg-[#F8F7FC] p-2.5 rounded-xl border border-[#E8E6F0]">
+                    <button onClick={() => navigateMonth('prev')} className="p-1 rounded-lg hover:bg-[#E8E6F0] transition-colors cursor-pointer">
+                      <ChevronLeft className="size-4 text-[#4B4B63]" />
                     </button>
-                    <h3 className="text-xs sm:text-sm font-bold text-gray-800">
+                    <h3 className="text-xs sm:text-sm font-bold text-[#14121F]">
                       {calendarDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
                     </h3>
-                    <button onClick={() => navigateMonth('next')} className="p-1 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
-                      <ChevronRight className="size-4 text-gray-600" />
+                    <button onClick={() => navigateMonth('next')} className="p-1 rounded-lg hover:bg-[#E8E6F0] transition-colors cursor-pointer">
+                      <ChevronRight className="size-4 text-[#4B4B63]" />
                     </button>
                   </div>
 
                   {/* CALENDAR GRID */}
                   <div className="grid grid-cols-7 gap-1.5">
                     {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(day => (
-                      <div key={day} className="text-xs font-semibold text-center text-gray-400 uppercase py-1 select-none">
+                      <div key={day} className="text-xs font-semibold text-center text-[#6B6780] uppercase py-1 select-none">
                         {day}
                       </div>
                     ))}
@@ -954,19 +954,19 @@ export default function ProjetsPage() {
                       return (
                         <div 
                           key={idx}
-                          className={`min-h-[85px] border border-gray-50 rounded-xl p-1 flex flex-col justify-between group transition-all relative ${
-                            cell.isCurrentMonth ? 'bg-white' : 'bg-gray-50/60 opacity-55'
-                          } hover:border-[#7225E3]/30 hover:bg-purple-50/5`}
+                          className={`min-h-[85px] border border-[#E8E6F0] rounded-xl p-1 flex flex-col justify-between group transition-all relative ${
+                            cell.isCurrentMonth ? 'bg-white' : 'bg-[#F8F7FC]/60 opacity-55'
+                          } hover:border-[#7225E3]/30 hover:bg-[#F3EEFD]/5`}
                         >
                           <div className="flex justify-between items-center">
-                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
-                              isToday ? 'bg-[#7225E3] text-white' : 'text-gray-500'
+                            <span className={`text-xs font-bold px-1.5 py-0.5 rounded-md ${
+                              isToday ? 'bg-[#7225E3] text-white' : 'text-[#6B6780]'
                             }`}>
                               {cell.date.getDate()}
                             </span>
                             <button
                               onClick={() => handleCalendarDayClick(cell.date)}
-                              className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-[#7225E3] transition-opacity"
+                              className="opacity-0 group-hover:opacity-100 text-[#6B6780] hover:text-[#7225E3] transition-opacity"
                             >
                               <Plus className="size-3" />
                             </button>
@@ -977,10 +977,10 @@ export default function ProjetsPage() {
                               <div
                                 key={p.id}
                                 onClick={() => setEditingPost(p)}
-                                className={`text-[9px] font-bold p-1 rounded-md truncate cursor-pointer transition-all ${
-                                  p.status === 'done' ? 'bg-green-100 text-green-800' :
-                                  p.status === 'inprogress' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-amber-100 text-amber-800'
+                                className={`text-xs font-bold p-1 rounded-md truncate cursor-pointer transition-all ${
+                                  p.status === 'done' ? 'bg-[#E7F6EE] text-[#0E7445]' :
+                                  p.status === 'inprogress' ? 'bg-[#E9F0FC] text-[#1F5BB8]' :
+                                  'bg-[#FDF2DF] text-[#8A4B00]'
                                 }`}
                               >
                                 {p.title}
@@ -998,13 +998,13 @@ export default function ProjetsPage() {
               {viewMode === 'kanban' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* COLUMN: TODO */}
-                  <div className="bg-gray-50/50 border border-gray-100 rounded-2xl p-4 space-y-4 min-h-[400px]">
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                  <div className="bg-[#F8F7FC]/50 border border-[#E8E6F0] rounded-2xl p-4 space-y-4 min-h-[400px]">
+                    <div className="flex items-center justify-between border-b border-[#E8E6F0] pb-2">
                       <div className="flex items-center gap-2">
-                        <span className="size-2.5 rounded-full bg-amber-500" />
-                        <h3 className="text-xs font-bold text-gray-800">À faire</h3>
+                        <span className="size-2.5 rounded-full bg-[#8A4B00]" />
+                        <h3 className="text-xs font-bold text-[#14121F]">À faire</h3>
                       </div>
-                      <span className="text-xs font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold bg-[#FDF2DF] text-[#8A4B00] px-2 py-0.5 rounded-md">
                         {todoPosts.length}
                       </span>
                     </div>
@@ -1013,19 +1013,19 @@ export default function ProjetsPage() {
                         <KanbanCard key={post.id} post={post} onEdit={setEditingPost} onDelete={handleDeletePost} onUpdateStatus={handleUpdateStatus} renderPlatformIcon={renderPlatformIcon} />
                       ))}
                       {todoPosts.length === 0 && (
-                        <div className="py-10 text-center text-xs text-gray-400 font-medium border border-dashed border-gray-200 rounded-xl">Aucun post à faire.</div>
+                        <div className="py-10 text-center text-xs text-[#6B6780] font-medium border border-dashed border-[#E8E6F0] rounded-xl">Aucun post à faire.</div>
                       )}
                     </div>
                   </div>
 
                   {/* COLUMN: IN PROGRESS */}
-                  <div className="bg-gray-50/50 border border-gray-100 rounded-2xl p-4 space-y-4 min-h-[400px]">
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                  <div className="bg-[#F8F7FC]/50 border border-[#E8E6F0] rounded-2xl p-4 space-y-4 min-h-[400px]">
+                    <div className="flex items-center justify-between border-b border-[#E8E6F0] pb-2">
                       <div className="flex items-center gap-2">
-                        <span className="size-2.5 rounded-full bg-blue-500" />
-                        <h3 className="text-xs font-bold text-gray-800">En cours</h3>
+                        <span className="size-2.5 rounded-full bg-[#1F5BB8]" />
+                        <h3 className="text-xs font-bold text-[#14121F]">En cours</h3>
                       </div>
-                      <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold bg-[#E9F0FC] text-[#1F5BB8] px-2 py-0.5 rounded-md">
                         {inprogressPosts.length}
                       </span>
                     </div>
@@ -1034,19 +1034,19 @@ export default function ProjetsPage() {
                         <KanbanCard key={post.id} post={post} onEdit={setEditingPost} onDelete={handleDeletePost} onUpdateStatus={handleUpdateStatus} renderPlatformIcon={renderPlatformIcon} />
                       ))}
                       {inprogressPosts.length === 0 && (
-                        <div className="py-10 text-center text-xs text-gray-400 font-medium border border-dashed border-gray-200 rounded-xl">Aucun post en cours.</div>
+                        <div className="py-10 text-center text-xs text-[#6B6780] font-medium border border-dashed border-[#E8E6F0] rounded-xl">Aucun post en cours.</div>
                       )}
                     </div>
                   </div>
 
                   {/* COLUMN: DONE */}
-                  <div className="bg-gray-50/50 border border-gray-100 rounded-2xl p-4 space-y-4 min-h-[400px]">
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                  <div className="bg-[#F8F7FC]/50 border border-[#E8E6F0] rounded-2xl p-4 space-y-4 min-h-[400px]">
+                    <div className="flex items-center justify-between border-b border-[#E8E6F0] pb-2">
                       <div className="flex items-center gap-2">
-                        <span className="size-2.5 rounded-full bg-green-500" />
-                        <h3 className="text-xs font-bold text-gray-800">Terminé</h3>
+                        <span className="size-2.5 rounded-full bg-[#0E7445]" />
+                        <h3 className="text-xs font-bold text-[#14121F]">Terminé</h3>
                       </div>
-                      <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold bg-[#E7F6EE] text-[#0E7445] px-2 py-0.5 rounded-md">
                         {donePosts.length}
                       </span>
                     </div>
@@ -1055,7 +1055,7 @@ export default function ProjetsPage() {
                         <KanbanCard key={post.id} post={post} onEdit={setEditingPost} onDelete={handleDeletePost} onUpdateStatus={handleUpdateStatus} renderPlatformIcon={renderPlatformIcon} />
                       ))}
                       {donePosts.length === 0 && (
-                        <div className="py-10 text-center text-xs text-gray-400 font-medium border border-dashed border-gray-200 rounded-xl">Aucun post terminé.</div>
+                        <div className="py-10 text-center text-xs text-[#6B6780] font-medium border border-dashed border-[#E8E6F0] rounded-xl">Aucun post terminé.</div>
                       )}
                     </div>
                   </div>
@@ -1070,21 +1070,21 @@ export default function ProjetsPage() {
       <div className="w-full 2xl:w-64 shrink-0 grid gap-6 sm:grid-cols-2 2xl:block 2xl:space-y-6">
         
         {/* FAST FILTERS CARD */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-          <h3 className="text-xs font-bold text-gray-400">Filtres rapides</h3>
+        <div className="bg-white border border-[#E8E6F0] rounded-2xl p-6 shadow-sm space-y-4">
+          <h3 className="text-xs font-bold text-[#6B6780]">Filtres rapides</h3>
           <div className="space-y-1.5">
             {/* Filter: All */}
             <button
               onClick={() => setActiveFilter('all')}
               className={`w-full flex justify-between items-center px-3 py-2 rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
-                activeFilter === 'all' ? 'bg-[#F3EEFD] text-[#7225E3]' : 'text-gray-600 hover:bg-gray-50'
+                activeFilter === 'all' ? 'bg-[#F3EEFD] text-[#7225E3]' : 'text-[#4B4B63] hover:bg-[#F8F7FC]'
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full border border-purple-500 flex shrink-0" />
+                <span className="size-2 rounded-full border border-[#7225E3] flex shrink-0" />
                 <span>Tous les posts</span>
               </div>
-              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 rounded-md">
                 {posts.length}
               </span>
             </button>
@@ -1093,14 +1093,14 @@ export default function ProjetsPage() {
             <button
               onClick={() => setActiveFilter('todo')}
               className={`w-full flex justify-between items-center px-3 py-2 rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
-                activeFilter === 'todo' ? 'bg-amber-50 text-amber-700 font-extrabold' : 'text-gray-600 hover:bg-gray-50'
+                activeFilter === 'todo' ? 'bg-[#FDF2DF] text-[#8A4B00] font-semibold' : 'text-[#4B4B63] hover:bg-[#F8F7FC]'
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-amber-500 flex shrink-0" />
+                <span className="size-2 rounded-full bg-[#8A4B00] flex shrink-0" />
                 <span>À faire</span>
               </div>
-              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 rounded-md">
                 {totalCountTodo}
               </span>
             </button>
@@ -1109,14 +1109,14 @@ export default function ProjetsPage() {
             <button
               onClick={() => setActiveFilter('inprogress')}
               className={`w-full flex justify-between items-center px-3 py-2 rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
-                activeFilter === 'inprogress' ? 'bg-blue-50 text-blue-700 font-extrabold' : 'text-gray-600 hover:bg-gray-50'
+                activeFilter === 'inprogress' ? 'bg-[#E9F0FC] text-[#1F5BB8] font-semibold' : 'text-[#4B4B63] hover:bg-[#F8F7FC]'
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-blue-500 flex shrink-0" />
+                <span className="size-2 rounded-full bg-[#1F5BB8] flex shrink-0" />
                 <span>En cours</span>
               </div>
-              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 rounded-md">
                 {totalCountInprogress}
               </span>
             </button>
@@ -1125,14 +1125,14 @@ export default function ProjetsPage() {
             <button
               onClick={() => setActiveFilter('done')}
               className={`w-full flex justify-between items-center px-3 py-2 rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
-                activeFilter === 'done' ? 'bg-green-50 text-green-700 font-extrabold' : 'text-gray-600 hover:bg-gray-50'
+                activeFilter === 'done' ? 'bg-[#E7F6EE] text-[#0E7445] font-semibold' : 'text-[#4B4B63] hover:bg-[#F8F7FC]'
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-green-500 flex shrink-0" />
+                <span className="size-2 rounded-full bg-[#0E7445] flex shrink-0" />
                 <span>Terminé</span>
               </div>
-              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-[#F8F7FC] text-[#6B6780] px-1.5 rounded-md">
                 {totalCountDone}
               </span>
             </button>
@@ -1140,8 +1140,8 @@ export default function ProjetsPage() {
         </div>
 
         {/* TEAM MEMBERS SIDEBAR LIST */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-          <h3 className="text-xs font-bold text-gray-400 flex items-center justify-between">
+        <div className="bg-white border border-[#E8E6F0] rounded-2xl p-6 shadow-sm space-y-4">
+          <h3 className="text-xs font-bold text-[#6B6780] flex items-center justify-between">
             <span>Membres de l'équipe</span>
             {selectedMemberName && (
               <span className="text-xs text-[#7225E3] hover:underline cursor-pointer font-semibold" onClick={() => setSelectedMemberName(null)}>
@@ -1160,7 +1160,7 @@ export default function ProjetsPage() {
                   className={`flex justify-between items-center p-2 rounded-xl border transition-all cursor-pointer ${
                     isSelected 
                       ? 'bg-[#F3EEFD] border-[#7225E3]/30 shadow-sm scale-102' 
-                      : 'border-transparent hover:bg-gray-50'
+                      : 'border-transparent hover:bg-[#F8F7FC]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
@@ -1168,7 +1168,7 @@ export default function ProjetsPage() {
                       <img 
                         src={member.imageUrl} 
                         alt={member.name} 
-                        className="size-8 rounded-full border border-gray-100 shrink-0 object-cover" 
+                        className="size-8 rounded-full border border-[#E8E6F0] shrink-0 object-cover" 
                       />
                     ) : (
                       <div className="size-8 rounded-full bg-[#7C3AED]/10 text-[#7C3AED] font-semibold flex items-center justify-center text-xs shrink-0">
@@ -1176,12 +1176,12 @@ export default function ProjetsPage() {
                       </div>
                     )}
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold text-gray-800 truncate">{member.name}</div>
-                      <div className="text-[9px] text-gray-400 font-semibold">{member.role}</div>
+                      <div className="text-xs font-semibold text-[#14121F] truncate">{member.name}</div>
+                      <div className="text-xs text-[#6B6780] font-semibold">{member.role}</div>
                     </div>
                   </div>
                   
-                  <span className="text-xs font-semibold bg-purple-100 text-[#7225E3] px-1.5 py-0.5 rounded-md border border-purple-200/20 shrink-0">
+                  <span className="text-xs font-semibold bg-[#E7DCFC] text-[#7225E3] px-1.5 py-0.5 rounded-md border border-[#E7DCFC]/20 shrink-0">
                     {member.role}
                   </span>
                 </div>
@@ -1199,10 +1199,10 @@ export default function ProjetsPage() {
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl px-6 py-3.5 z-40 flex items-center gap-6 text-white"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#14121F] border border-[#2E2B3D] rounded-2xl shadow-2xl px-6 py-3.5 z-40 flex items-center gap-6 text-white"
           >
-            <div className="text-xs font-semibold flex items-center gap-2 border-r border-gray-700 pr-5 shrink-0">
-              <span className="size-5 rounded-full bg-[#7225E3] flex items-center justify-center text-[10px] text-white">
+            <div className="text-xs font-semibold flex items-center gap-2 border-r border-[#4B4B63] pr-5 shrink-0">
+              <span className="size-5 rounded-full bg-[#7225E3] flex items-center justify-center text-xs text-white">
                 {selectedPostIds.length}
               </span>
               <span>contenus sélectionnés</span>
@@ -1211,25 +1211,25 @@ export default function ProjetsPage() {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => handleBulkStatusChange('todo')}
-                className="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/35 text-amber-300 rounded-lg text-xs font-semibold border border-amber-500/30 transition-all cursor-pointer"
+                className="px-2.5 py-1.5 bg-[#8A4B00]/20 hover:bg-[#8A4B00]/35 text-[#8A4B00] rounded-lg text-xs font-semibold border border-[#8A4B00]/30 transition-all cursor-pointer"
               >
                 À faire
               </button>
               <button 
                 onClick={() => handleBulkStatusChange('inprogress')}
-                className="px-2.5 py-1.5 bg-blue-500/20 hover:bg-blue-500/35 text-blue-300 rounded-lg text-xs font-semibold border border-blue-500/30 transition-all cursor-pointer"
+                className="px-2.5 py-1.5 bg-[#1F5BB8]/20 hover:bg-[#1F5BB8]/35 text-[#1F5BB8] rounded-lg text-xs font-semibold border border-[#1F5BB8]/30 transition-all cursor-pointer"
               >
                 En cours
               </button>
               <button 
                 onClick={() => handleBulkStatusChange('done')}
-                className="px-2.5 py-1.5 bg-green-500/20 hover:bg-green-500/35 text-green-300 rounded-lg text-xs font-semibold border border-green-500/30 transition-all cursor-pointer"
+                className="px-2.5 py-1.5 bg-[#0E7445]/20 hover:bg-[#0E7445]/35 text-[#0E7445] rounded-lg text-xs font-semibold border border-[#0E7445]/30 transition-all cursor-pointer"
               >
                 Terminé
               </button>
               <button 
                 onClick={handleBulkDelete}
-                className="px-2.5 py-1.5 bg-red-500/20 hover:bg-red-500/35 text-red-300 rounded-lg text-xs font-semibold border border-red-500/30 transition-all cursor-pointer flex items-center gap-1"
+                className="px-2.5 py-1.5 bg-[#B42318]/20 hover:bg-[#B42318]/35 text-[#B42318] rounded-lg text-xs font-semibold border border-[#B42318]/30 transition-all cursor-pointer flex items-center gap-1"
               >
                 <Trash2 className="size-3" />
                 Supprimer
@@ -1238,7 +1238,7 @@ export default function ProjetsPage() {
 
             <button 
               onClick={() => setSelectedPostIds([])}
-              className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+              className="text-[#6B6780] hover:text-white transition-colors cursor-pointer"
             >
               <X className="size-4" />
             </button>
@@ -1262,19 +1262,19 @@ export default function ProjetsPage() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white border border-gray-100 rounded-3xl shadow-2xl max-w-xl w-full p-6 z-10 space-y-6 max-h-[90vh] overflow-y-auto"
+              className="bg-white border border-[#E8E6F0] rounded-3xl shadow-2xl max-w-xl w-full p-6 z-10 space-y-6 max-h-[90vh] overflow-y-auto"
             >
               {/* MODAL HEADER */}
-              <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+              <div className="flex justify-between items-center border-b border-[#E8E6F0] pb-4">
                 <div className="flex items-center gap-2">
                   <span className={`size-3 rounded-full ${
-                    editingPost.status === 'done' ? 'bg-green-500' : editingPost.status === 'inprogress' ? 'bg-blue-500' : 'bg-amber-500'
+                    editingPost.status === 'done' ? 'bg-[#0E7445]' : editingPost.status === 'inprogress' ? 'bg-[#1F5BB8]' : 'bg-[#8A4B00]'
                   }`} />
-                  <h2 className="text-base font-bold text-gray-900 truncate max-w-xs">{editingPost.title}</h2>
+                  <h2 className="text-base font-bold text-[#14121F] truncate max-w-xs">{editingPost.title}</h2>
                 </div>
                 <button 
                   onClick={() => setEditingPost(null)}
-                  className="p-1 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="p-1 rounded-xl text-[#6B6780] hover:text-[#4B4B63] hover:bg-[#F8F7FC] transition-colors"
                 >
                   <X className="size-5" />
                 </button>
@@ -1283,13 +1283,13 @@ export default function ProjetsPage() {
               {/* DETAILS CONTENT */}
               <div className="space-y-4 text-xs">
                 {/* STATUS & DUE DATE */}
-                <div className="grid grid-cols-2 gap-4 bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                <div className="grid grid-cols-2 gap-4 bg-[#F8F7FC] p-3 rounded-2xl border border-[#E8E6F0]">
                   <div>
-                    <span className="text-xs font-semibold text-gray-400 uppercase">Statut</span>
+                    <span className="text-xs font-semibold text-[#6B6780] uppercase">Statut</span>
                     <select
                       value={editingPost.status}
                       onChange={(e) => setEditingPost({ ...editingPost, status: e.target.value as any })}
-                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
+                      className="w-full mt-1 bg-white border border-[#E8E6F0] rounded-xl px-2.5 py-1 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
                     >
                       <option value="todo">À faire</option>
                       <option value="inprogress">En cours</option>
@@ -1297,55 +1297,55 @@ export default function ProjetsPage() {
                     </select>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-gray-400 uppercase">Date d'échéance</span>
+                    <span className="text-xs font-semibold text-[#6B6780] uppercase">Date d'échéance</span>
                     <input
                       type="date"
                       value={convertToInputDate(editingPost.dueDate)}
                       onChange={(e) => setEditingPost({ ...editingPost, dueDate: convertFromInputDate(e.target.value) })}
-                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
+                      className="w-full mt-1 bg-white border border-[#E8E6F0] rounded-xl px-2.5 py-1 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
                     />
                   </div>
                 </div>
 
                 {/* TITLE EDIT */}
                 <div>
-                  <label className="text-xs font-semibold text-gray-400 uppercase">Titre du post</label>
+                  <label className="text-xs font-semibold text-[#6B6780] uppercase">Titre du post</label>
                   <input
                     type="text"
                     value={editingPost.title}
                     onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                    className="w-full mt-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                   />
                 </div>
 
                 {/* COMMENTS SECTION */}
                 <div className="space-y-3 pt-2">
-                  <h3 className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                  <h3 className="text-xs font-bold text-[#14121F] flex items-center gap-1.5">
                     <MessageSquare className="size-3.5 text-[#7225E3]" />
                     Commentaires ({editingPost.comments?.length || 0})
                   </h3>
 
                   <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                     {editingPost.comments?.map(c => (
-                      <div key={c.id} className="bg-gray-50 p-2.5 rounded-xl border border-gray-100 space-y-1">
+                      <div key={c.id} className="bg-[#F8F7FC] p-2.5 rounded-xl border border-[#E8E6F0] space-y-1">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
                             {c.avatar ? (
                               <img src={c.avatar} alt="" className="size-5 rounded-full object-cover" />
                             ) : (
-                              <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-semibold text-xs flex items-center justify-center">
+                              <div className="size-5 rounded-full bg-[#E7DCFC] text-[#7225E3] font-semibold text-xs flex items-center justify-center">
                                 {c.author.substring(0, 2)}
                               </div>
                             )}
-                            <span className="font-semibold text-gray-800 text-xs">{c.author}</span>
+                            <span className="font-semibold text-[#14121F] text-xs">{c.author}</span>
                           </div>
-                          <span className="text-[9px] text-gray-400">{c.date}</span>
+                          <span className="text-xs text-[#6B6780]">{c.date}</span>
                         </div>
-                        <p className="text-gray-600 pl-7 text-[11px]">{c.text}</p>
+                        <p className="text-[#4B4B63] pl-7 text-xs">{c.text}</p>
                       </div>
                     ))}
                     {(!editingPost.comments || editingPost.comments.length === 0) && (
-                      <div className="p-4 text-center text-gray-400 text-xs italic bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                      <div className="p-4 text-center text-[#6B6780] text-xs italic bg-[#F8F7FC] rounded-xl border border-dashed border-[#E8E6F0]">
                         Aucun commentaire pour le moment.
                       </div>
                     )}
@@ -1358,7 +1358,7 @@ export default function ProjetsPage() {
                       placeholder="Écrire un commentaire..."
                       value={newCommentText}
                       onChange={e => setNewCommentText(e.target.value)}
-                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="flex-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-1.5 text-xs text-[#14121F] placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     />
                     <button
                       type="submit"
@@ -1372,11 +1372,11 @@ export default function ProjetsPage() {
               </div>
 
               {/* MODAL FOOTER */}
-              <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+              <div className="flex justify-between items-center pt-2 border-t border-[#E8E6F0]">
                 <button
                   type="button"
                   onClick={() => { handleDeletePost(editingPost.id); setEditingPost(null); }}
-                  className="text-red-500 hover:text-red-700 text-xs font-semibold flex items-center gap-1 cursor-pointer"
+                  className="text-[#B42318] hover:text-[#96190F] text-xs font-semibold flex items-center gap-1 cursor-pointer"
                 >
                   <Trash2 className="size-3.5" />
                   Supprimer
@@ -1385,7 +1385,7 @@ export default function ProjetsPage() {
                   <button
                     type="button"
                     onClick={() => setEditingPost(null)}
-                    className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
+                    className="px-4 py-2 text-xs font-semibold text-[#4B4B63] hover:bg-[#F8F7FC] rounded-xl transition-all cursor-pointer"
                   >
                     Annuler
                   </button>
@@ -1419,45 +1419,45 @@ export default function ProjetsPage() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white border border-gray-100 rounded-3xl shadow-2xl max-w-md w-full p-6 z-10 space-y-4"
+              className="bg-white border border-[#E8E6F0] rounded-3xl shadow-2xl max-w-md w-full p-6 z-10 space-y-4"
             >
-              <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                <h2 className="text-base font-bold text-gray-900">Créer un nouveau projet</h2>
-                <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
+              <div className="flex justify-between items-center border-b border-[#E8E6F0] pb-3">
+                <h2 className="text-base font-bold text-[#14121F]">Créer un nouveau projet</h2>
+                <button onClick={() => setShowAddModal(false)} className="text-[#6B6780] hover:text-[#4B4B63]">
                   <X className="size-5" />
                 </button>
               </div>
 
               <form onSubmit={handleAddPostSubmit} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="text-xs font-semibold text-gray-400 uppercase">Titre du post / projet *</label>
+                  <label className="text-xs font-semibold text-[#6B6780] uppercase">Titre du post / projet *</label>
                   <input
                     type="text"
                     required
                     placeholder="Ex: Lancement nouvelle gamme..."
                     value={newPostTitle}
                     onChange={e => setNewPostTitle(e.target.value)}
-                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                    className="w-full mt-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-semibold text-gray-400 uppercase">Catégorie</label>
+                    <label className="text-xs font-semibold text-[#6B6780] uppercase">Catégorie</label>
                     <input
                       type="text"
                       placeholder="Ex: Produit, Conseils..."
                       value={newPostCategory}
                       onChange={e => setNewPostCategory(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="w-full mt-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-gray-400 uppercase">Statut</label>
+                    <label className="text-xs font-semibold text-[#6B6780] uppercase">Statut</label>
                     <select
                       value={newPostStatus}
                       onChange={e => setNewPostStatus(e.target.value as any)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="w-full mt-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     >
                       <option value="todo">À faire</option>
                       <option value="inprogress">En cours</option>
@@ -1468,11 +1468,11 @@ export default function ProjetsPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-semibold text-gray-400 uppercase">Assigner à</label>
+                    <label className="text-xs font-semibold text-[#6B6780] uppercase">Assigner à</label>
                     <select
                       value={newPostAssignee}
                       onChange={e => setNewPostAssignee(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="w-full mt-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     >
                       {teamMembers.map(m => (
                         <option key={m.id} value={m.name}>{m.name}</option>
@@ -1480,28 +1480,28 @@ export default function ProjetsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-gray-400 uppercase">Date d'échéance</label>
+                    <label className="text-xs font-semibold text-[#6B6780] uppercase">Date d'échéance</label>
                     <input
                       type="date"
                       value={newPostDueDate}
                       onChange={e => setNewPostDueDate(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="w-full mt-1 bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-400 uppercase mb-1.5 block">Plateformes</label>
+                  <label className="text-xs font-semibold text-[#6B6780] uppercase mb-1.5 block">Plateformes</label>
                   <div className="flex gap-2 flex-wrap">
                     {['instagram', 'facebook', 'linkedin', 'tiktok', 'twitter', 'pinterest'].map(plat => (
                       <button
                         key={plat}
                         type="button"
                         onClick={() => toggleModalPlatform(plat)}
-                        className={`px-2.5 py-1 rounded-xl border text-[11px] font-bold capitalize transition-all cursor-pointer ${
+                        className={`px-2.5 py-1 rounded-xl border text-xs font-bold capitalize transition-all cursor-pointer ${
                           newPostPlatforms.includes(plat)
                             ? 'bg-[#F3EEFD] border-[#7225E3] text-[#7225E3]'
-                            : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                            : 'bg-[#F8F7FC] border-[#E8E6F0] text-[#4B4B63] hover:bg-[#F8F7FC]'
                         }`}
                       >
                         {plat}
@@ -1510,11 +1510,11 @@ export default function ProjetsPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+                <div className="flex justify-end gap-2 pt-3 border-t border-[#E8E6F0]">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-all"
+                    className="px-4 py-2 text-xs font-semibold text-[#4B4B63] hover:bg-[#F8F7FC] rounded-xl transition-all"
                   >
                     Annuler
                   </button>
@@ -1562,8 +1562,8 @@ function PostRow({
   const isDropdownOpen = activeDropdownId === post.id
 
   return (
-    <div className={`flex items-center px-4 py-3 text-xs gap-4 transition-colors hover:bg-gray-50/70 group ${
-      selected ? 'bg-purple-50/40' : ''
+    <div className={`flex items-center px-4 py-3 text-xs gap-4 transition-colors hover:bg-[#F8F7FC]/70 group ${
+      selected ? 'bg-[#F3EEFD]/40' : ''
     }`}>
       {/* CHECKBOX */}
       <div className="flex shrink-0">
@@ -1571,56 +1571,56 @@ function PostRow({
           type="checkbox" 
           checked={selected}
           onChange={() => onToggleSelect(post.id)}
-          className="size-4 rounded border-gray-300 text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
+          className="size-4 rounded border-[#878399] text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
         />
       </div>
 
       {/* POST TITLE & CATEGORY & IMAGE */}
       <div className="flex-1 min-w-0 flex items-center gap-3 cursor-pointer" onClick={() => onEditPost(post)}>
         {post.imageUrl ? (
-          <img src={post.imageUrl} alt="" className="size-9 rounded-xl object-cover shrink-0 border border-gray-100" />
+          <img src={post.imageUrl} alt="" className="size-9 rounded-xl object-cover shrink-0 border border-[#E8E6F0]" />
         ) : (
-          <div className="size-9 rounded-xl bg-purple-50 text-[#7225E3] flex items-center justify-center font-semibold text-xs shrink-0">
+          <div className="size-9 rounded-xl bg-[#F3EEFD] text-[#7225E3] flex items-center justify-center font-semibold text-xs shrink-0">
             <FileText className="size-4" />
           </div>
         )}
         <div className="min-w-0">
-          <div className="font-semibold text-gray-900 truncate group-hover:text-[#7225E3] transition-colors">
+          <div className="font-semibold text-[#14121F] truncate group-hover:text-[#7225E3] transition-colors">
             {post.title}
           </div>
-          <div className="text-[10px] text-gray-400 font-semibold">{post.category}</div>
+          <div className="text-xs text-[#6B6780] font-semibold">{post.category}</div>
         </div>
       </div>
 
       {/* ASSIGNEE */}
       <div className="w-28 shrink-0 hidden lg:flex items-center gap-2">
         {post.assigneeAvatar ? (
-          <img src={post.assigneeAvatar} alt="" className="size-6 rounded-full object-cover shrink-0 border border-gray-100" />
+          <img src={post.assigneeAvatar} alt="" className="size-6 rounded-full object-cover shrink-0 border border-[#E8E6F0]" />
         ) : (
-          <div className="size-6 rounded-full bg-purple-100 text-[#7225E3] font-semibold text-xs flex items-center justify-center shrink-0">
+          <div className="size-6 rounded-full bg-[#E7DCFC] text-[#7225E3] font-semibold text-xs flex items-center justify-center shrink-0">
             {post.assigneeName.substring(0, 2).toUpperCase()}
           </div>
         )}
-        <span className="font-semibold text-gray-700 truncate text-xs">{post.assigneeName}</span>
+        <span className="font-semibold text-[#4B4B63] truncate text-xs">{post.assigneeName}</span>
       </div>
 
       {/* STATUS BADGE */}
       <div className="w-24 shrink-0">
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-extrabold capitalize ${
-          post.status === 'done' ? 'bg-green-50 text-green-700 border border-green-200/60' :
-          post.status === 'inprogress' ? 'bg-blue-50 text-blue-700 border border-blue-200/60' :
-          'bg-amber-50 text-amber-700 border border-amber-200/60'
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold capitalize ${
+          post.status === 'done' ? 'bg-[#E7F6EE] text-[#0E7445] border border-[#E7F6EE]/60' :
+          post.status === 'inprogress' ? 'bg-[#E9F0FC] text-[#1F5BB8] border border-[#E9F0FC]/60' :
+          'bg-[#FDF2DF] text-[#8A4B00] border border-[#F4DDB3]/60'
         }`}>
           <span className={`size-1.5 rounded-full ${
-            post.status === 'done' ? 'bg-green-500' : post.status === 'inprogress' ? 'bg-blue-500' : 'bg-amber-500'
+            post.status === 'done' ? 'bg-[#0E7445]' : post.status === 'inprogress' ? 'bg-[#1F5BB8]' : 'bg-[#8A4B00]'
           }`} />
           {post.status === 'done' ? 'Terminé' : post.status === 'inprogress' ? 'En cours' : 'À faire'}
         </span>
       </div>
 
       {/* DUE DATE */}
-      <div className="w-28 shrink-0 hidden md:flex items-center gap-1.5 text-gray-500 text-[11px] font-semibold">
-        <Clock className="size-3 text-gray-400 shrink-0" />
+      <div className="w-28 shrink-0 hidden md:flex items-center gap-1.5 text-[#6B6780] text-xs font-semibold">
+        <Clock className="size-3 text-[#6B6780] shrink-0" />
         <span className="truncate">{post.dueDate}</span>
       </div>
 
@@ -1632,8 +1632,8 @@ function PostRow({
       </div>
 
       {/* COMMENTS COUNT */}
-      <div className="w-16 shrink-0 hidden xl:flex items-center gap-1 text-gray-400 font-semibold text-xs">
-        <MessageSquare className="size-3.5 text-gray-400" />
+      <div className="w-16 shrink-0 hidden xl:flex items-center gap-1 text-[#6B6780] font-semibold text-xs">
+        <MessageSquare className="size-3.5 text-[#6B6780]" />
         <span>{post.commentCount || 0}</span>
       </div>
 
@@ -1641,7 +1641,7 @@ function PostRow({
       <div className="w-10 shrink-0 text-right relative">
         <button
           onClick={() => setActiveDropdownId(isDropdownOpen ? null : post.id)}
-          className="p-1 rounded-lg hover:bg-gray-200 text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
+          className="p-1 rounded-lg hover:bg-[#E8E6F0] text-[#6B6780] hover:text-[#4B4B63] transition-colors cursor-pointer"
         >
           <MoreVertical className="size-4" />
         </button>
@@ -1654,38 +1654,38 @@ function PostRow({
                 initial={{ opacity: 0, scale: 0.95, y: -5 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                className="absolute right-0 mt-1 w-36 bg-white border border-gray-100 rounded-xl shadow-xl py-1 z-30 text-left text-xs font-semibold"
+                className="absolute right-0 mt-1 w-36 bg-white border border-[#E8E6F0] rounded-xl shadow-xl py-1 z-30 text-left text-xs font-semibold"
               >
                 <button
                   onClick={() => onEditPost(post)}
-                  className="w-full px-3 py-2 hover:bg-gray-50 text-gray-700 flex items-center gap-2"
+                  className="w-full px-3 py-2 hover:bg-[#F8F7FC] text-[#4B4B63] flex items-center gap-2"
                 >
                   <FileText className="size-3.5 text-[#7225E3]" />
                   Détails / Éditer
                 </button>
-                <div className="border-t border-gray-100 my-1" />
+                <div className="border-t border-[#E8E6F0] my-1" />
                 <button
                   onClick={() => onUpdateStatus(post.id, 'todo')}
-                  className="w-full px-3 py-1.5 hover:bg-gray-50 text-amber-700 flex items-center gap-2 text-[11px]"
+                  className="w-full px-3 py-1.5 hover:bg-[#F8F7FC] text-[#8A4B00] flex items-center gap-2 text-xs"
                 >
                   Statut: À faire
                 </button>
                 <button
                   onClick={() => onUpdateStatus(post.id, 'inprogress')}
-                  className="w-full px-3 py-1.5 hover:bg-gray-50 text-blue-700 flex items-center gap-2 text-[11px]"
+                  className="w-full px-3 py-1.5 hover:bg-[#F8F7FC] text-[#1F5BB8] flex items-center gap-2 text-xs"
                 >
                   Statut: En cours
                 </button>
                 <button
                   onClick={() => onUpdateStatus(post.id, 'done')}
-                  className="w-full px-3 py-1.5 hover:bg-gray-50 text-green-700 flex items-center gap-2 text-[11px]"
+                  className="w-full px-3 py-1.5 hover:bg-[#F8F7FC] text-[#0E7445] flex items-center gap-2 text-xs"
                 >
                   Statut: Terminé
                 </button>
-                <div className="border-t border-gray-100 my-1" />
+                <div className="border-t border-[#E8E6F0] my-1" />
                 <button
                   onClick={() => onDeletePost(post.id)}
-                  className="w-full px-3 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2"
+                  className="w-full px-3 py-2 hover:bg-[#FDECEA] text-[#B42318] flex items-center gap-2"
                 >
                   <Trash2 className="size-3.5" />
                   Supprimer
@@ -1716,10 +1716,10 @@ function KanbanCard({
   return (
     <div 
       onClick={() => onEdit(post)}
-      className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-[#7225E3]/30 transition-all cursor-pointer space-y-3 group"
+      className="bg-white border border-[#E8E6F0] rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-[#7225E3]/30 transition-all cursor-pointer space-y-3 group"
     >
       <div className="flex justify-between items-start gap-2">
-        <span className="text-xs font-semibold text-[#7225E3] bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100/60 truncate max-w-[120px]">
+        <span className="text-xs font-semibold text-[#7225E3] bg-[#F3EEFD] px-2 py-0.5 rounded-md border border-[#E7DCFC]/60 truncate max-w-[120px]">
           {post.category}
         </span>
         <div className="flex items-center gap-1">
@@ -1729,24 +1729,24 @@ function KanbanCard({
         </div>
       </div>
 
-      <h4 className="font-semibold text-xs text-gray-900 line-clamp-2 group-hover:text-[#7225E3] transition-colors leading-snug">
+      <h4 className="font-semibold text-xs text-[#14121F] line-clamp-2 group-hover:text-[#7225E3] transition-colors leading-snug">
         {post.title}
       </h4>
 
-      <div className="flex justify-between items-center pt-2 border-t border-gray-50 text-[10px] text-gray-400 font-semibold">
+      <div className="flex justify-between items-center pt-2 border-t border-[#E8E6F0] text-xs text-[#6B6780] font-semibold">
         <div className="flex items-center gap-1.5">
           {post.assigneeAvatar ? (
-            <img src={post.assigneeAvatar} alt="" className="size-5 rounded-full object-cover shrink-0 border border-gray-100" />
+            <img src={post.assigneeAvatar} alt="" className="size-5 rounded-full object-cover shrink-0 border border-[#E8E6F0]" />
           ) : (
-            <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-semibold text-xs flex items-center justify-center shrink-0">
+            <div className="size-5 rounded-full bg-[#E7DCFC] text-[#7225E3] font-semibold text-xs flex items-center justify-center shrink-0">
               {post.assigneeName.substring(0, 2).toUpperCase()}
             </div>
           )}
-          <span className="truncate max-w-[80px] font-semibold text-gray-700">{post.assigneeName}</span>
+          <span className="truncate max-w-[80px] font-semibold text-[#4B4B63]">{post.assigneeName}</span>
         </div>
 
-        <div className="flex items-center gap-1 text-gray-500">
-          <Clock className="size-3 text-gray-400" />
+        <div className="flex items-center gap-1 text-[#6B6780]">
+          <Clock className="size-3 text-[#6B6780]" />
           <span>{post.dueDate}</span>
         </div>
       </div>

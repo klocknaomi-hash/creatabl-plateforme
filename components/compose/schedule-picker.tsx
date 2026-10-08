@@ -43,7 +43,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
           </div>
           <div className="flex flex-col">
             <Label htmlFor="schedule-toggle" className="font-semibold text-sm cursor-pointer">Programmer pour plus tard</Label>
-            <span className="text-[11px] text-muted-foreground">Choisissez une date et une heure</span>
+            <span className="text-xs text-muted-foreground">Choisissez une date et une heure</span>
           </div>
         </div>
         <Switch
@@ -100,7 +100,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground/70" />
                 <input
                   type="time"
-                  className="w-full h-9 pl-9 pr-3 text-[13px] font-semibold bg-background border border-border/60 rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground transition-all shadow-none"
+                  className="w-full h-9 pl-9 pr-3 text-sm font-semibold bg-background border border-border/60 rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground focus-visible:border-foreground transition-all shadow-none"
                   value={scheduledAt ? format(scheduledAt, "HH:mm") : ""}
                   onChange={(e) => {
                     const [hours, minutes] = e.target.value.split(":").map(Number);
@@ -119,9 +119,9 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
       )}
       
       {!isScheduled && (
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/5 border border-green-500/10">
-          <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-          <p className="text-[10px] font-medium text-green-700/70">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0E7445]/5 border border-[#0E7445]/10">
+          <div className="w-1 h-1 rounded-full bg-[#0E7445] animate-pulse" />
+          <p className="text-xs font-medium text-[#0E7445]/70">
             Le post sera publié immédiatement.
           </p>
         </div>

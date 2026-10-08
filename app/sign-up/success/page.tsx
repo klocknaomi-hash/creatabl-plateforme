@@ -46,14 +46,14 @@ export default function SignUpSuccessPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#14121F] text-white flex flex-col items-center justify-center p-4">
       <div className="text-center space-y-6 max-w-sm">
         <div className="w-16 h-16 bg-[#7225E3]/10 border border-[#7225E3]/30 rounded-2xl flex items-center justify-center mx-auto">
           <Loader2 className="w-8 h-8 animate-spin text-[#7225E3]" />
         </div>
         <div className="space-y-2">
           <h1 className="text-2xl font-bold">Finalisation de votre compte...</h1>
-          <p className="text-zinc-400 text-sm">
+          <p className="text-[#6B6780] text-sm">
             {error || 'Vous allez être redirigé automatiquement dans un instant.'}
           </p>
         </div>

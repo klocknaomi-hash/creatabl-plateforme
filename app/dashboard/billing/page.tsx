@@ -49,11 +49,11 @@ export default async function BillingPage() {
 
       {/* SECTION TRIAL */}
       {isTrial && (
-        <Card className="border-none shadow-2xl bg-white overflow-hidden rounded-2xl ring-1 ring-gray-100">
+        <Card className="border-none shadow-2xl bg-white overflow-hidden rounded-2xl ring-1 ring-[#E8E6F0]">
           <CardContent className="p-8 md:p-10 flex flex-col md:flex-row items-center gap-12">
             <div className="relative flex items-center justify-center flex-shrink-0">
               <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#F5F3FF" strokeWidth="10" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#F3EEFD" strokeWidth="10" />
                 <circle
                   cx="60"
                   cy="60"
@@ -68,8 +68,8 @@ export default async function BillingPage() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-gray-900 leading-none">{trialDaysLeft}</span>
-                <span className="text-xs font-semibold text-gray-400 mt-1">jours</span>
+                <span className="text-3xl font-bold text-[#14121F] leading-none">{trialDaysLeft}</span>
+                <span className="text-xs font-semibold text-[#6B6780] mt-1">jours</span>
               </div>
             </div>
 
@@ -80,21 +80,21 @@ export default async function BillingPage() {
                     Ton essai gratuit Business
                   </Badge>
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-xl font-bold text-[#14121F] leading-tight">
                   Il vous reste {trialDaysLeft} jours d'essai Business gratuit
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-[#6B6780]">
                   Profitez de toutes les fonctionnalités pour développer votre présence en ligne. 
                   Ton plan sélectionné à l'inscription est le plan <strong>{user.selectedPlan?.toUpperCase()}</strong>.
                 </p>
               </div>
               
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                 <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
-                   <CheckCircle2 className="w-4 h-4 text-green-500" />
+                 <div className="flex items-center gap-2 text-sm font-semibold text-[#4B4B63] bg-[#F8F7FC] px-4 py-2 rounded-full">
+                   <CheckCircle2 className="w-4 h-4 text-[#0E7445]" />
                    Accès complet Business
                  </div>
-                 <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
+                 <div className="flex items-center gap-2 text-sm font-semibold text-[#4B4B63] bg-[#F8F7FC] px-4 py-2 rounded-full">
                    <Clock className="w-4 h-4 text-primary" />
                    Extension automatique
                  </div>
@@ -110,13 +110,13 @@ export default async function BillingPage() {
       </div>
 
       {/* BANDEAU SECURITE */}
-      <div className="rounded-2xl bg-gray-50/50 py-8 px-8 text-center border border-gray-100">
+      <div className="rounded-2xl bg-[#F8F7FC]/50 py-8 px-8 text-center border border-[#E8E6F0]">
         <div className="max-w-2xl mx-auto space-y-4">
-          <p className="text-sm font-semibold text-gray-600 flex items-center justify-center gap-3">
+          <p className="text-sm font-semibold text-[#4B4B63] flex items-center justify-center gap-3">
             <Lock className="w-5 h-5 text-[#7C3AED]" />
             Paiements 100% sécurisés via Stripe
           </p>
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs text-[#6B6780] leading-relaxed">
             Creatabl utilise Stripe pour la gestion des paiements. Nous ne stockons jamais vos informations de carte bancaire. 
             Vous pouvez annuler ou modifier votre abonnement à tout moment depuis cet espace.
           </p>

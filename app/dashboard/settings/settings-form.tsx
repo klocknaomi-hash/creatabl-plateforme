@@ -10,14 +10,11 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useTheme } from "next-themes";
 import { 
   Bell, 
   Settings2, 
   Save,
   Loader2,
-  Moon,
-  Sun,
   Plus
 } from "lucide-react";
 import { saveSettingsAction } from "./actions";
@@ -38,7 +35,6 @@ const AUTOMATIONS = [
 
 export function SettingsForm({ initialSettings, user, hasData, isBusiness = false }: SettingsFormProps) {
   const router = useRouter();
-  const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [settings, setSettings] = useState(initialSettings);
@@ -156,7 +152,7 @@ export function SettingsForm({ initialSettings, user, hasData, isBusiness = fals
                   >
                     <div className="space-y-1">
                       <Label htmlFor={item.id} className="text-sm font-semibold cursor-pointer">{item.label}</Label>
-                      <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
+                      <p className="text-xs text-muted-foreground font-medium">{item.desc}</p>
                     </div>
                     <Switch 
                       id={item.id}
@@ -247,40 +243,6 @@ export function SettingsForm({ initialSettings, user, hasData, isBusiness = fals
                   <SelectItem value="Asia/Tokyo">JST (heure de Tokyo)</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            {/* Appearance */}
-            <div className="space-y-5 pt-10 border-t border-border/40">
-              <div className="space-y-1">
-                <Label className="text-sm font-semibold">Apparence</Label>
-                <p className="text-sm text-muted-foreground font-medium">Choisissez entre le thème clair et sombre pour l'interface.</p>
-              </div>
-              <div className="flex gap-4">
-                <button 
-                  onClick={() => setTheme('light')}
-                  className={cn(
-                    "flex-1 max-w-[160px] flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all",
-                    theme === 'light' ? "border-primary bg-primary/5 ring-4 ring-primary/5" : "border-border/40 hover:border-primary/20"
-                  )}
-                >
-                  <div className={cn("p-2.5 rounded-xl", theme === 'light' ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
-                    <Sun className="size-5" />
-                  </div>
-                  <span className="text-xs font-semibold">Clair</span>
-                </button>
-                <button 
-                  onClick={() => setTheme('dark')}
-                  className={cn(
-                    "flex-1 max-w-[160px] flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all",
-                    theme === 'dark' ? "border-primary bg-primary/5 ring-4 ring-primary/5" : "border-border/40 hover:border-primary/20"
-                  )}
-                >
-                  <div className={cn("p-2.5 rounded-xl", theme === 'dark' ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
-                    <Moon className="size-5" />
-                  </div>
-                  <span className="text-xs font-semibold">Sombre</span>
-                </button>
-              </div>
             </div>
 
             {/* Language & Locale */}

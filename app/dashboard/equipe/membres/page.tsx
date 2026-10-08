@@ -291,17 +291,17 @@ export default function MembresPage() {
   }
 
   const roleStyles = {
-    owner: 'bg-purple-50 text-purple-700 border-purple-100',
-    admin: 'bg-blue-50 text-blue-700 border-blue-100',
+    owner: 'bg-[#F3EEFD] text-[#5B1BB8] border-[#E7DCFC]',
+    admin: 'bg-[#E9F0FC] text-[#1F5BB8] border-[#E9F0FC]',
     editor: 'bg-[#7225E3]/5 text-[#7225E3] border-[#7225E3]/10',
-    viewer: 'bg-amber-50 text-amber-700 border-amber-100'
+    viewer: 'bg-[#FDF2DF] text-[#8A4B00] border-[#FDF2DF]'
   }
 
   if (!isLoaded) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-3">
         <Loader2 className="size-8 text-[#7C3AED] animate-spin" />
-        <p className="text-sm text-gray-500 font-medium">Chargement des membres de l'équipe...</p>
+        <p className="text-sm text-[#6B6780] font-medium">Chargement des membres de l'équipe...</p>
       </div>
     )
   }
@@ -312,10 +312,10 @@ export default function MembresPage() {
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold text-gray-900 tracking-tight">{onlyInvitations ? 'Invitations en attente' : "Membres de l'équipe"}</h2>
-            <Info className="size-4 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors mt-0.5" />
+            <h2 className="text-xl font-bold text-[#14121F] tracking-tight">{onlyInvitations ? 'Invitations en attente' : "Membres de l'équipe"}</h2>
+            <Info className="size-4 text-[#6B6780] cursor-pointer hover:text-[#4B4B63] transition-colors mt-0.5" />
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-[#6B6780] mt-1">
             Gérez les membres, les rôles et les invitations de votre organisation.
           </p>
         </div>
@@ -330,14 +330,14 @@ export default function MembresPage() {
           </button>
           
           {/* Notifications Bell */}
-          <NotificationsPopover className="rounded-full border border-gray-100 bg-white hover:bg-gray-50 size-9.5 flex items-center justify-center text-gray-600 hover:text-gray-800 shadow-none font-normal shrink-0" />
+          <NotificationsPopover className="rounded-full border border-[#E8E6F0] bg-white hover:bg-[#F8F7FC] size-9.5 flex items-center justify-center text-[#4B4B63] hover:text-[#14121F] shadow-none font-normal shrink-0" />
           
           {/* Connected User Avatar */}
           {user?.imageUrl && (
             <img 
               src={user.imageUrl} 
               alt={user.fullName || "User"}
-              className="size-9.5 rounded-full border border-gray-200 object-cover cursor-pointer hover:opacity-90 transition-all"
+              className="size-9.5 rounded-full border border-[#E8E6F0] object-cover cursor-pointer hover:opacity-90 transition-all"
               onClick={() => toast.info(`Connecté en tant que ${user.fullName || user.firstName}`)}
             />
           )}
@@ -347,58 +347,58 @@ export default function MembresPage() {
       {/* STATS BAR (4 CARDS) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Members */}
-        <div className="bg-white border border-gray-100/80 p-5 rounded-2xl shadow-sm flex items-center gap-4">
+        <div className="bg-white border border-[#E8E6F0] p-5 rounded-[12px] flex items-center gap-4">
           <div className="size-12 rounded-full flex items-center justify-center bg-[#7225E3]/10 text-[#7225E3] shrink-0">
             <Users className="size-5" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-gray-900 leading-none">{totalCount}</span>
-              <span className="text-sm font-semibold text-gray-800 leading-none">Membres</span>
+              <span className="text-2xl font-bold text-[#14121F] leading-none">{totalCount}</span>
+              <span className="text-sm font-semibold text-[#14121F] leading-none">Membres</span>
             </div>
-            <span className="text-[11px] text-gray-450 font-medium mt-1 leading-none">Dans l'organisation</span>
+            <span className="text-xs text-[#6B6780] font-medium mt-1 leading-none">Dans l'organisation</span>
           </div>
         </div>
 
         {/* Admins */}
-        <div className="bg-white border border-gray-100/80 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-          <div className="size-12 rounded-full flex items-center justify-center bg-[#E6F4EA] text-[#137333] shrink-0">
+        <div className="bg-white border border-[#E8E6F0] p-5 rounded-[12px] flex items-center gap-4">
+          <div className="size-12 rounded-full flex items-center justify-center bg-[#E7F6EE] text-[#0E7445] shrink-0">
             <Shield className="size-5" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-gray-900 leading-none">{adminCount}</span>
-              <span className="text-sm font-semibold text-gray-800 leading-none">Admins</span>
+              <span className="text-2xl font-bold text-[#14121F] leading-none">{adminCount}</span>
+              <span className="text-sm font-semibold text-[#14121F] leading-none">Admins</span>
             </div>
-            <span className="text-[11px] text-gray-450 font-medium mt-1 leading-none">Gestion complète</span>
+            <span className="text-xs text-[#6B6780] font-medium mt-1 leading-none">Gestion complète</span>
           </div>
         </div>
 
         {/* Editors */}
-        <div className="bg-white border border-gray-100/80 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-          <div className="size-12 rounded-full flex items-center justify-center bg-[#E8F0FE] text-[#1A73E8] shrink-0">
+        <div className="bg-white border border-[#E8E6F0] p-5 rounded-[12px] flex items-center gap-4">
+          <div className="size-12 rounded-full flex items-center justify-center bg-[#E9F0FC] text-[#1F5BB8] shrink-0">
             <UserCheck className="size-5" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-gray-900 leading-none">{editorCount}</span>
-              <span className="text-sm font-semibold text-gray-800 leading-none">Éditeurs</span>
+              <span className="text-2xl font-bold text-[#14121F] leading-none">{editorCount}</span>
+              <span className="text-sm font-semibold text-[#14121F] leading-none">Éditeurs</span>
             </div>
-            <span className="text-[11px] text-gray-450 font-medium mt-1 leading-none">Création & Édition</span>
+            <span className="text-xs text-[#6B6780] font-medium mt-1 leading-none">Création & Édition</span>
           </div>
         </div>
 
         {/* Invited / Pending */}
-        <div className="bg-white border border-gray-100/80 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-          <div className="size-12 rounded-full flex items-center justify-center bg-[#FEF7E0] text-[#B06000] shrink-0">
+        <div className="bg-white border border-[#E8E6F0] p-5 rounded-[12px] flex items-center gap-4">
+          <div className="size-12 rounded-full flex items-center justify-center bg-[#FDF2DF] text-[#8A4B00] shrink-0">
             <Eye className="size-5" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-gray-900 leading-none">{invitedCount}</span>
-              <span className="text-sm font-semibold text-gray-800 leading-none">En attente</span>
+              <span className="text-2xl font-bold text-[#14121F] leading-none">{invitedCount}</span>
+              <span className="text-sm font-semibold text-[#14121F] leading-none">En attente</span>
             </div>
-            <span className="text-[11px] text-gray-450 font-medium mt-1 leading-none">Invitations envoyées</span>
+            <span className="text-xs text-[#6B6780] font-medium mt-1 leading-none">Invitations envoyées</span>
           </div>
         </div>
       </div>
@@ -407,13 +407,13 @@ export default function MembresPage() {
       {allMembers.length === 1 && (
         <div className="bg-gradient-to-r from-[#7C3AED]/10 via-[#7C3AED]/5 to-transparent border border-[#7C3AED]/20 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[#14121F] flex items-center gap-2">
               <Crown className="size-4 text-[#7C3AED]" />
               {organization 
                 ? "Vous êtes actuellement le seul membre de cette organisation" 
                 : "Vous utilisez actuellement votre espace personnel"}
             </h3>
-            <p className="text-xs text-gray-500 max-w-lg">
+            <p className="text-xs text-[#6B6780] max-w-lg">
               {organization 
                 ? "Invitez vos collaborateurs pour commencer à créer des contenus et gérer vos projets en équipe." 
                 : "Pour inviter des collaborateurs et collaborer sur des projets en équipe, créez ou rejoignez une organisation."}
@@ -442,11 +442,11 @@ export default function MembresPage() {
           </button>
         </EmptyState>
       ) : (
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-[#E8E6F0] rounded-[12px] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50 text-xs font-semibold text-gray-400">
+              <tr className="border-b border-[#E8E6F0] bg-[#F8F7FC]/50 text-xs font-semibold text-[#6B6780]">
                 <th className="py-4 px-6">Membre</th>
                 <th className="py-4 px-6">Rôle</th>
                 <th className="py-4 px-6">Accès</th>
@@ -454,14 +454,14 @@ export default function MembresPage() {
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-sm">
+            <tbody className="divide-y divide-[#E8E6F0] text-sm">
               {allMembers.map(member => {
                 const isYou = member.userId === user?.id || member.name.includes('(Vous)')
                 const isPending = member.status === 'pending'
                 const displayRole = roleTextMap[member.role] || member.role
                 
                 return (
-                  <tr key={member.id} className="hover:bg-gray-50/40 transition-colors">
+                  <tr key={member.id} className="hover:bg-[#F8F7FC]/40 transition-colors">
                     {/* Member Profile */}
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
@@ -469,7 +469,7 @@ export default function MembresPage() {
                           <img 
                             src={member.avatarUrl} 
                             alt={member.name || ''} 
-                            className="size-10 rounded-full border border-gray-100 object-cover shrink-0" 
+                            className="size-10 rounded-full border border-[#E8E6F0] object-cover shrink-0" 
                           />
                         ) : (
                           <div className="size-10 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/10 text-[#7225E3] font-semibold flex items-center justify-center text-sm shrink-0">
@@ -477,7 +477,7 @@ export default function MembresPage() {
                           </div>
                         )}
                         <div className="min-w-0">
-                          <div className="font-semibold text-gray-900 flex items-center gap-2">
+                          <div className="font-semibold text-[#14121F] flex items-center gap-2">
                             {member.name}
                             {isYou && (
                               <span className="text-xs font-semibold bg-[#F3EEFD] text-[#7225E3] px-1.5 py-0.5 rounded-md">
@@ -485,7 +485,7 @@ export default function MembresPage() {
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-gray-400 font-medium truncate">
+                          <div className="text-xs text-[#6B6780] font-medium truncate">
                             {member.email}
                           </div>
                         </div>
@@ -518,23 +518,23 @@ export default function MembresPage() {
                               className="fixed inset-0 z-30" 
                               onClick={() => setActiveRoleDropdown(null)} 
                             />
-                            <div className="absolute left-0 mt-1.5 w-44 bg-white border border-gray-100 rounded-xl shadow-lg py-1.5 z-40 animate-in fade-in slide-in-from-top-1 duration-150">
-                              <div className="px-2.5 py-1 text-xs font-semibold text-gray-400">
+                            <div className="absolute left-0 mt-1.5 w-44 bg-white border border-[#E8E6F0] rounded-xl shadow-lg py-1.5 z-40 animate-in fade-in slide-in-from-top-1 duration-150">
+                              <div className="px-2.5 py-1 text-xs font-semibold text-[#6B6780]">
                                 Rôle
                               </div>
                               <button
                                 onClick={() => handleRoleChange(member, 'admin')}
-                                className={`w-full text-left px-3 py-1.5 text-xs font-semibold hover:bg-gray-50 flex items-center justify-between ${
-                                  member.role === 'admin' ? 'text-blue-600 bg-blue-50/50' : 'text-gray-700'
+                                className={`w-full text-left px-3 py-1.5 text-xs font-semibold hover:bg-[#F8F7FC] flex items-center justify-between ${
+                                  member.role === 'admin' ? 'text-[#1F5BB8] bg-[#E9F0FC]/50' : 'text-[#4B4B63]'
                                 }`}
                               >
                                 <span>Administrateur</span>
-                                {member.role === 'admin' && <span className="size-1.5 bg-blue-600 rounded-full" />}
+                                {member.role === 'admin' && <span className="size-1.5 bg-[#1F5BB8] rounded-full" />}
                               </button>
                               <button
                                 onClick={() => handleRoleChange(member, 'editor')}
-                                className={`w-full text-left px-3 py-1.5 text-xs font-semibold hover:bg-gray-50 flex items-center justify-between ${
-                                  member.role === 'editor' ? 'text-[#7225E3] bg-purple-50/50' : 'text-gray-700'
+                                className={`w-full text-left px-3 py-1.5 text-xs font-semibold hover:bg-[#F8F7FC] flex items-center justify-between ${
+                                  member.role === 'editor' ? 'text-[#7225E3] bg-[#F3EEFD]/50' : 'text-[#4B4B63]'
                                 }`}
                               >
                                 <span>Éditeur</span>
@@ -547,41 +547,41 @@ export default function MembresPage() {
                     </td>
 
                     {/* Access description */}
-                    <td className="py-4 px-6 text-gray-600 font-medium">
+                    <td className="py-4 px-6 text-[#4B4B63] font-medium">
                       <div className="flex items-start gap-2 max-w-[280px]">
                         {member.role === 'owner' && (
                           <>
-                            <Crown className="size-4 text-amber-500 mt-0.5 shrink-0" />
+                            <Crown className="size-4 text-[#8A4B00] mt-0.5 shrink-0" />
                             <div>
-                              <div className="font-semibold text-gray-800 text-xs">Accès complet</div>
-                              <div className="text-[11px] text-gray-400">Propriétaire de l'organisation</div>
+                              <div className="font-semibold text-[#14121F] text-xs">Accès complet</div>
+                              <div className="text-xs text-[#6B6780]">Propriétaire de l'organisation</div>
                             </div>
                           </>
                         )}
                         {member.role === 'admin' && (
                           <>
-                            <Shield className="size-4 text-blue-600 mt-0.5 shrink-0" />
+                            <Shield className="size-4 text-[#1F5BB8] mt-0.5 shrink-0" />
                             <div>
-                              <div className="font-semibold text-gray-800 text-xs">Gestion de l'équipe</div>
-                              <div className="text-[11px] text-gray-400">Projets, membres et paramètres</div>
+                              <div className="font-semibold text-[#14121F] text-xs">Gestion de l'équipe</div>
+                              <div className="text-xs text-[#6B6780]">Projets, membres et paramètres</div>
                             </div>
                           </>
                         )}
                         {member.role === 'editor' && !isPending && (
                           <>
-                            <PenLine className="size-4 text-gray-500 mt-0.5 shrink-0" />
+                            <PenLine className="size-4 text-[#6B6780] mt-0.5 shrink-0" />
                             <div>
-                              <div className="font-semibold text-gray-800 text-xs">Créer et modifier</div>
-                              <div className="text-[11px] text-gray-400">Peut créer et modifier les contenus</div>
+                              <div className="font-semibold text-[#14121F] text-xs">Créer et modifier</div>
+                              <div className="text-xs text-[#6B6780]">Peut créer et modifier les contenus</div>
                             </div>
                           </>
                         )}
                         {isPending && (
                           <>
-                            <Clock className="size-4 text-amber-500 mt-0.5 shrink-0" />
+                            <Clock className="size-4 text-[#8A4B00] mt-0.5 shrink-0" />
                             <div>
-                              <div className="font-semibold text-gray-800 text-xs">En attente d'acceptation</div>
-                              <div className="text-[11px] text-gray-400">
+                              <div className="font-semibold text-[#14121F] text-xs">En attente d'acceptation</div>
+                              <div className="text-xs text-[#6B6780]">
                                 Invitation envoyée le {member.invitedAt ? new Date(member.invitedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Récemment'}
                               </div>
                             </div>
@@ -593,11 +593,11 @@ export default function MembresPage() {
                     {/* Status Badge */}
                     <td className="py-4 px-6">
                       {isPending ? (
-                        <span className="inline-flex items-center text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100 px-2.5 py-0.5 rounded-full">
+                        <span className="inline-flex items-center text-xs font-semibold bg-[#FDF2DF] text-[#8A4B00] border border-[#FDF2DF] px-2.5 py-0.5 rounded-full">
                           En attente
                         </span>
                       ) : (
-                        <span className="inline-flex items-center text-xs font-semibold bg-green-50 text-green-700 border border-green-100 px-2.5 py-0.5 rounded-full">
+                        <span className="inline-flex items-center text-xs font-semibold bg-[#E7F6EE] text-[#0E7445] border border-[#E7F6EE] px-2.5 py-0.5 rounded-full">
                           Actif
                         </span>
                       )}
@@ -620,7 +620,7 @@ export default function MembresPage() {
                           <div className="relative inline-block text-left">
                             <button
                               onClick={() => setActiveDropdown(activeDropdown === member.id ? null : member.id)}
-                              className="p-1.5 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-100 text-gray-400 hover:text-gray-600 transition-all cursor-pointer bg-white"
+                              className="p-1.5 rounded-xl hover:bg-[#F8F7FC] border border-transparent hover:border-[#E8E6F0] text-[#6B6780] hover:text-[#4B4B63] transition-all cursor-pointer bg-white"
                             >
                               <MoreVertical className="size-4.5" />
                             </button>
@@ -631,10 +631,10 @@ export default function MembresPage() {
                                   className="fixed inset-0 z-30" 
                                   onClick={() => setActiveDropdown(null)} 
                                 />
-                                <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-40">
+                                <div className="absolute right-0 mt-1 w-36 bg-white border border-[#E8E6F0] rounded-xl shadow-lg py-1 z-40">
                                   <button
                                     onClick={() => handleDeleteMember(member)}
-                                    className="w-full text-left px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-1.5 transition-colors"
+                                    className="w-full text-left px-3 py-2 text-xs font-semibold text-[#B42318] hover:bg-[#FDECEA] flex items-center gap-1.5 transition-colors"
                                   >
                                     <Trash2 className="size-3.5 text-red-550" />
                                     {isPending ? 'Annuler' : 'Supprimer'}
@@ -673,7 +673,7 @@ export default function MembresPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowInviteModal(false)}
-              className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm"
+              className="fixed inset-0 bg-[#14121F]/60 backdrop-blur-sm"
             />
 
             {/* Content container */}
@@ -681,16 +681,16 @@ export default function MembresPage() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden z-10 border border-gray-100 flex flex-col relative"
+              className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden z-10 border border-[#E8E6F0] flex flex-col relative"
             >
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+              <div className="p-6 border-b border-[#E8E6F0] flex justify-between items-center bg-[#F8F7FC]/50">
+                <h3 className="text-base font-bold text-[#14121F] flex items-center gap-2">
                   <UserPlus className="size-5 text-[#7225E3]" />
                   Inviter un membre
                 </h3>
                 <button
                   onClick={() => setShowInviteModal(false)}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-[#F8F7FC] text-[#6B6780] hover:text-[#4B4B63] transition-colors"
                 >
                   <X className="size-4" />
                 </button>
@@ -699,7 +699,7 @@ export default function MembresPage() {
               <form onSubmit={handleInviteSubmit} className="p-6 space-y-4">
                 {/* Email Address */}
                 <div className="space-y-1">
-                  <label htmlFor="invite-email" className="text-xs font-semibold text-gray-600">
+                  <label htmlFor="invite-email" className="text-xs font-semibold text-[#4B4B63]">
                     Adresse email
                   </label>
                   <div className="relative">
@@ -710,9 +710,9 @@ export default function MembresPage() {
                       placeholder="exemple@entreprise.com"
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all font-medium"
+                      className="w-full bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#14121F] placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all font-medium"
                     />
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#6B6780]">
                       <Mail className="size-4" />
                     </div>
                   </div>
@@ -720,7 +720,7 @@ export default function MembresPage() {
 
                 {/* Role selection */}
                 <div className="space-y-1">
-                  <label htmlFor="invite-role" className="text-xs font-semibold text-gray-600">
+                  <label htmlFor="invite-role" className="text-xs font-semibold text-[#4B4B63]">
                     Rôle de l'invité
                   </label>
                   <div className="relative">
@@ -728,21 +728,21 @@ export default function MembresPage() {
                       id="invite-role"
                       value={inviteRole}
                       onChange={(e) => setInviteRole(e.target.value as any)}
-                      className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all cursor-pointer font-medium"
+                      className="w-full appearance-none bg-[#F8F7FC] border border-[#E8E6F0] rounded-xl px-4 py-2.5 text-sm text-[#14121F] focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all cursor-pointer font-medium"
                     >
                       <option value="editor">Éditeur (peut créer et modifier les contenus)</option>
                       <option value="admin">Administrateur (gestion équipe + projets + paramètres)</option>
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-400">
+                    <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-[#6B6780]">
                       <ChevronDown className="size-4" />
                     </div>
                   </div>
                 </div>
 
                 {/* Info Text */}
-                <div className="bg-purple-50/50 border border-purple-100 rounded-xl p-3 flex gap-2">
+                <div className="bg-[#F3EEFD]/50 border border-[#E7DCFC] rounded-xl p-3 flex gap-2">
                   <Info className="size-4 text-[#7225E3] shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-[#7225E3]/90 leading-normal font-medium">
+                  <p className="text-xs text-[#7225E3]/90 leading-normal font-medium">
                     Un email d'invitation Clerk sera envoyé à l'adresse indiquée pour rejoindre votre organisation.
                   </p>
                 </div>
@@ -769,7 +769,7 @@ export default function MembresPage() {
                   <button
                     type="button"
                     onClick={() => setShowInviteModal(false)}
-                    className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl text-sm font-semibold transition-all cursor-pointer"
+                    className="px-4 py-2.5 bg-[#F8F7FC] hover:bg-[#E8E6F0] text-[#14121F] rounded-xl text-sm font-semibold transition-all cursor-pointer"
                   >
                     Annuler
                   </button>

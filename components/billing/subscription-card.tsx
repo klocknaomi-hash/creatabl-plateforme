@@ -29,7 +29,7 @@ export function SubscriptionCard({ usageData, plan }: SubscriptionCardProps) {
             </CardTitle>
           </div>
         </div>
-        <Badge className="rounded-full px-4 py-1.5 bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-semibold text-xs shadow-none">
+        <Badge className="rounded-full px-4 py-1.5 bg-[#0E7445]/10 text-[#0E7445] border-[#0E7445]/20 font-semibold text-xs shadow-none">
           Plan actif
         </Badge>
       </CardHeader>

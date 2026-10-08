@@ -45,11 +45,11 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
       <DialogContent className="sm:max-w-[425px] flex flex-col items-center text-center py-8">
         <DialogHeader className="flex flex-col items-center">
           <AIUsageIndicator used={used} limit={limit} size={80} />
-          <DialogTitle className="text-2xl font-bold mt-4 text-[#D85A30]">
+          <DialogTitle className="text-2xl font-bold mt-4 text-[#B42318]">
             AI Limit Reached
           </DialogTitle>
         </DialogHeader>
-        <div className="py-4 text-gray-600 text-base leading-relaxed">
+        <div className="py-4 text-[#4B4B63] text-base leading-relaxed">
           {getUpgradeMessage()}
         </div>
         <DialogFooter className="flex flex-col sm:flex-row gap-3 w-full mt-4">
@@ -62,7 +62,7 @@ const AILimitModal: React.FC<AILimitModalProps> = ({
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="w-full rounded-xl py-6 h-auto text-base border-gray-200"
+            className="w-full rounded-xl py-6 h-auto text-base border-[#E8E6F0]"
           >
             Close
           </Button>

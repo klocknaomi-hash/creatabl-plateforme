@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 import { CircleHelp, CreditCard, Search, Settings, UserPlus } from "lucide-react";
 
-import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { NotificationsPopover } from "@/components/dashboard/notifications-popover";
 import { OrgSwitcher } from "@/components/ds/OrgSwitcher";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -71,7 +70,6 @@ export function Topbar() {
           <CircleHelp size={20} aria-hidden="true" />
         </a>
         <NotificationsPopover />
-        <ThemeToggle />
         <span style={{ marginLeft: 8, display: "inline-flex", width: 32, height: 32 }}>
           <UserButton appearance={{ elements: { avatarBox: "size-8" } }}>
             <UserButton.MenuItems>

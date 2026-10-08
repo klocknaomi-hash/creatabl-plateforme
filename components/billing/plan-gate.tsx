@@ -44,7 +44,7 @@ export function PlanGate({ children, plan = "pro", showUpgrade = true }: PlanGat
           <Lock className="w-6 h-6 text-primary" />
         </div>
         <CardTitle className="text-xl flex items-center justify-center gap-2">
-          <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+          <Crown className="w-5 h-5 text-[#8A4B00] fill-[#8A4B00]" />
           {plan.charAt(0).toUpperCase() + plan.slice(1)} Feature
         </CardTitle>
         <CardDescription>

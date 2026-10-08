@@ -197,7 +197,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             <TooltipButton
               onClick={() => handleAction("improve")}
               disabled={disabled}
-              icon={<Zap className={cn("size-3.5", !disabled && "text-amber-500")} />}
+              icon={<Zap className={cn("size-3.5", !disabled && "text-[#8A4B00]")} />}
               label="Améliorer"
               loading={loading}
               tooltip="Améliorer le style"
@@ -207,7 +207,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
               <TooltipButton
                 onClick={() => handleAction("rewrite")}
                 disabled={disabled}
-                icon={<RotateCcw className="size-3.5 text-blue-500" />}
+                icon={<RotateCcw className="size-3.5 text-[#1F5BB8]" />}
                 label="Reformuler"
                 loading={loading}
                 tooltip="Reformuler depuis un nouvel angle"
@@ -219,7 +219,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
                 className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
-                <RotateCcw className="size-3.5 text-blue-500" />
+                <RotateCcw className="size-3.5 text-[#1F5BB8]" />
                 Reformuler 🔒
               </button>
             )}
@@ -228,7 +228,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
               <TooltipButton
                 onClick={() => handleAction("shorten")}
                 disabled={disabled}
-                icon={<Minimize2 className="size-3.5 text-emerald-500" />}
+                icon={<Minimize2 className="size-3.5 text-[#0E7445]" />}
                 label="Raccourcir"
                 loading={loading}
                 tooltip="Raccourcir le contenu"
@@ -240,7 +240,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
                 className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
-                <Minimize2 className="size-3.5 text-emerald-500" />
+                <Minimize2 className="size-3.5 text-[#0E7445]" />
                 Raccourcir 🔒
               </button>
             )}
@@ -249,7 +249,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
               <TooltipButton
                 onClick={() => handleAction("lengthen")}
                 disabled={disabled}
-                icon={<Maximize2 className="size-3.5 text-orange-500" />}
+                icon={<Maximize2 className="size-3.5 text-[#8A4B00]" />}
                 label="Allonger"
                 loading={loading}
                 tooltip="Allonger le contenu"
@@ -261,7 +261,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 style={{ opacity: 0.4, cursor: 'not-allowed' }}
                 className="h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all flex items-center bg-transparent text-muted-foreground border-none"
               >
-                <Maximize2 className="size-3.5 text-orange-500" />
+                <Maximize2 className="size-3.5 text-[#8A4B00]" />
                 Allonger 🔒
               </button>
             )}
@@ -309,7 +309,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                       <span className="text-lg bg-muted/50 size-8 flex items-center justify-center rounded-lg group-hover:bg-primary/10 transition-colors">{t.icon}</span>
                       <div className="flex flex-col gap-0.5">
                         <span>{t.label}</span>
-                        <span className="text-[10px] font-normal text-muted-foreground">{t.description}</span>
+                        <span className="text-xs font-normal text-muted-foreground">{t.description}</span>
                       </div>
                       {activeTone === t.value && (
                         <motion.div layoutId="active-tone" className="ml-auto">
@@ -372,7 +372,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                   {saveStatus === "saving" ? (
                     <Loader2 className="size-3 animate-spin text-muted-foreground" />
                   ) : saveStatus === "saved" ? (
-                    <Save className="size-3 text-emerald-500" />
+                    <Save className="size-3 text-[#0E7445]" />
                   ) : (
                     <div className="size-1.5 rounded-full bg-destructive" />
                   )}
@@ -389,7 +389,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
         </div>
 
         {remaining < 10 && (
-          <div className="text-[11px] text-amber-600 dark:text-amber-500 font-semibold mt-1.5 px-2 flex items-center gap-1">
+          <div className="text-xs text-[#8A4B00] dark:text-[#8A4B00] font-semibold mt-1.5 px-2 flex items-center gap-1">
             ⏱ {remaining} {remaining <= 1 ? 'génération restante' : 'générations restantes'} aujourd'hui
           </div>
         )}
@@ -401,7 +401,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             borderRadius: '8px',
             padding: '10px 14px',
             fontSize: '12px',
-            color: '#BA7517',
+            color: '#8A4B00',
             marginTop: '8px',
           }}>
             ⏱ {rateLimitMessage}
