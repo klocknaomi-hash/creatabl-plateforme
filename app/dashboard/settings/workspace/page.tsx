@@ -45,7 +45,7 @@ export default function WorkspacePage() {
               headerTitle: 'text-xl font-bold text-foreground tracking-tight',
               headerSubtitle: 'text-sm text-muted-foreground',
               profileSectionTitle: 'border-b border-border/40 pb-2 text-base font-semibold text-foreground',
-              formButtonPrimary: 'bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-medium rounded-xl shadow-sm transition-all',
+              formButtonPrimary: 'bg-[#7C3AED] hover:bg-[#5B1BB8] text-white font-medium rounded-xl shadow-sm transition-all',
               formButtonReset: 'rounded-xl text-muted-foreground hover:bg-muted',
               dangerBox: 'border border-destructive/20 bg-destructive/5 rounded-2xl p-4',
             },

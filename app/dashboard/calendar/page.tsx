@@ -106,8 +106,8 @@ const STATUS_CONFIG: Record<string, { label: string, icon: any, color: string, b
 
 // Heatmap Intensity colors
 const getHeatmapColor = (intensity: number) => {
-  if (intensity >= 80) return "bg-[#6D28D9]"; // Dark Violet
-  if (intensity >= 50) return "bg-[#8B5CF6]"; // Medium Violet
+  if (intensity >= 80) return "bg-[#5B1BB8]"; // Dark Violet
+  if (intensity >= 50) return "bg-[#8A38F5]"; // Medium Violet
   if (intensity > 0) return "bg-[#C4B5FD]"; // Light Violet
   return "bg-transparent";
 };
@@ -292,7 +292,7 @@ export default function CalendarPage() {
         <div className="flex items-center h-14 px-4 gap-4 border-b border-border/40">
           {/* New Post Button */}
           <Button 
-            className="rounded-xl h-9 px-4 font-semibold text-xs shadow-sm bg-primary hover:bg-primary/90 transition-all active:scale-95 shrink-0" 
+            className="rounded-full h-9 px-4 font-semibold text-xs shadow-sm bg-primary hover:bg-primary/90 transition-all active:scale-95 shrink-0" 
             onClick={() => window.location.href = "/dashboard/compose"}
           >
             <Plus className="size-3 mr-1.5" /> Nouveau post
@@ -492,7 +492,7 @@ export default function CalendarPage() {
                        />
                        <div className="flex gap-2">
                           <Button variant="ghost" className="flex-1 rounded-xl font-bold text-xs" onClick={() => setIsEditingContent(false)}>Cancel</Button>
-                          <Button className="flex-1 rounded-xl h-11 font-black uppercase tracking-widest text-[11px] bg-primary shadow-lg shadow-primary/20" onClick={handleSaveContent} disabled={isSavingContent}>
+                          <Button className="flex-1 rounded-full h-11 font-black uppercase tracking-widest text-[11px] bg-primary shadow-lg shadow-primary/20" onClick={handleSaveContent} disabled={isSavingContent}>
                              {isSavingContent ? "Saving..." : "Save Content"}
                           </Button>
                        </div>
@@ -570,7 +570,7 @@ export default function CalendarPage() {
 
            <DialogFooter className="gap-2 sm:gap-0">
               <Button variant="ghost" className="rounded-xl font-bold h-11" onClick={() => setIsRescheduleOpen(false)}>Cancel</Button>
-              <Button className="rounded-xl px-8 h-11 font-black uppercase tracking-widest text-[11px] bg-primary" onClick={handleSaveReschedule} disabled={isSavingSchedule}>
+              <Button className="rounded-full px-8 h-11 font-black uppercase tracking-widest text-[11px] bg-primary" onClick={handleSaveReschedule} disabled={isSavingSchedule}>
                  {isSavingSchedule ? "Saving..." : "Save Schedule"}
               </Button>
            </DialogFooter>
@@ -735,7 +735,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
                   <Button 
                     variant="default" 
                     size="icon" 
-                    className="size-8 rounded-xl shadow-xl shadow-primary/20 pointer-events-auto bg-[#8B5CF6] hover:bg-[#6D28D9]" 
+                    className="size-8 rounded-xl shadow-xl shadow-primary/20 pointer-events-auto bg-[#8A38F5] hover:bg-[#5B1BB8]" 
                     onClick={() => window.location.href = `/dashboard/compose?date=${day.toISOString()}`}
                   >
                     <Plus className="size-4" />

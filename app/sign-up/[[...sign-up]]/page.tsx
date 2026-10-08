@@ -48,7 +48,7 @@ function SignUpContent() {
 
         {/* Brand Logo & Name (Exact official typography & layout) */}
         <div className="flex items-center gap-2.5 relative z-10 select-none">
-          <img src="/logo.svg" className="w-8 h-8 shrink-0" alt="creatabl.ia logo" />
+          <img src="/logo.png" className="w-8 h-8 shrink-0" alt="creatabl.ia logo" />
           <span className="text-2xl font-bold tracking-tight text-white lowercase">
             creatabl<span className="font-serif italic">.ia</span>
           </span>
@@ -68,8 +68,8 @@ function SignUpContent() {
           {/* Feature list (Compact) */}
           <div className="space-y-2.5 xl:space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#534AB7]/10 border border-[#534AB7]/25 flex items-center justify-center shrink-0 mt-0.5">
-                <Check className="w-2.5 h-2.5 text-[#534AB7]" />
+              <div className="w-5 h-5 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/25 flex items-center justify-center shrink-0 mt-0.5">
+                <Check className="w-2.5 h-2.5 text-[#7225E3]" />
               </div>
               <div>
                 <h3 className="font-semibold text-xs text-white">Création assistée par IA</h3>
@@ -78,8 +78,8 @@ function SignUpContent() {
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#534AB7]/10 border border-[#534AB7]/25 flex items-center justify-center shrink-0 mt-0.5">
-                <Check className="w-2.5 h-2.5 text-[#534AB7]" />
+              <div className="w-5 h-5 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/25 flex items-center justify-center shrink-0 mt-0.5">
+                <Check className="w-2.5 h-2.5 text-[#7225E3]" />
               </div>
               <div>
                 <h3 className="font-semibold text-xs text-white">Planification intelligente</h3>
@@ -88,8 +88,8 @@ function SignUpContent() {
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#534AB7]/10 border border-[#534AB7]/25 flex items-center justify-center shrink-0 mt-0.5">
-                <Check className="w-2.5 h-2.5 text-[#534AB7]" />
+              <div className="w-5 h-5 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/25 flex items-center justify-center shrink-0 mt-0.5">
+                <Check className="w-2.5 h-2.5 text-[#7225E3]" />
               </div>
               <div>
                 <h3 className="font-semibold text-xs text-white">Analytics avancés</h3>
@@ -99,8 +99,8 @@ function SignUpContent() {
           </div>
 
           {/* Sleek Floating Analytics Card (Super compact to fit screen height) */}
-          <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-4 shadow-xl relative overflow-hidden group hover:border-[#534AB7]/30 transition-all duration-500 w-full">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-tr from-transparent to-[#534AB7]/10 blur-xl pointer-events-none" />
+          <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-4 shadow-xl relative overflow-hidden group hover:border-[#7225E3]/30 transition-all duration-500 w-full">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-tr from-transparent to-[#7225E3]/10 blur-xl pointer-events-none" />
             <div className="flex items-center justify-between mb-2">
               <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Performance Globale</span>
               <span className="flex items-center gap-0.5 text-[9px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full">
@@ -116,13 +116,13 @@ function SignUpContent() {
                   <span className="font-bold text-white">21,456</span>
                 </div>
                 <div className="w-full h-1 rounded-full bg-zinc-800 overflow-hidden">
-                  <div className="w-[78%] h-full bg-gradient-to-r from-[#534AB7] to-purple-500 rounded-full" />
+                  <div className="w-[78%] h-full bg-gradient-to-r from-[#7225E3] to-purple-500 rounded-full" />
                 </div>
               </div>
               
               <div className="flex items-center gap-4 text-[9px] pt-1.5 border-t border-white/5 font-medium">
                 <div className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#534AB7]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#7225E3]" />
                   <span className="text-zinc-400">LinkedIn</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -141,7 +141,7 @@ function SignUpContent() {
           <div className="flex items-center gap-3 pt-3 border-t border-white/5">
             <div className="flex -space-x-1.5">
               <div className="w-6.5 h-6.5 rounded-full border border-zinc-950 bg-gradient-to-tr from-pink-500 to-indigo-500 flex items-center justify-center font-bold text-[9px] text-white">A</div>
-              <div className="w-6.5 h-6.5 rounded-full border border-zinc-950 bg-gradient-to-tr from-[#534AB7] to-purple-500 flex items-center justify-center font-bold text-[9px] text-white">M</div>
+              <div className="w-6.5 h-6.5 rounded-full border border-zinc-950 bg-gradient-to-tr from-[#7225E3] to-purple-500 flex items-center justify-center font-bold text-[9px] text-white">M</div>
               <div className="w-6.5 h-6.5 rounded-full border border-zinc-950 bg-gradient-to-tr from-teal-500 to-emerald-500 flex items-center justify-center font-bold text-[9px] text-white">J</div>
               <div className="w-6.5 h-6.5 rounded-full border border-zinc-950 bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center font-bold text-[9px] text-white">S</div>
             </div>
@@ -158,19 +158,19 @@ function SignUpContent() {
 
         {/* Footer info */}
         <div className="flex items-center gap-2 text-[10px] xl:text-[11px] text-zinc-500 relative z-10 font-medium mt-auto">
-          <Users className="w-4 h-4 text-[#534AB7]" />
+          <Users className="w-4 h-4 text-[#7225E3]" />
           <span>Essai gratuit de 14 jours sur les plans payants • Plan Free : 20 crédits par mois</span>
         </div>
       </div>
 
       {/* Right Column - Clerk Sign Up (Light Theme for perfect readability) */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-[#F8F9FD] relative min-h-screen">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#534AB7]/5 blur-[80px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#7225E3]/5 blur-[80px] rounded-full pointer-events-none" />
         
         <div className="w-full max-w-md relative z-10 flex flex-col items-center">
           {/* Small logo for mobile */}
           <div className="lg:hidden flex items-center gap-2.5 mb-8 select-none">
-            <img src="/logo.svg" className="w-7 h-7 shrink-0" alt="creatabl.ia logo" />
+            <img src="/logo.png" className="w-7 h-7 shrink-0" alt="creatabl.ia logo" />
             <span className="text-xl font-bold tracking-tight text-zinc-900 lowercase">
               creatabl<span className="font-serif italic text-zinc-950">.ia</span>
             </span>
@@ -184,13 +184,13 @@ function SignUpContent() {
                 logoPlacement: "none",
               },
               variables: {
-                colorPrimary: '#534AB7',
+                colorPrimary: '#7225E3',
                 colorBackground: '#ffffff',
-                colorText: '#1f2937', // gray-800
-                colorTextSecondary: '#4b5563', // gray-600
+                colorText: '#24212F', // gray-800
+                colorTextSecondary: '#4B4B63', // gray-600
                 colorInputBackground: '#ffffff',
-                colorInputText: '#1f2937',
-                colorBorder: '#e5e7eb', // gray-200
+                colorInputText: '#24212F',
+                colorBorder: '#E8E6F0', // gray-200
                 borderRadius: '12px',
                 fontFamily: 'inherit',
               },
@@ -200,15 +200,15 @@ function SignUpContent() {
                 headerSubtitle: "text-sm text-gray-500 text-center mt-1",
                 socialButtonsBlockButton: "border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition-all duration-200 py-3 shadow-sm",
                 socialButtonsBlockButtonText: "text-sm font-medium",
-                formButtonPrimary: "bg-[#534AB7] hover:bg-[#453da3] text-white font-bold rounded-xl py-3 shadow-lg shadow-indigo-500/10 active:scale-[0.98] transition-all",
+                formButtonPrimary: "bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold rounded-full py-3 shadow-lg shadow-indigo-500/10 active:scale-[0.98] transition-all",
                 formFieldLabel: "text-gray-700 font-semibold text-xs uppercase tracking-wider mb-1.5",
-                formFieldInput: "border border-gray-200 focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] rounded-xl px-4 py-3 text-sm transition-all text-gray-900 placeholder-gray-400 bg-white",
+                formFieldInput: "border border-gray-200 focus:border-[#7225E3] focus:ring-1 focus:ring-[#7225E3] rounded-xl px-4 py-3 text-sm transition-all text-gray-900 placeholder-gray-400 bg-white",
                 footerActionText: "text-sm text-gray-500",
-                footerActionLink: "text-[#534AB7] hover:text-[#453da3] font-bold transition-colors",
+                footerActionLink: "text-[#7225E3] hover:text-[#5B1BB8] font-bold transition-colors",
                 dividerLine: "bg-gray-100",
                 dividerText: "text-gray-400 text-xs font-semibold bg-[#ffffff] px-3",
                 identityPreviewText: "text-gray-900",
-                identityPreviewEditButtonIcon: "text-[#534AB7]"
+                identityPreviewEditButtonIcon: "text-[#7225E3]"
               }
             }}
             fallbackRedirectUrl="/sign-up/success"
@@ -219,7 +219,7 @@ function SignUpContent() {
 
           <p className="text-sm text-center text-gray-500 mt-4">
             Déjà un compte ?{' '}
-            <a href="/sign-in" className="text-[#534AB7] font-bold hover:underline">
+            <a href="/sign-in" className="text-[#7225E3] font-bold hover:underline">
               Se connecter
             </a>
           </p>

@@ -24,7 +24,7 @@ const EmptyState = () => (
     <p className="text-sm text-gray-400 mb-4">
       Tes données apparaîtront ici une fois connecté.
     </p>
-    <Link href="/dashboard/settings/connections" className="bg-[#534AB7] text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-[#453da3] transition-colors">
+    <Link href="/dashboard/settings/connections" className="bg-[#7225E3] text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-[#5B1BB8] transition-colors">
       Connecter mes réseaux
     </Link>
   </div>

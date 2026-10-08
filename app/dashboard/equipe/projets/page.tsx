@@ -600,9 +600,9 @@ export default function ProjetsPage() {
           <div className="flex items-center gap-3.5 self-end sm:self-auto">
             <button
               onClick={() => router.push('/dashboard/equipe/membres?invite=true')}
-              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#534AB7]/5 text-[#534AB7] border border-[#534AB7]/20 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#7225E3]/5 text-[#7225E3] border border-[#7225E3]/20 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
             >
-              <UserPlus className="size-4 text-[#534AB7]" />
+              <UserPlus className="size-4 text-[#7225E3]" />
               Inviter un membre
             </button>
             
@@ -629,7 +629,7 @@ export default function ProjetsPage() {
             <button 
               onClick={() => setViewMode('list')}
               className={`flex items-center gap-1.5 pb-3 font-bold text-xs border-b-2 transition-all cursor-pointer ${
-                viewMode === 'list' ? 'text-[#534AB7] border-[#534AB7]' : 'text-gray-400 hover:text-gray-600 border-transparent'
+                viewMode === 'list' ? 'text-[#7225E3] border-[#7225E3]' : 'text-gray-400 hover:text-gray-600 border-transparent'
               }`}
             >
               <List className="size-4" />
@@ -638,7 +638,7 @@ export default function ProjetsPage() {
             <button 
               onClick={() => setViewMode('calendar')}
               className={`flex items-center gap-1.5 pb-3 font-bold text-xs border-b-2 transition-all cursor-pointer ${
-                viewMode === 'calendar' ? 'text-[#534AB7] border-[#534AB7]' : 'text-gray-400 hover:text-gray-600 border-transparent'
+                viewMode === 'calendar' ? 'text-[#7225E3] border-[#7225E3]' : 'text-gray-400 hover:text-gray-600 border-transparent'
               }`}
             >
               <Calendar className="size-4" />
@@ -647,7 +647,7 @@ export default function ProjetsPage() {
             <button 
               onClick={() => setViewMode('kanban')}
               className={`flex items-center gap-1.5 pb-3 font-bold text-xs border-b-2 transition-all cursor-pointer ${
-                viewMode === 'kanban' ? 'text-[#534AB7] border-[#534AB7]' : 'text-gray-400 hover:text-gray-600 border-transparent'
+                viewMode === 'kanban' ? 'text-[#7225E3] border-[#7225E3]' : 'text-gray-400 hover:text-gray-600 border-transparent'
               }`}
             >
               <FolderKanban className="size-4" />
@@ -665,7 +665,7 @@ export default function ProjetsPage() {
                 placeholder="Rechercher..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-4 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white transition-all w-full min-w-[130px]"
+                className="bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-4 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all w-full min-w-[130px]"
               />
               <Search className="size-3.5 text-gray-400 absolute left-2.5 top-2 pointer-events-none" />
               {searchQuery && (
@@ -697,7 +697,7 @@ export default function ProjetsPage() {
                     >
                       <button
                         onClick={() => { setCategoryFilter('all'); setShowCategoryDropdown(false); }}
-                        className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-50 ${categoryFilter === 'all' ? 'text-[#534AB7] bg-purple-50/50' : 'text-gray-700'}`}
+                        className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-50 ${categoryFilter === 'all' ? 'text-[#7225E3] bg-purple-50/50' : 'text-gray-700'}`}
                       >
                         Tous les projets
                       </button>
@@ -706,7 +706,7 @@ export default function ProjetsPage() {
                         <button
                           key={cat}
                           onClick={() => { setCategoryFilter(cat); setShowCategoryDropdown(false); }}
-                          className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-50 ${categoryFilter === cat ? 'text-[#534AB7] bg-purple-50/50' : 'text-gray-700'}`}
+                          className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-50 ${categoryFilter === cat ? 'text-[#7225E3] bg-purple-50/50' : 'text-gray-700'}`}
                         >
                           {cat}
                         </button>
@@ -721,13 +721,13 @@ export default function ProjetsPage() {
             <div className="flex border border-gray-200 rounded-xl overflow-hidden bg-gray-50 shrink-0">
               <button 
                 onClick={() => setViewMode('list')}
-                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#534AB7] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#7225E3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
               >
                 <List className="size-3.5" />
               </button>
               <button 
                 onClick={() => setViewMode('kanban')}
-                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'kanban' ? 'bg-white text-[#534AB7] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 shrink-0 transition-colors cursor-pointer ${viewMode === 'kanban' ? 'bg-white text-[#7225E3] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
               >
                 <Grid className="size-3.5" />
               </button>
@@ -740,20 +740,20 @@ export default function ProjetsPage() {
           <div className="flex items-center gap-2 flex-wrap text-xs bg-purple-50/40 p-2.5 rounded-xl border border-purple-100/50">
             <span className="text-gray-500 font-medium">Filtres actifs :</span>
             {categoryFilter !== 'all' && (
-              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#534AB7] font-bold px-2 py-0.5 rounded-lg shadow-sm">
+              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-bold px-2 py-0.5 rounded-lg shadow-sm">
                 Projet: {categoryFilter}
                 <X className="size-3 cursor-pointer hover:text-red-500" onClick={() => setCategoryFilter('all')} />
               </span>
             )}
             {selectedMemberName && (
-              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#534AB7] font-bold px-2 py-0.5 rounded-lg shadow-sm">
+              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-bold px-2 py-0.5 rounded-lg shadow-sm">
                 Membre: {selectedMemberName}
                 <X className="size-3 cursor-pointer hover:text-red-500" onClick={() => setSelectedMemberName(null)} />
               </span>
             )}
             <button 
               onClick={() => { setCategoryFilter('all'); setSelectedMemberName(null); }}
-              className="text-[10px] text-[#534AB7] hover:underline font-bold ml-auto cursor-pointer"
+              className="text-[10px] text-[#7225E3] hover:underline font-bold ml-auto cursor-pointer"
             >
               Réinitialiser tout
             </button>
@@ -770,17 +770,17 @@ export default function ProjetsPage() {
           ) : posts.length === 0 ? (
             /* EMPTY STATE */
             <div className="bg-white border border-gray-100 rounded-3xl p-16 text-center space-y-4 my-6 shadow-sm max-w-2xl mx-auto">
-              <div className="size-16 rounded-full bg-[#7F77DD]/10 text-[#7F77DD] flex items-center justify-center mx-auto mb-2">
-                <FolderKanban className="size-8 text-[#7F77DD]" />
+              <div className="size-16 rounded-full bg-[#8A38F5]/10 text-[#8A38F5] flex items-center justify-center mx-auto mb-2">
+                <FolderKanban className="size-8 text-[#8A38F5]" />
               </div>
-              <h2 className="text-2xl font-extrabold text-[#111827]">Aucun projet pour le moment</h2>
-              <p className="text-[#6B7280] text-sm max-w-sm mx-auto leading-relaxed">
+              <h2 className="text-2xl font-extrabold text-[#14121F]">Aucun projet pour le moment</h2>
+              <p className="text-[#6B6780] text-sm max-w-sm mx-auto leading-relaxed">
                 Créez votre premier post pour commencer à organiser votre équipe.
               </p>
               <div className="pt-2">
                 <a
                   href="/dashboard/compose"
-                  className="inline-flex items-center gap-2 bg-[#7F77DD] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#7F77DD]/20"
+                  className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#8A38F5]/20"
                 >
                   Créer votre premier projet
                 </a>
@@ -798,7 +798,7 @@ export default function ProjetsPage() {
                         type="checkbox" 
                         checked={filteredPosts.length > 0 && filteredPosts.every(p => selectedPostIds.includes(p.id))}
                         onChange={handleToggleSelectAll}
-                        className="size-4 rounded border-gray-300 text-[#534AB7] focus:ring-[#534AB7]/40 cursor-pointer" 
+                        className="size-4 rounded border-gray-300 text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
                       />
                     </div>
                     <div className="flex-1 min-w-[200px]">Post / Titre</div>
@@ -915,7 +915,7 @@ export default function ProjetsPage() {
                   {/* ADD POST BUTTON */}
                   <button
                     onClick={() => router.push('/dashboard/compose')}
-                    className="w-full flex items-center justify-center gap-1.5 py-3 border border-dashed border-[#534AB7]/30 hover:border-[#534AB7] bg-purple-50/10 hover:bg-[#EEEDFE]/40 text-xs text-[#534AB7] font-bold rounded-2xl transition-all cursor-pointer active:scale-99 shadow-sm"
+                    className="w-full flex items-center justify-center gap-1.5 py-3 border border-dashed border-[#7225E3]/30 hover:border-[#7225E3] bg-purple-50/10 hover:bg-[#F3EEFD]/40 text-xs text-[#7225E3] font-bold rounded-2xl transition-all cursor-pointer active:scale-99 shadow-sm"
                   >
                     <Plus className="size-4" />
                     Ajouter un post
@@ -956,17 +956,17 @@ export default function ProjetsPage() {
                           key={idx}
                           className={`min-h-[85px] border border-gray-50 rounded-xl p-1 flex flex-col justify-between group transition-all relative ${
                             cell.isCurrentMonth ? 'bg-white' : 'bg-gray-50/60 opacity-55'
-                          } hover:border-[#534AB7]/30 hover:bg-purple-50/5`}
+                          } hover:border-[#7225E3]/30 hover:bg-purple-50/5`}
                         >
                           <div className="flex justify-between items-center">
                             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
-                              isToday ? 'bg-[#534AB7] text-white' : 'text-gray-500'
+                              isToday ? 'bg-[#7225E3] text-white' : 'text-gray-500'
                             }`}>
                               {cell.date.getDate()}
                             </span>
                             <button
                               onClick={() => handleCalendarDayClick(cell.date)}
-                              className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-[#534AB7] transition-opacity"
+                              className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-[#7225E3] transition-opacity"
                             >
                               <Plus className="size-3" />
                             </button>
@@ -1077,7 +1077,7 @@ export default function ProjetsPage() {
             <button
               onClick={() => setActiveFilter('all')}
               className={`w-full flex justify-between items-center px-3 py-2 rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
-                activeFilter === 'all' ? 'bg-[#EEEDFE] text-[#534AB7]' : 'text-gray-600 hover:bg-gray-50'
+                activeFilter === 'all' ? 'bg-[#F3EEFD] text-[#7225E3]' : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -1144,7 +1144,7 @@ export default function ProjetsPage() {
           <h3 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider flex items-center justify-between">
             <span>Membres de l'équipe</span>
             {selectedMemberName && (
-              <span className="text-[9px] text-[#534AB7] hover:underline cursor-pointer font-bold" onClick={() => setSelectedMemberName(null)}>
+              <span className="text-[9px] text-[#7225E3] hover:underline cursor-pointer font-bold" onClick={() => setSelectedMemberName(null)}>
                 Effacer
               </span>
             )}
@@ -1159,7 +1159,7 @@ export default function ProjetsPage() {
                   onClick={() => handleMemberClick(member.name)}
                   className={`flex justify-between items-center p-2 rounded-xl border transition-all cursor-pointer ${
                     isSelected 
-                      ? 'bg-[#EEEDFE] border-[#534AB7]/30 shadow-sm scale-102' 
+                      ? 'bg-[#F3EEFD] border-[#7225E3]/30 shadow-sm scale-102' 
                       : 'border-transparent hover:bg-gray-50'
                   }`}
                 >
@@ -1181,7 +1181,7 @@ export default function ProjetsPage() {
                     </div>
                   </div>
                   
-                  <span className="text-[9px] font-bold bg-purple-100 text-[#534AB7] px-1.5 py-0.5 rounded-md border border-purple-200/20 shrink-0">
+                  <span className="text-[9px] font-bold bg-purple-100 text-[#7225E3] px-1.5 py-0.5 rounded-md border border-purple-200/20 shrink-0">
                     {member.role}
                   </span>
                 </div>
@@ -1202,7 +1202,7 @@ export default function ProjetsPage() {
             className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl px-6 py-3.5 z-40 flex items-center gap-6 text-white"
           >
             <div className="text-xs font-bold flex items-center gap-2 border-r border-gray-700 pr-5 shrink-0">
-              <span className="size-5 rounded-full bg-[#534AB7] flex items-center justify-center text-[10px] text-white">
+              <span className="size-5 rounded-full bg-[#7225E3] flex items-center justify-center text-[10px] text-white">
                 {selectedPostIds.length}
               </span>
               <span>contenus sélectionnés</span>
@@ -1289,7 +1289,7 @@ export default function ProjetsPage() {
                     <select
                       value={editingPost.status}
                       onChange={(e) => setEditingPost({ ...editingPost, status: e.target.value as any })}
-                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7]"
+                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
                     >
                       <option value="todo">À faire</option>
                       <option value="inprogress">En cours</option>
@@ -1302,7 +1302,7 @@ export default function ProjetsPage() {
                       type="date"
                       value={convertToInputDate(editingPost.dueDate)}
                       onChange={(e) => setEditingPost({ ...editingPost, dueDate: convertFromInputDate(e.target.value) })}
-                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7]"
+                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
                     />
                   </div>
                 </div>
@@ -1314,14 +1314,14 @@ export default function ProjetsPage() {
                     type="text"
                     value={editingPost.title}
                     onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                   />
                 </div>
 
                 {/* COMMENTS SECTION */}
                 <div className="space-y-3 pt-2">
                   <h3 className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-                    <MessageSquare className="size-3.5 text-[#534AB7]" />
+                    <MessageSquare className="size-3.5 text-[#7225E3]" />
                     Commentaires ({editingPost.comments?.length || 0})
                   </h3>
 
@@ -1333,7 +1333,7 @@ export default function ProjetsPage() {
                             {c.avatar ? (
                               <img src={c.avatar} alt="" className="size-5 rounded-full object-cover" />
                             ) : (
-                              <div className="size-5 rounded-full bg-purple-100 text-[#534AB7] font-bold text-[9px] flex items-center justify-center">
+                              <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-bold text-[9px] flex items-center justify-center">
                                 {c.author.substring(0, 2)}
                               </div>
                             )}
@@ -1358,12 +1358,12 @@ export default function ProjetsPage() {
                       placeholder="Écrire un commentaire..."
                       value={newCommentText}
                       onChange={e => setNewCommentText(e.target.value)}
-                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     />
                     <button
                       type="submit"
                       disabled={!newCommentText.trim()}
-                      className="bg-[#534AB7] hover:bg-[#453da3] disabled:opacity-50 text-white font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1 transition-all cursor-pointer"
+                      className="bg-[#7225E3] hover:bg-[#5B1BB8] disabled:opacity-50 text-white font-bold px-3 py-1.5 rounded-full text-xs flex items-center gap-1 transition-all cursor-pointer"
                     >
                       <Send className="size-3" />
                     </button>
@@ -1392,7 +1392,7 @@ export default function ProjetsPage() {
                   <button
                     type="button"
                     onClick={handleSavePostDetails}
-                    className="px-4 py-2 text-xs font-bold bg-[#534AB7] hover:bg-[#453da3] text-white rounded-xl shadow-sm transition-all cursor-pointer"
+                    className="px-4 py-2 text-xs font-bold bg-[#7225E3] hover:bg-[#5B1BB8] text-white rounded-full shadow-sm transition-all cursor-pointer"
                   >
                     Enregistrer
                   </button>
@@ -1437,7 +1437,7 @@ export default function ProjetsPage() {
                     placeholder="Ex: Lancement nouvelle gamme..."
                     value={newPostTitle}
                     onChange={e => setNewPostTitle(e.target.value)}
-                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                   />
                 </div>
 
@@ -1449,7 +1449,7 @@ export default function ProjetsPage() {
                       placeholder="Ex: Produit, Conseils..."
                       value={newPostCategory}
                       onChange={e => setNewPostCategory(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     />
                   </div>
                   <div>
@@ -1457,7 +1457,7 @@ export default function ProjetsPage() {
                     <select
                       value={newPostStatus}
                       onChange={e => setNewPostStatus(e.target.value as any)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     >
                       <option value="todo">À faire</option>
                       <option value="inprogress">En cours</option>
@@ -1472,7 +1472,7 @@ export default function ProjetsPage() {
                     <select
                       value={newPostAssignee}
                       onChange={e => setNewPostAssignee(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     >
                       {teamMembers.map(m => (
                         <option key={m.id} value={m.name}>{m.name}</option>
@@ -1485,7 +1485,7 @@ export default function ProjetsPage() {
                       type="date"
                       value={newPostDueDate}
                       onChange={e => setNewPostDueDate(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white"
+                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     />
                   </div>
                 </div>
@@ -1500,7 +1500,7 @@ export default function ProjetsPage() {
                         onClick={() => toggleModalPlatform(plat)}
                         className={`px-2.5 py-1 rounded-xl border text-[11px] font-bold capitalize transition-all cursor-pointer ${
                           newPostPlatforms.includes(plat)
-                            ? 'bg-[#EEEDFE] border-[#534AB7] text-[#534AB7]'
+                            ? 'bg-[#F3EEFD] border-[#7225E3] text-[#7225E3]'
                             : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
                         }`}
                       >
@@ -1521,7 +1521,7 @@ export default function ProjetsPage() {
                   <button
                     type="submit"
                     disabled={submittingPost}
-                    className="px-4 py-2 text-xs font-bold bg-[#534AB7] hover:bg-[#453da3] text-white rounded-xl shadow-sm transition-all flex items-center gap-1.5"
+                    className="px-4 py-2 text-xs font-bold bg-[#7225E3] hover:bg-[#5B1BB8] text-white rounded-full shadow-sm transition-all flex items-center gap-1.5"
                   >
                     {submittingPost && <Loader2 className="size-3.5 animate-spin" />}
                     Créer
@@ -1571,7 +1571,7 @@ function PostRow({
           type="checkbox" 
           checked={selected}
           onChange={() => onToggleSelect(post.id)}
-          className="size-4 rounded border-gray-300 text-[#534AB7] focus:ring-[#534AB7]/40 cursor-pointer" 
+          className="size-4 rounded border-gray-300 text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
         />
       </div>
 
@@ -1580,12 +1580,12 @@ function PostRow({
         {post.imageUrl ? (
           <img src={post.imageUrl} alt="" className="size-9 rounded-xl object-cover shrink-0 border border-gray-100" />
         ) : (
-          <div className="size-9 rounded-xl bg-purple-50 text-[#534AB7] flex items-center justify-center font-bold text-xs shrink-0">
+          <div className="size-9 rounded-xl bg-purple-50 text-[#7225E3] flex items-center justify-center font-bold text-xs shrink-0">
             <FileText className="size-4" />
           </div>
         )}
         <div className="min-w-0">
-          <div className="font-extrabold text-gray-900 truncate group-hover:text-[#534AB7] transition-colors">
+          <div className="font-extrabold text-gray-900 truncate group-hover:text-[#7225E3] transition-colors">
             {post.title}
           </div>
           <div className="text-[10px] text-gray-400 font-semibold">{post.category}</div>
@@ -1597,7 +1597,7 @@ function PostRow({
         {post.assigneeAvatar ? (
           <img src={post.assigneeAvatar} alt="" className="size-6 rounded-full object-cover shrink-0 border border-gray-100" />
         ) : (
-          <div className="size-6 rounded-full bg-purple-100 text-[#534AB7] font-bold text-[9px] flex items-center justify-center shrink-0">
+          <div className="size-6 rounded-full bg-purple-100 text-[#7225E3] font-bold text-[9px] flex items-center justify-center shrink-0">
             {post.assigneeName.substring(0, 2).toUpperCase()}
           </div>
         )}
@@ -1660,7 +1660,7 @@ function PostRow({
                   onClick={() => onEditPost(post)}
                   className="w-full px-3 py-2 hover:bg-gray-50 text-gray-700 flex items-center gap-2"
                 >
-                  <FileText className="size-3.5 text-[#534AB7]" />
+                  <FileText className="size-3.5 text-[#7225E3]" />
                   Détails / Éditer
                 </button>
                 <div className="border-t border-gray-100 my-1" />
@@ -1716,10 +1716,10 @@ function KanbanCard({
   return (
     <div 
       onClick={() => onEdit(post)}
-      className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-[#534AB7]/30 transition-all cursor-pointer space-y-3 group"
+      className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-[#7225E3]/30 transition-all cursor-pointer space-y-3 group"
     >
       <div className="flex justify-between items-start gap-2">
-        <span className="text-[10px] font-extrabold text-[#534AB7] bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100/60 truncate max-w-[120px]">
+        <span className="text-[10px] font-extrabold text-[#7225E3] bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100/60 truncate max-w-[120px]">
           {post.category}
         </span>
         <div className="flex items-center gap-1">
@@ -1729,7 +1729,7 @@ function KanbanCard({
         </div>
       </div>
 
-      <h4 className="font-extrabold text-xs text-gray-900 line-clamp-2 group-hover:text-[#534AB7] transition-colors leading-snug">
+      <h4 className="font-extrabold text-xs text-gray-900 line-clamp-2 group-hover:text-[#7225E3] transition-colors leading-snug">
         {post.title}
       </h4>
 
@@ -1738,7 +1738,7 @@ function KanbanCard({
           {post.assigneeAvatar ? (
             <img src={post.assigneeAvatar} alt="" className="size-5 rounded-full object-cover shrink-0 border border-gray-100" />
           ) : (
-            <div className="size-5 rounded-full bg-purple-100 text-[#534AB7] font-bold text-[8px] flex items-center justify-center shrink-0">
+            <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-bold text-[8px] flex items-center justify-center shrink-0">
               {post.assigneeName.substring(0, 2).toUpperCase()}
             </div>
           )}

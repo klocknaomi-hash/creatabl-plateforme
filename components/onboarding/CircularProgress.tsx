@@ -24,7 +24,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#E5E7EB"
+          stroke="#E8E6F0"
           strokeWidth={strokeWidth}
           fill="transparent"
         />

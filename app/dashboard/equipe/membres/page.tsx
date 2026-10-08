@@ -288,7 +288,7 @@ export default function MembresPage() {
   const roleStyles = {
     owner: 'bg-purple-50 text-purple-700 border-purple-100',
     admin: 'bg-blue-50 text-blue-700 border-blue-100',
-    editor: 'bg-[#534AB7]/5 text-[#534AB7] border-[#534AB7]/10',
+    editor: 'bg-[#7225E3]/5 text-[#7225E3] border-[#7225E3]/10',
     viewer: 'bg-amber-50 text-amber-700 border-amber-100'
   }
 
@@ -304,17 +304,17 @@ export default function MembresPage() {
   if (allMembers.length === 0) {
     return (
       <div className="bg-white border border-gray-100 rounded-3xl p-16 text-center space-y-4 my-6 shadow-sm max-w-2xl mx-auto">
-        <div className="size-16 rounded-full bg-[#7F77DD]/10 text-[#7F77DD] flex items-center justify-center mx-auto mb-2">
-          <Users className="size-8 text-[#7F77DD]" />
+        <div className="size-16 rounded-full bg-[#8A38F5]/10 text-[#8A38F5] flex items-center justify-center mx-auto mb-2">
+          <Users className="size-8 text-[#8A38F5]" />
         </div>
-        <h2 className="text-2xl font-extrabold text-[#111827]">Aucun membre dans votre équipe</h2>
-        <p className="text-[#6B7280] text-sm max-w-sm mx-auto leading-relaxed">
+        <h2 className="text-2xl font-extrabold text-[#14121F]">Aucun membre dans votre équipe</h2>
+        <p className="text-[#6B6780] text-sm max-w-sm mx-auto leading-relaxed">
           Invitez votre premier membre pour commencer à collaborer.
         </p>
         <div className="pt-2">
           <button
             onClick={handleOpenInviteModal}
-            className="inline-flex items-center gap-2 bg-[#7F77DD] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#7F77DD]/20 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#8A38F5]/20 cursor-pointer"
           >
             + Inviter un membre
           </button>
@@ -340,9 +340,9 @@ export default function MembresPage() {
         <div className="flex items-center gap-3.5 self-end sm:self-auto">
           <button
             onClick={handleOpenInviteModal}
-            className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#534AB7]/5 text-[#534AB7] border border-[#534AB7]/20 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
+            className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#7225E3]/5 text-[#7225E3] border border-[#7225E3]/20 font-bold text-xs px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
           >
-            <UserPlus className="size-4 text-[#534AB7]" />
+            <UserPlus className="size-4 text-[#7225E3]" />
             Inviter un membre
           </button>
           
@@ -365,7 +365,7 @@ export default function MembresPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Members */}
         <div className="bg-white border border-gray-100/80 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-          <div className="size-12 rounded-full flex items-center justify-center bg-[#534AB7]/10 text-[#534AB7] shrink-0">
+          <div className="size-12 rounded-full flex items-center justify-center bg-[#7225E3]/10 text-[#7225E3] shrink-0">
             <Users className="size-5" />
           </div>
           <div className="flex flex-col">
@@ -438,7 +438,7 @@ export default function MembresPage() {
           </div>
           <button
             onClick={handleOpenInviteModal}
-            className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm shrink-0"
+            className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#5B1BB8] text-white font-bold text-xs px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-sm shrink-0"
           >
             <UserPlus className="size-4" />
             {organization ? "Inviter votre équipe" : "Créer une organisation"}
@@ -477,7 +477,7 @@ export default function MembresPage() {
                             className="size-10 rounded-full border border-gray-100 object-cover shrink-0" 
                           />
                         ) : (
-                          <div className="size-10 rounded-full bg-[#534AB7]/10 border border-[#534AB7]/10 text-[#534AB7] font-bold flex items-center justify-center text-sm shrink-0">
+                          <div className="size-10 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/10 text-[#7225E3] font-bold flex items-center justify-center text-sm shrink-0">
                             {getInitials(member.name, member.email)}
                           </div>
                         )}
@@ -485,7 +485,7 @@ export default function MembresPage() {
                           <div className="font-semibold text-gray-900 flex items-center gap-2">
                             {member.name}
                             {isYou && (
-                              <span className="text-[10px] font-bold bg-[#EEEDFE] text-[#534AB7] px-1.5 py-0.5 rounded-md">
+                              <span className="text-[10px] font-bold bg-[#F3EEFD] text-[#7225E3] px-1.5 py-0.5 rounded-md">
                                 Vous
                               </span>
                             )}
@@ -539,11 +539,11 @@ export default function MembresPage() {
                               <button
                                 onClick={() => handleRoleChange(member, 'editor')}
                                 className={`w-full text-left px-3 py-1.5 text-xs font-semibold hover:bg-gray-50 flex items-center justify-between ${
-                                  member.role === 'editor' ? 'text-[#534AB7] bg-purple-50/50' : 'text-gray-700'
+                                  member.role === 'editor' ? 'text-[#7225E3] bg-purple-50/50' : 'text-gray-700'
                                 }`}
                               >
                                 <span>Éditeur</span>
-                                {member.role === 'editor' && <span className="size-1.5 bg-[#534AB7] rounded-full" />}
+                                {member.role === 'editor' && <span className="size-1.5 bg-[#7225E3] rounded-full" />}
                               </button>
                             </div>
                           </>
@@ -614,9 +614,9 @@ export default function MembresPage() {
                         {isPending && (
                           <button
                             onClick={() => handleResendInvite(member)}
-                            className="inline-flex items-center gap-1.5 text-xs text-[#534AB7] hover:text-[#453da3] font-bold py-1.5 px-3 rounded-xl hover:bg-[#534AB7]/5 border border-transparent hover:border-[#534AB7]/10 transition-all cursor-pointer shadow-sm bg-white"
+                            className="inline-flex items-center gap-1.5 text-xs text-[#7225E3] hover:text-[#5B1BB8] font-bold py-1.5 px-3 rounded-xl hover:bg-[#7225E3]/5 border border-transparent hover:border-[#7225E3]/10 transition-all cursor-pointer shadow-sm bg-white"
                           >
-                            <Send className="size-3 text-[#534AB7]" />
+                            <Send className="size-3 text-[#7225E3]" />
                             Renvoyer
                           </button>
                         )}
@@ -660,9 +660,9 @@ export default function MembresPage() {
       </div>
 
       {/* FOOTER INFO BOX */}
-      <div className="bg-[#534AB7]/5 border border-[#534AB7]/10 rounded-xl p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#534AB7]/10 transition-colors">
-        <Info className="size-4 text-[#534AB7] shrink-0" />
-        <span className="text-xs font-semibold text-[#534AB7]">
+      <div className="bg-[#7225E3]/5 border border-[#7225E3]/10 rounded-xl p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#7225E3]/10 transition-colors">
+        <Info className="size-4 text-[#7225E3] shrink-0" />
+        <span className="text-xs font-semibold text-[#7225E3]">
           Les membres et invitations sont directement gérés par Clerk Organizations.
         </span>
       </div>
@@ -689,7 +689,7 @@ export default function MembresPage() {
             >
               <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                 <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-                  <UserPlus className="size-5 text-[#534AB7]" />
+                  <UserPlus className="size-5 text-[#7225E3]" />
                   Inviter un membre
                 </h3>
                 <button
@@ -714,7 +714,7 @@ export default function MembresPage() {
                       placeholder="exemple@entreprise.com"
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white transition-all font-medium"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all font-medium"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                       <Mail className="size-4" />
@@ -732,7 +732,7 @@ export default function MembresPage() {
                       id="invite-role"
                       value={inviteRole}
                       onChange={(e) => setInviteRole(e.target.value as any)}
-                      className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#534AB7] focus:bg-white transition-all cursor-pointer font-medium"
+                      className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white transition-all cursor-pointer font-medium"
                     >
                       <option value="editor">Éditeur (peut créer et modifier les contenus)</option>
                       <option value="admin">Administrateur (gestion équipe + projets + paramètres)</option>
@@ -745,8 +745,8 @@ export default function MembresPage() {
 
                 {/* Info Text */}
                 <div className="bg-purple-50/50 border border-purple-100 rounded-xl p-3 flex gap-2">
-                  <Info className="size-4 text-[#534AB7] shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-[#534AB7]/90 leading-normal font-medium">
+                  <Info className="size-4 text-[#7225E3] shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-[#7225E3]/90 leading-normal font-medium">
                     Un email d'invitation Clerk sera envoyé à l'adresse indiquée pour rejoindre votre organisation.
                   </p>
                 </div>
@@ -756,7 +756,7 @@ export default function MembresPage() {
                   <button
                     type="submit"
                     disabled={submittingInvite}
-                    className="flex-1 inline-flex items-center justify-center gap-2 bg-[#534AB7] hover:bg-[#453da3] text-white font-bold text-sm py-2.5 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                    className="flex-1 inline-flex items-center justify-center gap-2 bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold text-sm py-2.5 rounded-full transition-all cursor-pointer disabled:opacity-50"
                   >
                     {submittingInvite ? (
                       <>

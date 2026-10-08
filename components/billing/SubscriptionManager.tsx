@@ -113,7 +113,7 @@ export function SubscriptionManager({
             <Button
               onClick={handleReactivate}
               disabled={loading}
-              className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all"
+              className="bg-[#8A38F5] hover:bg-[#7C3AED] text-white font-bold px-6 py-2.5 rounded-full text-sm transition-all"
             >
               {loading ? (
                 <>

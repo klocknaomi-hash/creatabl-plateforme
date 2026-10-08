@@ -81,7 +81,7 @@ export function PlanSelection() {
         <button
           onClick={() => setBilling(billing === 'monthly' ? 'yearly' : 'monthly')}
           className={`relative w-12 h-6 rounded-full transition-colors ${
-            billing === 'yearly' ? 'bg-[#7F77DD]' : 'bg-gray-200'
+            billing === 'yearly' ? 'bg-[#8A38F5]' : 'bg-gray-200'
           }`}
           aria-label="Basculer entre mensuel et annuel"
         >
@@ -109,12 +109,12 @@ export function PlanSelection() {
               whileHover={{ y: -5 }}
               className={`relative bg-white rounded-3xl p-8 border-2 transition-all flex flex-col ${
                 plan.recommended
-                  ? 'border-[#7F77DD] shadow-xl shadow-purple-100'
+                  ? 'border-[#8A38F5] shadow-xl shadow-purple-100'
                   : 'border-gray-100 hover:border-gray-200 shadow-sm'
               }`}
             >
               {plan.recommended && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#7F77DD] text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
                   <Zap className="w-3 h-3" />
                   Le plus populaire
                 </div>
@@ -140,8 +140,8 @@ export function PlanSelection() {
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-gray-600 text-sm">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#EEEDFE] flex items-center justify-center mt-0.5">
-                      <Check className="w-3 h-3 text-[#7F77DD]" />
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#F3EEFD] flex items-center justify-center mt-0.5">
+                      <Check className="w-3 h-3 text-[#8A38F5]" />
                     </div>
                     {feature}
                   </li>
@@ -153,7 +153,7 @@ export function PlanSelection() {
                 disabled={loading !== null}
                 className={`w-full py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                   plan.recommended
-                    ? 'bg-[#7F77DD] text-white hover:bg-[#6C64C5] shadow-lg shadow-purple-100'
+                    ? 'bg-[#8A38F5] text-white hover:bg-[#6C64C5] shadow-lg shadow-purple-100'
                     : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >

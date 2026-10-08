@@ -19,9 +19,9 @@ export default function PrivacyPage() {
   ]
 
   return (
-    <div className="dark min-h-screen bg-[#0A0A0F] text-foreground flex flex-col relative selection:bg-[#7F77DD]/30 selection:text-white">
+    <div className="dark min-h-screen bg-[#0A0A0F] text-foreground flex flex-col relative selection:bg-[#8A38F5]/30 selection:text-white">
       {/* Decorative Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#7F77DD]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#8A38F5]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0F]/80 border-b border-white/5">
@@ -38,11 +38,11 @@ export default function PrivacyPage() {
                     width="10"
                     height="22"
                     rx="4"
-                    fill="#7F77DD"
+                    fill="#8A38F5"
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="22" fill="#7F77DD" />
+                <circle cx="0" cy="0" r="22" fill="#8A38F5" />
               </g>
             </svg>
             
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
                 Creatabl.
               </span>
               <span
-                className="text-[17px] font-normal italic text-[#7F77DD]"
+                className="text-[17px] font-normal italic text-[#8A38F5]"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 ia
@@ -63,7 +63,7 @@ export default function PrivacyPage() {
           <Link
             href="/dashboard"
             id="back-to-app-header-btn"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-white/5 hover:border-[#7F77DD]/30 bg-white/5 hover:bg-[#7F77DD]/10 transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-white/5 hover:border-[#8A38F5]/30 bg-white/5 hover:bg-[#8A38F5]/10 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to app
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-16">
         {/* Title / Hero */}
         <div className="space-y-4 mb-16 border-b border-white/5 pb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7F77DD]/10 border border-[#7F77DD]/20 text-[#7F77DD] text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8A38F5]/10 border border-[#8A38F5]/20 text-[#8A38F5] text-xs font-bold uppercase tracking-wider">
             <Shield className="w-3.5 h-3.5" />
             Privacy Protection
           </div>
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
                   key={section.id}
                   href={`#${section.id}`}
                   id={`toc-link-${section.id}`}
-                  className="block text-sm text-muted-foreground hover:text-[#7F77DD] hover:translate-x-1 transition-all duration-150 py-1"
+                  className="block text-sm text-muted-foreground hover:text-[#8A38F5] hover:translate-x-1 transition-all duration-150 py-1"
                 >
                   {section.title}
                 </a>
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
             {/* Section 1: What Data We Collect */}
             <section id="data-collection" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">1.</span> What Data We Collect
+                <span className="text-[#8A38F5]">1.</span> What Data We Collect
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -131,7 +131,7 @@ export default function PrivacyPage() {
             {/* Section 2: How We Use Your Data */}
             <section id="data-usage" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">2.</span> How We Use Your Data
+                <span className="text-[#8A38F5]">2.</span> How We Use Your Data
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
             {/* Section 3: Third-Party Services */}
             <section id="third-parties" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">3.</span> Third-Party Services
+                <span className="text-[#8A38F5]">3.</span> Third-Party Services
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -169,7 +169,7 @@ export default function PrivacyPage() {
             {/* Section 4: Data Storage & Security */}
             <section id="data-storage" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">4.</span> Data Storage & Security
+                <span className="text-[#8A38F5]">4.</span> Data Storage & Security
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -184,7 +184,7 @@ export default function PrivacyPage() {
             {/* Section 5: OAuth Token Retention */}
             <section id="oauth-tokens" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">5.</span> OAuth Token Retention
+                <span className="text-[#8A38F5]">5.</span> OAuth Token Retention
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -199,7 +199,7 @@ export default function PrivacyPage() {
             {/* Section 6: Your User Rights */}
             <section id="user-rights" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">6.</span> Your User Rights
+                <span className="text-[#8A38F5]">6.</span> Your User Rights
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -217,7 +217,7 @@ export default function PrivacyPage() {
             {/* Section 7: Contact Information */}
             <section id="contact" className="scroll-mt-32 space-y-4 border-t border-white/5 pt-8">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">7.</span> Contact Information
+                <span className="text-[#8A38F5]">7.</span> Contact Information
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 For questions regarding data processing, requests to delete your personal profile, or other privacy concerns, please contact our data team:
@@ -226,7 +226,7 @@ export default function PrivacyPage() {
                 <a
                   href="mailto:businessesonlinemail@gmail.com"
                   id="contact-email-link"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#7F77DD] hover:text-foreground border border-[#7F77DD]/20 hover:border-[#7F77DD] bg-[#7F77DD]/5 hover:bg-[#7F77DD]/10 transition-all duration-200 text-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#8A38F5] hover:text-foreground border border-[#8A38F5]/20 hover:border-[#8A38F5] bg-[#8A38F5]/5 hover:bg-[#8A38F5]/10 transition-all duration-200 text-sm font-semibold"
                 >
                   <Mail className="w-4 h-4" />
                   businessesonlinemail@gmail.com

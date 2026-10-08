@@ -173,7 +173,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
       >
         <Bell className="size-4.5" />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 size-3.5 bg-[#534AB7] rounded-full text-white text-[8px] font-bold flex items-center justify-center border border-background animate-in zoom-in duration-200">
+          <span className="absolute top-1 right-1 size-3.5 bg-[#7225E3] rounded-full text-white text-[8px] font-bold flex items-center justify-center border border-background animate-in zoom-in duration-200">
             {unreadCount}
           </span>
         )}
@@ -185,7 +185,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
           <div className="flex items-center gap-1.5">
             <span className="font-bold text-sm text-foreground">Notifications</span>
             {unreadCount > 0 && (
-              <span className="bg-[#534AB7]/10 text-[#534AB7] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="bg-[#7225E3]/10 text-[#7225E3] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                 {unreadCount} nouvelle{unreadCount > 1 ? "s" : ""}
               </span>
             )}
@@ -193,7 +193,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="text-xs font-bold text-[#534AB7] hover:text-[#453da3] transition-colors cursor-pointer"
+              className="text-xs font-bold text-[#7225E3] hover:text-[#5B1BB8] transition-colors cursor-pointer"
             >
               Tout marquer comme lu
             </button>
@@ -222,7 +222,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                   onClick={() => handleNotificationClick(item)}
                   className={cn(
                     "flex gap-3 p-3.5 transition-colors cursor-pointer relative hover:bg-muted/40",
-                    !isRead && "bg-[#534AB7]/[0.02]"
+                    !isRead && "bg-[#7225E3]/[0.02]"
                   )}
                 >
                   {/* Left Icon Badge */}
@@ -237,7 +237,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                         {item.title}
                       </h4>
                       {!isRead && (
-                        <span className="size-1.5 bg-[#534AB7] rounded-full shrink-0 mt-1" />
+                        <span className="size-1.5 bg-[#7225E3] rounded-full shrink-0 mt-1" />
                       )}
                     </div>
                     <p className="text-[11px] text-muted-foreground leading-normal mt-1 break-words font-medium">
@@ -249,7 +249,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                         {item.timestamp}
                       </span>
                       {item.link && (
-                        <span className="inline-flex items-center gap-0.5 text-[10px] text-[#534AB7] hover:underline font-bold">
+                        <span className="inline-flex items-center gap-0.5 text-[10px] text-[#7225E3] hover:underline font-bold">
                           Voir
                           <ExternalLink className="size-2.5" />
                         </span>
@@ -267,7 +267,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                     style={{ opacity: 1 }} // make it visible on hover easily
                     title={isRead ? "Marquer comme non lu" : "Marquer comme lu"}
                   >
-                    <Check className={cn("size-3.5", isRead ? "text-[#534AB7] stroke-[3]" : "text-muted-foreground")} />
+                    <Check className={cn("size-3.5", isRead ? "text-[#7225E3] stroke-[3]" : "text-muted-foreground")} />
                   </button>
                 </div>
               );

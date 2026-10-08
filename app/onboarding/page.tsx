@@ -31,7 +31,7 @@ export default async function OnboardingPage() {
           </p>
         </div>
         <div className="flex justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#7F77DD]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#8A38F5]" />
         </div>
         {/* Simple client-side redirect to dashboard after 2 seconds to allow webhook to fire */}
         <RedirectToDashboard />

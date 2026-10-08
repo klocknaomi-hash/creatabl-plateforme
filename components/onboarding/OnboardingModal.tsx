@@ -178,11 +178,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   onClick={() => setFormData({ ...formData, clientType: opt.id })}
                   className={`flex items-center p-4 rounded-xl border-2 transition-all text-left ${
                     formData.clientType === opt.id
-                      ? "border-[#534AB7] bg-[#534AB7]/5 text-[#534AB7]"
+                      ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
                       : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
                   }`}
                 >
-                  <div className={`p-2 rounded-lg mr-4 ${formData.clientType === opt.id ? "bg-[#534AB7] text-white" : "bg-gray-100 text-gray-500"}`}>
+                  <div className={`p-2 rounded-lg mr-4 ${formData.clientType === opt.id ? "bg-[#7225E3] text-white" : "bg-gray-100 text-gray-500"}`}>
                     <opt.icon size={20} />
                   </div>
                   <div>
@@ -207,7 +207,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
             <div className="space-y-4 pt-4">
               <button 
                 onClick={() => router.push("/dashboard/settings/connections")}
-                className="w-full bg-[#534AB7] text-white py-4 rounded-xl font-bold hover:bg-[#453da3] transition-colors"
+                className="w-full bg-[#7225E3] text-white py-4 rounded-xl font-bold hover:bg-[#5B1BB8] transition-colors"
               >
                 Connecter mes réseaux
               </button>
@@ -237,7 +237,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   placeholder="Ex : Mon agence, Studio Léa, Marque perso..."
                   value={formData.workspaceName}
                   onChange={(e) => setFormData({ ...formData, workspaceName: e.target.value })}
-                  className="w-full p-4 rounded-xl border border-gray-200 focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] outline-none transition-all"
+                  className="w-full p-4 rounded-xl border border-gray-200 focus:border-[#7225E3] focus:ring-1 focus:ring-[#7225E3] outline-none transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -272,7 +272,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     <button
                       type="button"
                       onClick={() => document.getElementById('logo-upload')?.click()}
-                      className="text-sm text-[#534AB7] font-bold hover:underline text-left"
+                      className="text-sm text-[#7225E3] font-bold hover:underline text-left"
                     >
                       Importer une image
                     </button>
@@ -313,7 +313,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   onClick={() => setFormData({ ...formData, writingTone: opt.id })}
                   className={`flex items-center p-4 rounded-xl border-2 transition-all text-left ${
                     formData.writingTone === opt.id
-                      ? "border-[#534AB7] bg-[#534AB7]/5 text-[#534AB7]"
+                      ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
                       : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
                   }`}
                 >
@@ -347,7 +347,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     onClick={() => setFormData({ ...formData, genderAgreement: opt.id })}
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                       formData.genderAgreement === opt.id
-                        ? "border-[#534AB7] bg-[#534AB7]/5 text-[#534AB7]"
+                        ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
                         : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
                     }`}
                   >
@@ -378,7 +378,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     onClick={() => setFormData({ ...formData, emojiPreference: opt.id })}
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                       formData.emojiPreference === opt.id
-                        ? "border-[#534AB7] bg-[#534AB7]/5 text-[#534AB7]"
+                        ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
                         : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
                     }`}
                   >
@@ -433,7 +433,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               <div className="flex flex-col w-full gap-3">
                 <button 
                   onClick={() => setShowConfirmClose(false)}
-                  className="w-full py-4 bg-[#534AB7] text-white rounded-xl font-bold hover:bg-[#453da3] transition-all"
+                  className="w-full py-4 bg-[#7225E3] text-white rounded-xl font-bold hover:bg-[#5B1BB8] transition-all"
                 >
                   Continuer le paramétrage
                 </button>
@@ -503,10 +503,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               <button
                 onClick={handleNext}
                 disabled={loading || isNextDisabled()}
-                className={`${(step === 0 || step === "final") ? "w-full" : "flex-[2]"} flex items-center justify-center py-4 rounded-xl font-bold text-lg transition-all ${
+                className={`${(step === 0 || step === "final") ? "w-full" : "flex-[2]"} flex items-center justify-center py-4 rounded-full font-bold text-lg transition-all ${
                   isNextDisabled()
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-[#534AB7] text-white hover:bg-[#453da3] shadow-lg shadow-[#534AB7]/20"
+                    : "bg-[#7225E3] text-white hover:bg-[#5B1BB8] shadow-lg shadow-[#7225E3]/20"
                 }`}
               >
                 {loading ? (

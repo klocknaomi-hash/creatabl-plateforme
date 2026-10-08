@@ -14,7 +14,7 @@ export function PaywallBanner({ selectedPlan }: PaywallBannerProps) {
     : 'Pro'
 
   return (
-    <div className="w-full bg-gradient-to-r from-[#534AB7] to-[#7B73D4] 
+    <div className="w-full bg-gradient-to-r from-[#7225E3] to-[#7B73D4] 
       text-white px-6 py-4 flex items-center justify-between">
       <div>
         <p className="font-bold text-sm">
@@ -28,7 +28,7 @@ export function PaywallBanner({ selectedPlan }: PaywallBannerProps) {
       <div className="flex items-center gap-3 ml-4">
         <button
           onClick={() => router.push('/dashboard/billing')}
-          className="bg-white text-[#534AB7] font-bold px-5 py-2 
+          className="bg-white text-[#7225E3] font-bold px-5 py-2 
             rounded-xl text-sm hover:bg-gray-100 transition-colors 
             whitespace-nowrap"
         >

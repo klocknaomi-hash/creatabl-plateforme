@@ -94,7 +94,7 @@ const PLANS = [
       'Analytics avancés',
     ],
     recommended: true,
-    buttonStyle: 'bg-[#8B5CF6] text-white hover:bg-[#7C3AED] border-transparent',
+    buttonStyle: 'bg-[#8A38F5] text-white hover:bg-[#7C3AED] border-transparent',
     ctaText: 'Essayer Pro — 14j gratuits →',
   },
   {
@@ -113,7 +113,7 @@ const PLANS = [
       'Agent IA (Tendances)',
     ],
     recommended: false,
-    buttonStyle: 'bg-[#111827] text-white hover:bg-black border-transparent',
+    buttonStyle: 'bg-[#14121F] text-white hover:bg-black border-transparent',
     ctaText: 'Essayer Business — 14j gratuits →',
   },
 ]
@@ -191,19 +191,19 @@ export default function UpgradeRequiredPage() {
               whileHover={{ y: -4 }}
               className={`h-full flex flex-col p-8 bg-white rounded-3xl border transition-all ${
                 planItem.recommended
-                  ? 'border-[3px] border-[#8B5CF6] scale-105 z-10 shadow-2xl relative'
+                  ? 'border-[3px] border-[#8A38F5] scale-105 z-10 shadow-2xl relative'
                   : 'border-zinc-800 shadow-sm hover:shadow-lg'
               }`}
             >
               {planItem.recommended && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8B5CF6] text-white text-[11px] font-black px-6 py-1.5 rounded-full tracking-wider whitespace-nowrap shadow-xl uppercase">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-[11px] font-black px-6 py-1.5 rounded-full tracking-wider whitespace-nowrap shadow-xl uppercase">
                   Le plus populaire
                 </div>
               )}
 
               <div className="mb-8">
                 <h3 className="text-3xl font-black text-black mb-1">{planItem.name}</h3>
-                <p className="text-sm italic text-[#8B5CF6] mb-6 font-serif leading-tight">
+                <p className="text-sm italic text-[#8A38F5] mb-6 font-serif leading-tight">
                   {planItem.tagline}
                 </p>
                 

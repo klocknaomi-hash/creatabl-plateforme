@@ -25,7 +25,7 @@ export function CanvaConnectModal({ children, onConnect }: CanvaConnectModalProp
           {/* Illustration Side */}
           <div className="bg-muted p-8 flex items-center justify-center flex-1 min-h-[300px]">
             <div className="relative w-full aspect-[4/3] max-w-[280px]">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#00C4CC] to-[#7F77DD] rounded-2xl opacity-20 blur-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00C4CC] to-[#8A38F5] rounded-2xl opacity-20 blur-xl"></div>
               <div className="relative bg-background/50 backdrop-blur-md rounded-2xl border shadow-xl p-4 flex flex-col gap-3 rotate-[-2deg] transform transition-transform hover:rotate-0">
                 {/* Mock UI */}
                 <div className="flex items-center gap-2 border-b pb-2">
@@ -36,7 +36,7 @@ export function CanvaConnectModal({ children, onConnect }: CanvaConnectModalProp
                   </div>
                   <div className="h-3 w-32 bg-muted rounded"></div>
                 </div>
-                <div className="flex-1 rounded-lg bg-gradient-to-br from-[#00C4CC]/20 to-[#7F77DD]/20 border border-border/50"></div>
+                <div className="flex-1 rounded-lg bg-gradient-to-br from-[#00C4CC]/20 to-[#8A38F5]/20 border border-border/50"></div>
                 <div className="grid grid-cols-3 gap-2">
                   <div className="h-12 bg-muted rounded-md"></div>
                   <div className="h-12 bg-muted rounded-md"></div>

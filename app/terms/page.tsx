@@ -23,9 +23,9 @@ export default function TermsPage() {
   ]
 
   return (
-    <div className="dark min-h-screen bg-[#0A0A0F] text-foreground flex flex-col relative selection:bg-[#7F77DD]/30 selection:text-white">
+    <div className="dark min-h-screen bg-[#0A0A0F] text-foreground flex flex-col relative selection:bg-[#8A38F5]/30 selection:text-white">
       {/* Decorative Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#7F77DD]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#8A38F5]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0F]/80 border-b border-white/5">
@@ -42,11 +42,11 @@ export default function TermsPage() {
                     width="10"
                     height="22"
                     rx="4"
-                    fill="#7F77DD"
+                    fill="#8A38F5"
                     transform={`rotate(${angle})`}
                   />
                 ))}
-                <circle cx="0" cy="0" r="22" fill="#7F77DD" />
+                <circle cx="0" cy="0" r="22" fill="#8A38F5" />
               </g>
             </svg>
             
@@ -56,7 +56,7 @@ export default function TermsPage() {
                 Creatabl.
               </span>
               <span
-                className="text-[17px] font-normal italic text-[#7F77DD]"
+                className="text-[17px] font-normal italic text-[#8A38F5]"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 ia
@@ -67,7 +67,7 @@ export default function TermsPage() {
           <Link
             href="/dashboard"
             id="back-to-app-header-btn"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-white/5 hover:border-[#7F77DD]/30 bg-white/5 hover:bg-[#7F77DD]/10 transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-white/5 hover:border-[#8A38F5]/30 bg-white/5 hover:bg-[#8A38F5]/10 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to app
@@ -79,7 +79,7 @@ export default function TermsPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-16">
         {/* Title / Hero */}
         <div className="space-y-4 mb-16 border-b border-white/5 pb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7F77DD]/10 border border-[#7F77DD]/20 text-[#7F77DD] text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8A38F5]/10 border border-[#8A38F5]/20 text-[#8A38F5] text-xs font-bold uppercase tracking-wider">
             <Scale className="w-3.5 h-3.5" />
             Legal Agreement
           </div>
@@ -104,7 +104,7 @@ export default function TermsPage() {
                   key={section.id}
                   href={`#${section.id}`}
                   id={`toc-link-${section.id}`}
-                  className="block text-sm text-muted-foreground hover:text-[#7F77DD] hover:translate-x-1 transition-all duration-150 py-1"
+                  className="block text-sm text-muted-foreground hover:text-[#8A38F5] hover:translate-x-1 transition-all duration-150 py-1"
                 >
                   {section.title}
                 </a>
@@ -117,7 +117,7 @@ export default function TermsPage() {
             {/* Section 1: Acceptance of Terms */}
             <section id="acceptance" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">1.</span> Acceptance of Terms
+                <span className="text-[#8A38F5]">1.</span> Acceptance of Terms
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -132,7 +132,7 @@ export default function TermsPage() {
             {/* Section 2: Description of Service */}
             <section id="description" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">2.</span> Description of Service
+                <span className="text-[#8A38F5]">2.</span> Description of Service
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -153,7 +153,7 @@ export default function TermsPage() {
             {/* Section 3: Account Registration */}
             <section id="registration" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">3.</span> Account Registration
+                <span className="text-[#8A38F5]">3.</span> Account Registration
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -168,7 +168,7 @@ export default function TermsPage() {
             {/* Section 4: User Responsibilities */}
             <section id="responsibilities" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">4.</span> User Responsibilities
+                <span className="text-[#8A38F5]">4.</span> User Responsibilities
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -186,7 +186,7 @@ export default function TermsPage() {
             {/* Section 5: Third-Party Integrations */}
             <section id="integrations" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">5.</span> Third-Party Integrations
+                <span className="text-[#8A38F5]">5.</span> Third-Party Integrations
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -201,7 +201,7 @@ export default function TermsPage() {
             {/* Section 6: AI-Generated Content */}
             <section id="ai-content" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">6.</span> AI-Generated Content
+                <span className="text-[#8A38F5]">6.</span> AI-Generated Content
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -216,7 +216,7 @@ export default function TermsPage() {
             {/* Section 7: Subscription and Billing */}
             <section id="billing" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">7.</span> Subscription and Billing
+                <span className="text-[#8A38F5]">7.</span> Subscription and Billing
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -231,7 +231,7 @@ export default function TermsPage() {
             {/* Section 8: Termination */}
             <section id="termination" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">8.</span> Termination
+                <span className="text-[#8A38F5]">8.</span> Termination
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -243,7 +243,7 @@ export default function TermsPage() {
             {/* Section 9: Limitation of Liability */}
             <section id="liability" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">9.</span> Limitation of Liability
+                <span className="text-[#8A38F5]">9.</span> Limitation of Liability
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -260,7 +260,7 @@ export default function TermsPage() {
             {/* Section 10: Governing Law */}
             <section id="governing-law" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">10.</span> Governing Law
+                <span className="text-[#8A38F5]">10.</span> Governing Law
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -272,7 +272,7 @@ export default function TermsPage() {
             {/* Section 11: Contact Information */}
             <section id="contact" className="scroll-mt-32 space-y-4 border-t border-white/5 pt-8">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#7F77DD]">11.</span> Contact Information
+                <span className="text-[#8A38F5]">11.</span> Contact Information
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 For questions, clarifications, or disputes regarding these Terms of Service, please contact us:
@@ -281,7 +281,7 @@ export default function TermsPage() {
                 <a
                   href="mailto:businessesonlinemail@gmail.com"
                   id="contact-email-link"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#7F77DD] hover:text-foreground border border-[#7F77DD]/20 hover:border-[#7F77DD] bg-[#7F77DD]/5 hover:bg-[#7F77DD]/10 transition-all duration-200 text-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#8A38F5] hover:text-foreground border border-[#8A38F5]/20 hover:border-[#8A38F5] bg-[#8A38F5]/5 hover:bg-[#8A38F5]/10 transition-all duration-200 text-sm font-semibold"
                 >
                   <Mail className="w-4 h-4" />
                   businessesonlinemail@gmail.com

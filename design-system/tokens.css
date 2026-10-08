@@ -1,0 +1,60 @@
+/* Creatabl.ia — generated from tokens.json */
+:root, [data-theme="light"] {
+  --violet-600: #7225E3;
+  --violet-500: #8A38F5;
+  --violet-platform: #7C3AED;
+  --violet-700: #5B1BB8;
+  --violet-100: #E7DCFC;
+  --violet-50: #F3EEFD;
+  --white: #FFFFFF;
+  --surface: #F8F7FC;
+  --ink: #14121F;
+  --ink-line: #2E2B3D;
+  --on-ink-muted: #B9B6C8;
+  --ink-muted: #4B4B63;
+  --ink-subtle: #6B6780;
+  --border: #E8E6F0;
+  --border-control: #878399;
+  --success-600: #0E7445;
+  --success-50: #E7F6EE;
+  --warning-600: #8A4B00;
+  --warning-50: #FDF2DF;
+  --warning-100: #F4DDB3;
+  --error-600: #B42318;
+  --error-700: #96190F;
+  --error-50: #FDECEA;
+  --info-600: #1F5BB8;
+  --info-50: #E9F0FC;
+  --focus-ring: var(--violet-600);
+  --shadow-1: 0 1px 2px rgba(20, 18, 31, 0.06), 0 1px 1px rgba(20, 18, 31, 0.04);
+  --shadow-2: 0 12px 32px rgba(20, 18, 31, 0.10), 0 2px 6px rgba(20, 18, 31, 0.05);
+}
+:root {
+  --space-0-5: 4px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-12: 96px;
+  --container: 1200px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+  --font-display: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-text: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-accent: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+.h1 { font-family: var(--font-display); font-size: 56px; line-height: 64px; font-weight: 700; letter-spacing: -0.02em; }
+.h2 { font-family: var(--font-display); font-size: 40px; line-height: 48px; font-weight: 700; letter-spacing: -0.015em; }
+.h3 { font-family: var(--font-display); font-size: 28px; line-height: 36px; font-weight: 600; letter-spacing: -0.01em; }
+.h4 { font-family: var(--font-display); font-size: 20px; line-height: 28px; font-weight: 600; }
+.lead { font-family: var(--font-text); font-size: 18px; line-height: 28px; font-weight: 400; }
+.body { font-family: var(--font-text); font-size: 16px; line-height: 26px; font-weight: 400; }
+.body-strong { font-family: var(--font-text); font-size: 16px; line-height: 26px; font-weight: 600; }
+.small { font-family: var(--font-text); font-size: 14px; line-height: 22px; font-weight: 400; }
+.small-medium { font-family: var(--font-text); font-size: 14px; line-height: 22px; font-weight: 500; }
+.caption { font-family: var(--font-text); font-size: 12px; line-height: 18px; font-weight: 400; }
+.overline { font-family: var(--font-text); font-size: 12px; line-height: 18px; font-weight: 600; letter-spacing: 0.08em; }
+.accent { font-family: var(--font-accent); font-size: 56px; line-height: 64px; font-weight: 500; font-style: italic; }

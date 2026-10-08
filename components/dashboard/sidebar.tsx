@@ -100,7 +100,7 @@ export function AppSidebar() {
         >
           {/* Logo mark — always visible */}
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="Creatabl logo"
             width={28}
             height={28}
@@ -296,9 +296,9 @@ export function AppSidebar() {
           const progressPercentage = Math.max(0, Math.min(100, Math.round(((14 - daysLeft) / 14) * 100)));
 
           return (
-            <div className="bg-[#534AB7]/5 border border-[#534AB7]/10 rounded-2xl p-4 space-y-2 group-data-[collapsible=icon]:hidden">
+            <div className="bg-[#7225E3]/5 border border-[#7225E3]/10 rounded-2xl p-4 space-y-2 group-data-[collapsible=icon]:hidden">
               <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-bold text-[#534AB7] leading-none">
+                <span className="text-sm font-bold text-[#7225E3] leading-none">
                   Essai Business
                 </span>
                 <span className="text-[11px] text-gray-500 font-semibold mt-1">
@@ -307,7 +307,7 @@ export function AppSidebar() {
               </div>
               <div className="h-2 w-full bg-purple-100/60 rounded-full overflow-hidden mt-1.5">
                 <div 
-                  className="h-full bg-[#534AB7] rounded-full transition-all duration-300"
+                  className="h-full bg-[#7225E3] rounded-full transition-all duration-300"
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>

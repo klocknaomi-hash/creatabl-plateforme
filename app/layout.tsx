@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Playfair_Display } from "next/font/google";
+import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { frFR } from "@clerk/localizations";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -7,7 +7,20 @@ import { Toaster } from "@/components/ui/sonner";
 import { UrlCleaner } from "@/components/url-cleaner";
 import "./globals.css";
 
-const outfit = Outfit({ subsets: ["latin"] });
+// Design system Creatabl.ia : Inter pour le texte, Outfit pour les titres
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -72,7 +85,7 @@ export default function RootLayout({
       <html
         lang="fr"
         suppressHydrationWarning
-        className={`${outfit.className} ${playfair.variable} h-full antialiased`}
+        className={`${inter.variable} ${outfit.variable} ${playfair.variable} h-full antialiased`}
       >
         <head>
           <link rel="icon" href="/favicon.ico" sizes="any" />
