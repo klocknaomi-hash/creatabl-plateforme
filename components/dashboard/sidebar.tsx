@@ -43,6 +43,7 @@ import { getTranslation } from "@/lib/i18n";
 import { useAccess } from "@/hooks/useAccess";
 import { isNaomiOrTest } from "@/lib/plans";
 import { useEffect, useState } from "react";
+import { CreditsMeter } from "@/components/dashboard/CreditsMeter";
 
 
 export function AppSidebar() {
@@ -313,6 +314,8 @@ export function AppSidebar() {
             </div>
           );
         })()}
+
+        <CreditsMeter />
 
         <SidebarMenu>
           <SidebarMenuItem>

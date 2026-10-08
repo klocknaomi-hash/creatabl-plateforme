@@ -62,9 +62,7 @@ import { PaywallOverlay } from '@/components/PaywallOverlay'
 
 export default function AgentIAPage() {
   const { user } = useUser()
-  const router = useRouter()
   const access = useAccess()
-  const firstName = user?.firstName || 'Naomi'
 
   if (!access.aiAdvanced) {
     const currentPlan = (user?.publicMetadata?.plan as string) || 'free'
@@ -75,6 +73,15 @@ export default function AgentIAPage() {
       </div>
     )
   }
+
+  return <AgentIADashboard />
+}
+
+// Séparé de la page pour que les hooks soient toujours appelés dans le même ordre,
+// même quand l'accès change après le chargement.
+function AgentIADashboard() {
+  const { user } = useUser()
+  const router = useRouter()
 
   // Dashboard Page State
   const [searchQuery, setSearchQuery] = useState('')

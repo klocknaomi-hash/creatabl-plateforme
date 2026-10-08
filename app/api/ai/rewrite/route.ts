@@ -5,7 +5,8 @@ import { getAccess } from '@/lib/get-access';
 import { checkAiRateLimit } from '@/lib/ai-rate-limit';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
+import { recordAiGeneration } from '@/lib/plans/credits';
 import { checkPlanLimit } from '@/lib/plans/check-limit';
 import { checkActiveAccess } from '@/lib/plans/check-active';
 
@@ -72,10 +73,7 @@ export async function POST(request: NextRequest) {
 
     const rewritten = await rewriteCaption(caption, tone || 'professional');
 
-    // Increment AI count in DB
-    await db.update(users)
-      .set({ monthlyAiCount: sql`${users.monthlyAiCount} + 1` })
-      .where(eq(users.clerkId, userId));
+    await recordAiGeneration(userId, { action: 'rewrite', provider: 'gemini', tone: tone || 'professional' });
 
     return NextResponse.json({ rewritten });
   } catch (error: any) {

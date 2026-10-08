@@ -159,7 +159,7 @@ function SignUpContent() {
         {/* Footer info */}
         <div className="flex items-center gap-2 text-[10px] xl:text-[11px] text-zinc-500 relative z-10 font-medium mt-auto">
           <Users className="w-4 h-4 text-[#534AB7]" />
-          <span>Essai gratuit de 14 jours sur les plans payants • Plan Free sans limite</span>
+          <span>Essai gratuit de 14 jours sur les plans payants • Plan Free : 20 crédits par mois</span>
         </div>
       </div>
 

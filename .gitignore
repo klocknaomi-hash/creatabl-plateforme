@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Fichiers locaux à ne jamais versionner
+*.env
+npm_cache/
+test-results/
+pull.log
+scratch/
+scratch*.js

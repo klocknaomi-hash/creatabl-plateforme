@@ -15,7 +15,8 @@ const PLANS = [
     yearlySavings: 120,
     features: [
       'LinkedIn · Instagram · X · Facebook',
-      '30 générations IA/mois',
+      '50 crédits / mois (1 crédit = 1 post)',
+      'Assistant IA de rédaction (50 générations / mois)',
       'Calendrier éditorial',
       'Analytics essentiels',
       '1 espace de travail',
@@ -31,7 +32,8 @@ const PLANS = [
     yearlySavings: 240,
     features: [
       'Tout le Starter inclus',
-      '120 générations IA/mois',
+      '120 crédits / mois (1 crédit = 1 post)',
+      'Assistant IA de rédaction illimité',
       'Reformuler un post',
       'Changer le ton (5 tons)',
       'Analytics avancés + graphiques',
@@ -48,7 +50,7 @@ const PLANS = [
     yearlySavings: 480,
     features: [
       'Tout le Pro inclus',
-      '300 générations IA/mois',
+      '300 crédits / mois (1 crédit = 1 post)',
       'Multi-comptes jusqu\'à 5',
       'Gestion équipe + rôles',
       'Analytics tous comptes',

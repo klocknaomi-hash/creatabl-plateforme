@@ -9,6 +9,8 @@ const isPublicRoute = createRouteMatcher([
   '/api/canva-setup',
   '/api/oauth(.*)',
   '/api/webhooks/clerk',
+  // Inngest appelle cette route depuis ses serveurs (requêtes signées, sans session Clerk)
+  '/api/inngest(.*)',
   '/sign-up/success',
   '/tarifs',
   '/pricing',

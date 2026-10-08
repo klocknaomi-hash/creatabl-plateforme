@@ -96,7 +96,7 @@ export async function PATCH(
             error: "limit_reached",
             limit: "postsPerMonth",
             upgradeUrl: "/pricing",
-            message: "Limite de posts mensuelle atteinte. Passe au plan supérieur pour continuer."
+            message: "Tu as utilisé tous tes crédits du mois. Ils se renouvellent le 1er du mois, ou passe au plan supérieur pour continuer."
           },
           { status: 402 }
         );
