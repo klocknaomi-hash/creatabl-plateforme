@@ -31,7 +31,7 @@ export function AnalyticsNavigation() {
   };
 
   return (
-    <div className="flex items-center gap-1 p-1 bg-card border border-border/50 rounded-[22px] shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+    <div className="flex items-center gap-1 p-1 bg-card border border-border/50 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       <Button 
         variant="ghost" 
         size="icon" 
@@ -43,7 +43,7 @@ export function AnalyticsNavigation() {
       
       <div className="flex items-center gap-2 px-3 h-8 border-x border-border/40">
         <CalendarIcon className="size-3.5 text-primary/60" />
-        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground whitespace-nowrap">
+        <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
           {format(weekStart, "MMM d", { locale: fr })} - {format(weekEnd, "MMM d, yyyy", { locale: fr })}
         </span>
       </div>

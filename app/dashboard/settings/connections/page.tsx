@@ -192,7 +192,7 @@ export default async function AccountsPage({
         <div className="flex flex-col space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Comptes connectés</h1>
           <p className="text-muted-foreground">
-            Connecte tes comptes pour programmer et automatiser ton contenu.
+            Connectez vos comptes pour programmer et automatiser votre contenu.
           </p>
         </div>
         <div className="inline-flex items-center rounded-xl bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
@@ -269,7 +269,7 @@ export default async function AccountsPage({
                     </div>
                   </div>
                   {platform.comingSoon ? (
-                    <Badge variant="secondary" className="bg-muted text-muted-foreground/60 border-none px-2 py-0.5">
+                    <Badge variant="secondary" className="bg-muted text-[#6B6780] border-none px-2 py-0.5">
                       Bientôt disponible
                     </Badge>
                   ) : connected ? (

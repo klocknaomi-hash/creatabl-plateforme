@@ -41,7 +41,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
                 {isCompleted ? <Check className="size-5" /> : stepNumber}
               </div>
               <span className={cn(
-                "mt-2 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300",
+                "mt-2 text-xs font-bold transition-colors duration-300",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}>
                 {step}

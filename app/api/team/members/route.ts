@@ -19,7 +19,7 @@ export async function GET() {
     if (!activeCheck.allowed) {
       return Response.json({
         error: "trial_expired",
-        message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+        message: "Votre essai gratuit est terminé. Choisissez un forfait pour continuer."
       }, { status: 403 });
     }
 
@@ -99,7 +99,7 @@ export async function POST(req: Request) {
     if (!activeCheck.allowed) {
       return Response.json({
         error: "trial_expired",
-        message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+        message: "Votre essai gratuit est terminé. Choisissez un forfait pour continuer."
       }, { status: 403 });
     }
 

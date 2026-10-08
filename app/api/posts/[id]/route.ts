@@ -65,7 +65,7 @@ export async function PATCH(
   if (!activeCheck.allowed) {
     return NextResponse.json({
       error: "trial_expired",
-      message: "Ton essai gratuit est terminé. Choisis un forfait pour continuer."
+      message: "Votre essai gratuit est terminé. Choisissez un forfait pour continuer."
     }, { status: 403 });
   }
 

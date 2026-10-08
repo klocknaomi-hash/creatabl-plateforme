@@ -199,7 +199,7 @@ export default function CalendarPage() {
     } else {
       // Mock analyzing state for a newly connected account (Twitter in this scenario)
       if (id === "twitter") {
-        toast.info("Analyzing your posting history. Best times will appear in 2 days.");
+        toast.info("Analyse de votre historique de publication : les meilleurs horaires apparaîtront d'ici 2 jours.");
       }
     }
   };
@@ -214,10 +214,10 @@ export default function CalendarPage() {
         setIsDialogOpen(false);
         mutate(apiUrl);
       } else {
-        toast.error("Failed to delete post");
+        toast.error("Impossible de supprimer le post");
       }
     } catch (err) {
-      toast.error("An error occurred");
+      toast.error("Une erreur est survenue");
     }
   };
 
@@ -240,7 +240,7 @@ export default function CalendarPage() {
         throw new Error("Failed to save");
       }
     } catch (err) {
-      toast.error("Failed to reschedule");
+      toast.error("Impossible de reprogrammer le post");
     } finally {
       setIsSavingSchedule(false);
     }
@@ -259,7 +259,7 @@ export default function CalendarPage() {
         body: JSON.stringify({ content: editedContent }),
       });
       if (res.ok) {
-        toast.success("Content updated!");
+        toast.success("Texte mis à jour");
         setSelectedPost({ ...selectedPost, content: editedContent });
         setIsEditingContent(false);
         mutate(apiUrl);
@@ -267,7 +267,7 @@ export default function CalendarPage() {
         throw new Error("Failed to save");
       }
     } catch (err) {
-      toast.error("Failed to update content");
+      toast.error("Impossible de mettre à jour le texte");
     } finally {
       setIsSavingContent(false);
     }
@@ -289,7 +289,7 @@ export default function CalendarPage() {
 
       {/* Unified Toolbar */}
       <div className="bg-card border-x rounded-t-3xl shadow-sm z-30">
-        <div className="flex items-center h-14 px-4 gap-4 border-b border-border/40">
+        <div className="flex flex-wrap items-center min-h-14 py-2 px-4 gap-x-4 gap-y-2 border-b border-border/40">
           {/* New Post Button */}
           <Button 
             className="rounded-full h-9 px-4 font-semibold text-xs shadow-sm bg-primary hover:bg-primary/90 transition-all active:scale-95 shrink-0" 
@@ -299,7 +299,7 @@ export default function CalendarPage() {
           </Button>
           
           {/* Divider */}
-          <div className="w-px h-6 bg-border/40"></div>
+          <div className="hidden sm:block w-px h-6 bg-border/40"></div>
           
           {/* Navigation Controls */}
           <div className="flex items-center gap-1">
@@ -312,7 +312,7 @@ export default function CalendarPage() {
           </div>
           
           {/* Current Date Display */}
-          <div className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground min-w-[100px] text-center">
+          <div className="text-xs font-bold text-muted-foreground min-w-[100px] text-center">
             {format(currentDate, view === "day" ? "d MMM yyyy" : "MMMM yyyy", { locale: fr })}
           </div>
           
@@ -322,7 +322,7 @@ export default function CalendarPage() {
           </Button>
           
           {/* Divider */}
-          <div className="w-px h-6 bg-border/40"></div>
+          <div className="hidden sm:block w-px h-6 bg-border/40"></div>
           
           {/* View Switcher */}
           <Tabs value={view} onValueChange={(v: any) => setView(v)} className="bg-muted/30 p-1 rounded-xl">
@@ -373,7 +373,7 @@ export default function CalendarPage() {
       </div>
 
       <div className="relative flex-1 flex flex-col">
-        <Card className="border-border/50 border-t-0 rounded-b-3xl rounded-t-none overflow-hidden shadow-xl shadow-primary/5 bg-card flex flex-col flex-1">
+        <Card className="border-border/50 border-t-0 rounded-b-3xl rounded-t-none overflow-hidden shadow-xl bg-card flex flex-col flex-1">
           {view === "month" && (
             <MonthView 
               currentDate={currentDate} 
@@ -407,13 +407,13 @@ export default function CalendarPage() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-4xl rounded-[40px] p-0 overflow-visible border-none shadow-2xl bg-background/95 backdrop-blur-2xl">
+        <DialogContent className="sm:max-w-4xl rounded-2xl p-0 overflow-visible border-none shadow-2xl bg-background/95 backdrop-blur-2xl">
           {selectedPost && (
             <div className="grid grid-cols-1 md:grid-cols-[1fr_360px] h-full max-h-[90vh]">
               {/* Left: Social Preview */}
               <div className="flex flex-col bg-muted/20 p-10 pt-16 items-center justify-center relative overflow-hidden">
                 <div className="absolute top-8 left-10 flex items-center gap-2">
-                  <Badge variant="outline" className="text-[9px] font-black uppercase tracking-widest bg-background/50 border-border/40 px-3 h-5">
+                  <Badge variant="outline" className="text-xs font-semibold bg-background/50 border-border/40 px-3 h-5">
                     Live Preview
                   </Badge>
                 </div>
@@ -423,8 +423,8 @@ export default function CalendarPage() {
                 </div>
                 
                 <div className="mt-10 text-center space-y-1">
-                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Platform View: {selectedPost.platforms[0]}</p>
-                   <p className="text-[9px] text-muted-foreground/60 font-medium">This is exactly how your post will appear on social media.</p>
+                   <p className="text-xs font-semibold text-muted-foreground">Platform View: {selectedPost.platforms[0]}</p>
+                   <p className="text-[9px] text-[#6B6780] font-medium">This is exactly how your post will appear on social media.</p>
                 </div>
               </div>
 
@@ -433,8 +433,8 @@ export default function CalendarPage() {
                 <div className="flex-1 space-y-8">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                       <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Status</h3>
-                       <Badge className={cn("rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border-none shadow-md", (STATUS_CONFIG[selectedPost.status] || STATUS_CONFIG.draft).badge)}>
+                       <h3 className="text-xs font-bold text-[#6B6780]">Statut</h3>
+                       <Badge className={cn("rounded-full px-3 py-1 text-xs font-bold border-none shadow-md", (STATUS_CONFIG[selectedPost.status] || STATUS_CONFIG.draft).badge)}>
                         {selectedPost.status}
                       </Badge>
                     </div>
@@ -453,14 +453,14 @@ export default function CalendarPage() {
                   </div>
 
                   <div className="space-y-4">
-                     <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Schedule Details</h3>
+                     <h3 className="text-xs font-bold text-[#6B6780]">Programmation</h3>
                      <div className="p-4 rounded-2xl bg-muted/30 border border-border/40 flex flex-col gap-4">
                       <div className="flex items-center gap-3">
                          <div className="size-10 rounded-xl bg-background border border-border/40 flex items-center justify-center shadow-inner">
                             <Clock className="size-5 text-primary" />
                          </div>
                          <div>
-                            <p className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground/60">Scheduled For</p>
+                            <p className="text-[10px] font-bold uppercase tracking-tighter text-[#6B6780]">Scheduled For</p>
                             <p className="text-sm font-bold">{format(new Date(selectedPost.scheduledAt), "MMM d, yyyy")}</p>
                             <p className="text-xs font-bold text-primary">{format(new Date(selectedPost.scheduledAt), "h:mm a")}</p>
                          </div>
@@ -469,7 +469,7 @@ export default function CalendarPage() {
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="h-8 px-6 rounded-lg text-[10px] font-bold uppercase tracking-widest border-border/60 hover:bg-background"
+                          className="h-8 px-6 rounded-lg text-xs font-bold border-border/60 hover:bg-background"
                           onClick={() => {
                             setRescheduleDate(new Date(selectedPost.scheduledAt));
                             setIsRescheduleOpen(true);
@@ -491,14 +491,14 @@ export default function CalendarPage() {
                           onChange={(e) => setEditedContent(e.target.value)}
                        />
                        <div className="flex gap-2">
-                          <Button variant="ghost" className="flex-1 rounded-xl font-bold text-xs" onClick={() => setIsEditingContent(false)}>Cancel</Button>
-                          <Button className="flex-1 rounded-full h-11 font-black uppercase tracking-widest text-[11px] bg-primary shadow-lg shadow-primary/20" onClick={handleSaveContent} disabled={isSavingContent}>
-                             {isSavingContent ? "Saving..." : "Save Content"}
+                          <Button variant="ghost" className="flex-1 rounded-xl font-bold text-xs" onClick={() => setIsEditingContent(false)}>Annuler</Button>
+                          <Button className="flex-1 rounded-full h-11 font-semibold text-xs bg-primary shadow-lg" onClick={handleSaveContent} disabled={isSavingContent}>
+                             {isSavingContent ? "Enregistrement…" : "Enregistrer"}
                           </Button>
                        </div>
                     </div>
                   ) : (
-                    <Button className="w-full rounded-2xl h-12 font-bold text-xs shadow-lg shadow-primary/10" onClick={() => setIsEditingContent(true)}>
+                    <Button className="w-full rounded-2xl h-12 font-bold text-xs shadow-lg" onClick={() => setIsEditingContent(true)}>
                       <Edit className="size-4 mr-2" /> Edit Content
                     </Button>
                   )}
@@ -517,7 +517,7 @@ export default function CalendarPage() {
       <Dialog open={isRescheduleOpen} onOpenChange={setIsRescheduleOpen}>
         <DialogContent className="sm:max-w-md rounded-3xl p-6 border-none shadow-2xl bg-background/95 backdrop-blur-xl">
            <DialogHeader>
-              <DialogTitle className="text-xl font-black flex items-center gap-2">
+              <DialogTitle className="text-xl font-bold flex items-center gap-2">
                  <CalendarDays className="size-5 text-primary" />
                  Reschedule Post
               </DialogTitle>
@@ -526,7 +526,7 @@ export default function CalendarPage() {
            <div className="py-6 space-y-6">
               <div className="grid grid-cols-1 gap-4">
                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">New Date</label>
+                    <label className="text-xs font-semibold text-muted-foreground ml-1">Nouvelle date</label>
                     <div className="p-1 rounded-2xl bg-muted/30 border border-border/40">
                       <Calendar
                         mode="single"
@@ -548,7 +548,7 @@ export default function CalendarPage() {
                  </div>
 
                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">New Time</label>
+                    <label className="text-xs font-semibold text-muted-foreground ml-1">Nouvelle heure</label>
                     <div className="relative">
                       <Clock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                       <input
@@ -569,9 +569,9 @@ export default function CalendarPage() {
            </div>
 
            <DialogFooter className="gap-2 sm:gap-0">
-              <Button variant="ghost" className="rounded-xl font-bold h-11" onClick={() => setIsRescheduleOpen(false)}>Cancel</Button>
-              <Button className="rounded-full px-8 h-11 font-black uppercase tracking-widest text-[11px] bg-primary" onClick={handleSaveReschedule} disabled={isSavingSchedule}>
-                 {isSavingSchedule ? "Saving..." : "Save Schedule"}
+              <Button variant="ghost" className="rounded-xl font-bold h-11" onClick={() => setIsRescheduleOpen(false)}>Annuler</Button>
+              <Button className="rounded-full px-8 h-11 font-semibold text-xs bg-primary" onClick={handleSaveReschedule} disabled={isSavingSchedule}>
+                 {isSavingSchedule ? "Enregistrement…" : "Enregistrer la date"}
               </Button>
            </DialogFooter>
         </DialogContent>
@@ -644,7 +644,7 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
              <Icon className={cn("size-5", brand?.color)} />
           </div>
           <div>
-             <p className="text-sm font-black uppercase tracking-widest">{brand?.label || platform}</p>
+             <p className="text-sm font-semibold">{brand?.label || platform}</p>
              <p className="text-[10px] text-muted-foreground font-bold">@{account.username}</p>
           </div>
        </div>
@@ -670,7 +670,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
     <div className="flex flex-col flex-1">
       <div className="grid grid-cols-7 border-b bg-muted/20">
         {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map(d => (
-          <div key={d} className="py-3 text-center text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground border-r last:border-r-0">{d}</div>
+          <div key={d} className="py-3 text-center text-xs font-semibold text-muted-foreground border-r last:border-r-0">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 flex-1 overflow-y-auto custom-scrollbar">
@@ -692,8 +692,8 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className={cn(
-                  "text-xs font-black size-7 flex items-center justify-center rounded-xl", 
-                  isToday(day) ? "bg-primary text-primary-foreground shadow-lg" : "text-foreground/40"
+                  "text-xs font-bold size-7 flex items-center justify-center rounded-xl", 
+                  isToday(day) ? "bg-primary text-primary-foreground shadow-lg" : "text-[#6B6780]"
                 )}>{format(day, "d")}</span>
                 
                 {hasPosts && !isPast && isSelectedMonth && (
@@ -735,7 +735,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
                   <Button 
                     variant="default" 
                     size="icon" 
-                    className="size-8 rounded-xl shadow-xl shadow-primary/20 pointer-events-auto bg-[#8A38F5] hover:bg-[#5B1BB8]" 
+                    className="size-8 rounded-xl shadow-xl pointer-events-auto bg-[#8A38F5] hover:bg-[#5B1BB8]" 
                     onClick={() => window.location.href = `/dashboard/compose?date=${day.toISOString()}`}
                   >
                     <Plus className="size-4" />
@@ -769,8 +769,8 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
             <div className="border-r border-border/40 h-14" />
             {weekDays.map(day => (
               <div key={day.toISOString()} className={cn("py-2 h-14 text-center border-r border-border/40 last:border-r-0 flex flex-col items-center justify-center gap-0.5", isToday(day) && "bg-primary/[0.04]")}>
-                <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 leading-none">{format(day, "EEE", { locale: fr })}</span>
-                <span className={cn("text-sm font-black size-7 flex items-center justify-center rounded-lg transition-colors", isToday(day) ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80")}>{format(day, "d")}</span>
+                <span className="text-xs font-semibold text-[#6B6780] leading-none">{format(day, "EEE", { locale: fr })}</span>
+                <span className={cn("text-sm font-bold size-7 flex items-center justify-center rounded-lg transition-colors", isToday(day) ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80")}>{format(day, "d")}</span>
               </div>
             ))}
           </div>
@@ -780,7 +780,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
           {/* Hour Labels */}
           <div className="flex flex-col bg-muted/5 z-10">
             {hours.map(h => (
-              <div key={h} className="h-[60px] border-r border-b border-border/40 text-[9px] font-black text-muted-foreground/40 flex items-start justify-center pt-1.5">
+              <div key={h} className="h-[60px] border-r border-b border-border/40 text-[9px] font-bold text-[#6B6780] flex items-start justify-center pt-1.5">
                 {format(setHours(new Date(), h), "HH'h'")}
               </div>
             ))}
@@ -800,7 +800,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
                     onClick={() => !isBefore(startOfDay(day), startOfDay(new Date())) && (window.location.href=`/dashboard/compose?date=${setHours(day, h).toISOString()}`)}
                   >
                     {intensity > 0 && (
-                      <span className="absolute top-1 right-1 text-[8px] font-black text-primary/60">{intensity}%</span>
+                      <span className="absolute top-1 right-1 text-[8px] font-bold text-primary/60">{intensity}%</span>
                     )}
                     {dayPosts.map((p: any) => {
                       const firstPlatform = p.platforms?.[0];
@@ -841,7 +841,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
 
           {/* Current Time Line */}
           <div className="absolute left-[100px] right-0 h-px bg-primary z-30 pointer-events-none flex items-center shadow-[0_0_8px_rgba(var(--primary),0.5)]" style={{ top: `${(getHours(currentTime) * 60) + (getMinutes(currentTime) * 60 / 60) + 56}px` }}>
-            <div className="px-2 py-0.5 rounded-full bg-primary text-[9px] font-black text-primary-foreground absolute left-[-45px] -top-2 shadow-lg">
+            <div className="px-2 py-0.5 rounded-full bg-primary text-[9px] font-bold text-primary-foreground absolute left-[-45px] -top-2 shadow-lg">
               {format(currentTime, "HH:mm")}
             </div>
           </div>
@@ -866,7 +866,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
           <div className="grid grid-cols-[100px_1fr] border-b bg-muted/10 backdrop-blur-md h-14">
             <div className="border-r border-border/40 h-14" />
             <div className="flex items-center justify-center px-4">
-              <h2 className="text-sm font-black uppercase tracking-widest text-foreground/80">{format(currentDate, "EEEE d MMMM", { locale: fr })}</h2>
+              <h2 className="text-sm font-semibold text-foreground/80">{format(currentDate, "EEEE d MMMM", { locale: fr })}</h2>
             </div>
           </div>
         </div>
@@ -874,7 +874,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
           <div className="flex flex-col border-r border-border/40 bg-muted/5 z-10">
             {hours.map(h => (
               <div key={h} className="h-[70px] border-b border-border/40 flex items-center justify-center">
-                <span className="text-[10px] font-black text-muted-foreground/40">{format(setHours(new Date(), h), "HH'h'")}</span>
+                <span className="text-[10px] font-bold text-[#6B6780]">{format(setHours(new Date(), h), "HH'h'")}</span>
               </div>
             ))}
           </div>
@@ -890,7 +890,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
                   onClick={() => !isBefore(startOfDay(currentDate), startOfDay(new Date())) && (window.location.href=`/dashboard/compose?date=${setHours(currentDate, h).toISOString()}`)}
                 >
                   {intensity > 0 && (
-                    <span className="absolute top-1 right-2 text-[8px] font-black text-primary/60">{intensity}% Engagement Signal</span>
+                    <span className="absolute top-1 right-2 text-[8px] font-bold text-primary/60">{intensity}% Engagement Signal</span>
                   )}
                   {hourPosts.map((p: any) => {
                     const firstPlatform = p.platforms?.[0];
@@ -928,7 +928,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
             })}
             {isToday(currentDate) && (
               <div className="absolute left-0 right-0 h-px bg-primary z-30 pointer-events-none flex items-center shadow-[0_0_8px_rgba(var(--primary),0.5)]" style={{ top: `${(getHours(currentTime) * 70) + (getMinutes(currentTime) * 70 / 60) + 60}px` }}>
-                <div className="px-2 py-0.5 rounded-full bg-primary text-[9px] font-black text-white absolute left-[-45px] -top-2 shadow-lg">
+                <div className="px-2 py-0.5 rounded-full bg-primary text-[9px] font-bold text-white absolute left-[-45px] -top-2 shadow-lg">
                   {format(currentTime, "HH:mm")}
                 </div>
               </div>

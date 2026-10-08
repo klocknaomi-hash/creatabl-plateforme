@@ -9,19 +9,21 @@ interface AIUsageIndicatorProps {
 const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size = 48 }) => {
   const radius = (size / 2) - 6;
   const circumference = 2 * Math.PI * radius;
-  const progress = Math.min(used / limit, 1);
+  const safeUsed = Number.isFinite(used) ? used : 0;
+  const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 0;
+  const progress = safeLimit ? Math.min(safeUsed / safeLimit, 1) : 0;
   const strokeDashoffset = circumference * (1 - progress);
 
   let color = "#8A38F5"; // Normal (Violet)
   if (progress >= 1) {
-    color = "#D85A30"; // Limit reached (Red/Orange-ish)
+    color = "#B42318"; // Limite atteinte (erreur du design system)
   } else if (progress > 0.8) {
-    color = "#EF9F27"; // Warning (Orange)
+    color = "#8A4B00"; // Alerte (design system)
   }
 
   const tooltip = progress >= 1 
-    ? "Limit reached — renews on the 1st of the month" 
-    : `${used} generations used out of ${limit} this month`;
+    ? "Limite atteinte : renouvellement le 1er du mois"
+    : `${safeUsed} générations utilisées sur ${safeLimit} ce mois-ci`;
 
   return (
     <div 
@@ -45,7 +47,7 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
         {progress < 1 ? (
           <text x={size/2} y={(size/2) + 4} textAnchor="middle" 
             fontSize={size > 60 ? "14" : "10"} fontWeight="600" fill={color}>
-            {used}/{limit}
+            {safeUsed}/{safeLimit}
           </text>
         ) : (
           <text x={size/2} y={(size/2) + 4} textAnchor="middle" 

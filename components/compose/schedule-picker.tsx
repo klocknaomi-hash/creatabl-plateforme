@@ -37,13 +37,13 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
         <div className="flex items-center gap-3">
           <div className={cn(
             "w-9 h-9 rounded-lg flex items-center justify-center transition-colors",
-            isScheduled ? "bg-foreground text-background" : "bg-muted text-muted-foreground"
+            isScheduled ? "bg-[#7225E3] text-white" : "bg-muted text-muted-foreground"
           )}>
             <CalendarIcon className="w-4.5 h-4.5" />
           </div>
           <div className="flex flex-col">
-            <Label htmlFor="schedule-toggle" className="font-bold text-[13px] cursor-pointer">Schedule for later</Label>
-            <span className="text-[11px] text-muted-foreground">Pick a specific date and time</span>
+            <Label htmlFor="schedule-toggle" className="font-bold text-[13px] cursor-pointer">Programmer pour plus tard</Label>
+            <span className="text-[11px] text-muted-foreground">Choisissez une date et une heure</span>
           </div>
         </div>
         <Switch
@@ -58,7 +58,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
         <div className="space-y-2.5">
           <div className="grid grid-cols-2 gap-2.5 p-3.5 rounded-xl border border-foreground/10 bg-muted/5 animate-in fade-in slide-in-from-top-1 duration-300">
             <div className="space-y-1">
-              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground ml-0.5">Date</Label>
+              <Label className="text-sm font-medium text-[#14121F] ml-0.5">Date</Label>
               <Popover>
                 <PopoverTrigger
                   render={
@@ -95,7 +95,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground ml-0.5">Heure</Label>
+              <Label className="text-sm font-medium text-[#14121F] ml-0.5">Heure</Label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground/70" />
                 <input
@@ -122,7 +122,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/5 border border-green-500/10">
           <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
           <p className="text-[10px] font-medium text-green-700/70">
-            Post will be published immediately.
+            Le post sera publié immédiatement.
           </p>
         </div>
       )}

@@ -86,7 +86,7 @@ export default function PostDetailPage() {
   const { data, error, isLoading, mutate } = useSWR(`/api/posts/${id}`, fetcher);
 
   const handleDelete = async () => {
-    if (!confirm("Es-tu sûr de vouloir supprimer ce post ?")) return;
+    if (!confirm("Voulez-vous vraiment supprimer ce post ?")) return;
 
     setDeleting(true);
     try {
@@ -122,10 +122,10 @@ export default function PostDetailPage() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
           <div className="space-y-6">
-            <Card className="rounded-[2.5rem] border-muted/50 h-[300px] bg-muted/10" />
-            <Card className="rounded-[2.5rem] border-muted/50 h-[250px] bg-muted/10" />
+            <Card className="rounded-2xl border-muted/50 h-[300px] bg-muted/10" />
+            <Card className="rounded-2xl border-muted/50 h-[250px] bg-muted/10" />
           </div>
-          <Card className="rounded-[2.5rem] border-muted/50 h-[500px] bg-muted/10" />
+          <Card className="rounded-2xl border-muted/50 h-[500px] bg-muted/10" />
         </div>
       </div>
     );
@@ -178,7 +178,7 @@ export default function PostDetailPage() {
           className="rounded-full gap-2 text-muted-foreground hover:text-foreground pl-2"
         >
           <ArrowLeft className="size-4" />
-          <span>Retour aux posts</span>
+          <span>Retour aux publications</span>
         </Button>
       </div>
 
@@ -186,8 +186,8 @@ export default function PostDetailPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-black tracking-tight">Détails du post</h1>
-            <Badge variant="outline" className={cn("rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider border-none shadow-sm", status.badge)}>
+            <h1 className="text-2xl font-bold tracking-tight">Détails du post</h1>
+            <Badge variant="outline" className={cn("rounded-full px-3 py-1 text-xs font-semibold border-none shadow-sm", status.badge)}>
               <StatusIcon className="size-3 mr-1.5 inline-block" />
               {status.label}
             </Badge>
@@ -239,10 +239,10 @@ export default function PostDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
         <div className="space-y-8 min-w-0 flex-1">
           {/* Post Content & Media */}
-          <Card className="rounded-[2.5rem] border border-border/50 shadow-sm overflow-hidden bg-card">
+          <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card">
             <CardContent className="p-8 space-y-6">
               <div className="space-y-3">
-                <h3 className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest">Message</h3>
+                <h3 className="text-xs font-bold text-[#6B6780]">Message</h3>
                 <p className="text-lg font-medium leading-relaxed whitespace-pre-wrap text-foreground/90 italic">
                   "{post.content}"
                 </p>
@@ -250,7 +250,7 @@ export default function PostDetailPage() {
 
               {/* Targets / Platforms Row */}
               <div className="space-y-3 pt-4 border-t border-border/30">
-                <h3 className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest">Plateformes ciblées</h3>
+                <h3 className="text-xs font-bold text-[#6B6780]">Plateformes ciblées</h3>
                 <div className="flex flex-wrap gap-2">
                   {post.platforms?.map((plt: string) => {
                     const brand = getPlatformBranding(plt);
@@ -275,13 +275,13 @@ export default function PostDetailPage() {
 
           {/* Performance metrics (only for published) */}
           {post.status === 'published' && (
-            <Card className="rounded-[2.5rem] border border-border/50 shadow-sm overflow-hidden bg-card">
+            <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-lg font-bold flex items-center gap-2">
                   <BarChart3 className="size-5 text-violet-500" />
                   Performances globales du post
                 </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground/60">Statistiques cumulées sur l'ensemble des réseaux</CardDescription>
+                <CardDescription className="text-xs text-[#6B6780]">Statistiques cumulées sur l'ensemble des réseaux</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-2 space-y-8">
                 {/* Aggregated KPIs */}
@@ -289,40 +289,40 @@ export default function PostDetailPage() {
                   <div className="p-5 rounded-3xl border border-border/50 bg-red-500/5 space-y-2">
                     <div className="flex items-center gap-2 text-red-500">
                       <Heart className="size-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest leading-none">Likes</span>
+                      <span className="text-xs font-semibold leading-none">J'aime</span>
                     </div>
-                    <p className="text-2xl font-black">{metrics.likes.toLocaleString()}</p>
+                    <p className="text-2xl font-bold">{metrics.likes.toLocaleString()}</p>
                   </div>
 
                   <div className="p-5 rounded-3xl border border-border/50 bg-blue-500/5 space-y-2">
                     <div className="flex items-center gap-2 text-blue-500">
                       <MessageCircle className="size-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest leading-none">Comments</span>
+                      <span className="text-xs font-semibold leading-none">Commentaires</span>
                     </div>
-                    <p className="text-2xl font-black">{metrics.comments.toLocaleString()}</p>
+                    <p className="text-2xl font-bold">{metrics.comments.toLocaleString()}</p>
                   </div>
 
                   <div className="p-5 rounded-3xl border border-border/50 bg-violet-500/5 space-y-2">
                     <div className="flex items-center gap-2 text-violet-500">
                       <Repeat2 className="size-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest leading-none">Partages</span>
+                      <span className="text-xs font-semibold leading-none">Partages</span>
                     </div>
-                    <p className="text-2xl font-black">{metrics.shares.toLocaleString()}</p>
+                    <p className="text-2xl font-bold">{metrics.shares.toLocaleString()}</p>
                   </div>
 
                   <div className="p-5 rounded-3xl border border-border/50 bg-slate-500/5 space-y-2">
                     <div className="flex items-center gap-2 text-slate-500">
                       <Eye className="size-4" />
-                      <span className="text-[10px] font-black uppercase tracking-widest leading-none">Reach</span>
+                      <span className="text-xs font-semibold leading-none">Portée</span>
                     </div>
-                    <p className="text-2xl font-black">{(metrics.reach || metrics.impressions).toLocaleString()}</p>
+                    <p className="text-2xl font-bold">{(metrics.reach || metrics.impressions).toLocaleString()}</p>
                   </div>
                 </div>
 
                 {/* Individual Platform Performance Breakdown */}
                 {platformResults.length > 0 && (
                   <div className="pt-6 border-t border-border/30 space-y-4">
-                    <h3 className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest">Détail par plateforme</h3>
+                    <h3 className="text-xs font-bold text-[#6B6780]">Détail par plateforme</h3>
                     <div className="space-y-3">
                       {platformResults.map((result: any) => {
                         const brand = getPlatformBranding(result.platform);
@@ -384,7 +384,7 @@ export default function PostDetailPage() {
                                 {result.platformPostId && (
                                   <a 
                                     href={`#`} // Ideally would point to direct link, or placeholder
-                                    className="text-[10px] text-violet-600 hover:underline flex items-center gap-1 font-black pl-2"
+                                    className="text-[10px] text-violet-600 hover:underline flex items-center gap-1 font-bold pl-2"
                                   >
                                     <ExternalLink className="size-3" />
                                     Voir
@@ -405,8 +405,8 @@ export default function PostDetailPage() {
 
         {/* Right Column: Live Mockup Preview */}
         <aside className="w-full sticky top-24 space-y-4">
-          <Card className="rounded-[2.5rem] border border-border/50 shadow-sm overflow-hidden bg-card p-6">
-            <h3 className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest mb-4 px-1">Aperçu visuel</h3>
+          <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card p-6">
+            <h3 className="text-xs font-bold text-[#6B6780] mb-4 px-1">Aperçu visuel</h3>
             <PostPreview 
               content={post.content} 
               mediaFiles={mediaFiles} 

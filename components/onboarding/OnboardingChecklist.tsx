@@ -6,11 +6,11 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 
 const CHECKLIST_ITEMS = [
-  { id: "connect", label: "Connecte tes réseaux sociaux", href: "/dashboard/settings/connections" },
-  { id: "post", label: "Génère un post", href: "/dashboard/compose" },
-  { id: "ideas", label: "Génère des idées", href: "/dashboard/compose?tab=ideas" },
-  { id: "analytics", label: "Analyse tes métriques", href: "/dashboard/analytics" },
-  { id: "engagement", label: "Crée une liste d'engagement", href: "/dashboard/settings/connections" },
+  { id: "connect", label: "Connectez vos réseaux sociaux", href: "/dashboard/settings/connections" },
+  { id: "post", label: "Générez un post", href: "/dashboard/compose" },
+  { id: "ideas", label: "Générez des idées", href: "/dashboard/compose?tab=ideas" },
+  { id: "analytics", label: "Analysez vos statistiques", href: "/dashboard/analytics" },
+  { id: "engagement", label: "Créez une liste d'engagement", href: "/dashboard/settings/connections" },
 ];
 
 export const OnboardingChecklist = () => {
@@ -23,7 +23,7 @@ export const OnboardingChecklist = () => {
   const completedCount = 0;
 
   return (
-    <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm space-y-6">
+    <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-bold text-gray-900">Premiers pas</h3>
         <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">

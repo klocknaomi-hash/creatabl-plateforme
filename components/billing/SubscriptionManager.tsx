@@ -80,16 +80,16 @@ export function SubscriptionManager({
       <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple-100 text-purple-700">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700">
               Abonnement actuel : {plan.toUpperCase()}
             </span>
             {isCanceling ? (
-              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 flex items-center gap-1">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" />
                 Se termine prochainement
               </span>
             ) : (
-              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
                 <CheckCircle className="w-3.5 h-3.5" />
                 Actif
               </span>

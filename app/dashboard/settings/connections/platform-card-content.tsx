@@ -161,7 +161,7 @@ export function PlatformCardContent({
 
                   {!isActive && (
                     <div className="mt-3 text-[10px] text-amber-600 dark:text-amber-400 font-medium bg-amber-500/5 px-3 py-1.5 rounded-xl border border-amber-500/10 leading-normal w-full">
-                      Passe au plan Business pour réactiver ce compte
+                      Passez au plan Business pour réactiver ce compte
                     </div>
                   )}
                 </div>
@@ -171,10 +171,10 @@ export function PlatformCardContent({
             <div className="flex flex-col items-center justify-center text-center py-6 px-4 border-2 border-dashed border-border/40 rounded-2xl bg-muted/[0.01] flex-1">
               <p className="text-xs text-muted-foreground leading-relaxed max-w-[220px]">
                 {isCanva
-                  ? 'Crée tes visuels Canva directement depuis Creatabl et attache-les à tes posts.'
+                  ? 'Créez vos visuels Canva directement depuis Creatabl et ajoutez-les à vos posts.'
                   : platform.comingSoon
                     ? 'Nous travaillons pour intégrer ce réseau prochainement.'
-                    : `Gère ta présence sur ${platform.name} directement depuis Creatabl.`}
+                    : `Gérez votre présence sur ${platform.name} directement depuis Creatabl.`}
               </p>
             </div>
           )}

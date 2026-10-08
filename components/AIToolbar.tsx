@@ -162,7 +162,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
       >
         <div className={cn(
           "flex items-center gap-2 p-1.5 rounded-2xl border transition-all duration-300 overflow-x-auto flex-nowrap",
-          "bg-background/80 backdrop-blur-md shadow-lg shadow-primary/5",
+          "bg-background/80 backdrop-blur-md shadow-lg",
           isHovered ? "border-primary/30 ring-4 ring-primary/5" : "border-border/60"
         )}>
           {/* Magic Badge */}
@@ -176,7 +176,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
             >
               <Sparkles className="size-3.5 text-primary fill-primary/20" />
             </motion.div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-primary/80">Gemini AI</span>
+            <span className="text-xs font-semibold text-[#5B1BB8]">Assistant IA</span>
             
             <AnimatePresence>
               {loading && (
@@ -295,10 +295,10 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 </Tooltip>
                 <DropdownMenuContent 
                   align="start" 
-                  className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl bg-background/95"
+                  className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl backdrop-blur-xl bg-background/95"
                 >
                   <div className="px-3 py-2 mb-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choisissez une voix</p>
+                    <p className="text-xs font-semibold text-[#6B6780]">Choisissez une voix</p>
                   </div>
                   {TONES.map((t) => (
                     <DropdownMenuItem
@@ -345,7 +345,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                         onClick={() => handleAction("optimize_platform")}
                         disabled={disabled}
                         className={cn(
-                          "h-8 px-2 rounded-xl text-[11px] font-black gap-1.5 transition-all group flex-shrink-0",
+                          "h-8 px-2 rounded-xl text-[11px] font-bold gap-1.5 transition-all group flex-shrink-0",
                           "border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/40",
                           "shadow-[0_0_15px_-5px_rgba(var(--primary),0.3)]"
                         )}

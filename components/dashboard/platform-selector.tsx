@@ -35,7 +35,7 @@ export function PlatformSelector({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">Filtrer par réseau</h3>
+        <h3 className="text-xs font-semibold text-[#6B6780]">Filtrer par réseau</h3>
       </div>
       <div className="flex flex-wrap gap-1.5">
         {platforms.map((p) => {
@@ -51,17 +51,17 @@ export function PlatformSelector({
               disabled={!isConnected}
               onClick={() => setPlatform(p.id)}
               className={cn(
-                "group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-[10px] font-black transition-all border-2",
+                "group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-[10px] font-bold transition-all border-2",
                 isActive 
-                  ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/10" 
+                  ? "bg-primary border-primary text-primary-foreground shadow-lg" 
                   : "bg-background border-border/40 hover:border-primary/20 text-muted-foreground",
                 !isConnected && "opacity-30 cursor-not-allowed grayscale border-dashed"
               )}
             >
-              {Icon && <Icon className={cn("size-3.5 transition-transform group-hover:scale-110", isActive ? "text-primary-foreground" : "text-muted-foreground/60")} />}
+              {Icon && <Icon className={cn("size-3.5 transition-transform group-hover:scale-110", isActive ? "text-primary-foreground" : "text-[#6B6780]")} />}
               <span className="uppercase tracking-tight">{p.label.split(' / ')[0]}</span>
               {!isConnected && (
-                <span className="ml-1 px-1 py-0.5 rounded-md bg-muted text-[7px] font-black opacity-60">
+                <span className="ml-1 px-1 py-0.5 rounded-md bg-muted text-[7px] font-bold opacity-60">
                   OFF
                 </span>
               )}

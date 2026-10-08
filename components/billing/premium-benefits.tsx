@@ -21,13 +21,13 @@ export function PremiumBenefits({ plan }: PremiumBenefitsProps) {
   ];
 
   return (
-    <Card className="rounded-[32px] border-border/50 shadow-xl overflow-hidden bg-gradient-to-br from-card to-muted/20 border-primary/10">
+    <Card className="rounded-2xl border-border/50 shadow-xl overflow-hidden bg-gradient-to-br from-card to-muted/20 border-primary/10">
       <CardHeader className="space-y-1 pb-6">
-        <CardTitle className="text-xl font-black flex items-center gap-2">
+        <CardTitle className="text-xl font-bold flex items-center gap-2">
           <Sparkles className="size-5 text-primary fill-primary/20" />
           Premium Benefits
         </CardTitle>
-        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+        <p className="text-xs font-bold text-muted-foreground">
           Available with Premium plan
         </p>
       </CardHeader>
@@ -45,11 +45,11 @@ export function PremiumBenefits({ plan }: PremiumBenefitsProps) {
       </CardContent>
       <CardFooter className="pt-6">
         {isPro ? (
-          <Badge className="w-full justify-center py-2 rounded-xl bg-primary/10 text-primary border-primary/20 font-black text-[10px] uppercase tracking-widest">
+          <Badge className="w-full justify-center py-2 rounded-xl bg-primary/10 text-primary border-primary/20 font-semibold text-xs">
             Active Plan Features
           </Badge>
         ) : (
-          <Button className="w-full rounded-xl font-black text-[10px] uppercase tracking-widest py-6 shadow-lg shadow-primary/20">
+          <Button className="w-full rounded-xl font-semibold text-xs py-6 shadow-lg">
             Upgrade to Premium
           </Button>
         )}

@@ -1,36 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import useSWR from "swr";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { 
-  MoreHorizontal, 
-  Trash2, 
-  Edit3, 
-  Calendar, 
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  MoreHorizontal,
+  Trash2,
+  Edit3,
   Filter,
-  ExternalLink,
-  Loader2,
-  AlertCircle,
-  Clock,
-  CheckCircle2,
-  XCircle,
-  FileText,
   Eye,
   Copy,
-  Image as ImageIcon
+  Plus,
+  X,
 } from "lucide-react";
-import { 
-  InstagramIcon as Instagram, 
-  LinkedinIcon as Linkedin, 
-  FacebookIcon as Facebook, 
-  TwitterIcon as Twitter 
-} from "@/components/platform-icons";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { EmptyState, PageHeader, PostCard } from "@/components/ds";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -45,27 +29,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-const PLATFORM_BRANDING: Record<string, { color: string, icon: any, label: string }> = {
-  instagram: { color: "text-[#E1306C]", icon: Instagram, label: "Instagram" },
-  linkedin: { color: "text-[#0077B5]", icon: Linkedin, label: "LinkedIn" },
-  facebook: { color: "text-[#1877F2]", icon: Facebook, label: "Facebook" },
-  twitter: { color: "text-foreground", icon: Twitter, label: "X" },
+const STATUS_ITEMS = {
+  all: "Tous les statuts",
+  draft: "Brouillons",
+  scheduled: "Programmés",
+  published: "Publiés",
+  failed: "Échecs",
 };
 
-const STATUS_CONFIG: Record<string, { label: string, icon: any, color: string, badge: string }> = {
-  draft: { label: "Draft", icon: FileText, color: "text-slate-500", badge: "bg-slate-100 text-slate-700 border-slate-200" },
-  scheduled: { label: "Programmé", icon: Clock, color: "text-blue-600", badge: "bg-blue-600 text-white border-transparent" },
-  published: { label: "Publié", icon: CheckCircle2, color: "text-emerald-600", badge: "bg-emerald-500 text-white border-transparent" },
-  failed: { label: "Échec", icon: XCircle, color: "text-destructive", badge: "bg-destructive text-white border-transparent" },
+const PLATFORM_ITEMS = {
+  all: "Tous les réseaux",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  twitter: "X (Twitter)",
 };
 
 export default function PostsPage() {
+  return (
+    <Suspense fallback={null}>
+      <PostsList />
+    </Suspense>
+  );
+}
+
+function PostsList() {
   const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const searchParams = useSearchParams();
+  const search = (searchParams.get("q") ?? "").trim();
+  const [statusFilter, setStatusFilter] = useState<string>(searchParams.get("status") ?? "all");
   const [platformFilter, setPlatformFilter] = useState<string>("all");
 
   const queryParams = new URLSearchParams();
@@ -75,7 +70,7 @@ export default function PostsPage() {
   const { data, error, isLoading, mutate } = useSWR(`/api/posts?${queryParams.toString()}`, fetcher);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Es-tu sûr de vouloir supprimer ce post ?")) return;
+    if (!confirm("Voulez-vous vraiment supprimer ce post ?")) return;
 
     try {
       const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
@@ -90,28 +85,36 @@ export default function PostsPage() {
     }
   };
 
+  // Recherche lancée depuis la Top Bar : filtre sur le texte des posts.
+  const posts: any[] = (data?.posts ?? []).filter((post: any) =>
+    search ? String(post.content ?? "").toLowerCase().includes(search.toLowerCase()) : true
+  );
+
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <AlertCircle className="size-12 text-destructive" />
-        <p className="text-muted-foreground font-medium">Échec du chargement des posts</p>
-        <Button onClick={() => mutate()}>Réessayer</Button>
+      <div className="flex-1 max-w-6xl mx-auto w-full">
+        <EmptyState
+          illustration="posts"
+          title="Impossible de charger vos publications"
+          text="Vérifiez votre connexion puis réessayez."
+        >
+          <button type="button" className="cr-btn cr-btn--primary" onClick={() => mutate()}>Réessayer</button>
+        </EmptyState>
       </div>
     );
   }
 
   return (
     <div className="flex-1 space-y-6 max-w-6xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Tous les posts</h1>
-          <p className="text-muted-foreground text-sm">Gérez et suivez votre contenu sur tous les réseaux.</p>
-        </div>
+      <PageHeader
+        title="Publications"
+        description="Gérez et suivez votre contenu sur tous les réseaux."
+        actions={
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
             <Filter className="size-4 text-muted-foreground" />
-            <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v || "all")}>
-              <SelectTrigger className="w-[140px] h-9 rounded-full bg-background">
+            <Select items={STATUS_ITEMS} value={statusFilter} onValueChange={(v) => setStatusFilter(v || "all")}>
+              <SelectTrigger className="w-[170px] h-10 rounded-full bg-white border-[#878399]">
                 <SelectValue placeholder="Statut" />
               </SelectTrigger>
               <SelectContent>
@@ -123,8 +126,8 @@ export default function PostsPage() {
               </SelectContent>
             </Select>
           </div>
-          <Select value={platformFilter} onValueChange={(v) => setPlatformFilter(v || "all")}>
-            <SelectTrigger className="w-[140px] h-9 rounded-full bg-background">
+          <Select items={PLATFORM_ITEMS} value={platformFilter} onValueChange={(v) => setPlatformFilter(v || "all")}>
+            <SelectTrigger className="w-[170px] h-10 rounded-full bg-white border-[#878399]">
               <SelectValue placeholder="Réseau" />
             </SelectTrigger>
             <SelectContent>
@@ -136,140 +139,89 @@ export default function PostsPage() {
             </SelectContent>
           </Select>
         </div>
-      </div>
+        }
+      />
+
+      {search && (
+        <div className="flex items-center gap-2 text-sm text-[#4B4B63]">
+          <span>
+            {posts.length} résultat{posts.length > 1 ? "s" : ""} pour « {search} »
+          </span>
+          <button type="button" className="cr-btn cr-btn--neutral cr-btn--sm" onClick={() => router.push("/dashboard/posts")}>
+            <X size={14} aria-hidden="true" />
+            Effacer
+          </button>
+        </div>
+      )}
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" aria-busy="true">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="animate-pulse border-muted/50 rounded-3xl h-[400px]">
-              <div className="aspect-video bg-muted" />
-              <CardContent className="p-5 space-y-3">
-                <div className="h-4 bg-muted rounded w-3/4" />
-                <div className="h-4 bg-muted rounded w-1/2" />
-              </CardContent>
-            </Card>
+            <div key={i} className="cr-post animate-pulse" style={{ minHeight: 172 }}>
+              <div className="h-6 w-1/3 rounded-full bg-[#F8F7FC]" />
+              <div className="h-4 w-full rounded bg-[#F8F7FC]" />
+              <div className="h-4 w-2/3 rounded bg-[#F8F7FC]" />
+            </div>
           ))}
         </div>
-      ) : data?.posts?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-3xl bg-muted/20">
-          <div className="size-16 rounded-full bg-muted flex items-center justify-center mb-4">
-            <Calendar className="size-8 text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-bold">Aucun post pour l'instant</h3>
-          <p className="text-muted-foreground text-center max-w-xs mt-1">
-            Ajuste tes filtres ou crée ton premier post pour commencer.
-          </p>
-          <Button variant="outline" className="mt-6 rounded-full" onClick={() => (window.location.href = "/dashboard/compose")}>
-            Nouveau post
-          </Button>
-        </div>
+      ) : posts.length === 0 ? (
+        <EmptyState
+          illustration="posts"
+          title={search || statusFilter !== "all" || platformFilter !== "all" ? "Aucune publication trouvée" : "Aucune publication pour l'instant"}
+          text={
+            search || statusFilter !== "all" || platformFilter !== "all"
+              ? "Modifiez vos filtres ou votre recherche pour retrouver vos posts."
+              : "Créez votre premier post : il apparaîtra ici, avec son statut sur chaque réseau."
+          }
+        >
+          <button type="button" className="cr-btn cr-btn--primary" onClick={() => router.push("/dashboard/compose")}>
+            <Plus size={18} aria-hidden="true" />
+            Créer un post
+          </button>
+        </EmptyState>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data?.posts?.map((post: any) => {
-            const status = STATUS_CONFIG[post.status] || STATUS_CONFIG.draft;
-            const StatusIcon = status.icon;
-
-            return (
-              <Link key={post.id} href={`/dashboard/posts/${post.id}`} className="block group flex flex-col h-full">
-                <Card className="w-full overflow-hidden border-border/50 group-hover:border-primary/40 group-hover:shadow-2xl group-hover:shadow-primary/5 transition-all duration-500 rounded-[32px] bg-card flex flex-col h-full">
-                  <div className="relative aspect-[16/10] bg-muted/20 overflow-hidden">
-                    {post.mediaUrls?.[0] ? (
-                      <img src={post.mediaUrls[0]} alt="" className="size-full object-cover transition-transform group-hover:scale-105 duration-700" />
-                    ) : (
-                      <div className="size-full flex items-center justify-center text-muted-foreground/10">
-                        <ImageIcon className="size-16" />
-                      </div>
-                    )}
-                    
-                    {/* Floating Platforms Row */}
-                    <div className="absolute bottom-3 left-3 flex gap-1.5">
-                    {(post.platforms ?? []).map((plt: string) => {
-                        const brand = PLATFORM_BRANDING[plt];
-                        const Icon = brand?.icon || ExternalLink;
-                        return (
-                          <div key={plt} className="size-7 rounded-xl bg-background/90 backdrop-blur-md flex items-center justify-center shadow-sm border border-border/20" title={plt}>
-                            <Icon className={cn("size-3.5", brand?.color || "text-foreground")} />
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Actions dropdown */}
-                    <div className="absolute top-3 right-3" onClick={(e) => e.stopPropagation()}>
-                       <DropdownMenu>
-                        <DropdownMenuTrigger render={
-                          <Button variant="secondary" size="icon" className="size-8 rounded-xl shadow-lg bg-background/80 backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity" />
-                        }>
-                          <MoreHorizontal className="size-4" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-2xl border-border/50 shadow-2xl min-w-[160px] p-2">
-                          <DropdownMenuItem onClick={() => router.push(`/dashboard/posts/${post.id}`)} className="rounded-xl gap-2 h-10">
-                            <Eye className="size-4 text-violet-500" />
-                            <span className="font-bold text-xs">Voir le post</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {posts.map((post: any) => (
+            <Link key={post.id} href={`/dashboard/posts/${post.id}`} className="block h-full rounded-[12px] transition-shadow hover:shadow-[0_12px_32px_rgba(20,18,31,0.10)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7225E3]">
+              <PostCard
+                content={post.content}
+                platforms={post.platforms ?? []}
+                status={post.status}
+                date={post.publishedAt || post.scheduledAt || post.createdAt}
+                mediaUrl={post.mediaUrls?.[0]}
+                actions={
+                  <span className="cr-post-more" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger render={<button type="button" className="cr-iconbtn" style={{ width: 32, height: 32 }} aria-label="Actions du post" />}>
+                        <MoreHorizontal size={18} />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="min-w-[180px] p-1.5">
+                        <DropdownMenuItem onClick={() => router.push(`/dashboard/posts/${post.id}`)} className="gap-2">
+                          <Eye className="size-4" />
+                          Voir le post
+                        </DropdownMenuItem>
+                        {post.status === "published" ? (
+                          <DropdownMenuItem onClick={() => router.push(`/dashboard/compose?duplicate=${post.id}`)} className="gap-2">
+                            <Copy className="size-4" />
+                            Réutiliser le post
                           </DropdownMenuItem>
-                          {post.status === "published" ? (
-                            <DropdownMenuItem onClick={() => router.push(`/dashboard/compose?duplicate=${post.id}`)} className="rounded-xl gap-2 h-10">
-                              <Copy className="size-4 text-indigo-500" />
-                              <span className="font-bold text-xs">Réutiliser le post</span>
-                            </DropdownMenuItem>
-                          ) : (
-                            <DropdownMenuItem onClick={() => router.push(`/dashboard/compose?id=${post.id}`)} className="rounded-xl gap-2 h-10">
-                              <Edit3 className="size-4 text-blue-500" />
-                              <span className="font-bold text-xs">Modifier le post</span>
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem onClick={() => handleDelete(post.id)} className="rounded-xl gap-2 h-10 text-destructive focus:text-destructive focus:bg-destructive/5">
-                            <Trash2 className="size-4" />
-                            <span className="font-bold text-xs">Supprimer le post</span>
+                        ) : (
+                          <DropdownMenuItem onClick={() => router.push(`/dashboard/compose?id=${post.id}`)} className="gap-2">
+                            <Edit3 className="size-4" />
+                            Modifier le post
                           </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-
-                  <CardContent className="p-6 flex flex-col flex-1 gap-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                         {(post.platforms ?? []).slice(0, 1).map((plt: string) => {
-                            const brand = PLATFORM_BRANDING[plt];
-                            const Icon = brand?.icon || ExternalLink;
-                            return (
-                              <div key={plt} className="flex items-center gap-2">
-                                 <Icon className={cn("size-4", brand?.color || "text-foreground")} />
-                                 <span className="text-[11px] font-bold uppercase tracking-widest">{brand?.label || plt}</span>
-                              </div>
-                            );
-                         })}
-                         {(post.platforms ?? []).length > 1 && (
-                           <span className="text-[10px] text-muted-foreground font-bold">+{(post.platforms ?? []).length - 1} plus</span>
-                         )}
-                      </div>
-                      
-                      <Badge variant="outline" className={cn("rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border-none shadow-sm", status.badge)}>
-                        {status.label}
-                      </Badge>
-                    </div>
-
-                    <p className="text-sm line-clamp-3 font-semibold leading-relaxed text-foreground/90 flex-1 italic">
-                      "{post.content}"
-                    </p>
-
-                    <div className="pt-4 mt-auto border-t border-border/40 flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-muted-foreground/60">
-                         <Clock className="size-3.5" />
-                         <span className="text-[10px] font-bold uppercase tracking-tighter">
-                          {post.status === 'scheduled' ? 'Programmé' : 'Publié'}
-                         </span>
-                      </div>
-                      <span className="text-[11px] font-bold text-foreground">
-                        {format(new Date(post.scheduledAt || post.createdAt), "MMM d, HH:mm")}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
+                        )}
+                        <DropdownMenuItem onClick={() => handleDelete(post.id)} className="gap-2 text-destructive focus:text-destructive">
+                          <Trash2 className="size-4" />
+                          Supprimer le post
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </span>
+                }
+              />
+            </Link>
+          ))}
         </div>
       )}
     </div>

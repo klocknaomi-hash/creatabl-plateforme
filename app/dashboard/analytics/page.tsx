@@ -114,7 +114,7 @@ export default async function AnalyticsPage(props: {
           </p>
         </div>
         <Link href="/dashboard/settings/connections">
-          <Button size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20">
+          <Button size="lg" className="rounded-full px-8 shadow-lg">
             <Plus className="mr-2 size-5" />
             Connecter votre premier compte
           </Button>
@@ -146,7 +146,7 @@ export default async function AnalyticsPage(props: {
           <AlertDescription className="flex items-center justify-between">
             <span className="text-sm">Le Plan Starter est limité aux 7 derniers jours d'Analytics. Upgrade au Plan Pro pour l'historique complet.</span>
             <Link href="https://creatabl-ia.com/tarifs">
-              <Button size="sm" className="ml-4 font-bold rounded-full">Upgrade</Button>
+              <Button size="sm" className="ml-4 font-bold rounded-full">Changer de plan</Button>
             </Link>
           </AlertDescription>
         </Alert>
@@ -154,9 +154,9 @@ export default async function AnalyticsPage(props: {
 
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Total posts</CardTitle>
+            <CardTitle className="text-xs font-bold text-[#6B6780]">Posts publiés</CardTitle>
             <TrendingUp className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
@@ -166,9 +166,9 @@ export default async function AnalyticsPage(props: {
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Portée totale</CardTitle>
+            <CardTitle className="text-xs font-bold text-[#6B6780]">Portée totale</CardTitle>
             <Users className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
@@ -177,9 +177,9 @@ export default async function AnalyticsPage(props: {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Taux d'engagement</CardTitle>
+            <CardTitle className="text-xs font-bold text-[#6B6780]">Taux d'engagement</CardTitle>
             <MousePointer2 className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
@@ -188,9 +188,9 @@ export default async function AnalyticsPage(props: {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-violet-500/20 transition-colors bg-violet-500/[0.02]">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-violet-500/20 transition-colors bg-violet-500/[0.02]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-violet-500/50">Support IA</CardTitle>
+            <CardTitle className="text-xs font-bold text-violet-500/50">Support IA</CardTitle>
             <Sparkles className="h-3.5 w-3.5 text-violet-500/40 group-hover:text-violet-500 transition-colors fill-violet-500/10" />
           </CardHeader>
           <CardContent>
@@ -204,10 +204,10 @@ export default async function AnalyticsPage(props: {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* Line Chart: Reach over time */}
-        <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-4 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-bold text-sm">Performance</CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+            <CardDescription className="text-xs font-semibold text-[#6B6780]">
               {selectedPlatform ? `Performance de ${selectedPlatform}` : "Sur toutes les plateformes"}
             </CardDescription>
           </CardHeader>
@@ -217,17 +217,17 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold uppercase tracking-widest">Pas encore de données</p>
+                <p className="text-xs font-bold">Pas encore de données</p>
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* Donut Chart: Platform Distribution */}
-        <Card className="col-span-3 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-3 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-bold text-sm">Réseaux</CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Posts publiés par Plateforme</CardDescription>
+            <CardDescription className="text-xs font-semibold text-[#6B6780]">Posts publiés par Plateforme</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px] pt-4">
             {data.platformDist.length > 0 ? (
@@ -235,7 +235,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold uppercase tracking-widest">Pas encore de données</p>
+                <p className="text-xs font-bold">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -244,10 +244,10 @@ export default async function AnalyticsPage(props: {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* Bar Chart: Posts per day */}
-        <Card className="col-span-3 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-3 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-bold text-sm">Croissance</CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Nombre de posts publiés par jour</CardDescription>
+            <CardDescription className="text-xs font-semibold text-[#6B6780]">Nombre de posts publiés par jour</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px] pt-4">
             {data.postsPerDay.length > 0 ? (
@@ -255,27 +255,27 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold uppercase tracking-widest">Pas encore de données</p>
+                <p className="text-xs font-bold">Pas encore de données</p>
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* Post Performance Table */}
-        <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-4 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
-            <CardTitle className="font-black text-sm">Meilleurs posts</CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Détail de vos posts récents</CardDescription>
+            <CardTitle className="font-bold text-sm">Meilleurs posts</CardTitle>
+            <CardDescription className="text-xs font-semibold text-[#6B6780]">Détail de vos posts récents</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent border-border/50">
-                  <TableHead className="text-xs font-black uppercase tracking-widest">Réseau</TableHead>
-                  <TableHead className="text-xs font-black uppercase tracking-widest">Caption</TableHead>
-                  <TableHead className="text-right text-xs font-black uppercase tracking-widest">Likes</TableHead>
-                  <TableHead className="text-right text-xs font-black uppercase tracking-widest">Reach</TableHead>
-                  <TableHead className="text-right text-xs font-black uppercase tracking-widest">ER%</TableHead>
+                  <TableHead className="text-xs font-semibold">Réseau</TableHead>
+                  <TableHead className="text-xs font-semibold">Texte</TableHead>
+                  <TableHead className="text-right text-xs font-semibold">J'aime</TableHead>
+                  <TableHead className="text-right text-xs font-semibold">Portée</TableHead>
+                  <TableHead className="text-right text-xs font-semibold">ER%</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -296,7 +296,7 @@ export default async function AnalyticsPage(props: {
                   return (
                     <TableRow key={`${post.id}-${post.platform}`} className="border-border/40">
                       <TableCell>
-                        <Badge variant="outline" className="capitalize text-[10px] font-black px-2 py-0.5 rounded-lg border-primary/20 bg-primary/5 text-primary">
+                        <Badge variant="outline" className="capitalize text-[10px] font-bold px-2 py-0.5 rounded-lg border-primary/20 bg-primary/5 text-primary">
                           {post.platform}
                         </Badge>
                       </TableCell>
@@ -313,7 +313,7 @@ export default async function AnalyticsPage(props: {
                 }) : (
                   <TableRow>
                     <TableCell colSpan={5} className="h-32 text-center opacity-40">
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em]">Aucun post ne correspond aux critères</p>
+                      <p className="text-xs font-semibold">Aucun post ne correspond aux critères</p>
                     </TableCell>
                   </TableRow>
                 )}

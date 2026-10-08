@@ -18,10 +18,10 @@ export function PaywallBanner({ selectedPlan }: PaywallBannerProps) {
       text-white px-6 py-4 flex items-center justify-between">
       <div>
         <p className="font-bold text-sm">
-          Ton essai gratuit est terminé
+          Votre essai gratuit est terminé
         </p>
         <p className="text-xs text-white/80 mt-0.5">
-          Choisis ton forfait pour continuer à utiliser Creatabl.
+          Choisissez votre forfait pour continuer à utiliser Creatabl.
           {selectedPlan && ` Tu avais sélectionné le plan ${planName}.`}
         </p>
       </div>

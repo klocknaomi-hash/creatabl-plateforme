@@ -314,7 +314,7 @@ export default function MembresPage() {
         <div className="pt-2">
           <button
             onClick={handleOpenInviteModal}
-            className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#8A38F5]/20 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md cursor-pointer"
           >
             + Inviter un membre
           </button>
@@ -451,7 +451,7 @@ export default function MembresPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50 text-xs font-bold text-gray-400 uppercase tracking-wider">
+              <tr className="border-b border-gray-100 bg-gray-50/50 text-xs font-bold text-gray-400">
                 <th className="py-4 px-6">Membre</th>
                 <th className="py-4 px-6">Rôle</th>
                 <th className="py-4 px-6">Accès</th>
@@ -524,7 +524,7 @@ export default function MembresPage() {
                               onClick={() => setActiveRoleDropdown(null)} 
                             />
                             <div className="absolute left-0 mt-1.5 w-44 bg-white border border-gray-100 rounded-xl shadow-lg py-1.5 z-40 animate-in fade-in slide-in-from-top-1 duration-150">
-                              <div className="px-2.5 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                              <div className="px-2.5 py-1 text-xs font-bold text-gray-400">
                                 Rôle
                               </div>
                               <button
@@ -703,7 +703,7 @@ export default function MembresPage() {
               <form onSubmit={handleInviteSubmit} className="p-6 space-y-4">
                 {/* Email Address */}
                 <div className="space-y-1">
-                  <label htmlFor="invite-email" className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <label htmlFor="invite-email" className="text-xs font-bold text-gray-600">
                     Adresse email
                   </label>
                   <div className="relative">
@@ -724,7 +724,7 @@ export default function MembresPage() {
 
                 {/* Role selection */}
                 <div className="space-y-1">
-                  <label htmlFor="invite-role" className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <label htmlFor="invite-role" className="text-xs font-bold text-gray-600">
                     Rôle de l'invité
                   </label>
                   <div className="relative">

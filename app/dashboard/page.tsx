@@ -1,14 +1,8 @@
 import { Suspense } from "react";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { BarChart3 } from "lucide-react";
+import { currentUser } from "@clerk/nextjs/server";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { getCachedUserSettings } from "@/lib/dashboard-data";
-import { getTranslation } from "@/lib/i18n";
 import { StatsRow } from "@/components/dashboard/stats-row";
 import { ActiveChannels } from "@/components/dashboard/active-channels";
 import { AudienceActivity } from "@/components/dashboard/audience-activity";
@@ -18,45 +12,37 @@ import { TopContent } from "@/components/dashboard/top-content";
 
 
 export default async function DashboardPage() {
+  // Mise en page DashboardPage du design system : accueil, indicateurs,
+  // « À venir » à gauche, comptes et brouillons à droite, puis activité et meilleurs posts.
   return (
-    <div className="space-y-12 pb-16 max-w-[1600px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* ── Header ── */}
-      <Suspense fallback={<Skeleton className="h-12 w-64" />}>
+    <div className="mx-auto grid w-full max-w-[1180px] content-start gap-6 pb-12">
+      <Suspense fallback={<Skeleton className="h-16 w-72" />}>
         <DashboardHeader />
       </Suspense>
 
-      {/* ── Stats Row ── */}
       <Suspense fallback={<StatsRowSkeleton />}>
         <StatsRow />
       </Suspense>
 
-      {/* ── Active Channels ── */}
-      <Suspense fallback={<Skeleton className="h-16 w-full rounded-full" />}>
-        <ActiveChannels />
-      </Suspense>
-
-      {/* ── Main Dashboard Grid ── */}
-      <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
-        {/* Left Column: Analytics */}
-        <div className="space-y-12">
-          <Suspense fallback={<Skeleton className="h-[450px] w-full rounded-[2.5rem]" />}>
-            <AudienceActivity />
+      <div className="ap-grid">
+        <Suspense fallback={<Skeleton className="h-[320px] rounded-[12px]" />}>
+          <UpcomingSchedule />
+        </Suspense>
+        <div className="grid gap-6">
+          <Suspense fallback={<Skeleton className="h-[180px] rounded-[12px]" />}>
+            <ActiveChannels />
           </Suspense>
-        </div>
-
-        {/* Right Column: Schedule & Drafts */}
-        <div className="space-y-10">
-          <Suspense fallback={<Skeleton className="h-[400px] rounded-[2.5rem]" />}>
-            <UpcomingSchedule />
-          </Suspense>
-          <Suspense fallback={<Skeleton className="h-[300px] rounded-[2rem]" />}>
+          <Suspense fallback={<Skeleton className="h-[220px] rounded-[12px]" />}>
             <RecentDrafts />
           </Suspense>
         </div>
       </div>
 
-      {/* ── Top Content ── */}
-      <Suspense fallback={<Skeleton className="h-64 w-full rounded-[2.5rem]" />}>
+      <Suspense fallback={<Skeleton className="h-[420px] w-full rounded-[12px]" />}>
+        <AudienceActivity />
+      </Suspense>
+
+      <Suspense fallback={<Skeleton className="h-64 w-full rounded-[12px]" />}>
         <TopContent />
       </Suspense>
     </div>
@@ -64,46 +50,21 @@ export default async function DashboardPage() {
 }
 
 async function DashboardHeader() {
-  try {
-    const { userId: clerkId } = await auth();
-    if (!clerkId) return null;
-    const settings = await getCachedUserSettings(clerkId);
-    const t = getTranslation(settings?.language || "fr");
-
-    return (
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
-        <div className="space-y-0.5">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            {t.myContentDashboard}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {t.trackGrowth}
-          </p>
-        </div>
-      </header>
-    );
-  } catch (error) {
-    console.error("DashboardHeader error:", error);
-    return (
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
-        <div className="space-y-0.5">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Mon Tableau de Bord
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Suivez la croissance de votre contenu
-          </p>
-        </div>
-      </header>
-    );
-  }
+  const user = await currentUser().catch(() => null);
+  const firstName = user?.firstName?.trim();
+  return (
+    <header className="ap-hello">
+      <h1>{firstName ? `Bonjour ${firstName}` : "Tableau de bord"}</h1>
+      <p>Suivez vos publications à venir, vos brouillons et vos résultats sur tous vos réseaux.</p>
+    </header>
+  );
 }
 
 function StatsRowSkeleton() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="ap-stats">
       {[1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} className="h-48 rounded-[2rem]" />
+        <Skeleton key={i} className="h-[136px] rounded-[12px]" />
       ))}
     </div>
   );

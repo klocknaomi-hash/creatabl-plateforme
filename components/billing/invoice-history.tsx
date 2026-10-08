@@ -3,19 +3,19 @@ import { History, Receipt } from "lucide-react";
 
 export function InvoiceHistory() {
   return (
-    <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/10 transition-colors">
+    <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/10 transition-colors">
       <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
         <div className="flex items-center gap-2">
           <div className="bg-primary/10 p-2 rounded-lg">
             <History className="size-4 text-primary" />
           </div>
-          <CardTitle className="text-sm font-black uppercase tracking-widest">Historique</CardTitle>
+          <CardTitle className="text-sm font-semibold">Historique</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="py-16">
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="bg-muted/50 p-6 rounded-full">
-            <Receipt className="size-10 text-muted-foreground/30" />
+            <Receipt className="size-10 text-[#6B6780]" />
           </div>
           <div className="space-y-1">
             <h3 className="font-bold text-lg">Aucune facture trouvée.</h3>

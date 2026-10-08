@@ -55,7 +55,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         toast.error(result.error || "Failed to save settings");
       }
     } catch (error) {
-      toast.error("An error occurred while saving settings");
+      toast.error("Impossible d'enregistrer les paramètres");
     } finally {
       setLoading(false);
     }
@@ -65,9 +65,9 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
     setExporting(true);
     try {
       window.location.href = "/api/settings/export";
-      toast.success("Data export started");
+      toast.success("Export des données lancé");
     } catch (error) {
-      toast.error("Failed to export data");
+      toast.error("Impossible d'exporter les données");
     } finally {
       setTimeout(() => setExporting(false), 2000);
     }
@@ -90,7 +90,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         <Button 
           onClick={handleSave} 
           disabled={loading} 
-          className="w-full sm:w-auto gap-2 h-10 px-6 font-semibold text-xs shadow-lg shadow-primary/20 transition-all active:scale-95 rounded-xl"
+          className="w-full sm:w-auto gap-2 h-10 px-6 font-semibold text-xs shadow-lg transition-all active:scale-95 rounded-xl"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Enregistrer
@@ -99,19 +99,19 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
 
       <div className="grid gap-8 pb-20">
         {/* NOTIFICATIONS SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2.5 rounded-xl">
                 <Bell className="size-4 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Notifications</CardTitle>
+                <CardTitle className="text-xs font-bold text-[#6B6780]">Notifications</CardTitle>
               </div>
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-10">
-            <div className="flex items-center justify-between p-6 bg-muted/30 rounded-[24px] border border-border/20">
+            <div className="flex items-center justify-between p-6 bg-muted/30 rounded-2xl border border-border/20">
               <div className="space-y-1">
                 <Label className="text-sm font-semibold leading-none">Notifications par email</Label>
                 <p className="text-sm text-muted-foreground font-medium">Recevez des mises à jour importantes sur votre compte et la plateforme par email.</p>
@@ -129,7 +129,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             )}>
               <div className="flex items-center gap-3 ml-2">
                 <div className="h-px bg-border flex-1" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 whitespace-nowrap">Abonnements liés</span>
+                <span className="text-xs font-bold text-[#6B6780] whitespace-nowrap">Abonnements liés</span>
                 <div className="h-px bg-border flex-1" />
               </div>
 
@@ -165,13 +165,13 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         </Card>
 
         {/* PREFERENCES SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2.5 rounded-xl">
                 <Settings2 className="size-4 text-primary" />
               </div>
-              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Préférences</CardTitle>
+              <CardTitle className="text-xs font-bold text-[#6B6780]">Préférences</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-12">
@@ -181,15 +181,16 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                 <Label className="text-sm font-semibold">Fuseau horaire</Label>
                 <p className="text-sm text-muted-foreground font-medium">Utilisé pour la programmation des posts et les rapports d'analytics</p>
               </div>
-              <Select value={settings.timezone} onValueChange={(v) => handleSelect('timezone', v)}>
-                <SelectTrigger className="max-w-md h-12 bg-muted/20 border-border/40 rounded-xl px-4 font-bold text-sm">
+              <Select items={{ UTC: "UTC (temps universel)", "Europe/Paris": "Europe/Paris (heure de Paris)", "America/New_York": "EST (heure de New York)", "Europe/London": "GMT (heure de Londres)", "Asia/Tokyo": "JST (heure de Tokyo)" }} value={settings.timezone} onValueChange={(v) => handleSelect('timezone', v)}>
+                <SelectTrigger className="max-w-md h-11 bg-white border-[#878399] rounded-[12px] px-4 text-sm">
                   <SelectValue placeholder="Sélectionner un fuseau horaire" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="UTC">UTC (Coordinated Universal Time)</SelectItem>
-                  <SelectItem value="America/New_York">EST (Eastern Standard Time)</SelectItem>
-                  <SelectItem value="Europe/London">GMT (Greenwich Mean Time)</SelectItem>
-                  <SelectItem value="Asia/Tokyo">JST (Japan Standard Time)</SelectItem>
+                  <SelectItem value="UTC">UTC (temps universel)</SelectItem>
+                  <SelectItem value="Europe/Paris">Europe/Paris (heure de Paris)</SelectItem>
+                  <SelectItem value="America/New_York">EST (heure de New York)</SelectItem>
+                  <SelectItem value="Europe/London">GMT (heure de Londres)</SelectItem>
+                  <SelectItem value="Asia/Tokyo">JST (heure de Tokyo)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -211,7 +212,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                   <div className={cn("p-2.5 rounded-xl", theme === 'light' ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                     <Sun className="size-5" />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest">Clair</span>
+                  <span className="text-xs font-semibold">Clair</span>
                 </button>
                 <button 
                   onClick={() => setTheme('dark')}
@@ -223,7 +224,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
                   <div className={cn("p-2.5 rounded-xl", theme === 'dark' ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                     <Moon className="size-5" />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest">Sombre</span>
+                  <span className="text-xs font-semibold">Sombre</span>
                 </button>
               </div>
             </div>
@@ -232,8 +233,8 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             <div className="grid md:grid-cols-2 gap-10 pt-10 border-t border-border/40">
               <div className="space-y-4">
                 <Label className="text-sm font-semibold">Langue</Label>
-                <Select value={settings.language} onValueChange={(v) => handleSelect('language', v)}>
-                  <SelectTrigger className="h-12 bg-muted/20 border-border/40 rounded-xl px-4 font-bold text-sm">
+                <Select items={{ en: "English (US)", es: "Español", fr: "Français" }} value={settings.language} onValueChange={(v) => handleSelect('language', v)}>
+                  <SelectTrigger className="h-11 bg-white border-[#878399] rounded-[12px] px-4 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -245,15 +246,15 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
               </div>
               <div className="space-y-4">
                 <Label className="text-sm font-semibold">Région</Label>
-                <Select value={settings.locale} onValueChange={(v) => handleSelect('locale', v)}>
-                  <SelectTrigger className="h-12 bg-muted/20 border-border/40 rounded-xl px-4 font-bold text-sm">
+                <Select items={{ US: "États-Unis", FR: "France", UK: "Royaume-Uni", ES: "Espagne" }} value={settings.locale} onValueChange={(v) => handleSelect('locale', v)}>
+                  <SelectTrigger className="h-11 bg-white border-[#878399] rounded-[12px] px-4 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="US">US</SelectItem>
-                    <SelectItem value="FR">FR</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="ES">ES</SelectItem>
+                    <SelectItem value="US">États-Unis</SelectItem>
+                    <SelectItem value="FR">France</SelectItem>
+                    <SelectItem value="UK">Royaume-Uni</SelectItem>
+                    <SelectItem value="ES">Espagne</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -262,17 +263,17 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         </Card>
 
         {/* DATA MANAGEMENT SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-destructive/10">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-destructive/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
             <div className="flex items-center gap-3">
               <div className="bg-destructive/10 p-2.5 rounded-xl">
                 <Save className="size-4 text-destructive" />
               </div>
-              <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Gestion des données</CardTitle>
+              <CardTitle className="text-xs font-bold text-[#6B6780]">Gestion des données</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-6">
-            <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-[24px] border border-destructive/10">
+            <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-2xl border border-destructive/10">
               <div className="space-y-1">
                 <Label className="text-sm font-bold text-destructive">Exporter vos données personnelles</Label>
                 <p className="text-xs text-muted-foreground font-medium max-w-md">Téléchargez une archive complète de vos posts, analytics et paramètres de compte au format JSON.</p>
