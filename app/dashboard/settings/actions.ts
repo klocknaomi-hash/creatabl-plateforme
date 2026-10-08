@@ -5,6 +5,7 @@ import { userSettings } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getAccess } from "@/lib/get-access";
 
 export async function saveSettingsAction(formData: any) {
   try {
@@ -30,6 +31,25 @@ export async function saveSettingsAction(formData: any) {
     if (formData.workspaceName !== undefined) updateData.workspaceName = formData.workspaceName;
     if (formData.language !== undefined) updateData.language = formData.language;
     if (formData.locale !== undefined) updateData.locale = formData.locale;
+
+    // Automatisations : réservées au plan Business (vérifié côté serveur).
+    const wantsAutomation =
+      formData.enableAutoReplies !== undefined || formData.autoPublish !== undefined || formData.clientApproval !== undefined;
+    if (wantsAutomation) {
+      const access = await getAccess();
+      if (access.team) {
+        if (formData.enableAutoReplies !== undefined) updateData.enableAutoReplies = !!formData.enableAutoReplies;
+        const current = await db.query.userSettings.findFirst({ where: eq(userSettings.userId, user.id) });
+        const branding = (current?.workspaceBranding as Record<string, unknown>) ?? {};
+        updateData.workspaceBranding = {
+          ...branding,
+          automation: {
+            autoPublish: !!formData.autoPublish,
+            clientApproval: !!formData.clientApproval,
+          },
+        };
+      }
+    }
 
     await db.update(userSettings)
       .set(updateData)

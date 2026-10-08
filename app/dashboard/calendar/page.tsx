@@ -78,6 +78,7 @@ import {
 } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useConfirm } from "@/components/ds/confirm";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -85,15 +86,15 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const PLATFORMS = [
-  { id: "instagram", name: "Instagram", icon: Instagram, color: "text-[#E1306C]" },
-  { id: "linkedin", name: "LinkedIn", icon: Linkedin, color: "text-[#0077B5]" },
+  { id: "instagram", name: "Instagram", icon: Instagram, color: "text-[#E4405F]" },
+  { id: "linkedin", name: "LinkedIn", icon: Linkedin, color: "text-[#0A66C2]" },
   { id: "facebook", name: "Facebook", icon: Facebook, color: "text-[#1877F2]" },
   { id: "twitter", name: "X", icon: Twitter, color: "text-foreground" },
 ];
 
 const PLATFORM_BRANDING: Record<string, { color: string, icon: any, label: string, bg: string }> = {
-  instagram: { color: "text-[#E1306C]", icon: Instagram, label: "Instagram", bg: "bg-[#E1306C]/10" },
-  linkedin: { color: "text-[#0077B5]", icon: Linkedin, label: "LinkedIn", bg: "bg-[#0077B5]/10" },
+  instagram: { color: "text-[#E4405F]", icon: Instagram, label: "Instagram", bg: "bg-[#E4405F]/10" },
+  linkedin: { color: "text-[#0A66C2]", icon: Linkedin, label: "LinkedIn", bg: "bg-[#0A66C2]/10" },
   facebook: { color: "text-[#1877F2]", icon: Facebook, label: "Facebook", bg: "bg-[#1877F2]/10" },
   twitter: { color: "text-foreground", icon: Twitter, label: "X", bg: "bg-foreground/20" },
 };
@@ -204,8 +205,9 @@ export default function CalendarPage() {
     }
   };
 
+  const confirmDialog = useConfirm();
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this post?")) return;
+    if (!(await confirmDialog({ title: "Supprimer ce post ?", description: "Il sera retiré du calendrier et ne sera pas publié.", confirmLabel: "Supprimer le post" }))) return;
 
     try {
       const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
@@ -312,12 +314,12 @@ export default function CalendarPage() {
           </div>
           
           {/* Current Date Display */}
-          <div className="text-xs font-bold text-muted-foreground min-w-[100px] text-center">
+          <div className="text-xs font-semibold text-muted-foreground min-w-[100px] text-center">
             {format(currentDate, view === "day" ? "d MMM yyyy" : "MMMM yyyy", { locale: fr })}
           </div>
           
           {/* Today Button */}
-          <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())} className="h-7 text-[10px] font-bold px-3 rounded-lg border-border/40">
+          <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())} className="h-7 text-xs font-semibold px-3 rounded-lg border-border/40">
             Aujourd'hui
           </Button>
           
@@ -327,9 +329,9 @@ export default function CalendarPage() {
           {/* View Switcher */}
           <Tabs value={view} onValueChange={(v: any) => setView(v)} className="bg-muted/30 p-1 rounded-xl">
             <TabsList className="bg-transparent h-7 border-none gap-0.5">
-              <TabsTrigger value="month" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Mois</TabsTrigger>
-              <TabsTrigger value="week" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Semaine</TabsTrigger>
-              <TabsTrigger value="day" className="rounded-lg px-3 text-[9px] font-bold data-[state=active]:bg-card h-5">Jour</TabsTrigger>
+              <TabsTrigger value="month" className="rounded-lg px-3 text-xs font-semibold data-[state=active]:bg-card h-5">Mois</TabsTrigger>
+              <TabsTrigger value="week" className="rounded-lg px-3 text-xs font-semibold data-[state=active]:bg-card h-5">Semaine</TabsTrigger>
+              <TabsTrigger value="day" className="rounded-lg px-3 text-xs font-semibold data-[state=active]:bg-card h-5">Jour</TabsTrigger>
             </TabsList>
           </Tabs>
           
@@ -434,7 +436,7 @@ export default function CalendarPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                        <h3 className="text-xs font-bold text-[#6B6780]">Statut</h3>
-                       <Badge className={cn("rounded-full px-3 py-1 text-xs font-bold border-none shadow-md", (STATUS_CONFIG[selectedPost.status] || STATUS_CONFIG.draft).badge)}>
+                       <Badge className={cn("rounded-full px-3 py-1 text-xs font-semibold border-none shadow-md", (STATUS_CONFIG[selectedPost.status] || STATUS_CONFIG.draft).badge)}>
                         {selectedPost.status}
                       </Badge>
                     </div>
@@ -460,16 +462,16 @@ export default function CalendarPage() {
                             <Clock className="size-5 text-primary" />
                          </div>
                          <div>
-                            <p className="text-[10px] font-bold uppercase tracking-tighter text-[#6B6780]">Scheduled For</p>
-                            <p className="text-sm font-bold">{format(new Date(selectedPost.scheduledAt), "MMM d, yyyy")}</p>
-                            <p className="text-xs font-bold text-primary">{format(new Date(selectedPost.scheduledAt), "h:mm a")}</p>
+                            <p className="text-xs font-semibold uppercase tracking-tighter text-[#6B6780]">Scheduled For</p>
+                            <p className="text-sm font-semibold">{format(new Date(selectedPost.scheduledAt), "MMM d, yyyy")}</p>
+                            <p className="text-xs font-semibold text-primary">{format(new Date(selectedPost.scheduledAt), "h:mm a")}</p>
                          </div>
                       </div>
                       <div className="flex justify-center w-full">
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="h-8 px-6 rounded-lg text-xs font-bold border-border/60 hover:bg-background"
+                          className="h-8 px-6 rounded-lg text-xs font-semibold border-border/60 hover:bg-background"
                           onClick={() => {
                             setRescheduleDate(new Date(selectedPost.scheduledAt));
                             setIsRescheduleOpen(true);
@@ -491,19 +493,19 @@ export default function CalendarPage() {
                           onChange={(e) => setEditedContent(e.target.value)}
                        />
                        <div className="flex gap-2">
-                          <Button variant="ghost" className="flex-1 rounded-xl font-bold text-xs" onClick={() => setIsEditingContent(false)}>Annuler</Button>
+                          <Button variant="ghost" className="flex-1 rounded-xl font-semibold text-xs" onClick={() => setIsEditingContent(false)}>Annuler</Button>
                           <Button className="flex-1 rounded-full h-11 font-semibold text-xs bg-primary shadow-lg" onClick={handleSaveContent} disabled={isSavingContent}>
                              {isSavingContent ? "Enregistrement…" : "Enregistrer"}
                           </Button>
                        </div>
                     </div>
                   ) : (
-                    <Button className="w-full rounded-2xl h-12 font-bold text-xs shadow-lg" onClick={() => setIsEditingContent(true)}>
+                    <Button className="w-full rounded-2xl h-12 font-semibold text-xs shadow-lg" onClick={() => setIsEditingContent(true)}>
                       <Edit className="size-4 mr-2" /> Edit Content
                     </Button>
                   )}
                   
-                  <Button variant="ghost" className="w-full rounded-2xl h-11 text-destructive/60 hover:text-destructive hover:bg-destructive/5 font-bold text-xs" onClick={() => handleDelete(selectedPost.id)}>
+                  <Button variant="ghost" className="w-full rounded-2xl h-11 text-destructive/60 hover:text-destructive hover:bg-destructive/5 font-semibold text-xs" onClick={() => handleDelete(selectedPost.id)}>
                     <Trash2 className="size-4 mr-2" /> Delete Post
                   </Button>
                 </div>
@@ -553,7 +555,7 @@ export default function CalendarPage() {
                       <Clock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                       <input
                         type="time"
-                        className="w-full h-12 pl-12 pr-4 text-sm font-bold bg-muted/30 border border-border/40 rounded-2xl focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                        className="w-full h-12 pl-12 pr-4 text-sm font-semibold bg-muted/30 border border-border/40 rounded-2xl focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                         value={rescheduleDate ? format(rescheduleDate, "HH:mm") : ""}
                         onChange={(e) => {
                           const [hours, minutes] = e.target.value.split(":").map(Number);
@@ -569,7 +571,7 @@ export default function CalendarPage() {
            </div>
 
            <DialogFooter className="gap-2 sm:gap-0">
-              <Button variant="ghost" className="rounded-xl font-bold h-11" onClick={() => setIsRescheduleOpen(false)}>Annuler</Button>
+              <Button variant="ghost" className="rounded-xl font-semibold h-11" onClick={() => setIsRescheduleOpen(false)}>Annuler</Button>
               <Button className="rounded-full px-8 h-11 font-semibold text-xs bg-primary" onClick={handleSaveReschedule} disabled={isSavingSchedule}>
                  {isSavingSchedule ? "Enregistrement…" : "Enregistrer la date"}
               </Button>
@@ -595,7 +597,7 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
           <div className="flex-1 min-w-0">
              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 min-w-0">
-                   <span className="font-bold truncate">Creatabl User</span>
+                   <span className="font-semibold truncate">Creatabl User</span>
                    <span className="text-zinc-500 text-sm truncate">@{account.username}</span>
                    <span className="text-zinc-500 text-sm">· {format(new Date(post.scheduledAt), "MMM d")}</span>
                 </div>
@@ -645,7 +647,7 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
           </div>
           <div>
              <p className="text-sm font-semibold">{brand?.label || platform}</p>
-             <p className="text-[10px] text-muted-foreground font-bold">@{account.username}</p>
+             <p className="text-xs text-muted-foreground font-semibold">@{account.username}</p>
           </div>
        </div>
        <p className="text-sm font-medium leading-relaxed mb-4 whitespace-pre-wrap italic">"{content}"</p>
@@ -692,7 +694,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className={cn(
-                  "text-xs font-bold size-7 flex items-center justify-center rounded-xl", 
+                  "text-xs font-semibold size-7 flex items-center justify-center rounded-xl", 
                   isToday(day) ? "bg-primary text-primary-foreground shadow-lg" : "text-[#6B6780]"
                 )}>{format(day, "d")}</span>
                 
@@ -718,7 +720,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
                     <div 
                       key={p.id} 
                       className={cn(
-                        "p-1.5 rounded-lg bg-background border text-[10px] font-bold truncate cursor-pointer hover:border-primary/50 shadow-sm transition-all flex items-center gap-1.5",
+                        "p-1.5 rounded-lg bg-background border text-xs font-semibold truncate cursor-pointer hover:border-primary/50 shadow-sm transition-all flex items-center gap-1.5",
                         brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
                       )} 
                       onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
@@ -770,7 +772,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
             {weekDays.map(day => (
               <div key={day.toISOString()} className={cn("py-2 h-14 text-center border-r border-border/40 last:border-r-0 flex flex-col items-center justify-center gap-0.5", isToday(day) && "bg-primary/[0.04]")}>
                 <span className="text-xs font-semibold text-[#6B6780] leading-none">{format(day, "EEE", { locale: fr })}</span>
-                <span className={cn("text-sm font-bold size-7 flex items-center justify-center rounded-lg transition-colors", isToday(day) ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80")}>{format(day, "d")}</span>
+                <span className={cn("text-sm font-semibold size-7 flex items-center justify-center rounded-lg transition-colors", isToday(day) ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80")}>{format(day, "d")}</span>
               </div>
             ))}
           </div>
@@ -780,7 +782,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
           {/* Hour Labels */}
           <div className="flex flex-col bg-muted/5 z-10">
             {hours.map(h => (
-              <div key={h} className="h-[60px] border-r border-b border-border/40 text-[9px] font-bold text-[#6B6780] flex items-start justify-center pt-1.5">
+              <div key={h} className="h-[60px] border-r border-b border-border/40 text-xs font-semibold text-[#6B6780] flex items-start justify-center pt-1.5">
                 {format(setHours(new Date(), h), "HH'h'")}
               </div>
             ))}
@@ -800,7 +802,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
                     onClick={() => !isBefore(startOfDay(day), startOfDay(new Date())) && (window.location.href=`/dashboard/compose?date=${setHours(day, h).toISOString()}`)}
                   >
                     {intensity > 0 && (
-                      <span className="absolute top-1 right-1 text-[8px] font-bold text-primary/60">{intensity}%</span>
+                      <span className="absolute top-1 right-1 text-xs font-semibold text-primary/60">{intensity}%</span>
                     )}
                     {dayPosts.map((p: any) => {
                       const firstPlatform = p.platforms?.[0];
@@ -810,7 +812,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
                         <div 
                           key={p.id} 
                           className={cn(
-                            "p-1 rounded-md bg-card border shadow-sm text-[9px] font-bold truncate cursor-pointer z-10 relative hover:border-primary/50 flex items-center gap-1 transition-all",
+                            "p-1 rounded-md bg-card border shadow-sm text-xs font-semibold truncate cursor-pointer z-10 relative hover:border-primary/50 flex items-center gap-1 transition-all",
                             brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
                           )} 
                           onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
@@ -841,7 +843,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
 
           {/* Current Time Line */}
           <div className="absolute left-[100px] right-0 h-px bg-primary z-30 pointer-events-none flex items-center shadow-[0_0_8px_rgba(var(--primary),0.5)]" style={{ top: `${(getHours(currentTime) * 60) + (getMinutes(currentTime) * 60 / 60) + 56}px` }}>
-            <div className="px-2 py-0.5 rounded-full bg-primary text-[9px] font-bold text-primary-foreground absolute left-[-45px] -top-2 shadow-lg">
+            <div className="px-2 py-0.5 rounded-full bg-primary text-xs font-semibold text-primary-foreground absolute left-[-45px] -top-2 shadow-lg">
               {format(currentTime, "HH:mm")}
             </div>
           </div>
@@ -874,7 +876,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
           <div className="flex flex-col border-r border-border/40 bg-muted/5 z-10">
             {hours.map(h => (
               <div key={h} className="h-[70px] border-b border-border/40 flex items-center justify-center">
-                <span className="text-[10px] font-bold text-[#6B6780]">{format(setHours(new Date(), h), "HH'h'")}</span>
+                <span className="text-xs font-semibold text-[#6B6780]">{format(setHours(new Date(), h), "HH'h'")}</span>
               </div>
             ))}
           </div>
@@ -890,7 +892,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
                   onClick={() => !isBefore(startOfDay(currentDate), startOfDay(new Date())) && (window.location.href=`/dashboard/compose?date=${setHours(currentDate, h).toISOString()}`)}
                 >
                   {intensity > 0 && (
-                    <span className="absolute top-1 right-2 text-[8px] font-bold text-primary/60">{intensity}% Engagement Signal</span>
+                    <span className="absolute top-1 right-2 text-xs font-semibold text-primary/60">{intensity}% Engagement Signal</span>
                   )}
                   {hourPosts.map((p: any) => {
                     const firstPlatform = p.platforms?.[0];
@@ -900,7 +902,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
                       <div 
                         key={p.id} 
                         className={cn(
-                          "min-w-[140px] max-w-[300px] p-2 rounded-xl bg-card border shadow-sm text-xs font-bold cursor-pointer z-10 hover:border-primary/50 flex items-center gap-2 transition-all",
+                          "min-w-[140px] max-w-[300px] p-2 rounded-xl bg-card border shadow-sm text-xs font-semibold cursor-pointer z-10 hover:border-primary/50 flex items-center gap-2 transition-all",
                           brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
                         )} 
                         onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
@@ -928,7 +930,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
             })}
             {isToday(currentDate) && (
               <div className="absolute left-0 right-0 h-px bg-primary z-30 pointer-events-none flex items-center shadow-[0_0_8px_rgba(var(--primary),0.5)]" style={{ top: `${(getHours(currentTime) * 70) + (getMinutes(currentTime) * 70 / 60) + 60}px` }}>
-                <div className="px-2 py-0.5 rounded-full bg-primary text-[9px] font-bold text-white absolute left-[-45px] -top-2 shadow-lg">
+                <div className="px-2 py-0.5 rounded-full bg-primary text-xs font-semibold text-white absolute left-[-45px] -top-2 shadow-lg">
                   {format(currentTime, "HH:mm")}
                 </div>
               </div>

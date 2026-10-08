@@ -22,8 +22,8 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
   }
 
   const tooltip = progress >= 1 
-    ? "Limite atteinte : renouvellement le 1er du mois"
-    : `${safeUsed} générations utilisées sur ${safeLimit} ce mois-ci`;
+    ? "Limite atteinte : de nouvelles générations seront disponibles sous 24 h"
+    : `${safeUsed} générations utilisées sur ${safeLimit} (24 h glissantes)`;
 
   return (
     <div 

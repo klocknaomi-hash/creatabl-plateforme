@@ -114,7 +114,7 @@ function MediaItem({
                 <Button 
                   size="sm" 
                   variant="secondary" 
-                  className="h-8 px-4 rounded-lg font-bold gap-1.5 transition-transform hover:scale-105 active:scale-95 bg-white text-black hover:bg-white/90 border-none shadow-sm"
+                  className="h-8 px-4 rounded-lg font-semibold gap-1.5 transition-transform hover:scale-105 active:scale-95 bg-white text-black hover:bg-white/90 border-none shadow-sm"
                 >
                   Modifier
                 </Button>
@@ -139,7 +139,7 @@ function MediaItem({
                   {/* Left: Options */}
                   <div className="w-full md:w-[320px] flex flex-col bg-muted/20 p-5 border-r border-border/40 overflow-y-auto custom-scrollbar">
                     <div className="mb-4">
-                      <h4 className="text-xs font-bold text-[#6B6780] mb-1">Améliorations IA</h4>
+                      <h4 className="text-xs font-semibold text-[#6B6780] mb-1">Améliorations IA</h4>
                       <p className="text-[11px] text-muted-foreground leading-relaxed">Sélectionnez une fonctionnalité pour améliorer votre média.</p>
                     </div>
                     
@@ -156,7 +156,7 @@ function MediaItem({
                             <div className="flex items-center justify-between w-full mb-1">
                               <div className="flex items-center gap-2.5">
                                 <t.icon className={cn("w-4 h-4", t.color)} />
-                                <span className="text-[13px] font-bold">{t.label}</span>
+                                <span className="text-sm font-semibold">{t.label}</span>
                               </div>
                               {activeTransformation === t.id && !t.hasPrompt && <Check className="w-3.5 h-3.5 text-primary" />}
                             </div>
@@ -175,7 +175,7 @@ function MediaItem({
                               <Button 
                                 size="sm" 
                                 onClick={() => applyTransformation(t)}
-                                className="w-full h-8 rounded-lg text-[10px] font-bold gap-1.5"
+                                className="w-full h-8 rounded-lg text-xs font-semibold gap-1.5"
                               >
                                 <Wand2 className="w-3 h-3" /> Appliquer {t.label}
                               </Button>
@@ -190,7 +190,7 @@ function MediaItem({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="w-full h-10 rounded-xl text-xs font-bold gap-2 hover:bg-destructive/5 hover:text-destructive transition-colors"
+                      className="w-full h-10 rounded-xl text-xs font-semibold gap-2 hover:bg-destructive/5 hover:text-destructive transition-colors"
                       onClick={() => {
                         setTempUrl(file.url.split("?")[0]);
                         setActiveTransformation(null);
@@ -213,12 +213,12 @@ function MediaItem({
                       
                       {/* Loading indicator for the image itself */}
                       <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                         <p className="text-xs font-bold text-muted-foreground">Traitement IA...</p>
+                         <p className="text-xs font-semibold text-muted-foreground">Traitement IA...</p>
                       </div>
                     </div>
                     
                     <div className="flex flex-col items-center gap-1">
-                      <p className="text-xs font-bold text-muted-foreground">Aperçu</p>
+                      <p className="text-xs font-semibold text-muted-foreground">Aperçu</p>
                       <p className="text-[9px] text-[#6B6780] italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
                     </div>
                   </div>
@@ -226,7 +226,7 @@ function MediaItem({
 
                 {/* Footer */}
                 <div className="p-5 border-t border-border/40 bg-background flex justify-end gap-3">
-                  <Button variant="ghost" size="sm" className="rounded-xl h-10 px-6 text-xs font-bold" onClick={handleCancel}>Annuler</Button>
+                  <Button variant="ghost" size="sm" className="rounded-xl h-10 px-6 text-xs font-semibold" onClick={handleCancel}>Annuler</Button>
                   <Button size="sm" className="rounded-full h-10 px-8 text-sm font-semibold bg-[image:var(--gradient-cta)] text-white hover:opacity-90 shadow-sm" onClick={handleSave}>Appliquer & Enregistrer</Button>
                 </div>
               </div>
@@ -238,7 +238,7 @@ function MediaItem({
       {/* Top Right Remove Button - Outside */}
       <Button 
         size="icon" 
-        variant="destructive" 
+        variant="destructive-soft" 
         className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full shadow-lg z-20 hover:scale-110 active:scale-90"
         onClick={(e) => {
           e.stopPropagation();
@@ -324,7 +324,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
       
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Upload failed");
+        throw new Error(data.error || "L'envoi a échoué");
       }
       
       const data = await res.json();
@@ -407,7 +407,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             >
               <div className="absolute -top-2 -right-2 z-10">
                 <Badge className="text-xs h-4 px-1.5 font-semibold border-2 border-background shadow-sm bg-[#00C4CC] text-white border-none">
-                  Connected
+                  Connecté
                 </Badge>
               </div>
               <div className="size-8 rounded-lg bg-[#00C4CC]/10 border border-[#00C4CC]/20 flex items-center justify-center transition-transform group-hover/canva:scale-110">
@@ -426,7 +426,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
             >
               <div className="absolute -top-2 -right-2 z-10">
                 <Badge variant="secondary" className="text-xs h-4 px-1.5 font-semibold bg-[#00C4CC]/10 text-[#00C4CC] border-2 border-background shadow-sm">
-                  New
+                  Nouveau
                 </Badge>
               </div>
               <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center transition-transform group-hover/canva:scale-110">

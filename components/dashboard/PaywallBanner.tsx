@@ -17,7 +17,7 @@ export function PaywallBanner({ selectedPlan }: PaywallBannerProps) {
     <div className="w-full bg-gradient-to-r from-[#7225E3] to-[#7B73D4] 
       text-white px-6 py-4 flex items-center justify-between">
       <div>
-        <p className="font-bold text-sm">
+        <p className="font-semibold text-sm">
           Votre essai gratuit est terminé
         </p>
         <p className="text-xs text-white/80 mt-0.5">

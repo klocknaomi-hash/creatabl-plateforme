@@ -27,7 +27,7 @@ export function PremiumBenefits({ plan }: PremiumBenefitsProps) {
           <Sparkles className="size-5 text-primary fill-primary/20" />
           Premium Benefits
         </CardTitle>
-        <p className="text-xs font-bold text-muted-foreground">
+        <p className="text-xs font-semibold text-muted-foreground">
           Available with Premium plan
         </p>
       </CardHeader>

@@ -12,8 +12,16 @@ import {
   Wand2,
   Clock,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Briefcase,
+  BookOpen,
+  Rocket,
+  GraduationCap,
+  MessageCircle,
+  CalendarClock,
 } from "lucide-react";
+import { checkPost } from "@/lib/network-rules";
+import { Alert as DsAlert } from "@/components/ds";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -36,7 +44,6 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface MediaFile {
   url: string;
@@ -45,11 +52,11 @@ interface MediaFile {
 }
 
 const TONES = [
-  { value: "professional", label: "Professionnel", icon: "💼" },
-  { value: "storytelling", label: "Storytelling", icon: "📖" },
-  { value: "viral", label: "Viral", icon: "🚀" },
-  { value: "educational", label: "Éducatif", icon: "🎓" },
-  { value: "conversational", label: "Conversationnel", icon: "💬" },
+  { value: "professional", label: "Professionnel", icon: Briefcase },
+  { value: "storytelling", label: "Storytelling", icon: BookOpen },
+  { value: "viral", label: "Viral", icon: Rocket },
+  { value: "educational", label: "Éducatif", icon: GraduationCap },
+  { value: "conversational", label: "Conversationnel", icon: MessageCircle },
 ];
 
 function ComposePageInner() {
@@ -73,6 +80,9 @@ function ComposePageInner() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [hasAccounts, setHasAccounts] = useState<boolean | null>(null);
   const lastSavedRef = useRef<string>("");
+  const [draftCreatedAt, setDraftCreatedAt] = useState<Date | null>(null);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const draftRequestedRef = useRef(false);
 
   // Handle Initial Load
   useEffect(() => {
@@ -91,6 +101,7 @@ function ComposePageInner() {
         const res = await fetch(`/api/posts/${id}`);
         const data = await res.json();
         if (data.post) {
+          if (!isDuplicating && data.post.createdAt) setDraftCreatedAt(new Date(data.post.createdAt));
           setContent(data.post.content || "");
           setSelectedPlatforms(data.post.platforms || []);
           if (data.post.scheduledAt && !isDuplicating) {
@@ -130,32 +141,37 @@ function ComposePageInner() {
     } else if (duplicateParam) {
       fetchPost(duplicateParam, true);
     } else {
-      // Fetch latest draft if it exists
-      const fetchLatestDraft = async () => {
+      // « Créer un post » ouvre toujours un nouveau brouillon : on réutilise le dernier
+      // brouillon vide s'il existe, sinon on en crée un. Sa date de création s'affiche.
+      const ensureDraft = async () => {
+        if (draftRequestedRef.current) return;
+        draftRequestedRef.current = true;
         try {
           const res = await fetch("/api/posts?status=draft&limit=1");
           const data = await res.json();
-          if (data.posts && data.posts.length > 0) {
-            const draft = data.posts[0];
-            // Only auto-load if it's very recent (last 24h) or has content
-            if (draft.content) {
-              setPostId(draft.id);
-              setContent(draft.content);
-              setSelectedPlatforms(draft.platforms || []);
-              if (draft.mediaUrls) {
-                setMediaFiles(draft.mediaUrls.map((url: string, i: number) => ({
-                  url,
-                  fileId: `draft-media-${i}`,
-                  name: `Media ${i + 1}`
-                })));
-              }
-            }
+          const latest = data.posts?.[0];
+          if (latest && !latest.content && !(latest.mediaUrls?.length > 0)) {
+            setPostId(latest.id);
+            setDraftCreatedAt(new Date(latest.createdAt));
+            window.history.replaceState(null, "", `/dashboard/compose?id=${latest.id}`);
+            return;
+          }
+          const created = await fetch("/api/posts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: "", platforms: [], mediaUrls: [], status: "draft" }),
+          });
+          const createdData = await created.json();
+          if (created.ok && createdData.postId) {
+            setPostId(createdData.postId);
+            setDraftCreatedAt(new Date());
+            window.history.replaceState(null, "", `/dashboard/compose?id=${createdData.postId}`);
           }
         } catch (err) {
-          console.error("Failed to fetch latest draft", err);
+          console.error("Failed to create draft", err);
         }
       };
-      fetchLatestDraft();
+      ensureDraft();
     }
 
     // Fetch account connections (Canva, etc.)
@@ -174,6 +190,14 @@ function ComposePageInner() {
     };
     fetchConnections();
   }, [idParam, dateParam]);
+
+  // Contraintes de chaque réseau sélectionné (longueur, médias, vidéo).
+  const networkIssues = checkPost(
+    content,
+    mediaFiles.map((f) => ({ url: f.url, mimeType: (f as { mimeType?: string }).mimeType })),
+    selectedPlatforms
+  );
+  const blockingIssues = networkIssues.filter((i) => i.level === "error");
 
   // Autosave logic
   const performAutosave = useCallback(async () => {
@@ -215,6 +239,7 @@ function ComposePageInner() {
       }
 
       lastSavedRef.current = currentDataStr;
+      setLastSavedAt(new Date());
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (err) {
@@ -233,13 +258,23 @@ function ComposePageInner() {
     return () => clearTimeout(timer);
   }, [content, selectedPlatforms, mediaFiles, scheduledAt, performAutosave]);
 
-  const handlePost = async (isDraft = false) => {
+  const [pendingAction, setPendingAction] = useState<"draft" | "now" | "schedule" | null>(null);
+
+  // Brouillon, publication immédiate ou programmation (ordre des boutons du design system).
+  const handlePost = async (isDraft = false, mode: "now" | "schedule" = scheduledAt ? "schedule" : "now") => {
     if (!content && mediaFiles.length === 0) {
       return toast.error("Ajoutez du texte ou un média");
     }
     if (selectedPlatforms.length === 0 && !isDraft) {
       return toast.error("Sélectionnez au moins un réseau");
     }
+    if (!isDraft && blockingIssues.length > 0) {
+      return toast.error(blockingIssues[0].message);
+    }
+    if (!isDraft && mode === "schedule" && !scheduledAt) {
+      return toast.error("Choisissez une date de programmation");
+    }
+    setPendingAction(isDraft ? "draft" : mode);
 
     setLoading(true);
     try {
@@ -254,20 +289,26 @@ function ComposePageInner() {
           platforms: selectedPlatforms,
           mediaUrls: mediaFiles.map(f => f.url),
           mediaFiles,
-          scheduledAt: scheduledAt?.toISOString(),
-          status: isDraft ? "draft" : (scheduledAt ? "scheduled" : "published"),
+          scheduledAt: mode === "schedule" ? scheduledAt?.toISOString() : undefined,
+          status: isDraft ? "draft" : (mode === "schedule" ? "scheduled" : "published"),
         }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save post");
 
-      toast.success(isDraft ? "Brouillon enregistré !" : (postId ? "Post mis à jour !" : "Post programmé avec succès !"));
+      toast.success(
+        isDraft ? "Brouillon enregistré" : mode === "schedule" ? "Post programmé" : "Publication envoyée",
+        isDraft || mode === "schedule"
+          ? undefined
+          : { description: `Envoyé sur ${selectedPlatforms.length} réseau${selectedPlatforms.length > 1 ? "x" : ""}. Le statut apparaît dans Publications.` }
+      );
       router.push("/dashboard/posts");
     } catch (err: any) {
       toast.error(err.message);
     } finally {
       setLoading(false);
+      setPendingAction(null);
     }
   };
 
@@ -335,46 +376,22 @@ function ComposePageInner() {
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-full mx-auto pb-16 overflow-x-hidden">
-      {/* Refined Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pt-2 w-full">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Créer un post</h1>
-            <AnimatePresence>
-              {saveStatus !== "idle" && (
-                <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="cr-badge cr-badge--plain"
-                >
-                  {saveStatus === "saving" && <Loader2 className="size-2.5 animate-spin" />}
-                  {saveStatus === "saved" && <CheckCircle2 className="size-2.5 text-emerald-500" />}
-                  {saveStatus === "error" && <AlertCircle className="size-2.5 text-destructive" />}
-                  <span>
-                  {saveStatus === "saving" ? "Enregistrement..." : saveStatus === "saved" ? "Enregistré" : "Erreur"}
-                </span></motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          <p className="text-sm text-muted-foreground">Créez et programmez votre contenu social</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" className="rounded-full h-10 px-5 text-sm" onClick={() => handlePost(true)} disabled={loading}>
-            <Save className="size-3.5 mr-1.5" /> Sauvegarder
-          </Button>
-          <Button 
-            onClick={() => handlePost(false)} 
-            disabled={loading || !content.trim()} 
-            size="sm"
-            className="h-10 px-5 rounded-full font-semibold bg-[image:var(--gradient-cta)] text-white shadow-sm transition-all hover:opacity-90 active:scale-95 text-sm"
-          >
-            {loading ? <Loader2 className="size-3.5 mr-1.5 animate-spin" /> : (
-              scheduledAt ? <Calendar className="size-3.5 mr-1.5" /> : <Send className="size-3.5 mr-1.5" />
-            )}
-            {scheduledAt ? "Programmer" : "Publier maintenant"}
-          </Button>
-        </div>
+      {/* En-tête (ComposerPage du design system) : titre et état du brouillon */}
+      <div className="flex flex-wrap items-center gap-3 pt-2 w-full">
+        <h1 className="font-heading text-[28px] leading-9 font-semibold tracking-[-0.01em] text-[#14121F]">{idParam ? "Modifier le post" : "Nouveau post"}</h1>
+        <span className="cr-badge cr-badge--plain" aria-live="polite">
+          {saveStatus === "saving" && <Loader2 className="size-3 animate-spin" aria-hidden="true" />}
+          {saveStatus === "error" && <AlertCircle className="size-3 text-[#B42318]" aria-hidden="true" />}
+          {saveStatus === "saving"
+            ? "Enregistrement…"
+            : saveStatus === "error"
+              ? "Brouillon non enregistré"
+              : lastSavedAt
+                ? `Brouillon enregistré à ${lastSavedAt.getHours()} h ${String(lastSavedAt.getMinutes()).padStart(2, "0")}`
+                : draftCreatedAt
+                  ? `Brouillon créé le ${((d: Date) => `${d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" })} à ${d.getHours()} h ${String(d.getMinutes()).padStart(2, "0")}`)(draftCreatedAt)}`
+                  : "Nouveau brouillon"}
+        </span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_480px] gap-6 items-start w-full">
@@ -410,7 +427,7 @@ function ComposePageInner() {
                         : "text-[#6B6780] hover:text-foreground hover:bg-background/50"
                     )}
                   >
-                    <span className="text-sm">{tone.icon}</span>
+                    <tone.icon className="size-4" aria-hidden="true" />
                   </button>
                 ))}
               </div>
@@ -448,22 +465,61 @@ function ComposePageInner() {
             />
           </div>
 
-          {/* Bottom Smart Action Button */}
-          <div className="flex justify-end pt-2">
-             <Button className="rounded-full h-10 px-5 shadow-sm text-sm font-semibold bg-[image:var(--gradient-cta)] text-white" onClick={() => handlePost(false)} disabled={loading || !content.trim()}>
-            {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-            {scheduledAt ? "Programmer" : "Publier maintenant"}
-          </Button>
+          {/* Contraintes des réseaux sélectionnés */}
+          {networkIssues.length > 0 && (
+            <div className="grid gap-2">
+              {networkIssues.map((issue, i) => (
+                <DsAlert key={i} tone={issue.level === "error" ? "error" : "warning"} title={issue.message} />
+              ))}
+            </div>
+          )}
+
+          {/* Pied d'actions (ComposerPage) : brouillon (fantôme), publier maintenant (secondaire), programmer (principal) */}
+          <div className="cp-actions">
+            <span className="left">
+              {selectedPlatforms.length === 0 ? (
+                <><AlertCircle className="size-3.5" aria-hidden="true" />Choisissez au moins un réseau</>
+              ) : blockingIssues.length > 0 ? (
+                <><AlertCircle className="size-3.5 text-[#B42318]" aria-hidden="true" />{blockingIssues.length} point{blockingIssues.length > 1 ? "s" : ""} à corriger</>
+              ) : (
+                <><CheckCircle2 className="size-3.5 text-[#0E7445]" aria-hidden="true" />Prêt pour {selectedPlatforms.map((p) => ({ twitter: "X", instagram: "Instagram", facebook: "Facebook", linkedin: "LinkedIn", tiktok: "TikTok" } as Record<string, string>)[p] ?? p).join(", ")}</>
+              )}
+            </span>
+            <Button variant="ghost" className="h-11 px-5 text-[#7225E3] hover:bg-[#F3EEFD] hover:text-[#5B1BB8]" onClick={() => handlePost(true)} loading={pendingAction === "draft"} disabled={loading}>
+              {pendingAction !== "draft" && <Save className="size-4" />}
+              Enregistrer le brouillon
+            </Button>
+            <Button
+              variant="outline"
+              className="h-11 px-5"
+              onClick={() => handlePost(false, "now")}
+              loading={pendingAction === "now"}
+              disabled={loading || (!content.trim() && mediaFiles.length === 0) || selectedPlatforms.length === 0 || blockingIssues.length > 0}
+            >
+              {pendingAction !== "now" && <Send className="size-4" />}
+              {pendingAction === "now" ? "Publication…" : "Publier maintenant"}
+            </Button>
+            <Button
+              className="h-11 px-5 bg-[image:var(--gradient-cta)] hover:bg-[#7225E3] hover:bg-none"
+              onClick={() => handlePost(false, "schedule")}
+              loading={pendingAction === "schedule"}
+              disabled={loading || !scheduledAt || (!content.trim() && mediaFiles.length === 0) || selectedPlatforms.length === 0 || blockingIssues.length > 0}
+              title={!scheduledAt ? "Activez « Programmer pour plus tard » et choisissez une date" : undefined}
+            >
+              {pendingAction !== "schedule" && <CalendarClock className="size-[18px]" />}
+              {pendingAction === "schedule" ? "Programmation…" : "Programmer"}
+            </Button>
           </div>
         </div>
 
         {/* Right Column: Live Preview */}
-        <aside className="hidden lg:block w-[480px] flex-shrink-0 sticky top-20 space-y-3 rounded-xl border border-[#E8E6F0] bg-[#F8F7FC] p-5">
+        <aside className="hidden lg:block w-[480px] flex-shrink-0 sticky top-20 space-y-3 rounded-[12px] border border-[#E8E6F0] bg-[#F8F7FC] p-5" aria-label="Aperçu de la publication">
           <h3 className="font-heading text-base font-semibold text-[#14121F] px-2">Aperçu</h3>
           <PostPreview 
             content={content} 
             mediaFiles={mediaFiles} 
             platforms={selectedPlatforms} 
+            scheduledAt={scheduledAt}
           />
         </aside>
       </div>
@@ -476,7 +532,7 @@ function ComposePageInner() {
               Générateur de post IA
             </DialogTitle>
             <DialogDescription className="text-xs">
-              Décrivez votre sujet et Gemini va générer une légende parfaite pour vous.
+              Décrivez votre sujet : l'IA rédige un post dans le ton choisi.
             </DialogDescription>
           </DialogHeader>
           <div className="py-2 space-y-4">
@@ -504,7 +560,7 @@ function ComposePageInner() {
                         : "bg-background border-border hover:border-foreground/30 text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    <span>{tone.icon}</span>
+                    <tone.icon className="size-4" aria-hidden="true" />
                     {tone.label}
                   </button>
                 ))}

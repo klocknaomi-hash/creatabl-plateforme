@@ -299,7 +299,7 @@ export default function ProjetsPage() {
       case 'pinterest':
         return (
           <span className="size-5 rounded-md bg-[#BD081C] flex items-center justify-center text-white shrink-0 shadow-sm" title="Pinterest">
-            <span className="font-bold text-[10px]">P</span>
+            <span className="font-semibold text-xs">P</span>
           </span>
         )
       case 'tiktok':
@@ -585,7 +585,7 @@ export default function ProjetsPage() {
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
               Projets de l'équipe
               <div className="group relative">
                 <HelpCircle className="size-4 text-gray-400 cursor-pointer hover:text-gray-650 transition-colors" />
@@ -593,14 +593,14 @@ export default function ProjetsPage() {
                   Gérez vos contenus éditoriaux, assignez les tâches et planifiez vos publications sur les réseaux sociaux.
                 </div>
               </div>
-            </h1>
+            </h2>
             <p className="text-sm text-gray-500 mt-1">Organisez et collaborez sur vos contenus.</p>
           </div>
           
           <div className="flex items-center gap-3.5 self-end sm:self-auto">
             <button
               onClick={() => router.push('/dashboard/equipe/membres?invite=true')}
-              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#7225E3]/5 text-[#7225E3] border border-[#7225E3]/20 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#7225E3]/5 text-[#7225E3] border border-[#7225E3]/20 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
             >
               <UserPlus className="size-4 text-[#7225E3]" />
               Inviter un membre
@@ -679,7 +679,7 @@ export default function ProjetsPage() {
             <div className="relative">
               <button 
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-100 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-all cursor-pointer"
               >
                 <span>{categoryFilter === 'all' ? 'Tous les projets' : categoryFilter}</span>
                 <ChevronDown className="size-3.5 text-gray-500" />
@@ -740,20 +740,20 @@ export default function ProjetsPage() {
           <div className="flex items-center gap-2 flex-wrap text-xs bg-purple-50/40 p-2.5 rounded-xl border border-purple-100/50">
             <span className="text-gray-500 font-medium">Filtres actifs :</span>
             {categoryFilter !== 'all' && (
-              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-bold px-2 py-0.5 rounded-lg shadow-sm">
+              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-semibold px-2 py-0.5 rounded-lg shadow-sm">
                 Projet: {categoryFilter}
                 <X className="size-3 cursor-pointer hover:text-red-500" onClick={() => setCategoryFilter('all')} />
               </span>
             )}
             {selectedMemberName && (
-              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-bold px-2 py-0.5 rounded-lg shadow-sm">
+              <span className="inline-flex items-center gap-1 bg-white border border-purple-200 text-[#7225E3] font-semibold px-2 py-0.5 rounded-lg shadow-sm">
                 Membre: {selectedMemberName}
                 <X className="size-3 cursor-pointer hover:text-red-500" onClick={() => setSelectedMemberName(null)} />
               </span>
             )}
             <button 
               onClick={() => { setCategoryFilter('all'); setSelectedMemberName(null); }}
-              className="text-[10px] text-[#7225E3] hover:underline font-bold ml-auto cursor-pointer"
+              className="text-xs text-[#7225E3] hover:underline font-semibold ml-auto cursor-pointer"
             >
               Réinitialiser tout
             </button>
@@ -773,14 +773,14 @@ export default function ProjetsPage() {
               <div className="size-16 rounded-full bg-[#8A38F5]/10 text-[#8A38F5] flex items-center justify-center mx-auto mb-2">
                 <FolderKanban className="size-8 text-[#8A38F5]" />
               </div>
-              <h2 className="text-2xl font-extrabold text-[#14121F]">Aucun projet pour le moment</h2>
+              <h2 className="text-2xl font-bold text-[#14121F]">Aucun projet pour le moment</h2>
               <p className="text-[#6B6780] text-sm max-w-sm mx-auto leading-relaxed">
                 Créez votre premier post pour commencer à organiser votre équipe.
               </p>
               <div className="pt-2">
                 <a
                   href="/dashboard/compose"
-                  className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md"
+                  className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-md"
                 >
                   Créer votre premier projet
                 </a>
@@ -792,7 +792,7 @@ export default function ProjetsPage() {
               {viewMode === 'list' && (
                 <div className="space-y-4">
                   {/* TABLE HEADER ROW */}
-                  <div className="flex items-center px-4 py-2 text-xs font-bold text-gray-400 gap-4 bg-gray-50 border border-gray-100 rounded-xl">
+                  <div className="flex items-center px-4 py-2 text-xs font-semibold text-gray-400 gap-4 bg-gray-50 border border-gray-100 rounded-xl">
                     <div className="flex shrink-0">
                       <input 
                         type="checkbox" 
@@ -815,8 +815,8 @@ export default function ProjetsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <span className="size-2 rounded-full bg-amber-500" />
-                        <span className="text-xs font-bold text-gray-800">À faire</span>
-                        <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
+                        <span className="text-xs font-semibold text-gray-800">À faire</span>
+                        <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
                           {todoPosts.length}
                         </span>
                       </div>
@@ -849,8 +849,8 @@ export default function ProjetsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <span className="size-2 rounded-full bg-blue-500" />
-                        <span className="text-xs font-bold text-gray-800">En cours</span>
-                        <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
+                        <span className="text-xs font-semibold text-gray-800">En cours</span>
+                        <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
                           {inprogressPosts.length}
                         </span>
                       </div>
@@ -883,8 +883,8 @@ export default function ProjetsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <span className="size-2 rounded-full bg-green-500" />
-                        <span className="text-xs font-bold text-gray-800">Terminé</span>
-                        <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
+                        <span className="text-xs font-semibold text-gray-800">Terminé</span>
+                        <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
                           {donePosts.length}
                         </span>
                       </div>
@@ -915,7 +915,7 @@ export default function ProjetsPage() {
                   {/* ADD POST BUTTON */}
                   <button
                     onClick={() => router.push('/dashboard/compose')}
-                    className="w-full flex items-center justify-center gap-1.5 py-3 border border-dashed border-[#7225E3]/30 hover:border-[#7225E3] bg-purple-50/10 hover:bg-[#F3EEFD]/40 text-xs text-[#7225E3] font-bold rounded-2xl transition-all cursor-pointer active:scale-99 shadow-sm"
+                    className="w-full flex items-center justify-center gap-1.5 py-3 border border-dashed border-[#7225E3]/30 hover:border-[#7225E3] bg-purple-50/10 hover:bg-[#F3EEFD]/40 text-xs text-[#7225E3] font-semibold rounded-2xl transition-all cursor-pointer active:scale-99 shadow-sm"
                   >
                     <Plus className="size-4" />
                     Ajouter un post
@@ -931,7 +931,7 @@ export default function ProjetsPage() {
                     <button onClick={() => navigateMonth('prev')} className="p-1 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
                       <ChevronLeft className="size-4 text-gray-600" />
                     </button>
-                    <h3 className="text-xs sm:text-sm font-extrabold text-gray-800">
+                    <h3 className="text-xs sm:text-sm font-bold text-gray-800">
                       {calendarDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
                     </h3>
                     <button onClick={() => navigateMonth('next')} className="p-1 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
@@ -942,7 +942,7 @@ export default function ProjetsPage() {
                   {/* CALENDAR GRID */}
                   <div className="grid grid-cols-7 gap-1.5">
                     {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(day => (
-                      <div key={day} className="text-[10px] font-bold text-center text-gray-400 uppercase py-1 select-none">
+                      <div key={day} className="text-xs font-semibold text-center text-gray-400 uppercase py-1 select-none">
                         {day}
                       </div>
                     ))}
@@ -1004,7 +1004,7 @@ export default function ProjetsPage() {
                         <span className="size-2.5 rounded-full bg-amber-500" />
                         <h3 className="text-xs font-bold text-gray-800">À faire</h3>
                       </div>
-                      <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md">
                         {todoPosts.length}
                       </span>
                     </div>
@@ -1025,7 +1025,7 @@ export default function ProjetsPage() {
                         <span className="size-2.5 rounded-full bg-blue-500" />
                         <h3 className="text-xs font-bold text-gray-800">En cours</h3>
                       </div>
-                      <span className="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md">
                         {inprogressPosts.length}
                       </span>
                     </div>
@@ -1046,7 +1046,7 @@ export default function ProjetsPage() {
                         <span className="size-2.5 rounded-full bg-green-500" />
                         <h3 className="text-xs font-bold text-gray-800">Terminé</h3>
                       </div>
-                      <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-md">
                         {donePosts.length}
                       </span>
                     </div>
@@ -1071,7 +1071,7 @@ export default function ProjetsPage() {
         
         {/* FAST FILTERS CARD */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-          <h3 className="text-xs font-extrabold text-gray-400">Filtres rapides</h3>
+          <h3 className="text-xs font-bold text-gray-400">Filtres rapides</h3>
           <div className="space-y-1.5">
             {/* Filter: All */}
             <button
@@ -1084,7 +1084,7 @@ export default function ProjetsPage() {
                 <span className="size-2 rounded-full border border-purple-500 flex shrink-0" />
                 <span>Tous les posts</span>
               </div>
-              <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
                 {posts.length}
               </span>
             </button>
@@ -1100,7 +1100,7 @@ export default function ProjetsPage() {
                 <span className="size-2 rounded-full bg-amber-500 flex shrink-0" />
                 <span>À faire</span>
               </div>
-              <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
                 {totalCountTodo}
               </span>
             </button>
@@ -1116,7 +1116,7 @@ export default function ProjetsPage() {
                 <span className="size-2 rounded-full bg-blue-500 flex shrink-0" />
                 <span>En cours</span>
               </div>
-              <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
                 {totalCountInprogress}
               </span>
             </button>
@@ -1132,7 +1132,7 @@ export default function ProjetsPage() {
                 <span className="size-2 rounded-full bg-green-500 flex shrink-0" />
                 <span>Terminé</span>
               </div>
-              <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 rounded-md">
+              <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-1.5 rounded-md">
                 {totalCountDone}
               </span>
             </button>
@@ -1141,10 +1141,10 @@ export default function ProjetsPage() {
 
         {/* TEAM MEMBERS SIDEBAR LIST */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-          <h3 className="text-xs font-extrabold text-gray-400 flex items-center justify-between">
+          <h3 className="text-xs font-bold text-gray-400 flex items-center justify-between">
             <span>Membres de l'équipe</span>
             {selectedMemberName && (
-              <span className="text-[9px] text-[#7225E3] hover:underline cursor-pointer font-bold" onClick={() => setSelectedMemberName(null)}>
+              <span className="text-xs text-[#7225E3] hover:underline cursor-pointer font-semibold" onClick={() => setSelectedMemberName(null)}>
                 Effacer
               </span>
             )}
@@ -1171,17 +1171,17 @@ export default function ProjetsPage() {
                         className="size-8 rounded-full border border-gray-100 shrink-0 object-cover" 
                       />
                     ) : (
-                      <div className="size-8 rounded-full bg-[#7C3AED]/10 text-[#7C3AED] font-bold flex items-center justify-center text-xs shrink-0">
+                      <div className="size-8 rounded-full bg-[#7C3AED]/10 text-[#7C3AED] font-semibold flex items-center justify-center text-xs shrink-0">
                         {member.avatar}
                       </div>
                     )}
                     <div className="min-w-0">
-                      <div className="text-xs font-extrabold text-gray-800 truncate">{member.name}</div>
+                      <div className="text-xs font-semibold text-gray-800 truncate">{member.name}</div>
                       <div className="text-[9px] text-gray-400 font-semibold">{member.role}</div>
                     </div>
                   </div>
                   
-                  <span className="text-[9px] font-bold bg-purple-100 text-[#7225E3] px-1.5 py-0.5 rounded-md border border-purple-200/20 shrink-0">
+                  <span className="text-xs font-semibold bg-purple-100 text-[#7225E3] px-1.5 py-0.5 rounded-md border border-purple-200/20 shrink-0">
                     {member.role}
                   </span>
                 </div>
@@ -1201,7 +1201,7 @@ export default function ProjetsPage() {
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
             className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl px-6 py-3.5 z-40 flex items-center gap-6 text-white"
           >
-            <div className="text-xs font-bold flex items-center gap-2 border-r border-gray-700 pr-5 shrink-0">
+            <div className="text-xs font-semibold flex items-center gap-2 border-r border-gray-700 pr-5 shrink-0">
               <span className="size-5 rounded-full bg-[#7225E3] flex items-center justify-center text-[10px] text-white">
                 {selectedPostIds.length}
               </span>
@@ -1211,25 +1211,25 @@ export default function ProjetsPage() {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => handleBulkStatusChange('todo')}
-                className="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/35 text-amber-300 rounded-lg text-[10px] font-bold border border-amber-500/30 transition-all cursor-pointer"
+                className="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/35 text-amber-300 rounded-lg text-xs font-semibold border border-amber-500/30 transition-all cursor-pointer"
               >
                 À faire
               </button>
               <button 
                 onClick={() => handleBulkStatusChange('inprogress')}
-                className="px-2.5 py-1.5 bg-blue-500/20 hover:bg-blue-500/35 text-blue-300 rounded-lg text-[10px] font-bold border border-blue-500/30 transition-all cursor-pointer"
+                className="px-2.5 py-1.5 bg-blue-500/20 hover:bg-blue-500/35 text-blue-300 rounded-lg text-xs font-semibold border border-blue-500/30 transition-all cursor-pointer"
               >
                 En cours
               </button>
               <button 
                 onClick={() => handleBulkStatusChange('done')}
-                className="px-2.5 py-1.5 bg-green-500/20 hover:bg-green-500/35 text-green-300 rounded-lg text-[10px] font-bold border border-green-500/30 transition-all cursor-pointer"
+                className="px-2.5 py-1.5 bg-green-500/20 hover:bg-green-500/35 text-green-300 rounded-lg text-xs font-semibold border border-green-500/30 transition-all cursor-pointer"
               >
                 Terminé
               </button>
               <button 
                 onClick={handleBulkDelete}
-                className="px-2.5 py-1.5 bg-red-500/20 hover:bg-red-500/35 text-red-300 rounded-lg text-[10px] font-bold border border-red-500/30 transition-all cursor-pointer flex items-center gap-1"
+                className="px-2.5 py-1.5 bg-red-500/20 hover:bg-red-500/35 text-red-300 rounded-lg text-xs font-semibold border border-red-500/30 transition-all cursor-pointer flex items-center gap-1"
               >
                 <Trash2 className="size-3" />
                 Supprimer
@@ -1285,11 +1285,11 @@ export default function ProjetsPage() {
                 {/* STATUS & DUE DATE */}
                 <div className="grid grid-cols-2 gap-4 bg-gray-50 p-3 rounded-2xl border border-gray-100">
                   <div>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase">Statut</span>
+                    <span className="text-xs font-semibold text-gray-400 uppercase">Statut</span>
                     <select
                       value={editingPost.status}
                       onChange={(e) => setEditingPost({ ...editingPost, status: e.target.value as any })}
-                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
+                      className="w-full mt-1 bg-white border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3]"
                     >
                       <option value="todo">À faire</option>
                       <option value="inprogress">En cours</option>
@@ -1297,7 +1297,7 @@ export default function ProjetsPage() {
                     </select>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase">Date d'échéance</span>
+                    <span className="text-xs font-semibold text-gray-400 uppercase">Date d'échéance</span>
                     <input
                       type="date"
                       value={convertToInputDate(editingPost.dueDate)}
@@ -1309,12 +1309,12 @@ export default function ProjetsPage() {
 
                 {/* TITLE EDIT */}
                 <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Titre du post</label>
+                  <label className="text-xs font-semibold text-gray-400 uppercase">Titre du post</label>
                   <input
                     type="text"
                     value={editingPost.title}
                     onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                    className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                   />
                 </div>
 
@@ -1333,11 +1333,11 @@ export default function ProjetsPage() {
                             {c.avatar ? (
                               <img src={c.avatar} alt="" className="size-5 rounded-full object-cover" />
                             ) : (
-                              <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-bold text-[9px] flex items-center justify-center">
+                              <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-semibold text-xs flex items-center justify-center">
                                 {c.author.substring(0, 2)}
                               </div>
                             )}
-                            <span className="font-extrabold text-gray-800 text-[11px]">{c.author}</span>
+                            <span className="font-semibold text-gray-800 text-xs">{c.author}</span>
                           </div>
                           <span className="text-[9px] text-gray-400">{c.date}</span>
                         </div>
@@ -1363,7 +1363,7 @@ export default function ProjetsPage() {
                     <button
                       type="submit"
                       disabled={!newCommentText.trim()}
-                      className="bg-[#7225E3] hover:bg-[#5B1BB8] disabled:opacity-50 text-white font-bold px-3 py-1.5 rounded-full text-xs flex items-center gap-1 transition-all cursor-pointer"
+                      className="bg-[#7225E3] hover:bg-[#5B1BB8] disabled:opacity-50 text-white font-semibold px-3 py-1.5 rounded-full text-xs flex items-center gap-1 transition-all cursor-pointer"
                     >
                       <Send className="size-3" />
                     </button>
@@ -1376,7 +1376,7 @@ export default function ProjetsPage() {
                 <button
                   type="button"
                   onClick={() => { handleDeletePost(editingPost.id); setEditingPost(null); }}
-                  className="text-red-500 hover:text-red-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                  className="text-red-500 hover:text-red-700 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                 >
                   <Trash2 className="size-3.5" />
                   Supprimer
@@ -1385,14 +1385,14 @@ export default function ProjetsPage() {
                   <button
                     type="button"
                     onClick={() => setEditingPost(null)}
-                    className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
+                    className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
                   >
                     Annuler
                   </button>
                   <button
                     type="button"
                     onClick={handleSavePostDetails}
-                    className="px-4 py-2 text-xs font-bold bg-[#7225E3] hover:bg-[#5B1BB8] text-white rounded-full shadow-sm transition-all cursor-pointer"
+                    className="px-4 py-2 text-xs font-semibold bg-[#7225E3] hover:bg-[#5B1BB8] text-white rounded-full shadow-sm transition-all cursor-pointer"
                   >
                     Enregistrer
                   </button>
@@ -1430,7 +1430,7 @@ export default function ProjetsPage() {
 
               <form onSubmit={handleAddPostSubmit} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Titre du post / projet *</label>
+                  <label className="text-xs font-semibold text-gray-400 uppercase">Titre du post / projet *</label>
                   <input
                     type="text"
                     required
@@ -1443,7 +1443,7 @@ export default function ProjetsPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase">Catégorie</label>
+                    <label className="text-xs font-semibold text-gray-400 uppercase">Catégorie</label>
                     <input
                       type="text"
                       placeholder="Ex: Produit, Conseils..."
@@ -1453,11 +1453,11 @@ export default function ProjetsPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase">Statut</label>
+                    <label className="text-xs font-semibold text-gray-400 uppercase">Statut</label>
                     <select
                       value={newPostStatus}
                       onChange={e => setNewPostStatus(e.target.value as any)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     >
                       <option value="todo">À faire</option>
                       <option value="inprogress">En cours</option>
@@ -1468,11 +1468,11 @@ export default function ProjetsPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase">Assigner à</label>
+                    <label className="text-xs font-semibold text-gray-400 uppercase">Assigner à</label>
                     <select
                       value={newPostAssignee}
                       onChange={e => setNewPostAssignee(e.target.value)}
-                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
+                      className="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#7225E3] focus:bg-white"
                     >
                       {teamMembers.map(m => (
                         <option key={m.id} value={m.name}>{m.name}</option>
@@ -1480,7 +1480,7 @@ export default function ProjetsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase">Date d'échéance</label>
+                    <label className="text-xs font-semibold text-gray-400 uppercase">Date d'échéance</label>
                     <input
                       type="date"
                       value={newPostDueDate}
@@ -1491,7 +1491,7 @@ export default function ProjetsPage() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase mb-1.5 block">Plateformes</label>
+                  <label className="text-xs font-semibold text-gray-400 uppercase mb-1.5 block">Plateformes</label>
                   <div className="flex gap-2 flex-wrap">
                     {['instagram', 'facebook', 'linkedin', 'tiktok', 'twitter', 'pinterest'].map(plat => (
                       <button
@@ -1514,14 +1514,14 @@ export default function ProjetsPage() {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-all"
+                    className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-all"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
                     disabled={submittingPost}
-                    className="px-4 py-2 text-xs font-bold bg-[#7225E3] hover:bg-[#5B1BB8] text-white rounded-full shadow-sm transition-all flex items-center gap-1.5"
+                    className="px-4 py-2 text-xs font-semibold bg-[#7225E3] hover:bg-[#5B1BB8] text-white rounded-full shadow-sm transition-all flex items-center gap-1.5"
                   >
                     {submittingPost && <Loader2 className="size-3.5 animate-spin" />}
                     Créer
@@ -1580,12 +1580,12 @@ function PostRow({
         {post.imageUrl ? (
           <img src={post.imageUrl} alt="" className="size-9 rounded-xl object-cover shrink-0 border border-gray-100" />
         ) : (
-          <div className="size-9 rounded-xl bg-purple-50 text-[#7225E3] flex items-center justify-center font-bold text-xs shrink-0">
+          <div className="size-9 rounded-xl bg-purple-50 text-[#7225E3] flex items-center justify-center font-semibold text-xs shrink-0">
             <FileText className="size-4" />
           </div>
         )}
         <div className="min-w-0">
-          <div className="font-extrabold text-gray-900 truncate group-hover:text-[#7225E3] transition-colors">
+          <div className="font-semibold text-gray-900 truncate group-hover:text-[#7225E3] transition-colors">
             {post.title}
           </div>
           <div className="text-[10px] text-gray-400 font-semibold">{post.category}</div>
@@ -1597,11 +1597,11 @@ function PostRow({
         {post.assigneeAvatar ? (
           <img src={post.assigneeAvatar} alt="" className="size-6 rounded-full object-cover shrink-0 border border-gray-100" />
         ) : (
-          <div className="size-6 rounded-full bg-purple-100 text-[#7225E3] font-bold text-[9px] flex items-center justify-center shrink-0">
+          <div className="size-6 rounded-full bg-purple-100 text-[#7225E3] font-semibold text-xs flex items-center justify-center shrink-0">
             {post.assigneeName.substring(0, 2).toUpperCase()}
           </div>
         )}
-        <span className="font-bold text-gray-700 truncate text-[11px]">{post.assigneeName}</span>
+        <span className="font-semibold text-gray-700 truncate text-xs">{post.assigneeName}</span>
       </div>
 
       {/* STATUS BADGE */}
@@ -1632,7 +1632,7 @@ function PostRow({
       </div>
 
       {/* COMMENTS COUNT */}
-      <div className="w-16 shrink-0 hidden xl:flex items-center gap-1 text-gray-400 font-bold text-[11px]">
+      <div className="w-16 shrink-0 hidden xl:flex items-center gap-1 text-gray-400 font-semibold text-xs">
         <MessageSquare className="size-3.5 text-gray-400" />
         <span>{post.commentCount || 0}</span>
       </div>
@@ -1719,7 +1719,7 @@ function KanbanCard({
       className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-[#7225E3]/30 transition-all cursor-pointer space-y-3 group"
     >
       <div className="flex justify-between items-start gap-2">
-        <span className="text-[10px] font-extrabold text-[#7225E3] bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100/60 truncate max-w-[120px]">
+        <span className="text-xs font-semibold text-[#7225E3] bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100/60 truncate max-w-[120px]">
           {post.category}
         </span>
         <div className="flex items-center gap-1">
@@ -1729,7 +1729,7 @@ function KanbanCard({
         </div>
       </div>
 
-      <h4 className="font-extrabold text-xs text-gray-900 line-clamp-2 group-hover:text-[#7225E3] transition-colors leading-snug">
+      <h4 className="font-semibold text-xs text-gray-900 line-clamp-2 group-hover:text-[#7225E3] transition-colors leading-snug">
         {post.title}
       </h4>
 
@@ -1738,11 +1738,11 @@ function KanbanCard({
           {post.assigneeAvatar ? (
             <img src={post.assigneeAvatar} alt="" className="size-5 rounded-full object-cover shrink-0 border border-gray-100" />
           ) : (
-            <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-bold text-[8px] flex items-center justify-center shrink-0">
+            <div className="size-5 rounded-full bg-purple-100 text-[#7225E3] font-semibold text-xs flex items-center justify-center shrink-0">
               {post.assigneeName.substring(0, 2).toUpperCase()}
             </div>
           )}
-          <span className="truncate max-w-[80px] font-bold text-gray-700">{post.assigneeName}</span>
+          <span className="truncate max-w-[80px] font-semibold text-gray-700">{post.assigneeName}</span>
         </div>
 
         <div className="flex items-center gap-1 text-gray-500">

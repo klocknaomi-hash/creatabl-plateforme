@@ -19,7 +19,6 @@ import {
   PopoverTrigger 
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 
 export interface NotificationItem {
   id: string;
@@ -128,21 +127,21 @@ export function NotificationsPopover({ className }: { className?: string }) {
         return {
           bg: "bg-purple-50 dark:bg-purple-950/30",
           border: "border-purple-100 dark:border-purple-900/40",
-          text: "text-purple-650 dark:text-purple-400",
+          text: "text-[#5B1BB8] dark:text-purple-400",
           icon: Sparkles
         };
       case "alert":
         return {
           bg: "bg-amber-50 dark:bg-amber-950/20",
           border: "border-amber-100 dark:border-amber-900/30",
-          text: "text-amber-650 dark:text-amber-400",
+          text: "text-[#8A4B00] dark:text-amber-400",
           icon: AlertTriangle
         };
       case "update":
         return {
           bg: "bg-emerald-50 dark:bg-emerald-950/20",
           border: "border-emerald-100 dark:border-emerald-900/30",
-          text: "text-emerald-650 dark:text-emerald-450",
+          text: "text-[#0E7445] dark:text-emerald-400",
           icon: RefreshCw
         };
       case "platform":
@@ -150,7 +149,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
         return {
           bg: "bg-blue-50 dark:bg-blue-950/20",
           border: "border-blue-100 dark:border-blue-900/30",
-          text: "text-blue-650 dark:text-blue-400",
+          text: "text-[#1F5BB8] dark:text-blue-400",
           icon: Globe
         };
     }
@@ -162,30 +161,22 @@ export function NotificationsPopover({ className }: { className?: string }) {
         render={
           <button
             id="topbar-notification-bell"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon-sm" }),
-              "relative cursor-pointer transition-all hover:bg-muted active:scale-95 text-muted-foreground hover:text-foreground",
-              className
-            )}
+            className={cn("cr-iconbtn", className)}
             aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} non lues` : ""}`}
           />
         }
       >
-        <Bell className="size-4.5" />
-        {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 size-3.5 bg-[#7225E3] rounded-full text-white text-[8px] font-bold flex items-center justify-center border border-background animate-in zoom-in duration-200">
-            {unreadCount}
-          </span>
-        )}
+        <Bell size={20} aria-hidden="true" />
+        {unreadCount > 0 && <span className="cr-pip" aria-hidden="true" />}
       </PopoverTrigger>
 
       <PopoverContent className="w-85 p-0 bg-popover border border-border/80 shadow-xl rounded-2xl overflow-hidden z-50 mr-4" align="end">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-gray-50/50 dark:bg-muted/30 border-b border-border/80">
           <div className="flex items-center gap-1.5">
-            <span className="font-bold text-sm text-foreground">Notifications</span>
+            <span className="font-semibold text-sm text-foreground">Notifications</span>
             {unreadCount > 0 && (
-              <span className="bg-[#7225E3]/10 text-[#7225E3] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="bg-[#7225E3]/10 text-[#7225E3] text-xs font-semibold px-1.5 py-0.5 rounded-full">
                 {unreadCount} nouvelle{unreadCount > 1 ? "s" : ""}
               </span>
             )}
@@ -193,7 +184,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="text-xs font-bold text-[#7225E3] hover:text-[#5B1BB8] transition-colors cursor-pointer"
+              className="text-xs font-semibold text-[#7225E3] hover:text-[#5B1BB8] transition-colors cursor-pointer"
             >
               Tout marquer comme lu
             </button>
@@ -233,7 +224,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                   {/* Content */}
                   <div className="flex-1 min-w-0 pr-2">
                     <div className="flex items-start justify-between gap-1">
-                      <h4 className={cn("text-xs font-bold leading-tight truncate", !isRead ? "text-foreground font-extrabold" : "text-muted-foreground")}>
+                      <h4 className={cn("text-xs font-semibold leading-tight truncate", !isRead ? "text-foreground font-semibold" : "text-muted-foreground")}>
                         {item.title}
                       </h4>
                       {!isRead && (
@@ -249,7 +240,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                         {item.timestamp}
                       </span>
                       {item.link && (
-                        <span className="inline-flex items-center gap-0.5 text-[10px] text-[#7225E3] hover:underline font-bold">
+                        <span className="inline-flex items-center gap-0.5 text-xs text-[#7225E3] hover:underline font-semibold">
                           Voir
                           <ExternalLink className="size-2.5" />
                         </span>

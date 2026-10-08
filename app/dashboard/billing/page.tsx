@@ -69,14 +69,14 @@ export default async function BillingPage() {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-3xl font-bold text-gray-900 leading-none">{trialDaysLeft}</span>
-                <span className="text-xs font-bold text-gray-400 mt-1">jours</span>
+                <span className="text-xs font-semibold text-gray-400 mt-1">jours</span>
               </div>
             </div>
 
             <div className="space-y-6 text-center md:text-left flex-1">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                  <Badge className="bg-primary/10 text-primary border-none px-3 py-1 text-xs font-bold rounded-full">
+                  <Badge className="bg-primary/10 text-primary border-none px-3 py-1 text-xs font-semibold rounded-full">
                     Ton essai gratuit Business
                   </Badge>
                 </div>
@@ -90,11 +90,11 @@ export default async function BillingPage() {
               </div>
               
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                 <div className="flex items-center gap-2 text-sm font-bold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
+                 <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
                    <CheckCircle2 className="w-4 h-4 text-green-500" />
                    Accès complet Business
                  </div>
-                 <div className="flex items-center gap-2 text-sm font-bold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
+                 <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-gray-50 px-4 py-2 rounded-full">
                    <Clock className="w-4 h-4 text-primary" />
                    Extension automatique
                  </div>
@@ -112,7 +112,7 @@ export default async function BillingPage() {
       {/* BANDEAU SECURITE */}
       <div className="rounded-2xl bg-gray-50/50 py-8 px-8 text-center border border-gray-100">
         <div className="max-w-2xl mx-auto space-y-4">
-          <p className="text-sm font-bold text-gray-600 flex items-center justify-center gap-3">
+          <p className="text-sm font-semibold text-gray-600 flex items-center justify-center gap-3">
             <Lock className="w-5 h-5 text-[#7C3AED]" />
             Paiements 100% sécurisés via Stripe
           </p>

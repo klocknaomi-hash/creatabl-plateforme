@@ -23,7 +23,10 @@ export async function GET(req: NextRequest) {
       'design:meta:read',
       'asset:read',
       'asset:write',
-      'profile:read'
+      'profile:read',
+      // Dossiers Canva dans le sélecteur : à activer seulement une fois le scope
+      // folder:read ajouté à l'intégration dans le portail développeur Canva.
+      ...(process.env.CANVA_FOLDER_SCOPE === 'true' ? ['folder:read'] : []),
     ].join(' '),
     code_challenge: codeChallenge,
     code_challenge_method: 'S256',

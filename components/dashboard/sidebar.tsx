@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -12,11 +11,12 @@ import {
   CreditCard,
   Plus,
   FileText,
-  FolderKanban,
   Users,
-  Building2,
   WandSparkles,
   Settings,
+  Inbox,
+  Image as ImageIcon,
+  Palette,
 } from "lucide-react";
 
 import {
@@ -35,61 +35,80 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
-import { useAccess } from "@/hooks/useAccess";
-import { isNaomiOrTest } from "@/lib/plans";
 import type React from "react";
 import { CreditsMeter } from "@/components/dashboard/CreditsMeter";
 
 
-type NavItem = { title: string; href: string; icon: React.ComponentType<{ className?: string }> };
+type NavItem = {
+  title: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  soon?: boolean;
+  activePrefix?: string;
+  exclude?: string;
+};
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { user } = useUser();
-  const access = useAccess();
 
   // Navigation du design system Creatabl.ia : création, publication, calendrier,
   // contenu et analytique, puis l'espace (équipe, organisation, réglages).
+  // Sidebar finale du design system : Principal, Ressources, Espace, Compte.
   const navMain: NavItem[] = [
     { title: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
     { title: "Agent IA", href: "/dashboard/agent-ia", icon: WandSparkles },
     { title: "Calendrier", href: "/dashboard/calendar", icon: CalendarDays },
     { title: "Publications", href: "/dashboard/posts", icon: FileText },
-    { title: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+    { title: "Analytique", href: "/dashboard/analytics", icon: BarChart3 },
   ];
 
-  const navTeam: NavItem[] = [
-    { title: "Projets", href: "/dashboard/equipe/projets", icon: FolderKanban },
-    { title: "Membres", href: "/dashboard/equipe/membres", icon: Users },
+  const navResources: NavItem[] = [
+    { title: "Messages", href: "#messages", icon: Inbox, soon: true },
+    { title: "Médiathèque", href: "/dashboard/mediatheque", icon: ImageIcon },
   ];
 
+  // L'organisation se gère depuis la Top Bar et la page Équipe.
   const navSpace: NavItem[] = [
     { title: "Comptes connectés", href: "/dashboard/settings/connections", icon: Link2 },
-    ...(access.multiAccounts
-      ? [{ title: "Organisation", href: "/dashboard/settings/workspace", icon: Building2 }]
-      : []),
-    { title: "Abonnement", href: "/dashboard/billing", icon: CreditCard },
-    { title: "Paramètres", href: "/dashboard/settings", icon: Settings },
+    { title: "Ton de marque", href: "/dashboard/ton-de-marque", icon: Palette },
+    { title: "Équipe", href: "/dashboard/equipe/membres", icon: Users, activePrefix: "/dashboard/equipe" },
   ];
 
-  function isActive(href: string) {
-    if (href === "/dashboard") return pathname === "/dashboard";
-    if (href === "/dashboard/settings") return pathname === "/dashboard/settings";
-    return pathname.startsWith(href);
+  const navAccount: NavItem[] = [
+    { title: "Abonnement", href: "/dashboard/billing", icon: CreditCard },
+    { title: "Paramètres", href: "/dashboard/settings", icon: Settings, activePrefix: "/dashboard/settings", exclude: "/dashboard/settings/connections" },
+  ];
+
+  function isActive(item: NavItem) {
+    if (item.soon) return false;
+    if (item.href === "/dashboard") return pathname === "/dashboard";
+    if (item.exclude && pathname.startsWith(item.exclude)) return false;
+    return pathname.startsWith(item.activePrefix ?? item.href);
   }
 
   const renderItems = (items: NavItem[]) => (
     <SidebarMenu>
       {items.map((item) => (
         <SidebarMenuItem key={item.href}>
-          <SidebarMenuButton
-            render={<Link href={item.href} aria-current={isActive(item.href) ? "page" : undefined} />}
-            isActive={isActive(item.href)}
-            tooltip={item.title}
-          >
-            <item.icon />
-            <span>{item.title}</span>
-          </SidebarMenuButton>
+          {item.soon ? (
+            // Fonction pas encore disponible : elle garde sa place, avec un badge « Bientôt ».
+            <SidebarMenuButton aria-disabled="true" tooltip={`${item.title} (bientôt)`} className="cursor-default opacity-100 aria-disabled:opacity-100">
+              <item.icon />
+              <span className="flex w-full items-center justify-between gap-2">
+                <span>{item.title}</span>
+                <span className="cr-badge cr-badge--violet cr-badge--plain" style={{ height: 20, padding: "0 8px", fontSize: 11 }}>Bientôt</span>
+              </span>
+            </SidebarMenuButton>
+          ) : (
+            <SidebarMenuButton
+              render={<Link href={item.href} aria-current={isActive(item) ? "page" : undefined} />}
+              isActive={isActive(item)}
+              tooltip={item.title}
+            >
+              <item.icon />
+              <span>{item.title}</span>
+            </SidebarMenuButton>
+          )}
         </SidebarMenuItem>
       ))}
     </SidebarMenu>
@@ -143,70 +162,28 @@ export function AppSidebar() {
       {/* ── Navigation ── */}
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Principal</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(navMain)}</SidebarGroupContent>
         </SidebarGroup>
 
-        {access.team && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Équipe</SidebarGroupLabel>
-            <SidebarGroupContent>{renderItems(navTeam)}</SidebarGroupContent>
-          </SidebarGroup>
-        )}
+        <SidebarGroup>
+          <SidebarGroupLabel>Ressources</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(navResources)}</SidebarGroupContent>
+        </SidebarGroup>
 
         <SidebarGroup>
           <SidebarGroupLabel>Espace</SidebarGroupLabel>
           <SidebarGroupContent>{renderItems(navSpace)}</SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Compte</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(navAccount)}</SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       {/* ── User Footer ── */}
       <SidebarFooter className="px-3 py-2 space-y-2 group-data-[collapsible=icon]:px-1">
-        {/* Trial Info */}
-        {(() => {
-          const email = user?.emailAddresses[0]?.emailAddress ?? '';
-          const currentPlan = (user?.publicMetadata?.plan as string) || 'starter';
-          
-          if (currentPlan === 'free' || user?.publicMetadata?.isSubscribed || user?.publicMetadata?.subscriptionStatus === 'active' || isNaomiOrTest(email)) return null;
-          
-          let daysLeft = 14;
-          let showTrial = true;
-          
-          let trialEndsAt = user?.publicMetadata?.trialEndsAt as string | undefined;
-          if (trialEndsAt) {
-            const calculatedDays = Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-            if (!isNaN(calculatedDays) && calculatedDays > 0) {
-              daysLeft = calculatedDays;
-            } else {
-              showTrial = false;
-            }
-          } else {
-            showTrial = false;
-          }
-
-          if (!showTrial) return null;
-          
-          const progressPercentage = Math.max(0, Math.min(100, Math.round(((14 - daysLeft) / 14) * 100)));
-
-          return (
-            <div className="bg-[#7225E3]/5 border border-[#7225E3]/10 rounded-2xl p-4 space-y-2 group-data-[collapsible=icon]:hidden">
-              <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-bold text-[#7225E3] leading-none">
-                  Essai Business
-                </span>
-                <span className="text-[11px] text-gray-500 font-semibold mt-1">
-                  {daysLeft} jour{daysLeft > 1 ? "s" : ""} restant{daysLeft > 1 ? "s" : ""}
-                </span>
-              </div>
-              <div className="h-2 w-full bg-purple-100/60 rounded-full overflow-hidden mt-1.5">
-                <div 
-                  className="h-full bg-[#7225E3] rounded-full transition-all duration-300"
-                  style={{ width: `${progressPercentage}%` }}
-                />
-              </div>
-            </div>
-          );
-        })()}
-
         <CreditsMeter />
 
       </SidebarFooter>

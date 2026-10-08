@@ -51,7 +51,7 @@ export function PlatformSelector({
               disabled={!isConnected}
               onClick={() => setPlatform(p.id)}
               className={cn(
-                "group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-[10px] font-bold transition-all border-2",
+                "group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border-2",
                 isActive 
                   ? "bg-primary border-primary text-primary-foreground shadow-lg" 
                   : "bg-background border-border/40 hover:border-primary/20 text-muted-foreground",
@@ -61,7 +61,7 @@ export function PlatformSelector({
               {Icon && <Icon className={cn("size-3.5 transition-transform group-hover:scale-110", isActive ? "text-primary-foreground" : "text-[#6B6780]")} />}
               <span className="uppercase tracking-tight">{p.label.split(' / ')[0]}</span>
               {!isConnected && (
-                <span className="ml-1 px-1 py-0.5 rounded-md bg-muted text-[7px] font-bold opacity-60">
+                <span className="ml-1 px-1 py-0.5 rounded-md bg-muted text-xs font-semibold opacity-60">
                   OFF
                 </span>
               )}

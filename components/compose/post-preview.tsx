@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Share2, MoreHorizontal, Repeat2, BarChart2, Bookmark, Check, Send } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TwitterIcon, InstagramIcon, LinkedinIcon, FacebookIcon } from "@/components/platform-icons";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { Bookmark, Globe, Heart, MessageCircle, Music2, MoreHorizontal, Repeat2, Send, Share2, ThumbsUp } from "lucide-react";
+import NetworkLogo, { toNetwork } from "@/components/ds/NetworkLogo";
+import { ruleFor } from "@/lib/network-rules";
 
 interface MediaFile {
   url: string;
   name: string;
+  mimeType?: string | null;
 }
 
 interface Account {
@@ -22,285 +22,257 @@ interface PostPreviewProps {
   content: string;
   mediaFiles: MediaFile[];
   platforms: string[];
+  scheduledAt?: Date | null;
 }
 
-export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps) {
+const isVideo = (m: MediaFile) => (m.mimeType ?? "").startsWith("video") || /\.(mp4|mov|webm|m4v)(\?|$)/i.test(m.url);
+
+function Media({ file, ratio }: { file: MediaFile; ratio: string }) {
+  return (
+    <div style={{ aspectRatio: ratio, background: "#F0F0F3", overflow: "hidden" }}>
+      {isVideo(file) ? (
+        <video src={file.url} className="size-full object-cover" muted playsInline />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={file.url} alt="" className="size-full object-cover" />
+      )}
+    </div>
+  );
+}
+
+function MediaPlaceholder({ ratio, text }: { ratio: string; text: string }) {
+  return (
+    <div className="cr-visual cr-visual--tint" style={{ aspectRatio: ratio, justifyContent: "center", alignItems: "center", padding: 16 }}>
+      <span style={{ font: "500 13px/18px var(--font-text)", textAlign: "center" }}>{text}</span>
+    </div>
+  );
+}
+
+function Avatar({ src, name, size = 34, square = false }: { src?: string; name: string; size?: number; square?: boolean }) {
+  return src ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt="" width={size} height={size} style={{ width: size, height: size, borderRadius: square ? 6 : "50%", objectFit: "cover", flex: "none" }} />
+  ) : (
+    <span className="cr-avatar" style={{ width: size, height: size, borderRadius: square ? 6 : "50%", fontSize: size / 2.6 }}>
+      {name.charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
+/** Texte coupé là où le réseau affiche « … plus », hashtags mis en évidence. */
+function Folded({ text, foldAt, more, tagClass }: { text: string; foldAt: number; more: string; tagClass?: string }) {
+  const [open, setOpen] = useState(false);
+  const chars = Array.from(text);
+  const cut = !open && chars.length > foldAt;
+  const shown = cut ? chars.slice(0, foldAt).join("").trimEnd() : text;
+  const parts = shown.split(/(#[\p{L}\p{N}_]+)/u);
+  return (
+    <>
+      {parts.map((p, i) => (p.startsWith("#") && tagClass ? <span key={i} className={tagClass}>{p}</span> : <span key={i}>{p}</span>))}
+      {cut && (
+        <button type="button" onClick={() => setOpen(true)} style={{ color: "#737373", background: "none", border: 0, padding: 0, marginLeft: 4, cursor: "pointer", font: "inherit" }}>
+          … {more}
+        </button>
+      )}
+    </>
+  );
+}
+
+function whenLabel(date?: Date | null) {
+  if (!date) return "Publication immédiate";
+  return `Programmé · ${date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })} à ${date.getHours()} h ${String(date.getMinutes()).padStart(2, "0")}`;
+}
+
+// Post Preview du design system : reproduction de la publication telle qu'elle apparaîtra
+// sur chaque réseau, avec son format, son ratio et sa coupure de texte.
+export function PostPreview({ content, mediaFiles, platforms, scheduledAt }: PostPreviewProps) {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [activeTab, setActiveTab] = useState<string>("");
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     fetch("/api/accounts")
       .then((res) => res.json())
-      .then((data) => {
-        const fetchedAccounts = data.accounts || [];
-        setAccounts(fetchedAccounts);
-      })
+      .then((data) => setAccounts(data.accounts || []))
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    if (platforms.length > 0 && (!activeTab || !platforms.includes(activeTab))) {
-      setActiveTab(platforms[0]);
-    }
-    setIsExpanded(false); // Reset expansion when changing tabs
-  }, [platforms, activeTab]);
+  const current = platforms.includes(activeTab) ? activeTab : platforms[0] ?? "";
+
+  const account = useMemo(
+    () => accounts.find((a) => a.platform.toLowerCase() === current.toLowerCase()),
+    [accounts, current]
+  );
 
   if (platforms.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[300px] border border-dashed rounded-2xl bg-muted/5 text-muted-foreground p-6 text-center">
-        <div className="w-12 h-12 rounded-full bg-muted/10 flex items-center justify-center mb-3">
-          <TwitterIcon className="w-6 h-6 opacity-20" />
-        </div>
-        <p className="text-sm font-bold text-foreground/80">Aperçu du post</p>
-        <p className="text-xs max-w-[150px]">Sélectionnez un réseau pour voir l'aperçu de votre post.</p>
+      <div className="cr-empty" style={{ background: "var(--white)", border: "1px dashed var(--border-control)", borderRadius: "var(--cr-radius-md)", width: "100%" }}>
+        <h4>Aperçu du post</h4>
+        <p>Sélectionnez un réseau pour voir votre post tel qu&apos;il apparaîtra.</p>
       </div>
     );
   }
 
-  const account = accounts.find((a: Account) => a.platform.toLowerCase() === activeTab.toLowerCase());
-  const username = account?.username || "Username";
-  const avatarUrl = account?.avatarUrl;
+  const rule = ruleFor(current);
+  const username = account?.username || "votre_compte";
+  const text = content || "Votre texte apparaîtra ici.";
+  const ratio = rule?.ratio ?? "1 / 1";
 
   const renderPreview = () => {
-    switch (activeTab.toLowerCase()) {
-      case 'instagram':
+    switch (current.toLowerCase()) {
+      case "instagram":
         return (
-          <Card className="rounded-xl border border-border/60 shadow-sm overflow-hidden bg-background">
-            <div className="p-3 flex items-center justify-between border-b border-border/40">
-              <div className="flex items-center gap-2">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src={avatarUrl} />
-                  <AvatarFallback className="text-[10px] font-bold">{username.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <span className="text-xs font-bold">{username}</span>
-              </div>
-              <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+          <div className="cr-ig" aria-label="Aperçu Instagram">
+            <div className="cr-ig-head">
+              <span className="cr-ig-ring"><Avatar src={account?.avatarUrl} name={username} size={34} /></span>
+              <div><strong>{username}</strong></div>
+              <span className="cr-ig-more"><MoreHorizontal size={20} aria-hidden="true" /></span>
             </div>
-            <CardContent className="p-0">
-              {mediaFiles.length > 0 ? (
-                <div className="relative bg-black/5 flex items-center justify-center border-y border-border/40 overflow-hidden">
-                  <img src={mediaFiles[0].url} alt="" className="w-full aspect-square object-cover" />
-                  {mediaFiles.length > 1 && (
-                    <div className="absolute top-3 right-3 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">
-                      1/{mediaFiles.length}
-                    </div>
+            <div className="cr-ig-media" style={{ aspectRatio: ratio }}>
+              {mediaFiles[0] ? <Media file={mediaFiles[0]} ratio={ratio} /> : <MediaPlaceholder ratio={ratio} text="Instagram exige une image ou une vidéo." />}
+            </div>
+            <div className="cr-ig-actions">
+              <Heart size={24} aria-hidden="true" />
+              <MessageCircle size={24} aria-hidden="true" />
+              <Send size={24} aria-hidden="true" />
+              {mediaFiles.length > 1 && <span style={{ fontSize: 12, color: "#5F5F6E", alignSelf: "center" }}>1/{mediaFiles.length}</span>}
+              <span className="end"><Bookmark size={24} aria-hidden="true" /></span>
+            </div>
+            <div className="cr-ig-meta">
+              <span><strong style={{ fontWeight: 600 }}>{username}</strong> <Folded text={text} foldAt={rule?.foldAt ?? 125} more="plus" tagClass="tags" /></span>
+              <small>{whenLabel(scheduledAt)}</small>
+            </div>
+          </div>
+        );
+
+      case "facebook":
+        return (
+          <div className="cr-fb" aria-label="Aperçu Facebook">
+            <div className="cr-fb-head">
+              <Avatar src={account?.avatarUrl} name={username} size={38} />
+              <div>
+                <strong>{username}</strong>
+                <small>{scheduledAt ? whenLabel(scheduledAt).replace("Programmé · ", "") : "À l'instant"} · <Globe size={12} aria-hidden="true" /></small>
+              </div>
+              <span className="cr-ig-more"><MoreHorizontal size={20} aria-hidden="true" /></span>
+            </div>
+            <div className="cr-fb-text"><Folded text={text} foldAt={rule?.foldAt ?? 480} more="Voir plus" /></div>
+            {mediaFiles[0] && <div className="cr-fb-media" style={{ aspectRatio: ratio }}><Media file={mediaFiles[0]} ratio={ratio} /></div>}
+            <div className="cr-fb-actions">
+              <span><ThumbsUp size={18} aria-hidden="true" />J&apos;aime</span>
+              <span><MessageCircle size={18} aria-hidden="true" />Commenter</span>
+              <span><Share2 size={18} aria-hidden="true" />Partager</span>
+            </div>
+          </div>
+        );
+
+      case "linkedin":
+        return (
+          <div className="cr-fb" aria-label="Aperçu LinkedIn">
+            <div className="cr-fb-head">
+              <Avatar src={account?.avatarUrl} name={username} size={44} square />
+              <div>
+                <strong>{username}</strong>
+                <small>{scheduledAt ? whenLabel(scheduledAt).replace("Programmé · ", "") : "Maintenant"} · <Globe size={12} aria-hidden="true" /></small>
+              </div>
+              <span className="cr-ig-more"><MoreHorizontal size={20} aria-hidden="true" /></span>
+            </div>
+            <div className="cr-fb-text"><Folded text={text} foldAt={rule?.foldAt ?? 210} more="voir plus" tagClass="font-semibold text-[#0A66C2]" /></div>
+            {mediaFiles[0] && <div className="cr-fb-media" style={{ aspectRatio: ratio }}><Media file={mediaFiles[0]} ratio={ratio} /></div>}
+            <div className="cr-fb-actions" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
+              <span><ThumbsUp size={18} aria-hidden="true" />J&apos;aime</span>
+              <span><MessageCircle size={18} aria-hidden="true" />Commenter</span>
+              <span><Repeat2 size={18} aria-hidden="true" />Republier</span>
+              <span><Send size={18} aria-hidden="true" />Envoyer</span>
+            </div>
+          </div>
+        );
+
+      case "twitter": {
+        const over = Array.from(content).length > 280;
+        return (
+          <div className="cr-fb" aria-label="Aperçu X" style={{ padding: 14 }}>
+            <div style={{ display: "flex", gap: 10 }}>
+              <Avatar src={account?.avatarUrl} name={username} size={40} />
+              <div style={{ minWidth: 0, flex: 1, display: "grid", gap: 6 }}>
+                <div style={{ fontSize: 15, lineHeight: "20px" }}>
+                  <strong style={{ fontWeight: 700 }}>{username}</strong>{" "}
+                  <span style={{ color: "#536471" }}>@{username.toLowerCase().replace(/\s+/g, "")} · {scheduledAt ? scheduledAt.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "maintenant"}</span>
+                </div>
+                <p style={{ fontSize: 15, lineHeight: "20px", whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
+                  {over ? (
+                    <>
+                      {Array.from(content).slice(0, 280).join("")}
+                      <mark style={{ background: "var(--error-50)", color: "var(--error-600)" }}>{Array.from(content).slice(280).join("")}</mark>
+                    </>
+                  ) : (
+                    <Folded text={text} foldAt={280} more="Afficher plus" tagClass="text-[#1D9BF0]" />
                   )}
-                </div>
-              ) : (
-                <div className="aspect-square bg-muted/10 flex items-center justify-center text-muted-foreground text-[10px] italic">
-                  Votre visuel apparaîtra ici
-                </div>
-              )}
-              <div className="p-3 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Heart className="w-6 h-6 hover:text-red-500 transition-colors" />
-                    <MessageCircle className="w-6 h-6" />
-                    <Share2 className="w-6 h-6" />
+                </p>
+                {mediaFiles.length > 0 && (
+                  <div style={{ display: "grid", gridTemplateColumns: mediaFiles.length > 1 ? "1fr 1fr" : "1fr", gap: 2, borderRadius: 16, overflow: "hidden", border: "1px solid #CFD9DE" }}>
+                    {mediaFiles.slice(0, 4).map((m, i) => <Media key={i} file={m} ratio={mediaFiles.length > 1 ? "1 / 1" : ratio} />)}
                   </div>
-                  <Bookmark className="w-6 h-6" />
+                )}
+                <div style={{ display: "flex", justifyContent: "space-between", color: "#536471", maxWidth: 320 }}>
+                  <MessageCircle size={18} aria-hidden="true" />
+                  <Repeat2 size={18} aria-hidden="true" />
+                  <Heart size={18} aria-hidden="true" />
+                  <Bookmark size={18} aria-hidden="true" />
+                  <Share2 size={18} aria-hidden="true" />
                 </div>
-                <div className="space-y-1">
-                  <div>
-                    <p className={cn("text-[13px] leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
-                      <span className="font-bold mr-1.5">{username}</span>
-                      {content || "Votre caption..."}
-                    </p>
-                    {content && content.length > 100 && !isExpanded && (
-                      <button onClick={() => setIsExpanded(true)} className="text-muted-foreground text-[13px] hover:text-foreground mt-1">
-                        Voir plus
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case 'twitter':
-        return (
-          <Card className="rounded-xl border border-border/60 shadow-sm overflow-hidden bg-background font-sans">
-            <CardContent className="p-3">
-              <div className="flex gap-3">
-                <Avatar className="w-10 h-10">
-                  <AvatarImage src={avatarUrl} />
-                  <AvatarFallback className="bg-muted text-foreground font-bold text-xs">{username.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center gap-1">
-                    <span className="font-bold text-[14px]">{username}</span>
-                    <span className="text-muted-foreground text-[14px]">@{username.toLowerCase()} · 1m</span>
-                  </div>
-                  {mediaFiles.length > 0 && (
-                    <div className={cn(
-                      "mt-2 mb-2 rounded-xl overflow-hidden border border-border/60 grid gap-0.5",
-                      mediaFiles.length === 1 ? "grid-cols-1" : "grid-cols-2"
-                    )}>
-                      {mediaFiles.slice(0, 4).map((media, i) => (
-                        <div key={i} className={cn(
-                          "relative flex items-center justify-center bg-black/5 overflow-hidden",
-                          mediaFiles.length === 3 && i === 0 && "row-span-2"
-                        )}>
-                          <img src={media.url} alt="" className="w-full aspect-[4/5] object-cover" />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div>
-                    <p className={cn("text-[14px] text-foreground leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-4")}>
-                      {content || "Quoi de neuf ?"}
-                    </p>
-                    {content && content.length > 150 && !isExpanded && (
-                      <button onClick={() => setIsExpanded(true)} className="text-blue-500 hover:underline text-[14px] mt-1">
-                        Afficher plus
-                      </button>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-center justify-between mt-3 text-muted-foreground max-w-[300px]">
-                    <MessageCircle className="w-4 h-4" />
-                    <Repeat2 className="w-4 h-4" />
-                    <Heart className="w-4 h-4" />
-                    <BarChart2 className="w-4 h-4" />
-                    <div className="flex items-center gap-2">
-                      <Bookmark className="w-4 h-4" />
-                      <Share2 className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case 'facebook':
-        return (
-          <Card className="rounded-xl border border-border/60 shadow-sm overflow-hidden bg-background">
-            <div className="p-3 flex items-center gap-2">
-              <Avatar className="w-9 h-9">
-                <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="bg-muted text-foreground font-bold text-xs">{username.charAt(0).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="text-[13px] font-bold text-[#050505]">{username}</span>
-                <span className="text-[11px] text-muted-foreground leading-none">Just now · 🌍</span>
               </div>
             </div>
-            <CardContent className="p-0">
-              {mediaFiles.length > 0 && (
-                <div className="bg-muted border-y border-border/40">
-                  <img src={mediaFiles[0].url} alt="" className="w-full aspect-square object-cover" />
-                </div>
-              )}
-              <div className="p-3">
-                <p className={cn("pb-2 text-[14px] leading-tight whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
-                  {content || "Quoi de neuf ?"}
-                </p>
-                {content && content.length > 100 && !isExpanded && (
-                  <button onClick={() => setIsExpanded(true)} className="text-muted-foreground font-bold hover:underline text-[14px] mb-2">
-                    Voir plus
-                  </button>
-                )}
-              </div>
-              <div className="p-3">
-                <div className="flex items-center justify-between text-muted-foreground text-[12px] mb-2 border-b border-border/40 pb-2">
-                  <div className="flex items-center gap-1">
-                    <span className="bg-[#1877F2] text-white p-0.5 rounded-full"><Heart className="w-2 h-2 fill-current" /></span>
-                    <span>12</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span>4 commentaires</span>
-                    <span>2 partages</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between px-2">
-                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><Heart className="w-4 h-4" /> J'aime</div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><MessageCircle className="w-4 h-4" /> Commenter</div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[13px]"><Share2 className="w-4 h-4" /> Partager</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          </div>
         );
+      }
 
-      case 'linkedin':
+      case "tiktok":
         return (
-          <Card className="rounded-xl border border-border/60 shadow-sm overflow-hidden bg-background">
-            <div className="p-3 flex items-center gap-2">
-              <Avatar className="w-10 h-10 rounded-sm">
-                <AvatarImage src={avatarUrl} />
-                <AvatarFallback className="bg-muted text-foreground font-bold text-xs rounded-sm">{username.charAt(0).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="text-[13px] font-bold text-foreground">{username}</span>
-                <span className="text-[11px] text-muted-foreground leading-tight">Software Engineer</span>
-                <span className="text-[10px] text-muted-foreground leading-tight">1m · 🌐</span>
-              </div>
+          <div aria-label="Aperçu TikTok" style={{ width: 260, aspectRatio: ratio, borderRadius: 16, overflow: "hidden", position: "relative", background: "#14121F", boxShadow: "var(--shadow-1)" }}>
+            {mediaFiles[0] && isVideo(mediaFiles[0]) ? (
+              <video src={mediaFiles[0].url} className="size-full object-cover" muted playsInline />
+            ) : (
+              <div className="grid size-full place-items-center p-6 text-center text-sm text-white/80">TikTok n&apos;accepte que la vidéo verticale (9:16).</div>
+            )}
+            <div style={{ position: "absolute", left: 12, right: 56, bottom: 14, color: "#fff", fontSize: 13, lineHeight: "18px", textShadow: "0 1px 2px rgba(0,0,0,.5)" }}>
+              <strong style={{ display: "block", marginBottom: 4 }}>@{username}</strong>
+              <Folded text={text} foldAt={rule?.foldAt ?? 150} more="plus" />
+              <span style={{ display: "flex", gap: 6, alignItems: "center", marginTop: 6 }}><Music2 size={14} aria-hidden="true" />Son original</span>
             </div>
-            <CardContent className="p-0">
-              {mediaFiles.length > 0 && (
-                <div className="bg-muted border-y border-border/40 mb-3">
-                  <img src={mediaFiles[0].url} alt="" className="w-full aspect-square object-cover" />
-                </div>
-              )}
-              <div className="px-3">
-                <p className={cn("text-[14px] leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
-                  {content || "De quoi voulez-vous discuter ?"}
-                </p>
-                {content && content.length > 100 && !isExpanded && (
-                  <button onClick={() => setIsExpanded(true)} className="text-muted-foreground font-semibold hover:underline text-[14px] mt-1 mb-2">
-                    ...voir plus
-                  </button>
-                )}
-              </div>
-              <div className="p-3">
-                <div className="flex items-center gap-1 text-muted-foreground text-[11px] mb-3">
-                  <span className="text-blue-600 font-bold">👍 45</span>
-                  <span>· 2 commentaires</span>
-                </div>
-                <div className="flex items-center justify-between pt-2 border-t border-border/40">
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Heart className="w-4 h-4" /> J'aime</div>
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><MessageCircle className="w-4 h-4" /> Commenter</div>
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Repeat2 className="w-4 h-4" /> Reposter</div>
-                  <div className="flex flex-col items-center gap-1 text-muted-foreground font-bold text-[11px]"><Send className="w-4 h-4" /> Envoyer</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          </div>
         );
 
       default:
-        return null;
+        return (
+          <div className="cr-fb" style={{ padding: 14 }}>
+            <p style={{ fontSize: 14, lineHeight: "20px", whiteSpace: "pre-wrap" }}>{text}</p>
+            {mediaFiles[0] && <Media file={mediaFiles[0]} ratio={ratio} />}
+          </div>
+        );
     }
   };
 
   return (
-    <div className="space-y-4 max-h-[calc(100vh-280px)] overflow-y-auto pr-2 custom-scrollbar">
+    <div className="grid w-full justify-items-center gap-4">
       {platforms.length > 1 && (
-        <div className="flex flex-wrap gap-1 p-1 bg-muted/10 rounded-lg border border-border/40">
-          {platforms.map((p) => (
-            <button
-              key={p}
-              onClick={() => setActiveTab(p)}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-xs font-semibold transition-all",
-                activeTab === p 
-                  ? "bg-white text-[#14121F] shadow-sm" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              )}
-            >
-              {({ twitter: 'X', instagram: 'Instagram', linkedin: 'LinkedIn', facebook: 'Facebook', tiktok: 'TikTok', youtube: 'YouTube', pinterest: 'Pinterest' } as Record<string, string>)[p] ?? p}
-            </button>
-          ))}
+        <div className="cr-segment max-w-full overflow-x-auto" role="tablist" aria-label="Réseau de l'aperçu">
+          {platforms.map((p) => {
+            const net = toNetwork(p);
+            return (
+              <button key={p} type="button" role="tab" aria-selected={p === current} className="cr-tab" onClick={() => setActiveTab(p)}>
+                {net && <NetworkLogo name={net} size={14} />}
+                {ruleFor(p)?.label ?? p}
+              </button>
+            );
+          })}
         </div>
       )}
-      
-      <div className="animate-in fade-in zoom-in-95 duration-300">
-        {renderPreview()}
-      </div>
+      <div className="grid w-full justify-items-center">{renderPreview()}</div>
+      {rule && (
+        <p className="max-w-[40ch] text-center text-xs text-[#6B6780]">
+          Format {rule.label} : {rule.ratioLabel}, {rule.maxChars.toLocaleString("fr-FR")} caractères maximum. L&apos;aperçu est indicatif : chaque réseau peut recadrer l&apos;image selon l&apos;appareil.
+        </p>
+      )}
     </div>
   );
 }

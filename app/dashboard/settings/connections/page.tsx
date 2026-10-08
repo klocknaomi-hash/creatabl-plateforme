@@ -30,9 +30,10 @@ import {
 import { DisconnectButton } from './disconnect-button';
 import { PlatformCardContent } from './platform-card-content';
 import { FEATURES } from '@/lib/config/features';
+import { Alert as DsAlert, Badge as DsBadge } from '@/components/ds';
 
 export const metadata: Metadata = {
-  title: 'Comptes connectés | Creatabl-IA',
+  title: 'Comptes connectés · Creatabl.ia',
   description: 'Gérez vos comptes connectés.',
 };
 
@@ -182,6 +183,12 @@ export default async function AccountsPage({
     ? 'business' 
     : ((user.plan || user.selectedPlan || 'starter') as string);
 
+  // Comptes dont le jeton a expiré : à reconnecter (état « déconnecté » du Network Tag).
+  const nowDate = new Date();
+  // Un jeton expiré avec un jeton de renouvellement se renouvelle seul : seul le cas sans
+  // renouvellement possible demande une reconnexion.
+  const expiredAccounts = connectedAccounts.filter((a) => a.expiresAt && new Date(a.expiresAt) < nowDate && !a.refreshToken);
+
   const { PLAN_LIMITS } = await import('@/lib/plans/limits');
   const limits = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS] || PLAN_LIMITS.free;
   const maxAccounts = limits.connectedAccounts === -1 ? 999 : limits.connectedAccounts;
@@ -195,7 +202,7 @@ export default async function AccountsPage({
             Connectez vos comptes pour programmer et automatiser votre contenu.
           </p>
         </div>
-        <div className="inline-flex items-center rounded-xl bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
+        <div className="cr-badge cr-badge--violet cr-badge--plain">
           {limits.connectedAccounts === -1
             ? `Comptes connectés : ${connectedAccounts.length} / Illimité`
             : `Comptes connectés : ${connectedAccounts.length} / ${limits.connectedAccounts}`}
@@ -203,29 +210,36 @@ export default async function AccountsPage({
       </div>
 
       {isTrialActive && (
-        <div className="bg-primary/10 border border-primary/20 text-primary p-4 rounded-xl text-sm font-semibold flex items-center justify-between gap-2 animate-in fade-in slide-in-from-top-2">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-primary" />
-            <span>Essai gratuit : accès Business</span>
-          </div>
-          <span className="text-xs bg-primary/20 text-primary px-2.5 py-0.5 rounded-full font-bold">
-            {trialStatus.daysLeft} jour{trialStatus.daysLeft && trialStatus.daysLeft > 1 ? "s" : ""} restant{trialStatus.daysLeft && trialStatus.daysLeft > 1 ? "s" : ""}
-          </span>
-        </div>
+        <DsAlert tone="info" title="Essai gratuit : accès Business">
+          Tous les réseaux et comptes illimités pendant encore {trialStatus.daysLeft} jour{trialStatus.daysLeft && trialStatus.daysLeft > 1 ? "s" : ""}.
+        </DsAlert>
       )}
 
       {(success || facebook === 'connected') && (
-        <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl text-sm font-medium flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-          <CheckCircle2 className="h-4 w-4" />
-          Compte connecté avec succès !
-        </div>
+        <DsAlert tone="success" title="Compte connecté">
+          Vous pouvez maintenant programmer vos publications sur ce compte.
+        </DsAlert>
       )}
 
       {error && (
-        <div className="bg-destructive/10 border border-destructive/20 text-destructive p-4 rounded-xl text-sm font-medium animate-in fade-in slide-in-from-top-2">
-          Error: {decodeURIComponent(error)}
-        </div>
+        <DsAlert tone="error" title="La connexion a échoué">
+          {decodeURIComponent(error)}
+        </DsAlert>
       )}
+
+      {expiredAccounts.map((acc) => {
+        const name = PLATFORMS.find((p) => p.id === acc.platform)?.name ?? acc.platform;
+        return (
+          <DsAlert
+            key={acc.id}
+            tone="warning"
+            title={`Connexion ${name} à renouveler`}
+            action={<Link href={`/api/oauth/${acc.platform}`} className="cr-btn cr-btn--secondary cr-btn--sm">Reconnecter {name}</Link>}
+          >
+            L&apos;accès de @{acc.username ?? name} a expiré : reconnectez le compte pour continuer à publier.
+          </DsAlert>
+        );
+      })}
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {PLATFORMS.map((platform) => {
@@ -269,18 +283,15 @@ export default async function AccountsPage({
                     </div>
                   </div>
                   {platform.comingSoon ? (
-                    <Badge variant="secondary" className="bg-muted text-[#6B6780] border-none px-2 py-0.5">
-                      Bientôt disponible
-                    </Badge>
+                    <DsBadge tone="violet" plain>Bientôt disponible</DsBadge>
+                  ) : connected && platformAccounts.some((a: any) => expiredAccounts.some((e) => e.id === a.id)) ? (
+                    <DsBadge tone="warning">À reconnecter</DsBadge>
+                  ) : hasSuspendedAccounts ? (
+                    <DsBadge tone="warning">Limite du plan</DsBadge>
                   ) : connected ? (
-                    <Badge variant="default" className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none px-2 py-0.5">
-                      <CheckCircle2 className="mr-1 h-3 w-3" />
-                      Connecté
-                    </Badge>
+                    <DsBadge tone="success">Connecté</DsBadge>
                   ) : (
-                    <Badge variant="secondary" className="bg-muted/50 text-muted-foreground border-none px-2 py-0.5">
-                      Non connecté
-                    </Badge>
+                    <DsBadge>Non connecté</DsBadge>
                   )}
                 </CardHeader>
               </div>

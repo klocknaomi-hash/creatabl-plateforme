@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useClerk, useOrganization, useOrganizationList, useUser } from "@clerk/nextjs";
-import { Check, ChevronDown, Plus } from "lucide-react";
+import { Check, ChevronDown, Plus, Settings2 } from "lucide-react";
 
 // Sélecteur d'organisation de la Top Bar (design system Creatabl.ia : pilule `cr-org`
 // et menu `cr-menu`). Il s'appuie sur les organisations Clerk de l'utilisateur :
@@ -139,6 +139,19 @@ export function OrgSwitcher() {
             </button>
           )}
           <div className="cr-menu-sep" />
+          {organization && (
+            <button
+              type="button"
+              className="cr-menu-item"
+              onClick={() => {
+                setOpen(false);
+                router.push("/dashboard/settings/workspace");
+              }}
+            >
+              <Settings2 size={18} aria-hidden="true" />
+              Gérer l&apos;organisation
+            </button>
+          )}
           <button
             type="button"
             className="cr-menu-item"

@@ -114,7 +114,7 @@ export function PlanSelection() {
               }`}
             >
               {plan.recommended && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
                   <Zap className="w-3 h-3" />
                   Le plus populaire
                 </div>

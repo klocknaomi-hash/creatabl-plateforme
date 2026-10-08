@@ -142,11 +142,11 @@ export default async function AnalyticsPage(props: {
       {isLimited && (
         <Alert variant="destructive" className="bg-primary/5 border-primary/20 text-primary-foreground rounded-2xl overflow-hidden">
           <Lock className="h-4 w-4" />
-          <AlertTitle className="font-bold">Fonctionnalité Pro</AlertTitle>
+          <AlertTitle className="font-semibold">Fonctionnalité Pro</AlertTitle>
           <AlertDescription className="flex items-center justify-between">
             <span className="text-sm">Le Plan Starter est limité aux 7 derniers jours d'Analytics. Upgrade au Plan Pro pour l'historique complet.</span>
             <Link href="https://creatabl-ia.com/tarifs">
-              <Button size="sm" className="ml-4 font-bold rounded-full">Changer de plan</Button>
+              <Button size="sm" className="ml-4 font-semibold rounded-full">Changer de plan</Button>
             </Link>
           </AlertDescription>
         </Alert>
@@ -161,7 +161,7 @@ export default async function AnalyticsPage(props: {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight">{displaySummary.totalPosts}</div>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">
+            <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">
               {selectedPlatform ? `Sur ${selectedPlatform}` : "Sur toutes les plateformes"}
             </p>
           </CardContent>
@@ -173,7 +173,7 @@ export default async function AnalyticsPage(props: {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight">{Number(displaySummary.totalReach).toLocaleString()}</div>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Utilisateurs uniques atteints</p>
+            <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">Utilisateurs uniques atteints</p>
           </CardContent>
         </Card>
 
@@ -184,7 +184,7 @@ export default async function AnalyticsPage(props: {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight">{displaySummary.avgEngagementRate.toFixed(2)}%</div>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Taux moyen par impression</p>
+            <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">Taux moyen par impression</p>
           </CardContent>
         </Card>
 
@@ -195,7 +195,7 @@ export default async function AnalyticsPage(props: {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight text-violet-600">{(displaySummary as any).aiActions || 0}</div>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase mt-1">Générations de contenu</p>
+            <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">Générations de contenu</p>
           </CardContent>
         </Card>
       </div>
@@ -217,7 +217,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold">Pas encore de données</p>
+                <p className="text-xs font-semibold">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -235,7 +235,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold">Pas encore de données</p>
+                <p className="text-xs font-semibold">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -255,7 +255,7 @@ export default async function AnalyticsPage(props: {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2 opacity-40">
                 <BarChart3 className="size-8" />
-                <p className="text-xs font-bold">Pas encore de données</p>
+                <p className="text-xs font-semibold">Pas encore de données</p>
               </div>
             )}
           </CardContent>
@@ -296,16 +296,16 @@ export default async function AnalyticsPage(props: {
                   return (
                     <TableRow key={`${post.id}-${post.platform}`} className="border-border/40">
                       <TableCell>
-                        <Badge variant="outline" className="capitalize text-[10px] font-bold px-2 py-0.5 rounded-lg border-primary/20 bg-primary/5 text-primary">
+                        <Badge variant="outline" className="capitalize text-xs font-semibold px-2 py-0.5 rounded-lg border-primary/20 bg-primary/5 text-primary">
                           {post.platform}
                         </Badge>
                       </TableCell>
-                      <TableCell className="max-w-[150px] truncate font-bold text-xs">
+                      <TableCell className="max-w-[150px] truncate font-semibold text-xs">
                         {post.content}
                       </TableCell>
-                      <TableCell className="text-right text-xs font-bold">{post.likes}</TableCell>
-                      <TableCell className="text-right text-xs font-bold">{Number(post.reach).toLocaleString()}</TableCell>
-                      <TableCell className="text-right font-mono text-[10px] font-bold text-emerald-600">
+                      <TableCell className="text-right text-xs font-semibold">{post.likes}</TableCell>
+                      <TableCell className="text-right text-xs font-semibold">{Number(post.reach).toLocaleString()}</TableCell>
+                      <TableCell className="text-right tabular-nums text-xs font-semibold text-emerald-600">
                         {er.toFixed(1)}%
                       </TableCell>
                     </TableRow>

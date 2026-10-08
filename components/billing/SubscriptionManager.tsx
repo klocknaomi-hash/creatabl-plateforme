@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
+import { useConfirm } from '@/components/ds/confirm'
 
 interface SubscriptionManagerProps {
   plan: string
@@ -36,10 +38,15 @@ export function SubscriptionManager({
       })
     : null
 
+  const confirmDialog = useConfirm()
+
   const handleCancel = async () => {
-    const confirmCancel = window.confirm(
-      "Êtes-vous sûr de vouloir résilier votre abonnement ? Vous conserverez l'accès jusqu'à la fin de votre période en cours."
-    )
+    const confirmCancel = await confirmDialog({
+      title: "Résilier votre abonnement ?",
+      description: "Vous conserverez l'accès jusqu'à la fin de votre période en cours.",
+      confirmLabel: "Résilier",
+      cancelLabel: "Garder mon abonnement",
+    })
     if (!confirmCancel) return
 
     setLoading(true)
@@ -49,7 +56,7 @@ export function SubscriptionManager({
       if (data.success) {
         window.location.reload()
       } else {
-        alert(data.error || 'Erreur lors de la résiliation')
+        toast.error(data.error || 'Erreur lors de la résiliation')
         setLoading(false)
       }
     } catch (err) {
@@ -66,7 +73,7 @@ export function SubscriptionManager({
       if (data.success) {
         window.location.reload()
       } else {
-        alert(data.error || 'Erreur lors de la réactivation')
+        toast.error(data.error || 'Erreur lors de la réactivation')
         setLoading(false)
       }
     } catch (err) {
@@ -80,16 +87,16 @@ export function SubscriptionManager({
       <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700">
               Abonnement actuel : {plan.toUpperCase()}
             </span>
             {isCanceling ? (
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 flex items-center gap-1">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" />
                 Se termine prochainement
               </span>
             ) : (
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
                 <CheckCircle className="w-3.5 h-3.5" />
                 Actif
               </span>
@@ -113,7 +120,7 @@ export function SubscriptionManager({
             <Button
               onClick={handleReactivate}
               disabled={loading}
-              className="bg-[#8A38F5] hover:bg-[#7C3AED] text-white font-bold px-6 py-2.5 rounded-full text-sm transition-all"
+              className="bg-[#8A38F5] hover:bg-[#7C3AED] text-white font-semibold px-6 py-2.5 rounded-full text-sm transition-all"
             >
               {loading ? (
                 <>
@@ -129,7 +136,7 @@ export function SubscriptionManager({
               onClick={handleCancel}
               disabled={loading}
               variant="outline"
-              className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold px-6 py-2.5 rounded-xl text-sm transition-all"
+              className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold px-6 py-2.5 rounded-xl text-sm transition-all"
             >
               {loading ? (
                 <>

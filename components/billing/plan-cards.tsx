@@ -11,7 +11,7 @@ interface PlanCardsProps {
 
 const SOCIAL_ICONS = {
   linkedin: (
-    <svg className="w-5 h-5 text-[#0077B5]" fill="currentColor" viewBox="0 0 24 24">
+    <svg className="w-5 h-5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
       <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
     </svg>
   ),
@@ -205,13 +205,13 @@ export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsPr
 
                 <div className="mb-8">
                   <h3 className="text-3xl font-bold text-black mb-1">{plan.name}</h3>
-                  <p className="text-sm italic text-[#8A38F5] mb-6 font-serif leading-tight">
+                  <p className="text-sm italic text-[#8A38F5] mb-6 font-playfair leading-tight">
                     {plan.tagline}
                   </p>
                   
                   <div className="flex items-baseline gap-2 mb-1">
                     <span className="text-5xl font-bold text-black tracking-tight">{displayPrice}€</span>
-                    <span className="text-zinc-400 font-bold text-base">/mois</span>
+                    <span className="text-zinc-400 font-semibold text-base">/mois</span>
                   </div>
                   {billing === 'yearly' && plan.id !== 'free' && (
                     <p className="text-xs text-gray-500 font-semibold mb-2">
@@ -226,10 +226,10 @@ export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsPr
                 <div className="space-y-6 flex-1">
                   {/* Posts Section */}
                   <div>
-                    <h4 className="text-xs font-bold text-zinc-400 mb-3">
+                    <h4 className="text-xs font-semibold text-zinc-400 mb-3">
                       Génération de posts
                     </h4>
-                    <div className="flex items-center gap-2.5 text-black font-bold text-sm">
+                    <div className="flex items-center gap-2.5 text-black font-semibold text-sm">
                       <Check className="w-4 h-4 text-green-500 stroke-[3]" />
                       {plan.postsPerMonth}
                     </div>
@@ -237,7 +237,7 @@ export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsPr
 
                   {/* Features Section */}
                   <div>
-                    <h4 className="text-xs font-bold text-zinc-400 mb-3">
+                    <h4 className="text-xs font-semibold text-zinc-400 mb-3">
                       Fonctionnalités
                     </h4>
                     
@@ -251,7 +251,7 @@ export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsPr
 
                     <ul className="space-y-3">
                       {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2.5 text-black text-sm font-bold">
+                        <li key={i} className="flex items-start gap-2.5 text-black text-sm font-semibold">
                           <Check className="w-4 h-4 text-green-500 stroke-[3] mt-0.5 flex-shrink-0" />
                           {feature}
                         </li>

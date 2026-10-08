@@ -52,9 +52,9 @@ export function UsageMetrics({ data }: UsageProps) {
                 <div className="flex items-baseline justify-between mt-1">
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-3xl font-bold">{stat.current}</span>
-                    <span className="text-muted-foreground font-bold text-sm">/ {displayLimit}</span>
+                    <span className="text-muted-foreground font-semibold text-sm">/ {displayLimit}</span>
                   </div>
-                  <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                     {Math.round(percentage)}%
                   </span>
                 </div>

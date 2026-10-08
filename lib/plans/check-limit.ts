@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { users, socialAccounts } from "@/lib/db/schema";
 import { eq, count } from "drizzle-orm";
 import { PLAN_LIMITS, LimitType, normalizePlan } from "./limits";
-import { countAiGenerationsThisMonth, countCreditsUsed } from "./credits";
+import { countAiGenerationsThisMonth, countCreditsUsed, creditCycleAnchor, currentCreditPeriod } from "./credits";
 import { isNaomiOrTest } from "./index";
 import { clerkClient } from "@clerk/nextjs/server";
 
@@ -61,15 +61,17 @@ export async function checkPlanLimit(
   const plan = isTest ? 'business' : normalizePlan(user.plan || user.selectedPlan);
   const limits = PLAN_LIMITS[plan];
   const limitValue = limits[limitType];
+  const anchor = creditCycleAnchor(user);
+  const period = currentCreditPeriod(new Date(), anchor);
 
   if (limitValue === -1) {
-    return { allowed: true, current: 0, limit: -1, remaining: Infinity, plan };
+    return { allowed: true, current: 0, limit: -1, remaining: Infinity, plan, period };
   }
 
   let currentCount = 0;
 
   if (limitType === 'postsPerMonth') {
-    currentCount = await countCreditsUsed({ userId: user.id, organizationId });
+    currentCount = await countCreditsUsed({ userId: user.id, organizationId, anchor });
 
   } else if (limitType === 'connectedAccounts') {
     const accountQuery = organizationId
@@ -85,7 +87,7 @@ export async function checkPlanLimit(
   } else if (limitType === 'aiGenerations') {
     // Toute l'organisation partage le même compteur ; il repart de zéro chaque mois.
     const clerkIds = organizationId && memberClerkIds.length > 0 ? memberClerkIds : [targetClerkId];
-    currentCount = await countAiGenerationsThisMonth(clerkIds);
+    currentCount = await countAiGenerationsThisMonth(clerkIds, anchor);
 
   } else if (limitType === 'teamMembers') {
     // Count team members using the organization membership count from Clerk
@@ -110,5 +112,6 @@ export async function checkPlanLimit(
     limit: limitValue,
     remaining,
     plan,
+    period,
   };
 }

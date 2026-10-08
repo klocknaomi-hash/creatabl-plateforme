@@ -39,7 +39,7 @@ export function SubscriptionCard({ usageData, plan }: SubscriptionCardProps) {
       </CardContent>
 
       <CardFooter className="border-t border-border/40 py-6 bg-muted/10 flex items-center justify-between">
-        <span className="text-sm font-bold text-muted-foreground">
+        <span className="text-sm font-semibold text-muted-foreground">
           Gérer votre Plan via Clerk
         </span>
         <Button variant="outline" className="rounded-xl font-semibold text-xs gap-2 border-border/60 hover:bg-background shadow-sm group">

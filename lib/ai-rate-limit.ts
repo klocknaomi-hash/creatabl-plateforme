@@ -58,10 +58,10 @@ export async function checkAiRateLimit(
       now.toDateString()
 
     const message = plan === 'starter'
-      ? `Tu as utilisé tes ${dailyLimit} générations du jour. Tu pourras relancer ${isToday
+      ? `Vous avez utilisé vos ${dailyLimit} générations du jour. Vous pourrez relancer ${isToday
           ? 'aujourd\'hui à ' + retryTime
           : 'demain à ' + retryTime}.`
-      : `Tu as beaucoup sollicité l'IA 🔥 Tu pourras relancer dans ${timeStr} (à ${retryTime}).`
+      : `Vous avez beaucoup sollicité l'IA. Vous pourrez relancer dans ${timeStr} (à ${retryTime}).`
 
     return {
       allowed: false,
@@ -107,10 +107,10 @@ export async function checkAiRateLimit(
       cooldownUntil.toDateString() === now.toDateString()
 
     const message = plan === 'starter'
-      ? `Tu as utilisé tes ${dailyLimit} générations du jour. Tu pourras relancer ${isToday
+      ? `Vous avez utilisé vos ${dailyLimit} générations du jour. Vous pourrez relancer ${isToday
           ? 'aujourd\'hui à ' + retryTime
           : 'demain à ' + retryTime}.`
-      : `Tu as beaucoup sollicité l'IA aujourd'hui 🔥 Tu pourras relancer demain à ${retryTime}.`
+      : `Vous avez beaucoup sollicité l'IA aujourd'hui. Vous pourrez relancer demain à ${retryTime}.`
 
     return {
       allowed: false,

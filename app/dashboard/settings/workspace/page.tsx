@@ -9,7 +9,7 @@ export default function WorkspacePage() {
       {/* Header */}
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <div className="size-8 rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] flex items-center justify-center font-bold">
+          <div className="size-8 rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] flex items-center justify-center font-semibold">
             <Building2 className="size-4" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Gestion de l'organisation</h1>

@@ -1,5 +1,6 @@
 'use client'
 
+import { toast } from 'sonner'
 import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { AlertTriangle, Loader2 } from 'lucide-react'
@@ -33,7 +34,7 @@ export function CancellationBanner({ cancelsAt: initialCancelsAt }: Cancellation
       if (data.success) {
         window.location.reload()
       } else {
-        alert(data.error || 'Erreur lors de la réactivation')
+        toast.error(data.error || 'Erreur lors de la réactivation')
         setLoading(false)
       }
     } catch (e) {
@@ -53,7 +54,7 @@ export function CancellationBanner({ cancelsAt: initialCancelsAt }: Cancellation
       <button
         onClick={handleReactivate}
         disabled={loading}
-        className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-1.5 rounded-lg text-xs transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 flex items-center gap-1.5"
+        className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-1.5 rounded-lg text-xs transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 flex items-center gap-1.5"
       >
         {loading ? (
           <>

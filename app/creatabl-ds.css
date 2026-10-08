@@ -398,3 +398,34 @@ a.cr-stat:hover { border-color: var(--violet-100); box-shadow: var(--shadow-1); 
   .cr-top-search { display: none; }
 }
 .cr-top-search, .cr-org { min-width: 0; }
+.cr-post--failed .cr-post-foot > span:first-child { color: var(--error-600); }
+a.cr-tab { text-decoration: none; }
+.cr-net.is-off svg { filter: grayscale(1); opacity: .6; }
+a.cr-net { text-decoration: none; }
+.ap-stats--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 720px) { .ap-stats--3 { grid-template-columns: 1fr; } }
+
+/* ---------- Composer (ComposerPage du design system) ---------- */
+.cp-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; padding-top: 20px; border-top: 1px solid var(--border); }
+.cp-actions .left { margin-right: auto; font-size: 12px; line-height: 18px; color: var(--ink-subtle); display: flex; gap: 6px; align-items: center; }
+@media (max-width: 639px) {
+  .cr-canva { grid-template-columns: 1fr; min-height: 0; }
+  .cr-canva-main { padding: 16px; }
+  .cr-canva-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cr-canva-folders { display: flex; gap: 4px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--border); padding: 8px 12px; }
+  .cr-canva-folders .cr-side-group, .cr-canva-folders p { display: none; }
+  .cr-canva-folders .cr-side-item { width: auto !important; flex: none; white-space: nowrap; }
+  .cr-modal-scrim { padding: 12px; }
+  .cr-modal-head { padding: 14px 16px; }
+  .cr-modal-head h4 { font-size: 18px; line-height: 24px; }
+  .cr-modal-foot { flex-wrap: wrap; padding: 12px 16px; }
+}
+/* Network Tag : compte en erreur (jeton expiré, connexion refusée). */
+.cr-net.is-error { border-color: var(--error-600); background: var(--error-50); color: var(--error-600); }
+.cr-net.is-error:hover { background: #FBDCD8; }
+.cr-post--failed .cr-post-foot { flex-wrap: wrap; }
+.cr-post--failed .cr-post-foot > span:first-child { flex: 1 1 200px; }
+/* Mobile : le texte d'une alerte ou de la bannière d'essai garde sa largeur, l'action passe dessous. */
+.cr-alert { flex-wrap: wrap; }
+.cr-alert > div.flex-1 { flex: 1 1 220px; }
+.cr-trial > div.flex-1 { flex: 1 1 240px; }

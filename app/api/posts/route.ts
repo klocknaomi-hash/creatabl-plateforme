@@ -35,13 +35,13 @@ export async function POST(request: NextRequest) {
   // Check limits (if not a draft)
   const body = await request.clone().json();
   if (body.status !== 'draft') {
-    const { allowed, current, limit } = await checkPlanLimit(clerkId, 'postsPerMonth', orgId);
+    const { allowed, current, limit, period } = await checkPlanLimit(clerkId, 'postsPerMonth', orgId);
     if (!allowed) {
       return NextResponse.json({ 
         error: "limit_reached",
         limit: "postsPerMonth",
         upgradeUrl: "/pricing",
-        message: `Tu as utilisé tes ${limit} crédits du mois (${current}/${limit}). Ils se renouvellent le 1er du mois, ou passe au plan supérieur pour continuer.`
+        message: `Vous avez utilisé vos ${limit} crédits de la période (${current}/${limit}). Ils se renouvellent ${period ? `le ${period.resetAt.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}` : 'à la prochaine échéance'}, ou passez au plan supérieur pour continuer.`
       }, { status: 402 });
     }
   }

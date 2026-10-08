@@ -3,6 +3,7 @@ import { CalendarDays, Plus } from "lucide-react";
 import { getUpcomingPosts } from "@/lib/dashboard-data";
 import { NetworkStack } from "@/components/ds/NetworkLogo";
 import { EmptyState, formatPostDate } from "@/components/ds";
+import { GenerateWeekButton } from "@/components/dashboard/generate-week-button";
 
 import { auth } from "@clerk/nextjs/server";
 
@@ -53,14 +54,12 @@ export function UpcomingScheduleView({ upcomingPosts }: UpcomingScheduleProps) {
         <EmptyState
           bordered={false}
           title="Aucun post programmé"
-          text="Votre calendrier est vide pour l'instant. Créez un premier post ou demandez des idées à l'Agent IA."
+          text="Votre calendrier est vide pour l'instant. Créez un premier post ou laissez l'IA vous proposer une semaine de contenus."
         >
-          <Link href="/dashboard/compose" className="cr-btn cr-btn--primary">
+          <GenerateWeekButton />
+          <Link href="/dashboard/compose" className="cr-btn cr-btn--secondary">
             <Plus size={18} aria-hidden="true" />
             Créer un post
-          </Link>
-          <Link href="/dashboard/agent-ia" className="cr-btn cr-btn--secondary">
-            Agent IA
           </Link>
         </EmptyState>
       )}

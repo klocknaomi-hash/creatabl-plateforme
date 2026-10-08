@@ -42,7 +42,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
             <CalendarIcon className="w-4.5 h-4.5" />
           </div>
           <div className="flex flex-col">
-            <Label htmlFor="schedule-toggle" className="font-bold text-[13px] cursor-pointer">Programmer pour plus tard</Label>
+            <Label htmlFor="schedule-toggle" className="font-semibold text-sm cursor-pointer">Programmer pour plus tard</Label>
             <span className="text-[11px] text-muted-foreground">Choisissez une date et une heure</span>
           </div>
         </div>

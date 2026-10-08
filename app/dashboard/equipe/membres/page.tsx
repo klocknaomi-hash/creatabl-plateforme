@@ -28,6 +28,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { NotificationsPopover } from '@/components/dashboard/notifications-popover'
+import { useConfirm } from "@/components/ds/confirm";
+import { EmptyState } from "@/components/ds";
 
 interface MemberRow {
   id: string
@@ -160,9 +162,11 @@ export default function MembresPage() {
     return []
   }, [invitations])
 
+  // Onglet Invitations de la page Équipe : ?vue=invitations n'affiche que les invitations en attente.
+  const onlyInvitations = searchParams.get('vue') === 'invitations'
   const allMembers = useMemo(() => {
-    return [...activeMembers, ...pendingInvitations]
-  }, [activeMembers, pendingInvitations])
+    return onlyInvitations ? pendingInvitations : [...activeMembers, ...pendingInvitations]
+  }, [activeMembers, pendingInvitations, onlyInvitations])
 
   useEffect(() => {
     if (hasInviteParam) {
@@ -231,10 +235,11 @@ export default function MembresPage() {
   }
 
   // Handle member removal or invitation revocation
+  const confirmDialog = useConfirm();
   const handleDeleteMember = async (memberItem: MemberRow) => {
     setActiveDropdown(null)
     if (memberItem.clerkInvitation) {
-      if (!confirm(`Voulez-vous vraiment annuler l'invitation de ${memberItem.email} ?`)) return
+      if (!(await confirmDialog({ title: "Annuler l'invitation ?", description: `${memberItem.email} ne pourra plus rejoindre l'organisation avec ce lien.`, confirmLabel: "Annuler l'invitation", cancelLabel: "Garder" }))) return
       try {
         await memberItem.clerkInvitation.revoke()
         toast.success("Invitation annulée.")
@@ -244,7 +249,7 @@ export default function MembresPage() {
         toast.error("Erreur lors de l'annulation de l'invitation.")
       }
     } else if (memberItem.clerkMembership && memberItem.userId) {
-      if (!confirm(`Voulez-vous vraiment retirer ${memberItem.name} de l'organisation ?`)) return
+      if (!(await confirmDialog({ title: `Retirer ${memberItem.name} ?`, description: "Ce membre n'aura plus accès à l'organisation ni à ses contenus.", confirmLabel: "Retirer le membre" }))) return
       try {
         await organization?.removeMember(memberItem.userId)
         toast.success("Membre retiré de l'équipe.")
@@ -301,35 +306,13 @@ export default function MembresPage() {
     )
   }
 
-  if (allMembers.length === 0) {
-    return (
-      <div className="bg-white border border-gray-100 rounded-3xl p-16 text-center space-y-4 my-6 shadow-sm max-w-2xl mx-auto">
-        <div className="size-16 rounded-full bg-[#8A38F5]/10 text-[#8A38F5] flex items-center justify-center mx-auto mb-2">
-          <Users className="size-8 text-[#8A38F5]" />
-        </div>
-        <h2 className="text-2xl font-extrabold text-[#14121F]">Aucun membre dans votre équipe</h2>
-        <p className="text-[#6B6780] text-sm max-w-sm mx-auto leading-relaxed">
-          Invitez votre premier membre pour commencer à collaborer.
-        </p>
-        <div className="pt-2">
-          <button
-            onClick={handleOpenInviteModal}
-            className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md cursor-pointer"
-          >
-            + Inviter un membre
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-8 pb-10 max-w-screen-xl mx-auto w-full">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Membres de l'équipe</h1>
+            <h2 className="text-xl font-bold text-gray-900 tracking-tight">{onlyInvitations ? 'Invitations en attente' : "Membres de l'équipe"}</h2>
             <Info className="size-4 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors mt-0.5" />
           </div>
           <p className="text-sm text-gray-500 mt-1">
@@ -340,7 +323,7 @@ export default function MembresPage() {
         <div className="flex items-center gap-3.5 self-end sm:self-auto">
           <button
             onClick={handleOpenInviteModal}
-            className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#7225E3]/5 text-[#7225E3] border border-[#7225E3]/20 font-bold text-xs px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
+            className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#7225E3]/5 text-[#7225E3] border border-[#7225E3]/20 font-semibold text-xs px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-sm hover:shadow active:scale-95"
           >
             <UserPlus className="size-4 text-[#7225E3]" />
             Inviter un membre
@@ -438,7 +421,7 @@ export default function MembresPage() {
           </div>
           <button
             onClick={handleOpenInviteModal}
-            className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#5B1BB8] text-white font-bold text-xs px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-sm shrink-0"
+            className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#5B1BB8] text-white font-semibold text-xs px-4 py-2.5 rounded-full transition-all cursor-pointer shadow-sm shrink-0"
           >
             <UserPlus className="size-4" />
             {organization ? "Inviter votre équipe" : "Créer une organisation"}
@@ -447,11 +430,23 @@ export default function MembresPage() {
       )}
 
       {/* MEMBERS TABLE */}
+      {allMembers.length === 0 ? (
+        <EmptyState
+          illustration="posts"
+          title={onlyInvitations ? 'Aucune invitation en attente' : 'Aucun membre dans votre équipe'}
+          text={onlyInvitations ? 'Les invitations envoyées et pas encore acceptées apparaîtront ici.' : 'Invitez votre premier membre pour commencer à collaborer.'}
+        >
+          <button type="button" className="cr-btn cr-btn--primary" onClick={handleOpenInviteModal}>
+            <UserPlus size={18} aria-hidden="true" />
+            Inviter un membre
+          </button>
+        </EmptyState>
+      ) : (
       <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50 text-xs font-bold text-gray-400">
+              <tr className="border-b border-gray-100 bg-gray-50/50 text-xs font-semibold text-gray-400">
                 <th className="py-4 px-6">Membre</th>
                 <th className="py-4 px-6">Rôle</th>
                 <th className="py-4 px-6">Accès</th>
@@ -477,7 +472,7 @@ export default function MembresPage() {
                             className="size-10 rounded-full border border-gray-100 object-cover shrink-0" 
                           />
                         ) : (
-                          <div className="size-10 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/10 text-[#7225E3] font-bold flex items-center justify-center text-sm shrink-0">
+                          <div className="size-10 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/10 text-[#7225E3] font-semibold flex items-center justify-center text-sm shrink-0">
                             {getInitials(member.name, member.email)}
                           </div>
                         )}
@@ -485,7 +480,7 @@ export default function MembresPage() {
                           <div className="font-semibold text-gray-900 flex items-center gap-2">
                             {member.name}
                             {isYou && (
-                              <span className="text-[10px] font-bold bg-[#F3EEFD] text-[#7225E3] px-1.5 py-0.5 rounded-md">
+                              <span className="text-xs font-semibold bg-[#F3EEFD] text-[#7225E3] px-1.5 py-0.5 rounded-md">
                                 Vous
                               </span>
                             )}
@@ -524,7 +519,7 @@ export default function MembresPage() {
                               onClick={() => setActiveRoleDropdown(null)} 
                             />
                             <div className="absolute left-0 mt-1.5 w-44 bg-white border border-gray-100 rounded-xl shadow-lg py-1.5 z-40 animate-in fade-in slide-in-from-top-1 duration-150">
-                              <div className="px-2.5 py-1 text-xs font-bold text-gray-400">
+                              <div className="px-2.5 py-1 text-xs font-semibold text-gray-400">
                                 Rôle
                               </div>
                               <button
@@ -598,11 +593,11 @@ export default function MembresPage() {
                     {/* Status Badge */}
                     <td className="py-4 px-6">
                       {isPending ? (
-                        <span className="inline-flex items-center text-[11px] font-bold bg-amber-50 text-amber-600 border border-amber-100 px-2.5 py-0.5 rounded-full">
+                        <span className="inline-flex items-center text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100 px-2.5 py-0.5 rounded-full">
                           En attente
                         </span>
                       ) : (
-                        <span className="inline-flex items-center text-[11px] font-bold bg-green-50 text-green-700 border border-green-100 px-2.5 py-0.5 rounded-full">
+                        <span className="inline-flex items-center text-xs font-semibold bg-green-50 text-green-700 border border-green-100 px-2.5 py-0.5 rounded-full">
                           Actif
                         </span>
                       )}
@@ -614,7 +609,7 @@ export default function MembresPage() {
                         {isPending && (
                           <button
                             onClick={() => handleResendInvite(member)}
-                            className="inline-flex items-center gap-1.5 text-xs text-[#7225E3] hover:text-[#5B1BB8] font-bold py-1.5 px-3 rounded-xl hover:bg-[#7225E3]/5 border border-transparent hover:border-[#7225E3]/10 transition-all cursor-pointer shadow-sm bg-white"
+                            className="inline-flex items-center gap-1.5 text-xs text-[#7225E3] hover:text-[#5B1BB8] font-semibold py-1.5 px-3 rounded-xl hover:bg-[#7225E3]/5 border border-transparent hover:border-[#7225E3]/10 transition-all cursor-pointer shadow-sm bg-white"
                           >
                             <Send className="size-3 text-[#7225E3]" />
                             Renvoyer
@@ -658,6 +653,7 @@ export default function MembresPage() {
           </table>
         </div>
       </div>
+      )}
 
       {/* FOOTER INFO BOX */}
       <div className="bg-[#7225E3]/5 border border-[#7225E3]/10 rounded-xl p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#7225E3]/10 transition-colors">
@@ -703,7 +699,7 @@ export default function MembresPage() {
               <form onSubmit={handleInviteSubmit} className="p-6 space-y-4">
                 {/* Email Address */}
                 <div className="space-y-1">
-                  <label htmlFor="invite-email" className="text-xs font-bold text-gray-600">
+                  <label htmlFor="invite-email" className="text-xs font-semibold text-gray-600">
                     Adresse email
                   </label>
                   <div className="relative">
@@ -724,7 +720,7 @@ export default function MembresPage() {
 
                 {/* Role selection */}
                 <div className="space-y-1">
-                  <label htmlFor="invite-role" className="text-xs font-bold text-gray-600">
+                  <label htmlFor="invite-role" className="text-xs font-semibold text-gray-600">
                     Rôle de l'invité
                   </label>
                   <div className="relative">
@@ -756,7 +752,7 @@ export default function MembresPage() {
                   <button
                     type="submit"
                     disabled={submittingInvite}
-                    className="flex-1 inline-flex items-center justify-center gap-2 bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold text-sm py-2.5 rounded-full transition-all cursor-pointer disabled:opacity-50"
+                    className="flex-1 inline-flex items-center justify-center gap-2 bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold text-sm py-2.5 rounded-full transition-all cursor-pointer disabled:opacity-50"
                   >
                     {submittingInvite ? (
                       <>

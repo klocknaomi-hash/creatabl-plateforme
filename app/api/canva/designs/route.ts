@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { getValidCanvaToken } from '@/lib/canva-auth'
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const { userId } = await auth()
     
@@ -16,7 +16,18 @@ export async function GET() {
       return NextResponse.json({ error: 'Canva not connected or token expired' }, { status: 401 })
     }
 
-    const response = await fetch('https://api.canva.com/rest/v1/designs', {
+    // Recherche, tri et pagination transmis à l'API Canva (designs du compte connecté).
+    const { searchParams } = new URL(req.url)
+    const params = new URLSearchParams()
+    const query = searchParams.get('query')
+    const sortBy = searchParams.get('sort_by')
+    const continuation = searchParams.get('continuation')
+    if (query) params.set('query', query.slice(0, 255))
+    if (sortBy && ['relevance', 'modified_descending', 'modified_ascending', 'title_descending', 'title_ascending'].includes(sortBy)) params.set('sort_by', sortBy)
+    if (continuation) params.set('continuation', continuation)
+    const qs = params.toString()
+
+    const response = await fetch(`https://api.canva.com/rest/v1/designs${qs ? `?${qs}` : ''}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
       }
@@ -26,10 +37,7 @@ export async function GET() {
     const statusText = response.statusText
     const responseText = await response.text()
     
-    console.log('--- CANVA API DIAGNOSTIC ---')
-    console.log(`Status: ${status} ${statusText}`)
-    console.log(`Body: ${responseText}`)
-    console.log('-----------------------------')
+    if (!response.ok) console.log(`[canva designs] ${status} ${statusText}`)
 
     if (!response.ok) {
       console.error('Canva designs API error:', responseText)

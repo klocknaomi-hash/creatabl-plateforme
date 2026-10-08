@@ -58,18 +58,21 @@ interface GeneratedIdea {
 }
 
 import { useAccess } from '@/hooks/useAccess'
-import { PaywallOverlay } from '@/components/PaywallOverlay'
+import { PlanGate } from '@/components/ds'
 
 export default function AgentIAPage() {
-  const { user } = useUser()
   const access = useAccess()
 
   if (!access.aiAdvanced) {
-    const currentPlan = (user?.publicMetadata?.plan as string) || 'free'
-    const billingCycle = (user?.publicMetadata?.billing as string) || 'monthly'
     return (
-      <div className="w-full flex justify-center py-6">
-        <PaywallOverlay plan={currentPlan} billingCycle={billingCycle} />
+      <div className="mx-auto w-full max-w-[880px] py-6">
+        <PlanGate
+          feature="L'Agent IA"
+          plan="Pro"
+          description="Des agents spécialisés pour trouver des idées, écrire vos accroches, optimiser vos hashtags et proposer des visuels, dans votre ton de marque."
+        >
+          <a href="/dashboard/compose" className="cr-btn cr-btn--secondary">Créer un post</a>
+        </PlanGate>
       </div>
     )
   }
@@ -515,7 +518,7 @@ function AgentIADashboard() {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-bold text-gray-900">{activeAgentData.title}</h2>
-                <Badge className={activeAgentData.badgeColor + " border text-[10px] font-bold"}>
+                <Badge className={activeAgentData.badgeColor + "border text-xs font-semibold"}>
                   {activeAgentData.badge}
                 </Badge>
               </div>
@@ -535,7 +538,7 @@ function AgentIADashboard() {
               <h3 className="text-sm font-bold text-gray-900 text-gray-400">Configuration</h3>
               
               <div className="space-y-2">
-                <Label htmlFor="redacteur-topic" className="text-xs font-bold text-gray-700">Sujet / Thème du post</Label>
+                <Label htmlFor="redacteur-topic" className="text-xs font-semibold text-gray-700">Sujet / Thème du post</Label>
                 <Textarea 
                   id="redacteur-topic"
                   placeholder="ex. Les 3 erreurs courantes de Copywriting à éviter absolument..."
@@ -546,7 +549,7 @@ function AgentIADashboard() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="redacteur-audience" className="text-xs font-bold text-gray-700">Audience cible (optionnel)</Label>
+                <Label htmlFor="redacteur-audience" className="text-xs font-semibold text-gray-700">Audience cible (optionnel)</Label>
                 <Input 
                   id="redacteur-audience"
                   placeholder="ex. SMM, Entrepreneurs, Créateurs"
@@ -557,7 +560,7 @@ function AgentIADashboard() {
               </div>
 
               <div className="space-y-3">
-                <span className="text-xs font-bold text-gray-700 block">Plateforme</span>
+                <span className="text-xs font-semibold text-gray-700 block">Plateforme</span>
                 <div className="flex gap-2">
                   {['linkedin', 'instagram', 'tiktok'].map(plat => (
                     <button
@@ -576,7 +579,7 @@ function AgentIADashboard() {
               </div>
 
               <div className="space-y-3">
-                <span className="text-xs font-bold text-gray-700 block">Ton de l'IA</span>
+                <span className="text-xs font-semibold text-gray-700 block">Ton de l'IA</span>
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: 'professional', label: '💼 Professionnel' },
@@ -603,7 +606,7 @@ function AgentIADashboard() {
               <Button 
                 onClick={generateRedacteur}
                 disabled={loading}
-                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Rédiger le post avec l'IA
@@ -630,13 +633,13 @@ function AgentIADashboard() {
                   <Button 
                     variant="outline" 
                     onClick={() => copyToClipboard(redacteurResult)}
-                    className="flex-1 rounded-xl text-xs font-bold border-gray-200 h-10 hover:bg-gray-50"
+                    className="flex-1 rounded-xl text-xs font-semibold border-gray-200 h-10 hover:bg-gray-50"
                   >
                     <Copy className="size-3.5 mr-1.5" /> Copier
                   </Button>
                   <Button 
                     onClick={() => openInEditor(redacteurResult, redacteurPlatform)}
-                    className="flex-1 bg-gray-900 hover:bg-black text-white font-bold h-10 rounded-xl text-xs"
+                    className="flex-1 bg-gray-900 hover:bg-black text-white font-semibold h-10 rounded-xl text-xs"
                   >
                     Ouvrir dans l'éditeur
                   </Button>
@@ -713,19 +716,19 @@ function AgentIADashboard() {
                             {trend.platform}
                           </span>
                           <div className="flex items-center gap-1">
-                            <span className="text-[10px] font-bold text-gray-500">{trend.growth}</span>
+                            <span className="text-xs font-semibold text-gray-500">{trend.growth}</span>
                           </div>
                         </div>
 
                         <div>
-                          <h4 className="text-xs font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#7225E3] transition-all">
+                          <h4 className="text-xs font-semibold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#7225E3] transition-all">
                             {trend.title}
                           </h4>
                           <p className="text-[10px] text-gray-400 font-medium mt-1 truncate">{trend.source}</p>
                         </div>
 
                         <div className="flex items-center justify-between pt-2 border-t border-gray-50">
-                          <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
+                          <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
                             {trend.status}
                           </span>
                           {trend.url && (
@@ -754,12 +757,12 @@ function AgentIADashboard() {
               {selectedTrend && (
                 <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-sm font-semibold text-gray-700">
-                    Sujet sélectionné : <span className="text-[#7225E3] font-bold">"{selectedTrend.title}"</span>
+                    Sujet sélectionné : <span className="text-[#7225E3] font-semibold">"{selectedTrend.title}"</span>
                   </div>
                   <Button
                     onClick={generateIdeasForTrend}
                     disabled={loading}
-                    className="bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold rounded-full h-10 px-5 shadow-sm border-transparent"
+                    className="bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold rounded-full h-10 px-5 shadow-sm border-transparent"
                   >
                     {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                     Générer 3 idées de post IA
@@ -777,17 +780,17 @@ function AgentIADashboard() {
                     <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between gap-5 relative overflow-hidden">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between gap-2">
-                          <Badge className="bg-[#F3EEFD] text-[#7225E3] border-none text-[10px] font-bold px-2 py-0.5">
+                          <Badge className="bg-[#F3EEFD] text-[#7225E3] border-none text-xs font-semibold px-2 py-0.5">
                             {idea.platform}
                           </Badge>
-                          <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
                             <Flame className="size-3.5" />
                             <span>{idea.score}%</span>
                           </div>
                         </div>
 
                         <div>
-                          <h4 className="text-sm font-bold text-gray-900 leading-snug">{idea.title}</h4>
+                          <h4 className="text-sm font-semibold text-gray-900 leading-snug">{idea.title}</h4>
                           <p className="text-[10px] text-gray-400 font-semibold mt-1">Meilleur moment : {idea.bestTime}</p>
                         </div>
 
@@ -797,7 +800,7 @@ function AgentIADashboard() {
 
                         <div className="flex flex-wrap gap-1">
                           {idea.hashtags.map((tag, tagIdx) => (
-                            <span key={tagIdx} className="text-[9px] font-bold text-[#7225E3] bg-purple-50/50 px-1.5 py-0.5 rounded border border-purple-100/50">
+                            <span key={tagIdx} className="text-xs font-semibold text-[#7225E3] bg-purple-50/50 px-1.5 py-0.5 rounded border border-purple-100/50">
                               {tag}
                             </span>
                           ))}
@@ -814,7 +817,7 @@ function AgentIADashboard() {
                         </button>
                         <Button
                           onClick={() => openInEditor(idea.content + '\n\n' + idea.hashtags.join(' '), idea.platform)}
-                          className="flex-1 bg-gray-900 hover:bg-black text-white text-[11px] font-bold h-9 rounded-xl border-transparent"
+                          className="flex-1 bg-gray-900 hover:bg-black text-white text-xs font-semibold h-9 rounded-xl border-transparent"
                         >
                           Utiliser dans l'éditeur
                         </Button>
@@ -834,7 +837,7 @@ function AgentIADashboard() {
               <h3 className="text-sm font-bold text-gray-900 text-gray-400">Configuration SEO</h3>
 
               <div className="space-y-2">
-                <Label htmlFor="seo-text" className="text-xs font-bold text-gray-700">Texte original à optimiser</Label>
+                <Label htmlFor="seo-text" className="text-xs font-semibold text-gray-700">Texte original à optimiser</Label>
                 <Textarea 
                   id="seo-text"
                   placeholder="Insérez votre post ici..."
@@ -845,7 +848,7 @@ function AgentIADashboard() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="seo-keywords" className="text-xs font-bold text-gray-700">Mots-clés cibles (séparés par des virgules)</Label>
+                <Label htmlFor="seo-keywords" className="text-xs font-semibold text-gray-700">Mots-clés cibles (séparés par des virgules)</Label>
                 <Input 
                   id="seo-keywords"
                   placeholder="ex. marketing digital, productivité, IA"
@@ -858,7 +861,7 @@ function AgentIADashboard() {
               <Button 
                 onClick={generateSEO}
                 disabled={loading}
-                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Optimiser le post pour le SEO
@@ -870,7 +873,7 @@ function AgentIADashboard() {
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-gray-900 text-gray-400">Version Optimisée</h3>
                   {seoScore !== null && (
-                    <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
                       Score SEO : {seoScore}/100
                     </span>
                   )}
@@ -883,7 +886,7 @@ function AgentIADashboard() {
                     </div>
 
                     <div className="p-4 bg-amber-50/40 border border-amber-100/60 rounded-xl space-y-2">
-                      <span className="text-xs font-bold text-amber-800 block">Analyse de lisibilité</span>
+                      <span className="text-xs font-semibold text-amber-800 block">Analyse de lisibilité</span>
                       <ul className="text-xs text-amber-700 space-y-1 font-medium list-disc list-inside">
                         <li>Mots-clés insérés de façon naturelle</li>
                         <li>Structure avec listes à puces pour maximiser la lecture</li>
@@ -904,13 +907,13 @@ function AgentIADashboard() {
                   <Button 
                     variant="outline" 
                     onClick={() => copyToClipboard(seoResult)}
-                    className="flex-1 rounded-xl text-xs font-bold border-gray-200 h-10 hover:bg-gray-50"
+                    className="flex-1 rounded-xl text-xs font-semibold border-gray-200 h-10 hover:bg-gray-50"
                   >
                     <Copy className="size-3.5 mr-1.5" /> Copier
                   </Button>
                   <Button 
                     onClick={() => openInEditor(seoResult)}
-                    className="flex-1 bg-gray-900 hover:bg-black text-white font-bold h-10 rounded-xl text-xs"
+                    className="flex-1 bg-gray-900 hover:bg-black text-white font-semibold h-10 rounded-xl text-xs"
                   >
                     Ouvrir dans l'éditeur
                   </Button>
@@ -927,7 +930,7 @@ function AgentIADashboard() {
               <h3 className="text-sm font-bold text-gray-900 text-gray-400">Configuration Accroches</h3>
 
               <div className="space-y-2">
-                <Label htmlFor="accroche-text" className="text-xs font-bold text-gray-700">Décrivez le sujet ou insérez le post</Label>
+                <Label htmlFor="accroche-text" className="text-xs font-semibold text-gray-700">Décrivez le sujet ou insérez le post</Label>
                 <Textarea 
                   id="accroche-text"
                   placeholder="ex. Un post expliquant comment j'ai automatisé mon calendrier éditorial..."
@@ -940,7 +943,7 @@ function AgentIADashboard() {
               <Button 
                 onClick={generateAccroches}
                 disabled={loading}
-                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Générer 5 accroches accrocheuses
@@ -954,7 +957,7 @@ function AgentIADashboard() {
                   <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
                     {accrocheResult.map((hook, index) => (
                       <div key={index} className="group border border-gray-100 hover:border-purple-200 rounded-xl p-4 bg-gray-50/50 hover:bg-purple-50/10 flex items-center justify-between gap-4 transition-all">
-                        <p className="text-xs font-bold text-gray-700 leading-relaxed flex-1">"{hook}"</p>
+                        <p className="text-xs font-semibold text-gray-700 leading-relaxed flex-1">"{hook}"</p>
                         <div className="flex gap-1.5 opacity-80 group-hover:opacity-100 transition-all shrink-0">
                           <button
                             onClick={() => copyToClipboard(hook)}
@@ -965,7 +968,7 @@ function AgentIADashboard() {
                           </button>
                           <button
                             onClick={() => openInEditor(hook)}
-                            className="px-2.5 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-[10px] font-bold shadow-sm transition-all"
+                            className="px-2.5 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition-all"
                           >
                             Écrire
                           </button>
@@ -991,7 +994,7 @@ function AgentIADashboard() {
               <h3 className="text-sm font-bold text-gray-900 text-gray-400">Contenu du Post</h3>
 
               <div className="space-y-2">
-                <Label htmlFor="hashtags-post" className="text-xs font-bold text-gray-700">Insérez votre texte de post</Label>
+                <Label htmlFor="hashtags-post" className="text-xs font-semibold text-gray-700">Insérez votre texte de post</Label>
                 <Textarea 
                   id="hashtags-post"
                   placeholder="Collez ici votre texte pour en extraire et générer des hashtags optimisés..."
@@ -1004,7 +1007,7 @@ function AgentIADashboard() {
               <Button 
                 onClick={generateHashtags}
                 disabled={loading}
-                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Générer les hashtags
@@ -1021,7 +1024,7 @@ function AgentIADashboard() {
                         <span 
                           key={index} 
                           onClick={() => copyToClipboard(tag)}
-                          className="cursor-pointer text-xs font-bold text-blue-600 bg-blue-50/60 hover:bg-blue-100 hover:scale-105 px-3 py-1.5 rounded-xl border border-blue-100 transition-all"
+                          className="cursor-pointer text-xs font-semibold text-blue-600 bg-blue-50/60 hover:bg-blue-100 hover:scale-105 px-3 py-1.5 rounded-xl border border-blue-100 transition-all"
                         >
                           {tag}
                         </span>
@@ -1043,7 +1046,7 @@ function AgentIADashboard() {
                   <Button 
                     variant="outline" 
                     onClick={() => copyToClipboard(hashtagsResult.join(' '))}
-                    className="w-full rounded-xl text-xs font-bold border-gray-200 h-10 hover:bg-gray-50"
+                    className="w-full rounded-xl text-xs font-semibold border-gray-200 h-10 hover:bg-gray-50"
                   >
                     <Copy className="size-3.5 mr-1.5" /> Copier tous les hashtags
                   </Button>
@@ -1060,7 +1063,7 @@ function AgentIADashboard() {
               <h3 className="text-sm font-bold text-gray-900 text-gray-400">Description / Post</h3>
 
               <div className="space-y-2">
-                <Label htmlFor="visuels-post" className="text-xs font-bold text-gray-700">Insérez votre texte de post</Label>
+                <Label htmlFor="visuels-post" className="text-xs font-semibold text-gray-700">Insérez votre texte de post</Label>
                 <Textarea 
                   id="visuels-post"
                   placeholder="Décrivez votre idée de post ou collez le post rédigé pour concevoir des idées de visuels assortis..."
@@ -1073,7 +1076,7 @@ function AgentIADashboard() {
               <Button 
                 onClick={generateVisuels}
                 disabled={loading}
-                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-semibold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Générer les concepts de visuels
@@ -1087,8 +1090,8 @@ function AgentIADashboard() {
                   <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                     {visuelsResult.map((concept, index) => (
                       <div key={index} className="border border-gray-100 rounded-xl p-4 bg-gray-50/40 space-y-2">
-                        <span className="text-xs font-extrabold text-[#7225E3] block">Concept {index + 1}</span>
-                        <p className="text-xs font-bold text-gray-800"><span className="text-gray-400">Scène : </span>{concept.scene}</p>
+                        <span className="text-xs font-semibold text-[#7225E3] block">Concept {index + 1}</span>
+                        <p className="text-xs font-semibold text-gray-800"><span className="text-gray-400">Scène : </span>{concept.scene}</p>
                         <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-[11px] font-semibold text-gray-500">
                           <span>🎨 Couleurs : {concept.colors}</span>
                           <span>💬 Texte incrusté : "{concept.text}"</span>
@@ -1135,7 +1138,7 @@ function AgentIADashboard() {
 
             {/* Custom Tab component, only showing "Mes agents" as requested */}
             <div className="border-b border-gray-100">
-              <div className="flex gap-6 text-sm font-bold">
+              <div className="flex gap-6 text-sm font-semibold">
                 <button className="text-[#7225E3] border-b-2 border-[#7225E3] pb-3 px-1 transition-all">
                   Mes agents
                 </button>
@@ -1160,7 +1163,7 @@ function AgentIADashboard() {
               <Button 
                 variant="outline" 
                 onClick={() => toast.info("Nos guides d'utilisation sont accessibles dans la barre latérale droite.")}
-                className="bg-white hover:bg-gray-50 text-[#7225E3] hover:text-[#5B1BB8] border-[#7225E3]/20 rounded-xl h-10 px-5 text-xs font-bold shrink-0 shadow-sm"
+                className="bg-white hover:bg-gray-50 text-[#7225E3] hover:text-[#5B1BB8] border-[#7225E3]/20 rounded-xl h-10 px-5 text-xs font-semibold shrink-0 shadow-sm"
               >
                 Découvrir comment ça marche
               </Button>
@@ -1188,7 +1191,7 @@ function AgentIADashboard() {
                   <select 
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-semibold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option>Tous les agents</option>
                     <option>Rédaction</option>
@@ -1205,7 +1208,7 @@ function AgentIADashboard() {
                   <select 
                     value={selectedPlatform}
                     onChange={(e) => setSelectedPlatform(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-semibold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option value="Toutes">Plateforme</option>
                     <option>LinkedIn</option>
@@ -1220,7 +1223,7 @@ function AgentIADashboard() {
                   <select 
                     value={selectedObjective}
                     onChange={(e) => setSelectedObjective(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-semibold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option value="Tous">Objectif</option>
                     <option>Engager</option>
@@ -1235,7 +1238,7 @@ function AgentIADashboard() {
                   <select 
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-semibold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option>Trier par</option>
                     <option>Popularité</option>
@@ -1283,7 +1286,7 @@ function AgentIADashboard() {
                         <h3 className="text-sm font-bold text-gray-900 group-hover:text-[#7225E3] transition-all">
                           {agent.title}
                         </h3>
-                        <Badge className={agent.badgeColor + " border text-[9px] font-bold py-0"}>
+                        <Badge className={agent.badgeColor + "border text-xs font-semibold py-0"}>
                           {agent.badge}
                         </Badge>
                       </div>
@@ -1302,7 +1305,7 @@ function AgentIADashboard() {
                       <Button
                         size="xs"
                         variant="outline"
-                        className="bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 border-gray-200 rounded-lg text-[10px] font-extrabold h-7 px-3 flex items-center gap-1 shrink-0"
+                        className="bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 border-gray-200 rounded-lg text-xs font-semibold h-7 px-3 flex items-center gap-1 shrink-0"
                       >
                         Utiliser
                         <ChevronRight className="size-3" />
@@ -1322,7 +1325,7 @@ function AgentIADashboard() {
             
             {/* Categories sidebar navigation */}
             <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-3">
-              <h4 className="text-xs font-bold text-gray-800 text-gray-400 mb-2">Catégories</h4>
+              <h4 className="text-xs font-semibold text-gray-800 text-gray-400 mb-2">Catégories</h4>
               
               <div className="space-y-1.5">
                 {[
@@ -1359,7 +1362,7 @@ function AgentIADashboard() {
 
             {/* Popular agents listing matching mockup */}
             <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
-              <h4 className="text-xs font-bold text-gray-800 text-gray-400 mb-2">Agents recommandés</h4>
+              <h4 className="text-xs font-semibold text-gray-800 text-gray-400 mb-2">Agents recommandés</h4>
               
               <div className="space-y-3.5">
                 {[
@@ -1381,7 +1384,7 @@ function AgentIADashboard() {
                           <Icon className={`size-3.5 ${pop.iconColor}`} />
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-gray-800 group-hover:text-[#7225E3] transition-all">
+                          <div className="text-xs font-semibold text-gray-800 group-hover:text-[#7225E3] transition-all">
                             {pop.name}
                           </div>
                           <div className="text-[10px] text-gray-400 font-semibold mt-0.5">
@@ -1407,14 +1410,14 @@ function AgentIADashboard() {
 
             {/* Need help guides matching mockup */}
             <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-3">
-              <h4 className="text-xs font-bold text-gray-800">Besoin d'aide ?</h4>
+              <h4 className="text-xs font-semibold text-gray-800">Besoin d'aide ?</h4>
               <p className="text-[11px] text-gray-500 leading-relaxed font-semibold">
                 Découvrez nos guides et tutoriels pour tirer le meilleur de vos agents IA.
               </p>
               
               <button
                 onClick={() => toast.success("Chargement des guides d'aide...")}
-                className="w-full flex items-center justify-between px-3 h-9 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#7225E3] hover:text-[#5B1BB8] text-xs font-bold transition-all shadow-sm bg-white"
+                className="w-full flex items-center justify-between px-3 h-9 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#7225E3] hover:text-[#5B1BB8] text-xs font-semibold transition-all shadow-sm bg-white"
               >
                 <span>Voir les guides</span>
                 <ExternalLink className="size-3.5 text-gray-400" />

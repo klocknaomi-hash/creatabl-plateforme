@@ -1,22 +1,74 @@
 import type React from "react";
-import { Clock, MoreHorizontal } from "lucide-react";
+import { CircleCheck, CircleX, Clock, Info, MoreHorizontal, Sparkles, TriangleAlert, X } from "lucide-react";
 import { NetworkStack } from "@/components/ds/NetworkLogo";
 
 // Composants du design system Creatabl.ia (classes cr-* de app/creatabl-ds.css),
 // partagés par les pages de la plateforme.
 
 /* ---------- Statut d'une publication ---------- */
-export const POST_STATUS: Record<string, { label: string; tone: "info" | "success" | "error" | "warning" | "plain" }> = {
-  draft: { label: "Brouillon", tone: "plain" },
+type BadgeTone = "info" | "success" | "error" | "warning" | "violet" | "neutral";
+
+export const POST_STATUS: Record<string, { label: string; tone: BadgeTone }> = {
+  draft: { label: "Brouillon", tone: "neutral" },
   scheduled: { label: "Programmé", tone: "info" },
   published: { label: "Publié", tone: "success" },
   failed: { label: "Échec", tone: "error" },
   pending: { label: "À valider", tone: "warning" },
+  edited: { label: "Modifié", tone: "neutral" },
+  ai: { label: "Généré par l'IA", tone: "violet" },
 };
+
+// Badge du design system : le point coloré accompagne toujours un mot.
+export function Badge({ tone = "neutral", plain = false, children }: { tone?: BadgeTone; plain?: boolean; children: React.ReactNode }) {
+  const cls = ["cr-badge", tone !== "neutral" ? `cr-badge--${tone}` : "", plain ? "cr-badge--plain" : ""].filter(Boolean).join(" ");
+  return <span className={cls}>{children}</span>;
+}
 
 export function StatusBadge({ status }: { status: string }) {
   const s = POST_STATUS[status] ?? POST_STATUS.draft;
-  return <span className={`cr-badge${s.tone === "plain" ? "" : ` cr-badge--${s.tone}`}`}>{s.label}</span>;
+  if (status === "ai") {
+    return (
+      <Badge tone="violet" plain>
+        <Sparkles size={12} aria-hidden="true" />
+        {s.label}
+      </Badge>
+    );
+  }
+  return <Badge tone={s.tone}>{s.label}</Badge>;
+}
+
+/* ---------- Alert ---------- */
+const ALERT_ICONS = { success: CircleCheck, info: Info, warning: TriangleAlert, error: CircleX };
+
+export function Alert({
+  tone = "info",
+  title,
+  children,
+  action,
+  onDismiss,
+}: {
+  tone?: "success" | "info" | "warning" | "error";
+  title: React.ReactNode;
+  children?: React.ReactNode;
+  action?: React.ReactNode;
+  onDismiss?: () => void;
+}) {
+  const Icon = ALERT_ICONS[tone];
+  return (
+    <div className={`cr-alert cr-alert--${tone}`} role={tone === "error" ? "alert" : "status"}>
+      <span data-icon className="shrink-0"><Icon size={20} aria-hidden="true" /></span>
+      <div className="min-w-0 flex-1">
+        <strong>{title}</strong>
+        {children && <p>{children}</p>}
+      </div>
+      {action && <div className="flex shrink-0 items-center gap-2 self-center">{action}</div>}
+      {onDismiss && (
+        <button type="button" className="cr-iconbtn shrink-0" style={{ width: 32, height: 32 }} aria-label="Fermer" onClick={onDismiss}>
+          <X size={16} aria-hidden="true" />
+        </button>
+      )}
+    </div>
+  );
 }
 
 /* ---------- Date au format du design system : « Mar. 14 oct. · 9 h 30 » ---------- */
@@ -38,6 +90,8 @@ export function PostCard({
   date,
   mediaUrl,
   footNote,
+  errorMessage,
+  aiGenerated = false,
   actions,
 }: {
   content: string;
@@ -46,13 +100,18 @@ export function PostCard({
   date?: string | Date | null;
   mediaUrl?: string | null;
   footNote?: string;
+  errorMessage?: string | null;
+  aiGenerated?: boolean;
   actions?: React.ReactNode;
 }) {
   return (
     <article className={`cr-post h-full${status === "failed" ? " cr-post--failed" : ""}`}>
       <div className="cr-post-head">
         <NetworkStack platforms={platforms} />
-        <StatusBadge status={status} />
+        <span className="flex items-center gap-1.5">
+          {aiGenerated && <StatusBadge status="ai" />}
+          <StatusBadge status={status} />
+        </span>
       </div>
       <div className="cr-post-body" style={mediaUrl ? undefined : { gridTemplateColumns: "1fr" }}>
         <p>{content}</p>
@@ -66,7 +125,7 @@ export function PostCard({
       <div className="cr-post-foot">
         <span>
           <Clock size={14} aria-hidden="true" />
-          {[formatPostDate(date), footNote].filter(Boolean).join(" · ")}
+          {[formatPostDate(date), status === "failed" ? errorMessage || "publication refusée par le réseau" : footNote].filter(Boolean).join(" · ")}
         </span>
         {actions ?? (
           <span className="cr-post-more" aria-hidden="true">
@@ -199,6 +258,34 @@ export function PageHeader({
         {description && <p className="mt-1 text-sm text-[#4B4B63]">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+    </div>
+  );
+}
+
+/* ---------- Fonction réservée à un plan ---------- */
+export function PlanGate({
+  feature,
+  plan,
+  description,
+  children,
+}: {
+  feature: string;
+  plan: "Pro" | "Business";
+  description: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="cr-empty" style={{ background: "var(--white)", border: "1px solid var(--border)", borderRadius: "var(--cr-radius-md)" }}>
+      <span className="cr-icon-tile" style={{ width: 56, height: 56 }} aria-hidden="true">
+        <Sparkles size={26} />
+      </span>
+      <Badge tone="violet" plain>Plan {plan}</Badge>
+      <h4>{feature} est inclus à partir du plan {plan}</h4>
+      <p>{description}</p>
+      <div className="cr-empty-actions">
+        <a href="/dashboard/billing" className="cr-btn cr-btn--primary">Voir les plans</a>
+        {children}
+      </div>
     </div>
   );
 }
