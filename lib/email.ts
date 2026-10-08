@@ -65,10 +65,10 @@ export async function sendTeamInvitation({
           <tr>
             <td style="padding: 40px 40px 32px 40px;">
               <h2 style="margin-top: 0; color: #1e1b4b; font-size: 20px; font-weight: 700; line-height: 1.3;">Rejoignez l'équipe ${workspaceName}</h2>
-              <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 16px 0 24px 0;">
+              <p style="color: #4B4B63; font-size: 15px; line-height: 1.6; margin: 16px 0 24px 0;">
                 Bonjour,
               </p>
-              <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 16px 0 24px 0;">
+              <p style="color: #4B4B63; font-size: 15px; line-height: 1.6; margin: 16px 0 24px 0;">
                 <strong>${inviterName}</strong> vous invite à rejoindre son espace de travail <strong>${workspaceName}</strong> sur Creatabl.ia en tant que <strong>${roleLabel}</strong>.
               </p>
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 32px 0;">
@@ -80,7 +80,7 @@ export async function sendTeamInvitation({
                   </td>
                 </tr>
               </table>
-              <p style="color: #9ca3af; font-size: 12px; line-height: 1.5; margin: 24px 0 0 0; text-align: center;">
+              <p style="color: #6B6780; font-size: 12px; line-height: 1.5; margin: 24px 0 0 0; text-align: center;">
                 Cette invitation expirera dans 7 jours. Si vous n'attendiez pas cette invitation, vous pouvez ignorer cet e-mail.
               </p>
             </td>
@@ -88,7 +88,7 @@ export async function sendTeamInvitation({
           <!-- Footer -->
           <tr>
             <td style="padding: 32px 40px; background-color: #f9f9fb; border-top: 1px solid #eef0f5; text-align: center;">
-              <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+              <p style="margin: 0; color: #6B6780; font-size: 12px;">
                 &copy; 2026 Creatabl.ia. Tous droits réservés.
               </p>
             </td>

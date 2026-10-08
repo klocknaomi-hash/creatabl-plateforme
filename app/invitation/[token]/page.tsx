@@ -135,7 +135,7 @@ export default function InvitationPage({ params }: { params: Promise<{ token: st
                 <Button
                   onClick={handleAccept}
                   disabled={accepting}
-                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl h-11 shadow-lg shadow-primary/10 transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold rounded-full h-11 shadow-lg shadow-primary/10 transition-all flex items-center justify-center gap-2"
                 >
                   {accepting ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

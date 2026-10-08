@@ -1,9 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { generateCaption } from '@/lib/ai-generate'
-import { db } from '@/lib/db'
-import { users } from '@/lib/db/schema'
-import { eq, sql } from 'drizzle-orm'
+import { recordAiGeneration } from '@/lib/plans/credits'
 import { checkPlanLimit } from '@/lib/plans/check-limit'
 import { checkActiveAccess } from '@/lib/plans/check-active'
 
@@ -73,10 +71,7 @@ export async function POST(req: Request) {
       return NextResponse.json(result, { status })
     }
 
-    // Increment AI count
-    await db.update(users)
-      .set({ monthlyAiCount: sql`${users.monthlyAiCount} + 1` })
-      .where(eq(users.clerkId, userId));
+    await recordAiGeneration(userId, { action: 'generate', provider: 'gemini', platform })
 
     return NextResponse.json(result)
 

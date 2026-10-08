@@ -1,7 +1,8 @@
 import { db } from "@/lib/db";
-import { users, posts, socialAccounts } from "@/lib/db/schema";
-import { eq, count, and, gte, inArray } from "drizzle-orm";
-import { PLAN_LIMITS, LimitType } from "./limits";
+import { users, socialAccounts } from "@/lib/db/schema";
+import { eq, count } from "drizzle-orm";
+import { PLAN_LIMITS, LimitType, normalizePlan } from "./limits";
+import { countAiGenerationsThisMonth, countCreditsUsed } from "./credits";
 import { isNaomiOrTest } from "./index";
 import { clerkClient } from "@clerk/nextjs/server";
 
@@ -57,31 +58,18 @@ export async function checkPlanLimit(
 
   // Naomi or test accounts bypass limits (treated as business / unlimited)
   const isTest = isNaomiOrTest(user.email) || user.email.endsWith('@creatabl-ia.com');
-  const plan = isTest ? 'business' : ((user.plan || user.selectedPlan || 'free') as keyof typeof PLAN_LIMITS);
-  
-  const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.free;
+  const plan = isTest ? 'business' : normalizePlan(user.plan || user.selectedPlan);
+  const limits = PLAN_LIMITS[plan];
   const limitValue = limits[limitType];
 
   if (limitValue === -1) {
-    return { allowed: true, current: 0, limit: -1, remaining: Infinity };
+    return { allowed: true, current: 0, limit: -1, remaining: Infinity, plan };
   }
 
   let currentCount = 0;
 
   if (limitType === 'postsPerMonth') {
-    const firstDayOfMonth = new Date();
-    firstDayOfMonth.setDate(1);
-    firstDayOfMonth.setHours(0, 0, 0, 0);
-
-    const postQuery = organizationId
-      ? eq(posts.organizationId, organizationId)
-      : eq(posts.userId, user.id);
-
-    const result = await db
-      .select({ value: count() })
-      .from(posts)
-      .where(and(postQuery, gte(posts.createdAt, firstDayOfMonth)));
-    currentCount = Number(result[0].value);
+    currentCount = await countCreditsUsed({ userId: user.id, organizationId });
 
   } else if (limitType === 'connectedAccounts') {
     const accountQuery = organizationId
@@ -95,16 +83,9 @@ export async function checkPlanLimit(
     currentCount = Number(result[0].value);
 
   } else if (limitType === 'aiGenerations') {
-    // If organization is specified, sum AI count across all members in Clerk organization
-    if (organizationId && memberClerkIds.length > 0) {
-      const dbUsers = await db
-        .select({ monthlyAiCount: users.monthlyAiCount })
-        .from(users)
-        .where(inArray(users.clerkId, memberClerkIds));
-      currentCount = dbUsers.reduce((sum, u) => sum + (u.monthlyAiCount || 0), 0);
-    } else {
-      currentCount = user.monthlyAiCount || 0;
-    }
+    // Toute l'organisation partage le même compteur ; il repart de zéro chaque mois.
+    const clerkIds = organizationId && memberClerkIds.length > 0 ? memberClerkIds : [targetClerkId];
+    currentCount = await countAiGenerationsThisMonth(clerkIds);
 
   } else if (limitType === 'teamMembers') {
     // Count team members using the organization membership count from Clerk
@@ -128,5 +109,6 @@ export async function checkPlanLimit(
     current: currentCount,
     limit: limitValue,
     remaining,
+    plan,
   };
 }

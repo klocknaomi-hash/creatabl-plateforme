@@ -1,3 +1,5 @@
+import { PLAN_LIMITS } from './limits'
+
 export type Plan = 'free' | 'starter' | 'pro' | 'business'
 
 export type PlanAccess = {
@@ -36,7 +38,7 @@ export const PLAN_CONFIG: Record<Plan, PlanAccess> = {
     multiAccounts: false,
     maxAccounts: 1,
     team: false,
-    maxPostsPerMonth: 20,
+    maxPostsPerMonth: PLAN_LIMITS.free.postsPerMonth,
     canvaIntegration: false,
   },
   starter: {
@@ -50,7 +52,7 @@ export const PLAN_CONFIG: Record<Plan, PlanAccess> = {
     multiAccounts: false,
     maxAccounts: 1,
     team: false,
-    maxPostsPerMonth: 30,
+    maxPostsPerMonth: PLAN_LIMITS.starter.postsPerMonth,
     canvaIntegration: true,
   },
   pro: {
@@ -64,7 +66,7 @@ export const PLAN_CONFIG: Record<Plan, PlanAccess> = {
     multiAccounts: false,
     maxAccounts: 1,
     team: false,
-    maxPostsPerMonth: 120,
+    maxPostsPerMonth: PLAN_LIMITS.pro.postsPerMonth,
     canvaIntegration: true,
   },
   business: {
@@ -78,7 +80,7 @@ export const PLAN_CONFIG: Record<Plan, PlanAccess> = {
     multiAccounts: true,
     maxAccounts: 5,
     team: true,
-    maxPostsPerMonth: 300,
+    maxPostsPerMonth: PLAN_LIMITS.business.postsPerMonth,
     canvaIntegration: true,
   },
 }

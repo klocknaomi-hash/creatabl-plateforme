@@ -36,7 +36,7 @@ export function AudienceActivityChart({
           </p>
           <Button
             variant="outline"
-            className="rounded-xl border-violet-600/20 text-violet-600 font-bold hover:bg-violet-600/5"
+            className="rounded-full border-violet-600/20 text-violet-600 font-bold hover:bg-violet-600/5"
             onClick={() => (window.location.href = "/dashboard/settings/connections")}
           >
             Connect your social accounts

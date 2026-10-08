@@ -48,8 +48,8 @@ export default function SignUpSuccessPage() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center p-4">
       <div className="text-center space-y-6 max-w-sm">
-        <div className="w-16 h-16 bg-[#534AB7]/10 border border-[#534AB7]/30 rounded-2xl flex items-center justify-center mx-auto">
-          <Loader2 className="w-8 h-8 animate-spin text-[#534AB7]" />
+        <div className="w-16 h-16 bg-[#7225E3]/10 border border-[#7225E3]/30 rounded-2xl flex items-center justify-center mx-auto">
+          <Loader2 className="w-8 h-8 animate-spin text-[#7225E3]" />
         </div>
         <div className="space-y-2">
           <h1 className="text-2xl font-bold">Finalisation de votre compte...</h1>

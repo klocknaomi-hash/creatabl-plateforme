@@ -62,9 +62,7 @@ import { PaywallOverlay } from '@/components/PaywallOverlay'
 
 export default function AgentIAPage() {
   const { user } = useUser()
-  const router = useRouter()
   const access = useAccess()
-  const firstName = user?.firstName || 'Naomi'
 
   if (!access.aiAdvanced) {
     const currentPlan = (user?.publicMetadata?.plan as string) || 'free'
@@ -75,6 +73,15 @@ export default function AgentIAPage() {
       </div>
     )
   }
+
+  return <AgentIADashboard />
+}
+
+// Séparé de la page pour que les hooks soient toujours appelés dans le même ordre,
+// même quand l'accès change après le chargement.
+function AgentIADashboard() {
+  const { user } = useUser()
+  const router = useRouter()
 
   // Dashboard Page State
   const [searchQuery, setSearchQuery] = useState('')
@@ -558,7 +565,7 @@ export default function AgentIAPage() {
                       onClick={() => setRedacteurPlatform(plat)}
                       className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold capitalize transition-all ${
                         redacteurPlatform === plat 
-                          ? 'bg-[#534AB7] border-[#534AB7] text-white shadow-sm' 
+                          ? 'bg-[#7225E3] border-[#7225E3] text-white shadow-sm' 
                           : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                       }`}
                     >
@@ -596,7 +603,7 @@ export default function AgentIAPage() {
               <Button 
                 onClick={generateRedacteur}
                 disabled={loading}
-                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white font-bold h-11 rounded-xl shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Rédiger le post avec l'IA
@@ -675,7 +682,7 @@ export default function AgentIAPage() {
               {/* Trend cards list */}
               {loadingTrends ? (
                 <div className="flex flex-col items-center justify-center py-16 space-y-3">
-                  <Loader2 className="size-6 text-[#534AB7] animate-spin" />
+                  <Loader2 className="size-6 text-[#7225E3] animate-spin" />
                   <span className="text-xs text-gray-500 font-semibold">Récupération des dernières tendances...</span>
                 </div>
               ) : filteredTrends.length > 0 ? (
@@ -697,7 +704,7 @@ export default function AgentIAPage() {
                         }}
                         className={`border rounded-xl p-4 cursor-pointer transition-all flex flex-col justify-between gap-3 bg-white relative overflow-hidden group ${
                           isSelected 
-                            ? 'border-[#534AB7] ring-1 ring-[#534AB7] bg-purple-50/10' 
+                            ? 'border-[#7225E3] ring-1 ring-[#7225E3] bg-purple-50/10' 
                             : 'border-gray-100 hover:border-gray-300 hover:shadow-sm'
                         }`}
                       >
@@ -711,7 +718,7 @@ export default function AgentIAPage() {
                         </div>
 
                         <div>
-                          <h4 className="text-xs font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#534AB7] transition-all">
+                          <h4 className="text-xs font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#7225E3] transition-all">
                             {trend.title}
                           </h4>
                           <p className="text-[10px] text-gray-400 font-medium mt-1 truncate">{trend.source}</p>
@@ -727,7 +734,7 @@ export default function AgentIAPage() {
                               target="_blank" 
                               rel="noreferrer" 
                               onClick={(e) => e.stopPropagation()}
-                              className="text-gray-400 hover:text-[#534AB7] transition-all p-0.5"
+                              className="text-gray-400 hover:text-[#7225E3] transition-all p-0.5"
                             >
                               <ExternalLink className="size-3" />
                             </a>
@@ -747,12 +754,12 @@ export default function AgentIAPage() {
               {selectedTrend && (
                 <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-sm font-semibold text-gray-700">
-                    Sujet sélectionné : <span className="text-[#534AB7] font-bold">"{selectedTrend.title}"</span>
+                    Sujet sélectionné : <span className="text-[#7225E3] font-bold">"{selectedTrend.title}"</span>
                   </div>
                   <Button
                     onClick={generateIdeasForTrend}
                     disabled={loading}
-                    className="bg-[#534AB7] hover:bg-[#453da3] text-white font-bold rounded-xl h-10 px-5 shadow-sm border-transparent"
+                    className="bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold rounded-full h-10 px-5 shadow-sm border-transparent"
                   >
                     {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                     Générer 3 idées de post IA
@@ -770,7 +777,7 @@ export default function AgentIAPage() {
                     <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between gap-5 relative overflow-hidden">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between gap-2">
-                          <Badge className="bg-[#EEEDFE] text-[#534AB7] border-none text-[10px] font-bold px-2 py-0.5">
+                          <Badge className="bg-[#F3EEFD] text-[#7225E3] border-none text-[10px] font-bold px-2 py-0.5">
                             {idea.platform}
                           </Badge>
                           <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
@@ -790,7 +797,7 @@ export default function AgentIAPage() {
 
                         <div className="flex flex-wrap gap-1">
                           {idea.hashtags.map((tag, tagIdx) => (
-                            <span key={tagIdx} className="text-[9px] font-bold text-[#534AB7] bg-purple-50/50 px-1.5 py-0.5 rounded border border-purple-100/50">
+                            <span key={tagIdx} className="text-[9px] font-bold text-[#7225E3] bg-purple-50/50 px-1.5 py-0.5 rounded border border-purple-100/50">
                               {tag}
                             </span>
                           ))}
@@ -851,7 +858,7 @@ export default function AgentIAPage() {
               <Button 
                 onClick={generateSEO}
                 disabled={loading}
-                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white font-bold h-11 rounded-xl shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Optimiser le post pour le SEO
@@ -933,7 +940,7 @@ export default function AgentIAPage() {
               <Button 
                 onClick={generateAccroches}
                 disabled={loading}
-                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white font-bold h-11 rounded-xl shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Générer 5 accroches accrocheuses
@@ -997,7 +1004,7 @@ export default function AgentIAPage() {
               <Button 
                 onClick={generateHashtags}
                 disabled={loading}
-                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white font-bold h-11 rounded-xl shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Générer les hashtags
@@ -1066,7 +1073,7 @@ export default function AgentIAPage() {
               <Button 
                 onClick={generateVisuels}
                 disabled={loading}
-                className="w-full bg-[#534AB7] hover:bg-[#453da3] text-white font-bold h-11 rounded-xl shadow-sm border-transparent"
+                className="w-full bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold h-11 rounded-full shadow-sm border-transparent"
               >
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Sparkles className="size-4 mr-2" />}
                 Générer les concepts de visuels
@@ -1080,7 +1087,7 @@ export default function AgentIAPage() {
                   <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                     {visuelsResult.map((concept, index) => (
                       <div key={index} className="border border-gray-100 rounded-xl p-4 bg-gray-50/40 space-y-2">
-                        <span className="text-[10px] font-extrabold text-[#534AB7] uppercase tracking-wider block">Concept {index + 1}</span>
+                        <span className="text-[10px] font-extrabold text-[#7225E3] uppercase tracking-wider block">Concept {index + 1}</span>
                         <p className="text-xs font-bold text-gray-800"><span className="text-gray-400">Scène : </span>{concept.scene}</p>
                         <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-[11px] font-semibold text-gray-500">
                           <span>🎨 Couleurs : {concept.colors}</span>
@@ -1129,17 +1136,17 @@ export default function AgentIAPage() {
             {/* Custom Tab component, only showing "Mes agents" as requested */}
             <div className="border-b border-gray-100">
               <div className="flex gap-6 text-sm font-bold">
-                <button className="text-[#534AB7] border-b-2 border-[#534AB7] pb-3 px-1 transition-all">
+                <button className="text-[#7225E3] border-b-2 border-[#7225E3] pb-3 px-1 transition-all">
                   Mes agents
                 </button>
               </div>
             </div>
 
             {/* Copilot Purple card description banner */}
-            <div className="bg-[#EEEDFE]/40 border border-[#534AB7]/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden shadow-sm">
+            <div className="bg-[#F3EEFD]/40 border border-[#7225E3]/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden shadow-sm">
               <div className="flex items-center gap-5">
                 {/* Illustration placeholder */}
-                <div className="size-14 rounded-2xl bg-gradient-to-br from-[#534AB7] to-purple-400 flex items-center justify-center shadow-md shadow-purple-100 shrink-0">
+                <div className="size-14 rounded-2xl bg-gradient-to-br from-[#7225E3] to-purple-400 flex items-center justify-center shadow-md shadow-purple-100 shrink-0">
                   <Bot className="size-7 text-white" />
                 </div>
                 <div>
@@ -1153,7 +1160,7 @@ export default function AgentIAPage() {
               <Button 
                 variant="outline" 
                 onClick={() => toast.info("Nos guides d'utilisation sont accessibles dans la barre latérale droite.")}
-                className="bg-white hover:bg-gray-50 text-[#534AB7] hover:text-[#453da3] border-[#534AB7]/20 rounded-xl h-10 px-5 text-xs font-bold shrink-0 shadow-sm"
+                className="bg-white hover:bg-gray-50 text-[#7225E3] hover:text-[#5B1BB8] border-[#7225E3]/20 rounded-xl h-10 px-5 text-xs font-bold shrink-0 shadow-sm"
               >
                 Découvrir comment ça marche
               </Button>
@@ -1169,7 +1176,7 @@ export default function AgentIAPage() {
                   placeholder="Rechercher un agent..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 h-10 border-gray-200 rounded-xl bg-white shadow-sm focus-visible:ring-1 focus-visible:ring-[#534AB7] text-xs font-semibold"
+                  className="pl-9 h-10 border-gray-200 rounded-xl bg-white shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] text-xs font-semibold"
                 />
               </div>
 
@@ -1181,7 +1188,7 @@ export default function AgentIAPage() {
                   <select 
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#534AB7] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option>Tous les agents</option>
                     <option>Rédaction</option>
@@ -1198,7 +1205,7 @@ export default function AgentIAPage() {
                   <select 
                     value={selectedPlatform}
                     onChange={(e) => setSelectedPlatform(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#534AB7] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option value="Toutes">Plateforme</option>
                     <option>LinkedIn</option>
@@ -1213,7 +1220,7 @@ export default function AgentIAPage() {
                   <select 
                     value={selectedObjective}
                     onChange={(e) => setSelectedObjective(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#534AB7] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option value="Tous">Objectif</option>
                     <option>Engager</option>
@@ -1228,7 +1235,7 @@ export default function AgentIAPage() {
                   <select 
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#534AB7] outline-none cursor-pointer"
+                    className="appearance-none pr-8 pl-3 h-10 border border-gray-200 rounded-xl bg-white text-xs font-bold text-gray-600 shadow-sm focus-visible:ring-1 focus-visible:ring-[#7225E3] outline-none cursor-pointer"
                   >
                     <option>Trier par</option>
                     <option>Popularité</option>
@@ -1273,7 +1280,7 @@ export default function AgentIAPage() {
                     {/* Middle description */}
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-gray-900 group-hover:text-[#534AB7] transition-all">
+                        <h3 className="text-sm font-bold text-gray-900 group-hover:text-[#7225E3] transition-all">
                           {agent.title}
                         </h3>
                         <Badge className={agent.badgeColor + " border text-[9px] font-bold py-0"}>
@@ -1325,7 +1332,7 @@ export default function AgentIAPage() {
 
               {/* Progress bar styled like mockup */}
               <div className="h-2 w-full bg-purple-50 rounded-full overflow-hidden">
-                <div className="h-full bg-[#534AB7] rounded-full" style={{ width: '41.3%' }} />
+                <div className="h-full bg-[#7225E3] rounded-full" style={{ width: '41.3%' }} />
               </div>
 
               <div className="text-[10px] text-gray-400 font-semibold">
@@ -1354,13 +1361,13 @@ export default function AgentIAPage() {
                       onClick={() => setSelectedCategory(cat.name)}
                       className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs font-semibold transition-all ${
                         isCurrentCat 
-                          ? 'bg-purple-50/50 text-[#534AB7] font-bold' 
+                          ? 'bg-purple-50/50 text-[#7225E3] font-bold' 
                           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                     >
                       <span className="truncate">{cat.label}</span>
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                        isCurrentCat ? 'bg-[#534AB7]/10 text-[#534AB7]' : 'bg-gray-100 text-gray-500'
+                        isCurrentCat ? 'bg-[#7225E3]/10 text-[#7225E3]' : 'bg-gray-100 text-gray-500'
                       }`}>
                         {cat.count}
                       </span>
@@ -1394,7 +1401,7 @@ export default function AgentIAPage() {
                           <Icon className={`size-3.5 ${pop.iconColor}`} />
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-gray-800 group-hover:text-[#534AB7] transition-all">
+                          <div className="text-xs font-bold text-gray-800 group-hover:text-[#7225E3] transition-all">
                             {pop.name}
                           </div>
                           <div className="text-[10px] text-gray-400 font-semibold mt-0.5">
@@ -1427,7 +1434,7 @@ export default function AgentIAPage() {
               
               <button
                 onClick={() => toast.success("Chargement des guides d'aide...")}
-                className="w-full flex items-center justify-between px-3 h-9 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#534AB7] hover:text-[#453da3] text-xs font-bold transition-all shadow-sm bg-white"
+                className="w-full flex items-center justify-between px-3 h-9 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#7225E3] hover:text-[#5B1BB8] text-xs font-bold transition-all shadow-sm bg-white"
               >
                 <span>Voir les guides</span>
                 <ExternalLink className="size-3.5 text-gray-400" />

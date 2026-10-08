@@ -35,7 +35,7 @@ export default function NotFound() {
         height: '260px',
         borderRadius: '50%',
         overflow: 'hidden',
-        boxShadow: '0 0 60px rgba(127,119,221,0.35)',
+        boxShadow: '0 0 60px rgba(138,56,245,0.35)',
       }}>
         {!videoError ? (
           <video
@@ -67,7 +67,7 @@ export default function NotFound() {
       <p style={{
         fontSize: '11px',
         fontWeight: 600,
-        color: '#7F77DD',
+        color: '#8A38F5',
         letterSpacing: '0.15em',
         textTransform: 'uppercase',
       }}>
@@ -97,7 +97,7 @@ export default function NotFound() {
       <Link
         href="/dashboard"
         style={{
-          background: '#7F77DD',
+          background: '#8A38F5',
           color: '#FFFFFF',
           padding: '13px 32px',
           borderRadius: '100px',

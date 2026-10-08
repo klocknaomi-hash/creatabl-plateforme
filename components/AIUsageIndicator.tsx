@@ -12,7 +12,7 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
   const progress = Math.min(used / limit, 1);
   const strokeDashoffset = circumference * (1 - progress);
 
-  let color = "#7F77DD"; // Normal (Violet)
+  let color = "#8A38F5"; // Normal (Violet)
   if (progress >= 1) {
     color = "#D85A30"; // Limit reached (Red/Orange-ish)
   } else if (progress > 0.8) {
@@ -31,7 +31,7 @@ const AIUsageIndicator: React.FC<AIUsageIndicatorProps> = ({ used, limit, size =
     >
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <circle cx={size/2} cy={size/2} r={radius} 
-          fill="none" stroke="#E5E7EB" strokeWidth="4"/>
+          fill="none" stroke="#E8E6F0" strokeWidth="4"/>
         <circle cx={size/2} cy={size/2} r={radius}
           fill="none" 
           stroke={color}

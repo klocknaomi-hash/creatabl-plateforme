@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         error: "limit_reached",
         limit: "postsPerMonth",
         upgradeUrl: "/pricing",
-        message: `Limite de posts mensuelle atteinte. Tu as utilisé ${current} sur ${limit} posts. Passe au plan supérieur pour continuer.`
+        message: `Tu as utilisé tes ${limit} crédits du mois (${current}/${limit}). Ils se renouvellent le 1er du mois, ou passe au plan supérieur pour continuer.`
       }, { status: 402 });
     }
   }

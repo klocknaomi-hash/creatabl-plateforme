@@ -1,13 +1,13 @@
 export const DS = {
   colors: {
-    primary: "#534AB7",
-    primaryLight: "#EEEDFE",
-    primaryDark: "#453da3",
+    primary: "#7225E3",
+    primaryLight: "#F3EEFD",
+    primaryDark: "#5B1BB8",
     primaryBorder: "#AFA9EC",
-    textPrimary: "#111827",
-    textSecondary: "#6B7280",
-    textTertiary: "#9CA3AF",
-    border: "#E5E7EB",
+    textPrimary: "#14121F",
+    textSecondary: "#6B6780",
+    textTertiary: "#6B6780",
+    border: "#E8E6F0",
     borderLight: "#F3F4F6",
     background: "#FFFFFF",
     backgroundSecondary: "#F9FAFB",
@@ -29,20 +29,20 @@ export const DS = {
     // Small / captions
     caption: "text-xs text-gray-400",
     // Italic subtitle (plans)
-    subtitle: "text-sm italic text-[#534AB7]",
+    subtitle: "text-sm italic text-[#7225E3]",
     // Section label uppercase
     sectionLabel: "text-xs font-semibold text-gray-400 uppercase tracking-wider",
   },
   buttons: {
-    primary: "bg-[#534AB7] text-white font-bold rounded-xl hover:bg-[#453da3] transition-colors",
-    secondary: "border border-[#534AB7] text-[#534AB7] font-bold rounded-xl hover:bg-[#EEEDFE] transition-colors",
+    primary: "bg-[#7225E3] text-white font-bold rounded-xl hover:bg-[#5B1BB8] transition-colors",
+    secondary: "border border-[#7225E3] text-[#7225E3] font-bold rounded-xl hover:bg-[#F3EEFD] transition-colors",
     dark: "bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors",
     ghost: "text-gray-500 hover:text-gray-700 transition-colors",
   },
   cards: {
     base: "bg-white border border-gray-100 rounded-2xl",
     elevated: "bg-white border border-gray-100 rounded-2xl shadow-sm",
-    highlighted: "bg-white border-2 border-[#534AB7] rounded-2xl",
+    highlighted: "bg-white border-2 border-[#7225E3] rounded-2xl",
   },
   spacing: {
     pagePadding: "p-8",
@@ -51,9 +51,9 @@ export const DS = {
     cardGap: "gap-4",
   },
   badges: {
-    popular: "bg-[#534AB7] text-white text-xs font-bold px-3 py-1 rounded-full",
-    choice: "bg-[#534AB7] text-white text-xs font-bold px-3 py-1 rounded-full",
-    trial: "bg-[#534AB7]/10 text-[#534AB7] text-xs font-bold px-3 py-1 rounded-full",
+    popular: "bg-[#7225E3] text-white text-xs font-bold px-3 py-1 rounded-full",
+    choice: "bg-[#7225E3] text-white text-xs font-bold px-3 py-1 rounded-full",
+    trial: "bg-[#7225E3]/10 text-[#7225E3] text-xs font-bold px-3 py-1 rounded-full",
   }
 } as const
 
@@ -65,7 +65,7 @@ export const DS = {
  * - Always import DS from "@/lib/design-system"
  * - Never hardcode colors — use DS.colors.*
  * - Never change font sizes without explicit request
- * - Primary purple is always #534AB7
+ * - Primary purple is always #7225E3
  * - All cards use rounded-2xl
  * - All buttons use rounded-xl
  * - Page padding is always p-8

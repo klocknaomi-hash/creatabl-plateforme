@@ -20,7 +20,7 @@ function SignInContent() {
 
         {/* Brand Logo & Name (Exact official typography & layout) */}
         <div className="flex items-center gap-2.5 relative z-10 select-none">
-          <img src="/logo.svg" className="w-8 h-8 shrink-0" alt="creatabl.ia logo" />
+          <img src="/logo.png" className="w-8 h-8 shrink-0" alt="creatabl.ia logo" />
           <span className="text-2xl font-bold tracking-tight text-white lowercase">
             creatabl<span className="font-serif italic">.ia</span>
           </span>
@@ -45,7 +45,7 @@ function SignInContent() {
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-2 rounded-lg text-[10px] xl:text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${
                   activeTab === tab
-                    ? 'bg-[#534AB7] text-white shadow-md shadow-indigo-500/10'
+                    ? 'bg-[#7225E3] text-white shadow-md shadow-indigo-500/10'
                     : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -63,7 +63,7 @@ function SignInContent() {
                 {/* Header */}
                 <div className="p-3.5 flex items-center justify-between border-b border-white/5 bg-zinc-950/20">
                   <div className="flex items-center gap-2">
-                    <img src="/logo.svg" className="w-8 h-8 rounded-full border border-white/10 p-0.5 bg-zinc-950" alt="" />
+                    <img src="/logo.png" className="w-8 h-8 rounded-full border border-white/10 p-0.5 bg-zinc-950" alt="" />
                     <div className="flex flex-col">
                       <span className="text-[11px] font-bold text-white flex items-center gap-1">
                         creatabl.ia <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
@@ -81,7 +81,7 @@ function SignInContent() {
                 <div className="p-3.5 space-y-2 bg-zinc-950/10">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3.5">
-                      <Heart className="w-5 h-5 text-[#534AB7] fill-[#534AB7]" />
+                      <Heart className="w-5 h-5 text-[#7225E3] fill-[#7225E3]" />
                       <MessageCircle className="w-5 h-5 text-zinc-400" />
                       <Share2 className="w-5 h-5 text-zinc-400" />
                     </div>
@@ -103,7 +103,7 @@ function SignInContent() {
               <div className="p-4 space-y-3 animate-in fade-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="flex gap-3">
-                  <img src="/logo.svg" className="w-9 h-9 rounded-full border border-white/10 p-0.5 bg-zinc-950 shrink-0" alt="" />
+                  <img src="/logo.png" className="w-9 h-9 rounded-full border border-white/10 p-0.5 bg-zinc-950 shrink-0" alt="" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1">
                       <span className="font-bold text-[12px] text-white truncate">creatabl.ia</span>
@@ -122,7 +122,7 @@ function SignInContent() {
                 <div className="flex items-center justify-between text-zinc-500 text-[11px] max-w-[280px] pt-1">
                   <span className="flex items-center gap-1.5 hover:text-white transition-colors"><MessageCircle className="w-4 h-4" /> 12</span>
                   <span className="flex items-center gap-1.5 hover:text-white transition-colors"><Repeat2 className="w-4 h-4" /> 4</span>
-                  <span className="flex items-center gap-1.5 hover:text-[#534AB7] transition-colors"><Heart className="w-4 h-4 text-[#534AB7] fill-[#534AB7]" /> 84</span>
+                  <span className="flex items-center gap-1.5 hover:text-[#7225E3] transition-colors"><Heart className="w-4 h-4 text-[#7225E3] fill-[#7225E3]" /> 84</span>
                   <span className="flex items-center gap-1.5 hover:text-white transition-colors"><BarChart2 className="w-4 h-4" /> 1.2k</span>
                 </div>
               </div>
@@ -133,10 +133,10 @@ function SignInContent() {
               <div className="animate-in fade-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="p-3.5 flex items-center gap-2.5 border-b border-white/5 bg-zinc-950/20">
-                  <img src="/logo.svg" className="w-9 h-9 rounded-md border border-white/10 p-0.5 bg-zinc-950 shrink-0" alt="" />
+                  <img src="/logo.png" className="w-9 h-9 rounded-md border border-white/10 p-0.5 bg-zinc-950 shrink-0" alt="" />
                   <div className="flex flex-col min-w-0">
                     <span className="text-[11px] font-bold text-white flex items-center gap-1">
-                      creatabl.ia <span className="text-[9px] font-medium text-[#534AB7] bg-indigo-500/10 px-1.5 py-0.5 rounded">1er</span>
+                      creatabl.ia <span className="text-[9px] font-medium text-[#7225E3] bg-indigo-500/10 px-1.5 py-0.5 rounded">1er</span>
                     </span>
                     <span className="text-[9px] text-zinc-500 leading-tight truncate">Social Media Copilot • IA Active</span>
                     <span className="text-[8px] text-zinc-600 leading-tight">À l&apos;instant · 🌐</span>
@@ -157,7 +157,7 @@ function SignInContent() {
                     <span>· 2 commentaires</span>
                   </div>
                   <div className="flex items-center justify-between pt-1.5 border-t border-white/5 text-zinc-400 font-bold text-[10px]">
-                    <span className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"><Heart className="w-3.5 h-3.5 text-[#534AB7] fill-[#534AB7]" /> J&apos;aime</span>
+                    <span className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"><Heart className="w-3.5 h-3.5 text-[#7225E3] fill-[#7225E3]" /> J&apos;aime</span>
                     <span className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"><MessageCircle className="w-3.5 h-3.5" /> Commenter</span>
                     <span className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"><Repeat2 className="w-3.5 h-3.5" /> Reposter</span>
                     <span className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"><Send className="w-3.5 h-3.5" /> Envoyer</span>
@@ -171,19 +171,19 @@ function SignInContent() {
 
         {/* Footer info */}
         <div className="flex items-center gap-2 text-[10px] xl:text-[11px] text-zinc-500 relative z-10 font-medium mt-auto">
-          <Shield className="w-4 h-4 text-[#534AB7]" />
+          <Shield className="w-4 h-4 text-[#7225E3]" />
           <span>Plateforme sécurisée de niveau entreprise • RGPD Compliant</span>
         </div>
       </div>
 
       {/* Right Column - Clerk Sign In (Light Theme for perfect readability) */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-[#F8F9FD] relative min-h-screen">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#534AB7]/5 blur-[80px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#7225E3]/5 blur-[80px] rounded-full pointer-events-none" />
         
         <div className="w-full max-w-md relative z-10 flex flex-col items-center">
           {/* Small logo for mobile */}
           <div className="lg:hidden flex items-center gap-2.5 mb-8 select-none">
-            <img src="/logo.svg" className="w-7 h-7 shrink-0" alt="creatabl.ia logo" />
+            <img src="/logo.png" className="w-7 h-7 shrink-0" alt="creatabl.ia logo" />
             <span className="text-xl font-bold tracking-tight text-zinc-900 lowercase">
               creatabl<span className="font-serif italic text-zinc-950">.ia</span>
             </span>
@@ -191,8 +191,8 @@ function SignInContent() {
 
           {message === 'account_exists' && (
             <div className="w-full mb-6 p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-950 flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
-              <div className="w-5 h-5 rounded-full bg-[#534AB7]/10 border border-[#534AB7]/25 flex items-center justify-center shrink-0 mt-0.5 animate-pulse">
-                <span className="text-[#534AB7] text-xs font-black">!</span>
+              <div className="w-5 h-5 rounded-full bg-[#7225E3]/10 border border-[#7225E3]/25 flex items-center justify-center shrink-0 mt-0.5 animate-pulse">
+                <span className="text-[#7225E3] text-xs font-black">!</span>
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-xs text-indigo-950">Compte déjà existant</h4>
@@ -211,13 +211,13 @@ function SignInContent() {
                 logoPlacement: "none",
               },
               variables: {
-                colorPrimary: '#534AB7',
+                colorPrimary: '#7225E3',
                 colorBackground: '#ffffff',
-                colorText: '#1f2937', // gray-800
-                colorTextSecondary: '#4b5563', // gray-600
+                colorText: '#24212F', // gray-800
+                colorTextSecondary: '#4B4B63', // gray-600
                 colorInputBackground: '#ffffff',
-                colorInputText: '#1f2937',
-                colorBorder: '#e5e7eb', // gray-200
+                colorInputText: '#24212F',
+                colorBorder: '#E8E6F0', // gray-200
                 borderRadius: '12px',
                 fontFamily: 'inherit',
               },
@@ -227,15 +227,15 @@ function SignInContent() {
                 headerSubtitle: "text-sm text-gray-500 text-center mt-1",
                 socialButtonsBlockButton: "border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition-all duration-200 py-3 shadow-sm",
                 socialButtonsBlockButtonText: "text-sm font-medium",
-                formButtonPrimary: "bg-[#534AB7] hover:bg-[#453da3] text-white font-bold rounded-xl py-3 shadow-lg shadow-indigo-500/10 active:scale-[0.98] transition-all",
+                formButtonPrimary: "bg-[#7225E3] hover:bg-[#5B1BB8] text-white font-bold rounded-full py-3 shadow-lg shadow-indigo-500/10 active:scale-[0.98] transition-all",
                 formFieldLabel: "text-gray-700 font-semibold text-xs uppercase tracking-wider mb-1.5",
-                formFieldInput: "border border-gray-200 focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] rounded-xl px-4 py-3 text-sm transition-all text-gray-900 placeholder-gray-400 bg-white",
+                formFieldInput: "border border-gray-200 focus:border-[#7225E3] focus:ring-1 focus:ring-[#7225E3] rounded-xl px-4 py-3 text-sm transition-all text-gray-900 placeholder-gray-400 bg-white",
                 footerActionText: "text-sm text-gray-500",
-                footerActionLink: "text-[#534AB7] hover:text-[#453da3] font-bold transition-colors",
+                footerActionLink: "text-[#7225E3] hover:text-[#5B1BB8] font-bold transition-colors",
                 dividerLine: "bg-gray-100",
                 dividerText: "text-gray-400 text-xs font-semibold bg-white px-3",
                 identityPreviewText: "text-gray-900",
-                identityPreviewEditButtonIcon: "text-[#534AB7]"
+                identityPreviewEditButtonIcon: "text-[#7225E3]"
               }
             }}
             fallbackRedirectUrl="/dashboard"

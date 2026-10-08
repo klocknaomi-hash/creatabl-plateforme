@@ -17,8 +17,8 @@ export function UpgradePrompt({
 
   return (
     <div style={{
-      background: 'rgba(127,119,221,0.08)',
-      border: '1px solid rgba(127,119,221,0.3)',
+      background: 'rgba(138,56,245,0.08)',
+      border: '1px solid rgba(138,56,245,0.3)',
       borderRadius: '12px',
       padding: '16px',
       textAlign: 'center',
@@ -31,7 +31,7 @@ export function UpgradePrompt({
       <Link
         href="https://creatabl-ia.com/tarifs"
         style={{
-          background: '#7F77DD',
+          background: '#8A38F5',
           color: 'white',
           padding: '8px 16px',
           borderRadius: '8px',
