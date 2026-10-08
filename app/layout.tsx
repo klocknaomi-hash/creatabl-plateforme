@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { UrlCleaner } from "@/components/url-cleaner";
 import "./globals.css";
+import "./creatabl-ds.css";
 
 // Design system Creatabl.ia : Inter pour le texte, Outfit pour les titres
 const inter = Inter({

@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const activeCheck = await checkActiveAccess(userId)
   if (!activeCheck.allowed) {
     return NextResponse.redirect(
-      new URL(`/dashboard/settings/connections?error=trial_expired&message=${encodeURIComponent("Ton essai gratuit est terminé. Choisis un forfait pour continuer.")}`, req.nextUrl.origin)
+      new URL(`/dashboard/settings/connections?error=trial_expired&message=${encodeURIComponent("Votre essai gratuit est terminé. Choisissez un forfait pour continuer.")}`, req.nextUrl.origin)
     );
   }
 

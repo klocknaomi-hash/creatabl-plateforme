@@ -46,15 +46,15 @@ export function UsageMetrics({ data }: UsageProps) {
           <Card key={stat.label} className="border-none bg-muted/30 shadow-none rounded-2xl overflow-hidden">
             <CardContent className="p-5 space-y-4">
               <div className="flex flex-col">
-                <span className="text-[10px] font-black tracking-[0.2em] text-muted-foreground uppercase">
+                <span className="text-xs font-semibold text-muted-foreground">
                   {stat.label}
                 </span>
                 <div className="flex items-baseline justify-between mt-1">
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-3xl font-black">{stat.current}</span>
+                    <span className="text-3xl font-bold">{stat.current}</span>
                     <span className="text-muted-foreground font-bold text-sm">/ {displayLimit}</span>
                   </div>
-                  <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                     {Math.round(percentage)}%
                   </span>
                 </div>

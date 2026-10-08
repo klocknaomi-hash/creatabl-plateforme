@@ -159,10 +159,10 @@ export function PaywallOverlay({ plan, billingCycle }: PaywallOverlayProps) {
         <div className="text-center mb-6 space-y-3">
           <span className="text-4xl inline-block mb-1">🎊</span>
           <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
-            Ton essai gratuit est terminé !
+            Votre essai gratuit est terminé !
           </h2>
           <p className="text-zinc-400 text-base max-w-xl mx-auto">
-            Découvre nos abonnements ou continue gratuitement avec 20 posts par mois !
+            Découvrez nos abonnements ou continuez gratuitement avec 20 posts par mois !
           </p>
         </div>
 

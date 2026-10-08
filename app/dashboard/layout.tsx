@@ -25,7 +25,7 @@ export default async function DashboardLayout({
 }) {
   try {
     const { userId } = await auth()
-    if (!userId) redirect('https://app.creatabl-ia.com/sign-in')
+    if (!userId) redirect('/sign-in')
     
     const clerkUser = await currentUser()
     
@@ -165,6 +165,6 @@ export default async function DashboardLayout({
     );
   } catch (error) {
     console.error('Dashboard layout error:', error)
-    redirect('https://app.creatabl-ia.com/sign-in')
+    redirect('/sign-in')
   }
 }

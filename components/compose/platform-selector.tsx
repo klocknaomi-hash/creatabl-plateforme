@@ -50,7 +50,7 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
     return (
       <div className="flex items-center gap-3 p-4 border rounded-xl bg-muted/5">
         <Loader2 className="w-4 h-4 animate-spin text-primary" />
-        <span className="text-xs font-medium text-muted-foreground">Loading accounts...</span>
+        <span className="text-xs font-medium text-muted-foreground">Chargement des comptes…</span>
       </div>
     );
   }
@@ -91,14 +91,14 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
             </div>
             
             <div className="flex flex-col min-w-0">
-              <span className={cn("text-[13px] font-semibold truncate", isSelected ? "text-background" : "text-foreground")}>
+              <span className={cn("text-[13px] font-semibold truncate", isSelected ? "text-[#5B1BB8]" : "text-foreground")}>
                 {account.username}
               </span>
             </div>
 
             {isSelected && (
-              <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-foreground border-2 border-background flex items-center justify-center shadow-md z-10">
-                <Check className="w-2.5 h-2.5 text-background stroke-[4]" />
+              <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#7225E3] border-2 border-background flex items-center justify-center shadow-md z-10">
+                <Check className="w-2.5 h-2.5 text-white stroke-[4]" />
               </div>
             )}
           </div>
@@ -112,10 +112,10 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
           e.stopPropagation();
           router.push("/dashboard/settings/connections");
         }}
-        className="h-[52px] px-4 rounded-xl border-2 border-dashed border-muted-foreground/30 hover:border-foreground hover:bg-foreground hover:text-background transition-all gap-2 group"
+        className="h-11 px-4 rounded-full border border-dashed border-[#878399] text-[#4B4B63] hover:border-[#7225E3] hover:text-[#7225E3] hover:bg-[#F3EEFD] transition-all gap-2 group"
       >
         <Plus className="w-4 h-4" />
-        <span className="text-xs font-semibold">Connecter</span>
+        <span className="text-sm font-medium">Connecter un compte</span>
       </Button>
     </div>
   );

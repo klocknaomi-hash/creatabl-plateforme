@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 // Components
 import { PlatformSelector } from "@/components/compose/platform-selector";
 import { CaptionEditor } from "@/components/compose/caption-editor";
+import { EmptyState } from "@/components/ds";
 import { MediaUploader } from "@/components/compose/media-uploader";
 import { SchedulePicker } from "@/components/compose/schedule-picker";
 import { PostPreview } from "@/components/compose/post-preview";
@@ -111,7 +112,7 @@ function ComposePageInner() {
           }
         }
       } catch (err) {
-        toast.error("Failed to load post data");
+        toast.error("Impossible de charger le post");
       }
     };
 
@@ -234,10 +235,10 @@ function ComposePageInner() {
 
   const handlePost = async (isDraft = false) => {
     if (!content && mediaFiles.length === 0) {
-      return toast.error("Please add some content or media");
+      return toast.error("Ajoutez du texte ou un média");
     }
     if (selectedPlatforms.length === 0 && !isDraft) {
-      return toast.error("Please select at least one platform");
+      return toast.error("Sélectionnez au moins un réseau");
     }
 
     setLoading(true);
@@ -319,19 +320,15 @@ function ComposePageInner() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center 
-          h-64 text-center border border-dashed border-gray-200 
-          rounded-2xl p-8 w-full mt-4 bg-background">
-          <p className="font-medium text-gray-500 mb-1">
-            Connecte tes réseaux sociaux
-          </p>
-          <p className="text-sm text-gray-400 mb-4">
-            Connectez au moins un réseau social pour créer et publier du contenu.
-          </p>
-          <Link href="/dashboard/settings/connections" className="bg-[#7225E3] text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-[#5B1BB8] transition-colors">
-            Se connecter
+        <EmptyState
+          illustration="posts"
+          title="Connectez vos réseaux sociaux"
+          text="Connectez au moins un réseau social pour créer et publier du contenu."
+        >
+          <Link href="/dashboard/settings/connections" className="cr-btn cr-btn--primary">
+            Connecter un compte
           </Link>
-        </div>
+        </EmptyState>
       </div>
     );
   }
@@ -349,12 +346,12 @@ function ComposePageInner() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0 }}
-                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                  className="cr-badge cr-badge--plain"
                 >
                   {saveStatus === "saving" && <Loader2 className="size-2.5 animate-spin" />}
                   {saveStatus === "saved" && <CheckCircle2 className="size-2.5 text-emerald-500" />}
                   {saveStatus === "error" && <AlertCircle className="size-2.5 text-destructive" />}
-                  <span className="text-xs font-medium text-muted-foreground animate-pulse">
+                  <span>
                   {saveStatus === "saving" ? "Enregistrement..." : saveStatus === "saved" ? "Enregistré" : "Erreur"}
                 </span></motion.div>
               )}
@@ -385,7 +382,7 @@ function ComposePageInner() {
         <div className="min-w-0 flex-1 space-y-4">
           {/* Platforms Card */}
           <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Plateformes</h3>
+            <h3 className="font-heading text-base font-semibold text-[#14121F]">Réseaux</h3>
             <PlatformSelector 
               selectedPlatforms={selectedPlatforms} 
               onToggle={(p) => setSelectedPlatforms(prev => 
@@ -397,7 +394,7 @@ function ComposePageInner() {
           {/* Caption Card */}
           <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Caption</h3>
+              <h3 className="font-heading text-base font-semibold text-[#14121F]">Texte du post</h3>
               
               {/* Integrated Tone Selector */}
               <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-lg border border-border/50">
@@ -410,7 +407,7 @@ function ComposePageInner() {
                       "p-1.5 rounded-md transition-all",
                       selectedTone === tone.value 
                         ? "bg-background shadow-sm text-foreground ring-1 ring-border" 
-                        : "text-muted-foreground/60 hover:text-foreground hover:bg-background/50"
+                        : "text-[#6B6780] hover:text-foreground hover:bg-background/50"
                     )}
                   >
                     <span className="text-sm">{tone.icon}</span>
@@ -431,7 +428,7 @@ function ComposePageInner() {
 
           {/* Media Card */}
           <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Médias</h3>
+            <h3 className="font-heading text-base font-semibold text-[#14121F]">Médias</h3>
             <MediaUploader 
               mediaFiles={mediaFiles} 
               selectedPlatforms={selectedPlatforms}
@@ -444,7 +441,7 @@ function ComposePageInner() {
 
           {/* Schedule Card */}
           <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
-            <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Scheduling</h3>
+            <h3 className="font-heading text-base font-semibold text-[#14121F]">Programmation</h3>
             <SchedulePicker 
               scheduledAt={scheduledAt} 
               onChange={setScheduledAt} 
@@ -462,7 +459,7 @@ function ComposePageInner() {
 
         {/* Right Column: Live Preview */}
         <aside className="hidden lg:block w-[480px] flex-shrink-0 sticky top-20 space-y-3 rounded-xl border border-[#E8E6F0] bg-[#F8F7FC] p-5">
-          <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest px-2">Preview</h3>
+          <h3 className="font-heading text-base font-semibold text-[#14121F] px-2">Aperçu</h3>
           <PostPreview 
             content={content} 
             mediaFiles={mediaFiles} 
@@ -484,7 +481,7 @@ function ComposePageInner() {
           </DialogHeader>
           <div className="py-2 space-y-4">
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sujet</Label>
+              <Label className="text-sm font-semibold text-[#14121F]">Sujet</Label>
               <Textarea 
                 placeholder="ex. Écrire un post sur le lancement de notre nouvelle fonctionnalité IA..."
                 className="min-h-[100px] rounded-xl resize-none border focus-visible:ring-1 focus-visible:ring-foreground bg-muted/5"
@@ -494,7 +491,7 @@ function ComposePageInner() {
             </div>
 
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Ton souhaité</Label>
+              <Label className="text-sm font-semibold text-[#14121F]">Ton souhaité</Label>
               <div className="grid grid-cols-2 gap-2">
                 {TONES.map((tone) => (
                   <button

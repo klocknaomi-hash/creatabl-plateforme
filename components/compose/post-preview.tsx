@@ -52,8 +52,8 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
         <div className="w-12 h-12 rounded-full bg-muted/10 flex items-center justify-center mb-3">
           <TwitterIcon className="w-6 h-6 opacity-20" />
         </div>
-        <p className="text-sm font-bold text-foreground/80">Preview visuelle</p>
-        <p className="text-xs max-w-[150px]">Sélectionnez une plateforme pour voir la preview de votre post.</p>
+        <p className="text-sm font-bold text-foreground/80">Aperçu du post</p>
+        <p className="text-xs max-w-[150px]">Sélectionnez un réseau pour voir l'aperçu de votre post.</p>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                 </div>
               ) : (
                 <div className="aspect-square bg-muted/10 flex items-center justify-center text-muted-foreground text-[10px] italic">
-                  Media Placeholder
+                  Votre visuel apparaîtra ici
                 </div>
               )}
               <div className="p-3 space-y-2">
@@ -102,7 +102,6 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
                   <Bookmark className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[13px] font-bold">1,234 Likes</p>
                   <div>
                     <p className={cn("text-[13px] leading-snug whitespace-pre-wrap", !isExpanded && "line-clamp-3")}>
                       <span className="font-bold mr-1.5">{username}</span>
@@ -287,13 +286,13 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               key={p}
               onClick={() => setActiveTab(p)}
               className={cn(
-                "px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-all",
+                "px-3 py-1.5 rounded-full text-xs font-semibold transition-all",
                 activeTab === p 
                   ? "bg-white text-[#14121F] shadow-sm" 
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              {p === 'twitter' ? 'X / Twitter' : p}
+              {({ twitter: 'X', instagram: 'Instagram', linkedin: 'LinkedIn', facebook: 'Facebook', tiktok: 'TikTok', youtube: 'YouTube', pinterest: 'Pinterest' } as Record<string, string>)[p] ?? p}
             </button>
           ))}
         </div>

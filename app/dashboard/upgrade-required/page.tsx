@@ -146,11 +146,11 @@ export default function UpgradeRequiredPage() {
     <div className="w-full max-w-[1400px] p-6 md:p-10 my-8 overflow-hidden">
       <div className="text-center mb-10 space-y-3">
         <span className="text-4xl inline-block mb-1">🎉</span>
-        <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
-          Ton essai gratuit est terminé !
+        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+          Votre essai gratuit est terminé !
         </h2>
         <p className="text-zinc-400 text-base max-w-xl mx-auto">
-          Découvre nos abonnements ou continue gratuitement avec le plan Free (20 posts/mois).
+          Découvrez nos abonnements ou continuez gratuitement avec le plan Free (20 posts/mois).
         </p>
       </div>
 
@@ -196,19 +196,19 @@ export default function UpgradeRequiredPage() {
               }`}
             >
               {planItem.recommended && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-[11px] font-black px-6 py-1.5 rounded-full tracking-wider whitespace-nowrap shadow-xl uppercase">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-xs font-semibold px-6 py-1.5 rounded-full whitespace-nowrap shadow-xl">
                   Le plus populaire
                 </div>
               )}
 
               <div className="mb-8">
-                <h3 className="text-3xl font-black text-black mb-1">{planItem.name}</h3>
+                <h3 className="text-3xl font-bold text-black mb-1">{planItem.name}</h3>
                 <p className="text-sm italic text-[#8A38F5] mb-6 font-serif leading-tight">
                   {planItem.tagline}
                 </p>
                 
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-5xl font-black text-black tracking-tight">{displayPrice}€</span>
+                  <span className="text-5xl font-bold text-black tracking-tight">{displayPrice}€</span>
                   <span className="text-zinc-400 font-bold text-base">/mois</span>
                 </div>
                 {billing === 'yearly' && planItem.id !== 'free' && (
@@ -216,7 +216,7 @@ export default function UpgradeRequiredPage() {
                     soit {planItem.yearlyMonthly * 12}€/an
                   </p>
                 )}
-                <p className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
+                <p className="text-xs text-zinc-400 font-medium">
                   {planItem.subtext}
                 </p>
               </div>
@@ -224,7 +224,7 @@ export default function UpgradeRequiredPage() {
               <div className="space-y-6 flex-1">
                 {/* Posts Section */}
                 <div>
-                  <h4 className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-3">
+                  <h4 className="text-xs font-bold text-zinc-400 mb-3">
                     Génération de posts
                   </h4>
                   <div className="flex items-center gap-2.5 text-black font-bold text-sm">
@@ -235,7 +235,7 @@ export default function UpgradeRequiredPage() {
 
                 {/* Features Section */}
                 <div>
-                  <h4 className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-3">
+                  <h4 className="text-xs font-bold text-zinc-400 mb-3">
                     Fonctionnalités
                   </h4>
                   

@@ -158,8 +158,8 @@ function AgentIADashboard() {
       title: 'Rédacteur IA',
       badge: 'Rédaction',
       badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border-purple-200',
-      description: 'Rédige des textes percutants adaptés à votre audience et à vos objectifs.',
-      stats: '12.4K utilisations',
+      description: 'Rédigez des textes percutants adaptés à votre audience et à vos objectifs.',
+      stats: '',
       icon: PenSquare,
       iconColor: 'text-purple-600',
       iconBg: 'bg-purple-50 dark:bg-purple-950/40',
@@ -171,7 +171,7 @@ function AgentIADashboard() {
       badge: 'Idéation',
       badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border-emerald-200',
       description: 'Trouve des idées de contenu virales et adaptées à votre niche.',
-      stats: '8.7K utilisations',
+      stats: '',
       icon: Lightbulb,
       iconColor: 'text-emerald-600',
       iconBg: 'bg-emerald-50 dark:bg-emerald-950/40',
@@ -183,7 +183,7 @@ function AgentIADashboard() {
       badge: 'SEO',
       badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 border-amber-200',
       description: 'Optimise vos posts pour le référencement et la visibilité.',
-      stats: '6.2K utilisations',
+      stats: '',
       icon: Bot,
       iconColor: 'text-amber-600',
       iconBg: 'bg-amber-50 dark:bg-amber-950/40',
@@ -194,8 +194,8 @@ function AgentIADashboard() {
       title: 'Accroche Magique',
       badge: 'Engagement',
       badgeColor: 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300 border-rose-200',
-      description: "Crée des accroches irrésistibles qui captent l'attention dès la 1ère ligne.",
-      stats: '9.1K utilisations',
+      description: "Créez des accroches irrésistibles qui captent l'attention dès la 1ère ligne.",
+      stats: '',
       icon: Sparkles,
       iconColor: 'text-rose-600',
       iconBg: 'bg-rose-50 dark:bg-rose-950/40',
@@ -207,7 +207,7 @@ function AgentIADashboard() {
       badge: 'Réseaux sociaux',
       badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border-blue-200',
       description: 'Trouve les meilleurs hashtags pour booster votre portée.',
-      stats: '7.3K utilisations',
+      stats: '',
       icon: BrainCircuit,
       iconColor: 'text-blue-600',
       iconBg: 'bg-blue-50 dark:bg-blue-950/40',
@@ -219,7 +219,7 @@ function AgentIADashboard() {
       badge: 'Créatif',
       badgeColor: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300 border-cyan-200',
       description: 'Propose des concepts de visuels adaptés à votre contenu.',
-      stats: '5.6K utilisations',
+      stats: '',
       icon: Wand2,
       iconColor: 'text-cyan-600',
       iconBg: 'bg-cyan-50 dark:bg-cyan-950/40',
@@ -532,7 +532,7 @@ function AgentIADashboard() {
         {activeAgent === 'redacteur' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Configuration</h3>
+              <h3 className="text-sm font-bold text-gray-900 text-gray-400">Configuration</h3>
               
               <div className="space-y-2">
                 <Label htmlFor="redacteur-topic" className="text-xs font-bold text-gray-700">Sujet / Thème du post</Label>
@@ -612,7 +612,7 @@ function AgentIADashboard() {
 
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between min-h-[350px]">
               <div>
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400 mb-4">Post Généré</h3>
+                <h3 className="text-sm font-bold text-gray-900 text-gray-400 mb-4">Post Généré</h3>
                 {redacteurResult ? (
                   <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed max-h-[350px] overflow-y-auto font-medium">
                     {redacteurResult}
@@ -653,7 +653,7 @@ function AgentIADashboard() {
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Tendances actuelles</h3>
+                  <h3 className="text-sm font-bold text-gray-900 text-gray-400">Tendances actuelles</h3>
                   <p className="text-xs text-gray-500">Sélectionnez un sujet populaire pour générer des posts adaptés.</p>
                 </div>
                 
@@ -771,7 +771,7 @@ function AgentIADashboard() {
             {/* Generated ideas container */}
             {generatedIdeas.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Idées suggérées</h3>
+                <h3 className="text-sm font-bold text-gray-900 text-gray-400">Idées suggérées</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {generatedIdeas.map((idea, idx) => (
                     <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between gap-5 relative overflow-hidden">
@@ -831,7 +831,7 @@ function AgentIADashboard() {
         {activeAgent === 'seo' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Configuration SEO</h3>
+              <h3 className="text-sm font-bold text-gray-900 text-gray-400">Configuration SEO</h3>
 
               <div className="space-y-2">
                 <Label htmlFor="seo-text" className="text-xs font-bold text-gray-700">Texte original à optimiser</Label>
@@ -868,7 +868,7 @@ function AgentIADashboard() {
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between min-h-[350px]">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Version Optimisée</h3>
+                  <h3 className="text-sm font-bold text-gray-900 text-gray-400">Version Optimisée</h3>
                   {seoScore !== null && (
                     <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
                       Score SEO : {seoScore}/100
@@ -883,7 +883,7 @@ function AgentIADashboard() {
                     </div>
 
                     <div className="p-4 bg-amber-50/40 border border-amber-100/60 rounded-xl space-y-2">
-                      <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">Analyse de lisibilité</span>
+                      <span className="text-xs font-bold text-amber-800 block">Analyse de lisibilité</span>
                       <ul className="text-xs text-amber-700 space-y-1 font-medium list-disc list-inside">
                         <li>Mots-clés insérés de façon naturelle</li>
                         <li>Structure avec listes à puces pour maximiser la lecture</li>
@@ -924,7 +924,7 @@ function AgentIADashboard() {
         {activeAgent === 'accroche' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Configuration Accroches</h3>
+              <h3 className="text-sm font-bold text-gray-900 text-gray-400">Configuration Accroches</h3>
 
               <div className="space-y-2">
                 <Label htmlFor="accroche-text" className="text-xs font-bold text-gray-700">Décrivez le sujet ou insérez le post</Label>
@@ -949,7 +949,7 @@ function AgentIADashboard() {
 
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between min-h-[350px]">
               <div>
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400 mb-4">Accroches Proposées</h3>
+                <h3 className="text-sm font-bold text-gray-900 text-gray-400 mb-4">Accroches Proposées</h3>
                 {accrocheResult.length > 0 ? (
                   <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
                     {accrocheResult.map((hook, index) => (
@@ -988,7 +988,7 @@ function AgentIADashboard() {
         {activeAgent === 'hashtags' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Contenu du Post</h3>
+              <h3 className="text-sm font-bold text-gray-900 text-gray-400">Contenu du Post</h3>
 
               <div className="space-y-2">
                 <Label htmlFor="hashtags-post" className="text-xs font-bold text-gray-700">Insérez votre texte de post</Label>
@@ -1013,7 +1013,7 @@ function AgentIADashboard() {
 
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between min-h-[350px]">
               <div>
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400 mb-4">Hashtags Proposés</h3>
+                <h3 className="text-sm font-bold text-gray-900 text-gray-400 mb-4">Hashtags Proposés</h3>
                 {hashtagsResult.length > 0 ? (
                   <div className="space-y-4">
                     <div className="flex flex-wrap gap-2 max-h-[220px] overflow-y-auto p-1">
@@ -1057,7 +1057,7 @@ function AgentIADashboard() {
         {activeAgent === 'visuels' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400">Description / Post</h3>
+              <h3 className="text-sm font-bold text-gray-900 text-gray-400">Description / Post</h3>
 
               <div className="space-y-2">
                 <Label htmlFor="visuels-post" className="text-xs font-bold text-gray-700">Insérez votre texte de post</Label>
@@ -1082,12 +1082,12 @@ function AgentIADashboard() {
 
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between min-h-[350px]">
               <div>
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400 mb-4">Scénarios Visuels suggérés</h3>
+                <h3 className="text-sm font-bold text-gray-900 text-gray-400 mb-4">Scénarios Visuels suggérés</h3>
                 {visuelsResult.length > 0 ? (
                   <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                     {visuelsResult.map((concept, index) => (
                       <div key={index} className="border border-gray-100 rounded-xl p-4 bg-gray-50/40 space-y-2">
-                        <span className="text-[10px] font-extrabold text-[#7225E3] uppercase tracking-wider block">Concept {index + 1}</span>
+                        <span className="text-xs font-extrabold text-[#7225E3] block">Concept {index + 1}</span>
                         <p className="text-xs font-bold text-gray-800"><span className="text-gray-400">Scène : </span>{concept.scene}</p>
                         <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-[11px] font-semibold text-gray-500">
                           <span>🎨 Couleurs : {concept.colors}</span>
@@ -1320,29 +1320,9 @@ function AgentIADashboard() {
           {/* RIGHT SIDEBAR COLUMN - 1 column on lg */}
           <div className="space-y-6">
             
-            {/* Usage limit card */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
-              <div className="space-y-1">
-                <h4 className="text-xs font-bold text-gray-800">Utilisation des agents</h4>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-xl font-bold text-gray-900">124</span>
-                  <span className="text-xs text-gray-400 font-bold">/ 300 utilisations ce mois</span>
-                </div>
-              </div>
-
-              {/* Progress bar styled like mockup */}
-              <div className="h-2 w-full bg-purple-50 rounded-full overflow-hidden">
-                <div className="h-full bg-[#7225E3] rounded-full" style={{ width: '41.3%' }} />
-              </div>
-
-              <div className="text-[10px] text-gray-400 font-semibold">
-                Renouvellement dans 18 jours
-              </div>
-            </div>
-
             {/* Categories sidebar navigation */}
             <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-3">
-              <h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider text-gray-400 mb-2">Catégories</h4>
+              <h4 className="text-xs font-bold text-gray-800 text-gray-400 mb-2">Catégories</h4>
               
               <div className="space-y-1.5">
                 {[
@@ -1379,13 +1359,13 @@ function AgentIADashboard() {
 
             {/* Popular agents listing matching mockup */}
             <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
-              <h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider text-gray-400 mb-2">Agents populaires</h4>
+              <h4 className="text-xs font-bold text-gray-800 text-gray-400 mb-2">Agents recommandés</h4>
               
               <div className="space-y-3.5">
                 {[
-                  { id: 'redacteur', name: 'Rédacteur IA', stats: '12.4K utilisations', icon: PenSquare, iconColor: 'text-purple-600', iconBg: 'bg-purple-50' },
-                  { id: 'ideateur', name: "Générateur d'idées", stats: '8.7K utilisations', icon: Lightbulb, iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50' },
-                  { id: 'accroche', name: 'Accroche Magique', stats: '9.1K utilisations', icon: Sparkles, iconColor: 'text-rose-600', iconBg: 'bg-rose-50' },
+                  { id: 'redacteur', name: 'Rédacteur IA', stats: '', icon: PenSquare, iconColor: 'text-purple-600', iconBg: 'bg-purple-50' },
+                  { id: 'ideateur', name: "Générateur d'idées", stats: '', icon: Lightbulb, iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50' },
+                  { id: 'accroche', name: 'Accroche Magique', stats: '', icon: Sparkles, iconColor: 'text-rose-600', iconBg: 'bg-rose-50' },
                 ].map((pop) => {
                   const Icon = pop.icon
                   const isFav = favorites.includes(pop.id)

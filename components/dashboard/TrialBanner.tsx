@@ -39,7 +39,7 @@ export function TrialBanner() {
 
   const bannerText = daysLeft <= 3
     ? `Votre essai gratuit se termine dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""}, choisissez votre plan.`
-    : `Essai ${trialPlanName} — ${daysLeft} jour${daysLeft > 1 ? "s" : ""} restant${daysLeft > 1 ? "s" : ""}. Choisis ton plan avant la fin de l'essai.`
+    : `Essai ${trialPlanName} — ${daysLeft} jour${daysLeft > 1 ? "s" : ""} restant${daysLeft > 1 ? "s" : ""}. Choisissez votre plan avant la fin de l'essai.`
 
   const urgent = daysLeft <= 3
 

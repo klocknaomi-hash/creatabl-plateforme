@@ -40,9 +40,9 @@ export const translations = {
     trackGrowth: "Rastree el crecimiento y optimice su estrategia de publicación en tiempo real.",
   },
   fr: {
-    dashboard: "Dashboard",
+    dashboard: "Tableau de bord",
     compose: "Créer un post",
-    posts: "Posts",
+    posts: "Publications",
     calendar: "Calendrier",
     analytics: "Analytics",
     accounts: "Comptes connectés",
@@ -52,10 +52,10 @@ export const translations = {
     totalReach: "Portée totale",
     engagement: "Taux d'engagement",
     scheduled: "Programmé",
-    drafts: "Drafts",
+    drafts: "Brouillons",
     activeChannels: "Comptes actifs",
     manageAccounts: "Gérer les comptes",
-    myContentDashboard: "Mon Dashboard",
+    myContentDashboard: "Tableau de bord",
     trackGrowth: "Suivez votre croissance et optimisez votre stratégie en temps réel.",
   }
 };

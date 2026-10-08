@@ -34,7 +34,7 @@ export async function GET(
   const activeCheck = await checkActiveAccess(user.clerkId);
   if (!activeCheck.allowed) {
     return NextResponse.redirect(
-      new URL(`/dashboard/settings/connections?error=trial_expired&message=${encodeURIComponent("Ton essai gratuit est terminé. Choisis un forfait pour continuer.")}`, request.nextUrl.origin)
+      new URL(`/dashboard/settings/connections?error=trial_expired&message=${encodeURIComponent("Votre essai gratuit est terminé. Choisissez un forfait pour continuer.")}`, request.nextUrl.origin)
     );
   }
 

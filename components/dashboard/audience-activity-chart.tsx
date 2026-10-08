@@ -1,5 +1,7 @@
 "use client";
 
+import { EmptyState } from "@/components/ds";
+
 import {
   XAxis,
   YAxis,
@@ -10,8 +12,6 @@ import {
   Area,
 } from "recharts";
 import { format } from "date-fns";
-import { BarChart3, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface AudienceActivityChartProps {
   engagementData: any[];
@@ -26,53 +26,25 @@ export function AudienceActivityChart({
 }: AudienceActivityChartProps) {
   if (!hasAccounts) {
     return (
-      <div className="flex flex-col items-center justify-center h-[350px] text-center space-y-6">
-        <div className="bg-violet-600/5 p-6 rounded-full">
-          <BarChart3 className="size-10 text-violet-600/40" />
-        </div>
-        <div className="space-y-2">
-          <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">
-            Unlock deeper insights
-          </p>
-          <Button
-            variant="outline"
-            className="rounded-full border-violet-600/20 text-violet-600 font-bold hover:bg-violet-600/5"
-            onClick={() => (window.location.href = "/dashboard/settings/connections")}
-          >
-            Connect your social accounts
-          </Button>
-        </div>
-      </div>
+      <EmptyState
+        bordered={false}
+        illustration="chart"
+        title="Pas encore de statistiques"
+        text="Connectez un réseau social pour suivre l'activité de votre audience."
+      >
+        <a href="/dashboard/settings/connections" className="cr-btn cr-btn--secondary">Connecter un compte</a>
+      </EmptyState>
     );
   }
 
-  if (!hasPosts) {
+  if (!hasPosts || engagementData.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[350px] text-center space-y-6">
-        <div className="bg-violet-600/5 p-6 rounded-full">
-          <TrendingUp className="size-10 text-violet-600/40" />
-        </div>
-        <div className="space-y-2">
-          <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">
-            Waiting for data
-          </p>
-          <p className="text-xs text-muted-foreground/50 max-w-[250px]">
-            Once you start posting, your audience activity will appear here in
-            real-time.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (engagementData.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[350px] text-center space-y-4 opacity-40">
-        <BarChart3 className="size-10 text-muted-foreground" />
-        <p className="text-xs font-bold uppercase tracking-widest">
-          Collecting performance metrics...
-        </p>
-      </div>
+      <EmptyState
+        bordered={false}
+        illustration="chart"
+        title="Pas encore de statistiques"
+        text="Les chiffres apparaissent 24 heures après votre première publication."
+      />
     );
   }
 

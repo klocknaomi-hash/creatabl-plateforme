@@ -82,7 +82,7 @@ export function WorkspaceSwitcher() {
   return (
     <div className="px-4 py-3 border-b border-white/5 space-y-2">
       <div className="flex justify-between items-center">
-        <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
+        <p className="text-xs font-bold text-white/40">
           Espace de travail
         </p>
       </div>

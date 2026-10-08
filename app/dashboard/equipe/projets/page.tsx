@@ -375,7 +375,7 @@ export default function ProjetsPage() {
         method: 'DELETE',
       })
       if (!res.ok) {
-        throw new Error("Failed to delete post")
+        throw new Error("Impossible de supprimer le post")
       }
       toast.success("Post supprimé du board.")
       fetchRealPosts()
@@ -577,10 +577,10 @@ export default function ProjetsPage() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 pb-10">
+    <div className="flex flex-col 2xl:flex-row gap-8 pb-10">
       
       {/* LEFT MAIN PROJECTS SECTION */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 min-w-0 space-y-6">
         
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
@@ -792,7 +792,7 @@ export default function ProjetsPage() {
               {viewMode === 'list' && (
                 <div className="space-y-4">
                   {/* TABLE HEADER ROW */}
-                  <div className="flex items-center px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider gap-4 bg-gray-50 border border-gray-100 rounded-xl">
+                  <div className="flex items-center px-4 py-2 text-xs font-bold text-gray-400 gap-4 bg-gray-50 border border-gray-100 rounded-xl">
                     <div className="flex shrink-0">
                       <input 
                         type="checkbox" 
@@ -801,12 +801,12 @@ export default function ProjetsPage() {
                         className="size-4 rounded border-gray-300 text-[#7225E3] focus:ring-[#7225E3]/40 cursor-pointer" 
                       />
                     </div>
-                    <div className="flex-1 min-w-[200px]">Post / Titre</div>
-                    <div className="w-28 shrink-0 hidden sm:block">Assigné à</div>
+                    <div className="flex-1 min-w-0">Post / Titre</div>
+                    <div className="w-28 shrink-0 hidden lg:block">Assigné à</div>
                     <div className="w-24 shrink-0">Statut</div>
                     <div className="w-28 shrink-0 hidden md:block">Échéance</div>
-                    <div className="w-24 shrink-0">Plateformes</div>
-                    <div className="w-16 shrink-0">Commentaires</div>
+                    <div className="w-24 shrink-0 hidden sm:block">Plateformes</div>
+                    <div className="w-16 shrink-0 hidden xl:block">Commentaires</div>
                     <div className="w-10 shrink-0 text-right"></div>
                   </div>
 
@@ -815,7 +815,7 @@ export default function ProjetsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <span className="size-2 rounded-full bg-amber-500" />
-                        <span className="text-xs font-bold text-gray-800 uppercase tracking-wider">À faire</span>
+                        <span className="text-xs font-bold text-gray-800">À faire</span>
                         <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
                           {todoPosts.length}
                         </span>
@@ -849,7 +849,7 @@ export default function ProjetsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <span className="size-2 rounded-full bg-blue-500" />
-                        <span className="text-xs font-bold text-gray-800 uppercase tracking-wider">En cours</span>
+                        <span className="text-xs font-bold text-gray-800">En cours</span>
                         <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
                           {inprogressPosts.length}
                         </span>
@@ -883,7 +883,7 @@ export default function ProjetsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <span className="size-2 rounded-full bg-green-500" />
-                        <span className="text-xs font-bold text-gray-800 uppercase tracking-wider">Terminé</span>
+                        <span className="text-xs font-bold text-gray-800">Terminé</span>
                         <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md">
                           {donePosts.length}
                         </span>
@@ -931,7 +931,7 @@ export default function ProjetsPage() {
                     <button onClick={() => navigateMonth('prev')} className="p-1 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
                       <ChevronLeft className="size-4 text-gray-600" />
                     </button>
-                    <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-gray-800">
+                    <h3 className="text-xs sm:text-sm font-extrabold text-gray-800">
                       {calendarDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
                     </h3>
                     <button onClick={() => navigateMonth('next')} className="p-1 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
@@ -1002,7 +1002,7 @@ export default function ProjetsPage() {
                     <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                       <div className="flex items-center gap-2">
                         <span className="size-2.5 rounded-full bg-amber-500" />
-                        <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">À faire</h3>
+                        <h3 className="text-xs font-bold text-gray-800">À faire</h3>
                       </div>
                       <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md">
                         {todoPosts.length}
@@ -1023,7 +1023,7 @@ export default function ProjetsPage() {
                     <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                       <div className="flex items-center gap-2">
                         <span className="size-2.5 rounded-full bg-blue-500" />
-                        <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">En cours</h3>
+                        <h3 className="text-xs font-bold text-gray-800">En cours</h3>
                       </div>
                       <span className="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md">
                         {inprogressPosts.length}
@@ -1044,7 +1044,7 @@ export default function ProjetsPage() {
                     <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                       <div className="flex items-center gap-2">
                         <span className="size-2.5 rounded-full bg-green-500" />
-                        <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Terminé</h3>
+                        <h3 className="text-xs font-bold text-gray-800">Terminé</h3>
                       </div>
                       <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-md">
                         {donePosts.length}
@@ -1067,11 +1067,11 @@ export default function ProjetsPage() {
       </div>
 
       {/* RIGHT SIDE PANEL FILTERS */}
-      <div className="w-full lg:w-64 shrink-0 space-y-6">
+      <div className="w-full 2xl:w-64 shrink-0 grid gap-6 sm:grid-cols-2 2xl:block 2xl:space-y-6">
         
         {/* FAST FILTERS CARD */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-          <h3 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider">Filtres rapides</h3>
+          <h3 className="text-xs font-extrabold text-gray-400">Filtres rapides</h3>
           <div className="space-y-1.5">
             {/* Filter: All */}
             <button
@@ -1141,7 +1141,7 @@ export default function ProjetsPage() {
 
         {/* TEAM MEMBERS SIDEBAR LIST */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-          <h3 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider flex items-center justify-between">
+          <h3 className="text-xs font-extrabold text-gray-400 flex items-center justify-between">
             <span>Membres de l'équipe</span>
             {selectedMemberName && (
               <span className="text-[9px] text-[#7225E3] hover:underline cursor-pointer font-bold" onClick={() => setSelectedMemberName(null)}>
@@ -1576,7 +1576,7 @@ function PostRow({
       </div>
 
       {/* POST TITLE & CATEGORY & IMAGE */}
-      <div className="flex-1 min-w-[200px] flex items-center gap-3 cursor-pointer" onClick={() => onEditPost(post)}>
+      <div className="flex-1 min-w-0 flex items-center gap-3 cursor-pointer" onClick={() => onEditPost(post)}>
         {post.imageUrl ? (
           <img src={post.imageUrl} alt="" className="size-9 rounded-xl object-cover shrink-0 border border-gray-100" />
         ) : (
@@ -1593,7 +1593,7 @@ function PostRow({
       </div>
 
       {/* ASSIGNEE */}
-      <div className="w-28 shrink-0 hidden sm:flex items-center gap-2">
+      <div className="w-28 shrink-0 hidden lg:flex items-center gap-2">
         {post.assigneeAvatar ? (
           <img src={post.assigneeAvatar} alt="" className="size-6 rounded-full object-cover shrink-0 border border-gray-100" />
         ) : (
@@ -1625,14 +1625,14 @@ function PostRow({
       </div>
 
       {/* PLATFORMS */}
-      <div className="w-24 shrink-0 flex items-center gap-1">
+      <div className="w-24 shrink-0 hidden sm:flex items-center gap-1">
         {post.platforms.map((plat, idx) => (
           <React.Fragment key={idx}>{renderPlatformIcon(plat)}</React.Fragment>
         ))}
       </div>
 
       {/* COMMENTS COUNT */}
-      <div className="w-16 shrink-0 flex items-center gap-1 text-gray-400 font-bold text-[11px]">
+      <div className="w-16 shrink-0 hidden xl:flex items-center gap-1 text-gray-400 font-bold text-[11px]">
         <MessageSquare className="size-3.5 text-gray-400" />
         <span>{post.commentCount || 0}</span>
       </div>

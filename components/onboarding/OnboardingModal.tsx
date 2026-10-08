@@ -154,7 +154,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">Bienvenue 🎉</h1>
             <p className="text-gray-600 text-lg">
-              Nous allons te poser quelques questions pour paramétrer l'IA avec ton style d'écriture et tes objectifs.
+              Quelques questions pour paramétrer l'IA avec votre style d'écriture et vos objectifs.
             </p>
             <p className="text-gray-400 text-sm">Durée estimée : 45 secondes.</p>
           </div>
@@ -163,7 +163,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">STEP 1/6</p>
+              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 1/6</p>
               <h2 className="text-2xl font-bold text-gray-900">Quel profil te correspond le mieux ?</h2>
             </div>
             <div className="grid grid-cols-1 gap-3">
@@ -198,11 +198,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">STEP 2/6</p>
+              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 2/6</p>
               <h2 className="text-2xl font-bold text-gray-900">Personnalise l'IA</h2>
             </div>
             <p className="text-gray-600">
-              Tu peux connecter tes réseaux sociaux pour importer ton style d'écriture, planifier tes posts et tracker tes métriques.
+              Connectez vos réseaux sociaux pour importer votre style d'écriture, planifier vos posts et suivre vos statistiques.
             </p>
             <div className="space-y-4 pt-4">
               <button 
@@ -224,13 +224,13 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">STEP 3/6</p>
+              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 3/6</p>
               <h2 className="text-2xl font-bold text-gray-900">Ton workspace</h2>
             </div>
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                  Comment s'appelle ton workspace ?
+                  Comment s'appelle votre espace de travail ?
                 </label>
                 <input
                   type="text"
@@ -242,7 +242,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                  Ajoute un logo (optionnel)
+                  Ajoutez un logo (facultatif)
                 </label>
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
@@ -297,11 +297,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">STEP 4/6</p>
+              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 4/6</p>
               <h2 className="text-2xl font-bold text-gray-900">Ton style d'écriture</h2>
             </div>
             <div className="grid grid-cols-1 gap-3">
-              <label className="text-sm font-medium text-gray-700">Quel ton utilises-tu dans tes posts ?</label>
+              <label className="text-sm font-medium text-gray-700">Quel ton utilisez-vous dans vos posts ?</label>
               {[
                 { id: "professional", title: "Professionnel", subtitle: "Sérieux, structuré, crédible" },
                 { id: "inspiring", title: "Inspirant", subtitle: "Motivant, positif, humain" },
@@ -331,11 +331,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">STEP 5/6</p>
+              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 5/6</p>
               <h2 className="text-2xl font-bold text-gray-900">Paramètres des posts</h2>
             </div>
             <div className="space-y-4">
-              <label className="text-sm font-medium text-gray-700">Quel accord de genre souhaites-tu employer dans tes posts ?</label>
+              <label className="text-sm font-medium text-gray-700">Quel accord de genre souhaitez-vous employer dans vos posts ?</label>
               <div className="space-y-2">
                 {[
                   { id: "female", title: "Féminin" },
@@ -362,11 +362,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">STEP 6/6</p>
+              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 6/6</p>
               <h2 className="text-2xl font-bold text-gray-900">Paramètres des posts</h2>
             </div>
             <div className="space-y-4">
-              <label className="text-sm font-medium text-gray-700">Quelle est ta préférence en nombre d'émojis par post ?</label>
+              <label className="text-sm font-medium text-gray-700">Combien d'émojis souhaitez-vous par post ?</label>
               <div className="space-y-2">
                 {[
                   { id: "none", title: "Aucun" },
@@ -394,7 +394,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">Paramétrage terminé</h1>
             <p className="text-gray-600 text-lg">
-              Tu pourras modifier tes paramètres d'écriture quand tu le souhaites.
+              Vous pourrez modifier vos paramètres d'écriture à tout moment.
             </p>
             <div className="flex justify-center py-4">
                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
@@ -426,9 +426,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               exit={{ opacity: 0 }}
               className="absolute inset-0 z-[110] bg-white/90 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center"
             >
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Es-tu sûr de vouloir quitter ?</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Voulez-vous vraiment quitter ?</h3>
               <p className="text-gray-600 mb-8">
-                Prendre 45 secondes pour paramétrer tes préférences permet à l'IA de générer du contenu qui te ressemble vraiment. Ne passe pas à côté de cette personnalisation !
+                Prendre 45 secondes pour paramétrer vos préférences permet à l'IA de générer du contenu qui vous ressemble vraiment. Ne passez pas à côté de cette personnalisation !
               </p>
               <div className="flex flex-col w-full gap-3">
                 <button 
@@ -452,7 +452,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         <div className="px-8 pt-8 flex justify-between items-start">
           <div>
             {step !== 0 && step !== "final" && (
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <p className="text-xs font-bold text-gray-400">
                 STEP {step}/6
               </p>
             )}

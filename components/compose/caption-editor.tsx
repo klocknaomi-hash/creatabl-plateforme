@@ -63,9 +63,9 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       // Insert generated text into the caption editor
       onChange(data.text);
       setAiPrompt('');
-      toast.success("Caption IA générée !");
+      toast.success("Texte généré par l’IA");
     } catch (err) {
-      setError('Erreur de connexion. Réessaie.');
+      setError('Erreur de connexion. Réessayez.');
     } finally {
       setGenerating(false);
     }
@@ -98,7 +98,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
               );
             })()
           ) : (
-            <div className="text-[10px] font-medium text-muted-foreground/60 italic">
+            <div className="text-[10px] font-medium text-[#6B6780] italic">
               Sélectionnez une plateforme pour voir la limite de caractères
             </div>
           )}
@@ -134,7 +134,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
         
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Décris ton idée de post..."
+            placeholder="Décrivez votre idée de post…"
             className="h-9 text-sm rounded-lg border-border/40 bg-background shadow-none focus-visible:ring-1 focus-visible:ring-foreground"
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}

@@ -34,7 +34,7 @@ export default async function BillingPage() {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
         <div className="space-y-0.5">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Abonnement</h1>
-          <p className="text-sm text-muted-foreground">Gère ton plan et consulte tes jours d'essai.</p>
+          <p className="text-sm text-muted-foreground">Gérez votre plan et consultez vos jours d'essai.</p>
         </div>
       </header>
 
@@ -68,23 +68,23 @@ export default async function BillingPage() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-black text-gray-900 leading-none">{trialDaysLeft}</span>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-1">jours</span>
+                <span className="text-3xl font-bold text-gray-900 leading-none">{trialDaysLeft}</span>
+                <span className="text-xs font-bold text-gray-400 mt-1">jours</span>
               </div>
             </div>
 
             <div className="space-y-6 text-center md:text-left flex-1">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                  <Badge className="bg-primary/10 text-primary border-none px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                  <Badge className="bg-primary/10 text-primary border-none px-3 py-1 text-xs font-bold rounded-full">
                     Ton essai gratuit Business
                   </Badge>
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 leading-tight">
-                  Tu as {trialDaysLeft} jours restants sur ton essai Business gratuit
+                  Il vous reste {trialDaysLeft} jours d'essai Business gratuit
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Profite de toutes les fonctionnalités pour booster ta présence en ligne. 
+                  Profitez de toutes les fonctionnalités pour développer votre présence en ligne. 
                   Ton plan sélectionné à l'inscription est le plan <strong>{user.selectedPlan?.toUpperCase()}</strong>.
                 </p>
               </div>

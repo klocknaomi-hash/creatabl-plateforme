@@ -9,13 +9,13 @@ export function InvoiceHistory() {
           <div className="bg-primary/10 p-2 rounded-lg">
             <History className="size-4 text-primary" />
           </div>
-          <CardTitle className="text-sm font-black uppercase tracking-widest">Historique</CardTitle>
+          <CardTitle className="text-sm font-semibold">Historique</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="py-16">
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="bg-muted/50 p-6 rounded-full">
-            <Receipt className="size-10 text-muted-foreground/30" />
+            <Receipt className="size-10 text-[#6B6780]" />
           </div>
           <div className="space-y-1">
             <h3 className="font-bold text-lg">Aucune facture trouvée.</h3>

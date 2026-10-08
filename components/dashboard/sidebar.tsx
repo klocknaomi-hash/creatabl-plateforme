@@ -3,20 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser, OrganizationSwitcher } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   CalendarDays,
-  BarChart2,
+  BarChart3,
   Link2,
   CreditCard,
-  PenSquare,
+  Plus,
   FileText,
-  Clock,
   FolderKanban,
   Users,
   Building2,
-  Bot,
+  WandSparkles,
+  Settings,
 } from "lucide-react";
 
 import {
@@ -31,64 +31,69 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
-import { useSettings } from "@/lib/settings-context";
-import { getTranslation } from "@/lib/i18n";
 import { useAccess } from "@/hooks/useAccess";
 import { isNaomiOrTest } from "@/lib/plans";
-import { useEffect, useState } from "react";
+import type React from "react";
 import { CreditsMeter } from "@/components/dashboard/CreditsMeter";
 
+
+type NavItem = { title: string; href: string; icon: React.ComponentType<{ className?: string }> };
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useUser();
-  const { language } = useSettings();
-  const t = getTranslation(language);
   const access = useAccess();
 
-  // Workspace name from localStorage (set by workspace page)
-  const [workspaceName, setWorkspaceName] = useState<string | null>(null);
-  useEffect(() => {
-    const update = () => {
-      const name = localStorage.getItem('current_workspace_name');
-      setWorkspaceName(name);
-    };
-    update();
-    window.addEventListener('storage', update);
-    return () => window.removeEventListener('storage', update);
-  }, []);
-
-  const navMain: { title: string; href: string; icon: any; badge?: string }[] = [
-    { title: t.dashboard, href: "/dashboard", icon: LayoutDashboard },
-    { title: t.compose, href: "/dashboard/compose", icon: PenSquare },
-    { title: "Agent IA", href: "/dashboard/agent-ia", icon: Bot },
-    { title: t.posts, href: "/dashboard/posts", icon: FileText },
-    { title: t.calendar, href: "/dashboard/calendar", icon: CalendarDays },
+  // Navigation du design system Creatabl.ia : création, publication, calendrier,
+  // contenu et analytique, puis l'espace (équipe, organisation, réglages).
+  const navMain: NavItem[] = [
+    { title: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
+    { title: "Agent IA", href: "/dashboard/agent-ia", icon: WandSparkles },
+    { title: "Calendrier", href: "/dashboard/calendar", icon: CalendarDays },
+    { title: "Publications", href: "/dashboard/posts", icon: FileText },
+    { title: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   ];
 
-  const navContent = [
-    { title: t.analytics, href: "/dashboard/analytics", icon: BarChart2 },
+  const navTeam: NavItem[] = [
+    { title: "Projets", href: "/dashboard/equipe/projets", icon: FolderKanban },
+    { title: "Membres", href: "/dashboard/equipe/membres", icon: Users },
   ];
 
-  const navSettings = [
-    { title: t.accounts, href: "/dashboard/settings/connections", icon: Link2 },
-    { title: t.billing, href: "/dashboard/billing", icon: CreditCard },
+  const navSpace: NavItem[] = [
+    { title: "Comptes connectés", href: "/dashboard/settings/connections", icon: Link2 },
     ...(access.multiAccounts
-      ? [{ title: "Workspace", href: "/dashboard/settings/workspace", icon: Building2 }]
+      ? [{ title: "Organisation", href: "/dashboard/settings/workspace", icon: Building2 }]
       : []),
+    { title: "Abonnement", href: "/dashboard/billing", icon: CreditCard },
+    { title: "Paramètres", href: "/dashboard/settings", icon: Settings },
   ];
 
   function isActive(href: string) {
     if (href === "/dashboard") return pathname === "/dashboard";
+    if (href === "/dashboard/settings") return pathname === "/dashboard/settings";
     return pathname.startsWith(href);
   }
+
+  const renderItems = (items: NavItem[]) => (
+    <SidebarMenu>
+      {items.map((item) => (
+        <SidebarMenuItem key={item.href}>
+          <SidebarMenuButton
+            render={<Link href={item.href} aria-current={isActive(item.href) ? "page" : undefined} />}
+            isActive={isActive(item.href)}
+            tooltip={item.title}
+          >
+            <item.icon />
+            <span>{item.title}</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  );
 
   return (
     <Sidebar collapsible="icon">
@@ -123,28 +128,6 @@ export function AppSidebar() {
         <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
       </SidebarHeader>
 
-      {/* ── Organization Switcher ── */}
-      <div className="px-2 pb-2 group-data-[collapsible=icon]:hidden">
-        <OrganizationSwitcher
-          afterCreateOrganizationUrl="/dashboard/settings/workspace"
-          afterLeaveOrganizationUrl="/dashboard"
-          afterSelectOrganizationUrl="/dashboard"
-          appearance={{
-            variables: {
-              colorPrimary: '#7C3AED',
-              borderRadius: '0.75rem',
-            },
-            elements: {
-              rootBox: 'flex w-full items-center shrink-0',
-              organizationSwitcherTrigger:
-                'flex h-11 w-full items-center justify-between gap-2 pl-1.5 pr-3 rounded-full border border-[#E8E6F0] bg-white hover:border-[#878399] text-sm font-semibold text-[#14121F] transition-all truncate',
-              organizationPreviewAvatarBox: 'size-8 rounded-full shrink-0',
-              organizationSwitcherTriggerIcon: 'size-3.5 text-muted-foreground shrink-0',
-            },
-          }}
-        />
-      </div>
-
       {/* ── New Post CTA ── */}
       <div className="px-3 pb-3 group-data-[collapsible=icon]:px-1">
         <Button
@@ -152,117 +135,27 @@ export function AppSidebar() {
           className="h-11 w-full justify-center gap-2 bg-[image:var(--gradient-cta)] text-sm shadow-sm hover:bg-[#7225E3] hover:bg-none group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
           render={<Link href="/dashboard/compose" />}
         >
-          <PenSquare className="size-4 shrink-0" />
-          <span className="group-data-[collapsible=icon]:hidden">{t.newPost}</span>
+          <Plus className="size-[18px] shrink-0" />
+          <span className="group-data-[collapsible=icon]:hidden">Créer un post</span>
         </Button>
       </div>
 
-      <SidebarSeparator />
-
       {/* ── Navigation ── */}
       <SidebarContent>
-        {/* Main */}
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navMain.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    render={<Link href={item.href} />}
-                    isActive={isActive(item.href)}
-                    tooltip={item.title}
-                  >
-                    <item.icon className="size-4 shrink-0" />
-                    {'badge' in item ? (
-                      <span className="flex items-center justify-between w-full">
-                        <span>{item.title}</span>
-                        <span className="ml-auto rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary tracking-wider uppercase">
-                          {item.badge}
-                        </span>
-                      </span>
-                    ) : (
-                      <span>{item.title}</span>
-                    )}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupContent>{renderItems(navMain)}</SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Content */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Contenu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navContent.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    render={<Link href={item.href} />}
-                    isActive={isActive(item.href)}
-                    tooltip={item.title}
-                  >
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-
-        {/* Team navigation section */}
         {access.team && (
           <SidebarGroup>
             <SidebarGroupLabel>Équipe</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    render={<Link href="/dashboard/equipe/projets" />}
-                    isActive={isActive("/dashboard/equipe/projets")}
-                    tooltip="Projets"
-                  >
-                    <FolderKanban />
-                    <span>Projets</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    render={<Link href="/dashboard/equipe/membres" />}
-                    isActive={isActive("/dashboard/equipe/membres")}
-                    tooltip="Membres"
-                  >
-                    <Users />
-                    <span>Membres</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
+            <SidebarGroupContent>{renderItems(navTeam)}</SidebarGroupContent>
           </SidebarGroup>
         )}
 
-        {/* Settings */}
         <SidebarGroup>
-          <SidebarGroupLabel>Paramètres</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navSettings.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    render={<Link href={item.href} />}
-                    isActive={isActive(item.href)}
-                    tooltip={item.title}
-                  >
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupLabel>Espace</SidebarGroupLabel>
+          <SidebarGroupContent>{renderItems(navSpace)}</SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
@@ -316,32 +209,6 @@ export function AppSidebar() {
 
         <CreditsMeter />
 
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div
-              className={cn(
-                "flex w-full items-center gap-2.5 overflow-hidden rounded-md p-1.5",
-                "group-data-[collapsible=icon]:justify-center"
-              )}
-            >
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "size-7 shrink-0",
-                  },
-                }}
-              />
-              <div className="flex min-w-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
-                <span className="truncate text-sm font-medium leading-tight text-foreground">
-                  {user?.fullName ?? user?.username ?? "User"}
-                </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {user?.primaryEmailAddress?.emailAddress ?? ""}
-                </span>
-              </div>
-            </div>
-          </SidebarMenuItem>
-        </SidebarMenu>
       </SidebarFooter>
 
       <SidebarRail />

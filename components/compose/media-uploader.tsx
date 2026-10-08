@@ -76,7 +76,7 @@ function MediaItem({
 
     if (t.hasPrompt) {
       if (!prompt) {
-        toast.error("Please enter a prompt first");
+        toast.error("Décrivez d'abord la modification souhaitée");
         return;
       }
       setTempUrl(`${baseUrl}?tr=${t.value}${encodeURIComponent(prompt)}`);
@@ -89,7 +89,7 @@ function MediaItem({
   const handleSave = () => {
     onTransform(file.fileId, tempUrl);
     setIsOpen(false);
-    toast.success("Changes applied!");
+    toast.success("Modifications appliquées");
   };
 
   const handleCancel = () => {
@@ -130,7 +130,7 @@ function MediaItem({
                     </div>
                     <div>
                       <DialogTitle className="text-base font-bold">Outils IA ImageKit</DialogTitle>
-                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Transformer avec l'IA</p>
+                      <p className="text-xs text-muted-foreground font-medium">Transformer avec l'IA</p>
                     </div>
                   </div>
                 </div>
@@ -139,7 +139,7 @@ function MediaItem({
                   {/* Left: Options */}
                   <div className="w-full md:w-[320px] flex flex-col bg-muted/20 p-5 border-r border-border/40 overflow-y-auto custom-scrollbar">
                     <div className="mb-4">
-                      <h4 className="text-[11px] font-bold uppercase tracking-widest text-foreground/60 mb-1">Améliorations IA</h4>
+                      <h4 className="text-xs font-bold text-[#6B6780] mb-1">Améliorations IA</h4>
                       <p className="text-[11px] text-muted-foreground leading-relaxed">Sélectionnez une fonctionnalité pour améliorer votre média.</p>
                     </div>
                     
@@ -207,19 +207,19 @@ function MediaItem({
                     <div className="relative aspect-square w-full max-w-[450px] rounded-3xl overflow-hidden shadow-2xl border border-border/40 bg-background group">
                       <img 
                         src={tempUrl} 
-                        alt="Preview" 
+                        alt="Aperçu" 
                         className="w-full h-full object-contain"
                       />
                       
                       {/* Loading indicator for the image itself */}
                       <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Traitement IA...</p>
+                         <p className="text-xs font-bold text-muted-foreground">Traitement IA...</p>
                       </div>
                     </div>
                     
                     <div className="flex flex-col items-center gap-1">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Fenêtre de Preview</p>
-                      <p className="text-[9px] text-muted-foreground/60 italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
+                      <p className="text-xs font-bold text-muted-foreground">Aperçu</p>
+                      <p className="text-[9px] text-[#6B6780] italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
                     </div>
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
       
       const data = await res.json();
       onUpload({ url: data.url, fileId: data.fileId, name: data.name });
-      toast.success("Uploaded!");
+      toast.success("Fichier importé");
     } catch (err: any) {
       toast.error(err.message, { duration: 5000 });
     } finally {
@@ -406,14 +406,14 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
               className="relative aspect-square rounded-xl border border-[#00C4CC]/20 bg-[#00C4CC]/10 transition-all flex flex-col items-center justify-center group/canva opacity-100 grayscale-0 w-full"
             >
               <div className="absolute -top-2 -right-2 z-10">
-                <Badge className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider border-2 border-background shadow-sm bg-[#00C4CC] text-white border-none">
+                <Badge className="text-xs h-4 px-1.5 font-semibold border-2 border-background shadow-sm bg-[#00C4CC] text-white border-none">
                   Connected
                 </Badge>
               </div>
               <div className="size-8 rounded-lg bg-[#00C4CC]/10 border border-[#00C4CC]/20 flex items-center justify-center transition-transform group-hover/canva:scale-110">
                 <CanvaIcon size={16} className="text-[#00C4CC]" />
               </div>
-              <span className="text-[8px] font-black uppercase tracking-widest text-[#00C4CC] mt-2">
+              <span className="text-xs font-semibold text-[#00C4CC] mt-2">
                 Canva
               </span>
             </button>
@@ -425,14 +425,14 @@ export function MediaUploader({ mediaFiles, selectedPlatforms, onUpload, onRemov
               className="relative aspect-square rounded-xl border border-border/40 bg-muted/20 transition-all flex flex-col items-center justify-center group/canva hover:border-[#00C4CC]/40 hover:bg-[#00C4CC]/[0.03] hover:shadow-sm w-full"
             >
               <div className="absolute -top-2 -right-2 z-10">
-                <Badge variant="secondary" className="text-[7px] h-4 px-1.5 font-black uppercase tracking-wider bg-[#00C4CC]/10 text-[#00C4CC] border-2 border-background shadow-sm">
+                <Badge variant="secondary" className="text-xs h-4 px-1.5 font-semibold bg-[#00C4CC]/10 text-[#00C4CC] border-2 border-background shadow-sm">
                   New
                 </Badge>
               </div>
               <div className="size-8 rounded-lg bg-background/50 border border-border/40 flex items-center justify-center transition-transform group-hover/canva:scale-110">
-                <CanvaIcon size={16} className="text-muted-foreground/60 group-hover/canva:text-[#00C4CC] transition-colors" />
+                <CanvaIcon size={16} className="text-[#6B6780] group-hover/canva:text-[#00C4CC] transition-colors" />
               </div>
-              <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 mt-2">
+              <span className="text-xs font-semibold text-[#6B6780] mt-2">
                 Canva
               </span>
             </button>
