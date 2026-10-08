@@ -77,7 +77,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
       </div>
 
       {!hasAccounts || !hasPosts ? (
-         <Card className="rounded-[2.5rem] border-none bg-muted/10 p-20 text-center flex flex-col items-center gap-4 ring-1 ring-border/50">
+         <Card className="rounded-2xl border-none bg-muted/10 p-20 text-center flex flex-col items-center gap-4 ring-1 ring-border/50">
           <div className="bg-muted/20 p-8 rounded-full">
             <TrendingUp className="size-12 text-muted-foreground/20" />
           </div>
@@ -93,7 +93,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
             const Icon = brand.icon;
             return (
               <Link key={post.id} href={`/dashboard/posts/${post.id}`} className="block group h-full">
-                <Card className="rounded-[2.5rem] border-none bg-background shadow-sm ring-1 ring-border/50 hover:ring-violet-600/30 transition-all hover:shadow-2xl hover:shadow-violet-600/5 h-full overflow-hidden flex flex-col">
+                <Card className="rounded-2xl border-none bg-background shadow-sm ring-1 ring-border/50 hover:ring-violet-600/30 transition-all hover:shadow-2xl hover:shadow-violet-600/5 h-full overflow-hidden flex flex-col">
                   <CardContent className="p-8 flex flex-col flex-1 space-y-6">
                     <div className="flex items-center justify-between">
                       <div className={cn("size-12 rounded-2xl flex items-center justify-center border border-border/40 shadow-sm transition-transform group-hover:scale-110", brand.bg, brand.color)}>
@@ -153,7 +153,7 @@ export function TopContentView({ topPosts, hasAccounts, hasPosts }: TopContentPr
           })}
         </div>
       ) : (
-        <div className="rounded-[2.5rem] border border-dashed border-border/50 p-20 text-center bg-muted/5">
+        <div className="rounded-2xl border border-dashed border-border/50 p-20 text-center bg-muted/5">
           <p className="text-base font-bold text-muted-foreground/40 italic">En attente de plus de données pour mettre en avant votre contenu</p>
         </div>
       )}

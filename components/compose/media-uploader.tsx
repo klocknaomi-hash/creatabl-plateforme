@@ -227,7 +227,7 @@ function MediaItem({
                 {/* Footer */}
                 <div className="p-5 border-t border-border/40 bg-background flex justify-end gap-3">
                   <Button variant="ghost" size="sm" className="rounded-xl h-10 px-6 text-xs font-bold" onClick={handleCancel}>Annuler</Button>
-                  <Button size="sm" className="rounded-xl h-10 px-8 text-xs font-bold bg-foreground text-background hover:opacity-90 shadow-lg shadow-foreground/10" onClick={handleSave}>Appliquer & Enregistrer</Button>
+                  <Button size="sm" className="rounded-full h-10 px-8 text-sm font-semibold bg-[image:var(--gradient-cta)] text-white hover:opacity-90 shadow-sm" onClick={handleSave}>Appliquer & Enregistrer</Button>
                 </div>
               </div>
             </DialogContent>

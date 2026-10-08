@@ -41,7 +41,7 @@ export async function AudienceActivity() {
     }
 
     return (
-      <Card className="rounded-[2.5rem] border-none bg-background shadow-xl shadow-muted/20 ring-1 ring-border/50 overflow-hidden">
+      <Card className="rounded-2xl border-none bg-background shadow-xl shadow-muted/20 ring-1 ring-border/50 overflow-hidden">
         <CardHeader className="p-10 pb-6 flex flex-row items-center justify-between">
           <div className="space-y-1.5">
             <CardTitle className="text-xl font-bold flex items-center gap-2">

@@ -53,9 +53,9 @@ export function Topbar() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4 md:px-6 lg:px-8">
+    <header className="flex h-16 shrink-0 items-center gap-3 border-b border-[#E8E6F0] bg-white px-4 md:px-6 lg:px-8">
       {/* Page title */}
-      <h1 className="text-base font-semibold truncate flex-1">{title}</h1>
+      <h1 className="font-heading text-lg font-semibold tracking-[-0.01em] text-[#14121F] truncate flex-1">{title}</h1>
 
       {/* Actions */}
       <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export function Topbar() {
             variant="outline"
             size="sm"
             onClick={() => router.push('/dashboard/equipe/membres?invite=true')}
-            className="text-primary border-primary/20 bg-primary/5 hover:bg-primary/10 gap-1.5 hidden sm:inline-flex h-9"
+            className="text-[#5B1BB8] border-[#E7DCFC] bg-[#F3EEFD] hover:bg-[#E7DCFC] gap-1.5 hidden sm:inline-flex h-10 px-4"
           >
             <UserPlus className="size-4" />
             <span>Inviter un membre</span>
@@ -75,9 +75,8 @@ export function Topbar() {
         {/* New Post — full button on desktop */}
         <Button
           id="topbar-new-post-btn"
-          size="sm"
           render={<Link href="/dashboard/compose" />}
-          className="hidden sm:inline-flex"
+          className="hidden sm:inline-flex h-10 px-4 bg-[image:var(--gradient-cta)] hover:bg-[#7225E3] hover:bg-none"
         >
           <PenSquare />
           Créer un post
@@ -108,8 +107,8 @@ export function Topbar() {
             elements: {
               rootBox: 'flex items-center shrink-0',
               organizationSwitcherTrigger:
-                'flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-border/60 bg-muted/30 hover:bg-muted/70 text-xs font-semibold text-foreground transition-all max-w-[180px] sm:max-w-[220px] truncate',
-              organizationPreviewAvatarBox: 'size-5 rounded-md shrink-0',
+                'flex h-10 items-center gap-2 pl-1.5 pr-3 rounded-full border border-[#E8E6F0] bg-white hover:border-[#878399] text-sm font-semibold text-[#14121F] transition-all max-w-[180px] sm:max-w-[240px] truncate',
+              organizationPreviewAvatarBox: 'size-7 rounded-full shrink-0',
               organizationSwitcherTriggerIcon: 'size-3.5 text-muted-foreground shrink-0',
             },
           }}
@@ -125,7 +124,7 @@ export function Topbar() {
         <UserButton
           appearance={{
             elements: {
-              avatarBox: "size-7",
+              avatarBox: "size-8",
             },
           }}
         >

@@ -23,7 +23,7 @@ export const OnboardingChecklist = () => {
   const completedCount = 0;
 
   return (
-    <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm space-y-6">
+    <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-bold text-gray-900">Premiers pas</h3>
         <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">

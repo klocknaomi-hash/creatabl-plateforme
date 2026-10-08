@@ -45,7 +45,7 @@ export async function RecentDrafts() {
 
 export function RecentDraftsView({ recentDrafts }: RecentDraftsProps) {
   return (
-    <Card className="rounded-[2.5rem] border-none bg-background shadow-lg shadow-muted/20 ring-1 ring-border/50 overflow-hidden">
+    <Card className="rounded-2xl border-none bg-background shadow-lg shadow-muted/20 ring-1 ring-border/50 overflow-hidden">
       <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-bold flex items-center gap-3">
           <div className="size-10 rounded-xl bg-violet-600/10 flex items-center justify-center">

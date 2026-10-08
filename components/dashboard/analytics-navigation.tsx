@@ -31,7 +31,7 @@ export function AnalyticsNavigation() {
   };
 
   return (
-    <div className="flex items-center gap-1 p-1 bg-card border border-border/50 rounded-[22px] shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+    <div className="flex items-center gap-1 p-1 bg-card border border-border/50 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       <Button 
         variant="ghost" 
         size="icon" 

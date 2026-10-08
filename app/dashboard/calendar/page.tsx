@@ -373,7 +373,7 @@ export default function CalendarPage() {
       </div>
 
       <div className="relative flex-1 flex flex-col">
-        <Card className="border-border/50 border-t-0 rounded-b-3xl rounded-t-none overflow-hidden shadow-xl shadow-primary/5 bg-card flex flex-col flex-1">
+        <Card className="border-border/50 border-t-0 rounded-b-3xl rounded-t-none overflow-hidden shadow-xl bg-card flex flex-col flex-1">
           {view === "month" && (
             <MonthView 
               currentDate={currentDate} 
@@ -407,7 +407,7 @@ export default function CalendarPage() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-4xl rounded-[40px] p-0 overflow-visible border-none shadow-2xl bg-background/95 backdrop-blur-2xl">
+        <DialogContent className="sm:max-w-4xl rounded-2xl p-0 overflow-visible border-none shadow-2xl bg-background/95 backdrop-blur-2xl">
           {selectedPost && (
             <div className="grid grid-cols-1 md:grid-cols-[1fr_360px] h-full max-h-[90vh]">
               {/* Left: Social Preview */}
@@ -492,13 +492,13 @@ export default function CalendarPage() {
                        />
                        <div className="flex gap-2">
                           <Button variant="ghost" className="flex-1 rounded-xl font-bold text-xs" onClick={() => setIsEditingContent(false)}>Cancel</Button>
-                          <Button className="flex-1 rounded-full h-11 font-black uppercase tracking-widest text-[11px] bg-primary shadow-lg shadow-primary/20" onClick={handleSaveContent} disabled={isSavingContent}>
+                          <Button className="flex-1 rounded-full h-11 font-black uppercase tracking-widest text-[11px] bg-primary shadow-lg" onClick={handleSaveContent} disabled={isSavingContent}>
                              {isSavingContent ? "Saving..." : "Save Content"}
                           </Button>
                        </div>
                     </div>
                   ) : (
-                    <Button className="w-full rounded-2xl h-12 font-bold text-xs shadow-lg shadow-primary/10" onClick={() => setIsEditingContent(true)}>
+                    <Button className="w-full rounded-2xl h-12 font-bold text-xs shadow-lg" onClick={() => setIsEditingContent(true)}>
                       <Edit className="size-4 mr-2" /> Edit Content
                     </Button>
                   )}
@@ -735,7 +735,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
                   <Button 
                     variant="default" 
                     size="icon" 
-                    className="size-8 rounded-xl shadow-xl shadow-primary/20 pointer-events-auto bg-[#8A38F5] hover:bg-[#5B1BB8]" 
+                    className="size-8 rounded-xl shadow-xl pointer-events-auto bg-[#8A38F5] hover:bg-[#5B1BB8]" 
                     onClick={() => window.location.href = `/dashboard/compose?date=${day.toISOString()}`}
                   >
                     <Plus className="size-4" />

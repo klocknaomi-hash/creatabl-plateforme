@@ -37,7 +37,7 @@ export function SchedulePicker({ scheduledAt, onChange }: SchedulePickerProps) {
         <div className="flex items-center gap-3">
           <div className={cn(
             "w-9 h-9 rounded-lg flex items-center justify-center transition-colors",
-            isScheduled ? "bg-foreground text-background" : "bg-muted text-muted-foreground"
+            isScheduled ? "bg-[#7225E3] text-white" : "bg-muted text-muted-foreground"
           )}>
             <CalendarIcon className="w-4.5 h-4.5" />
           </div>

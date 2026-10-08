@@ -144,7 +144,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
             size="sm" 
             onClick={handleGenerateAI} 
             disabled={generating || !aiPrompt}
-            className="rounded-lg px-4 h-9 font-bold bg-foreground text-background hover:bg-foreground/90 transition-all shadow-sm"
+            className="rounded-full px-4 h-9 font-semibold bg-[image:var(--gradient-cta)] text-white hover:opacity-90 transition-all shadow-sm"
           >
             {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Générer"}
           </Button>

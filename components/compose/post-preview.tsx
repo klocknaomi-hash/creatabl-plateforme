@@ -289,7 +289,7 @@ export function PostPreview({ content, mediaFiles, platforms }: PostPreviewProps
               className={cn(
                 "px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-all",
                 activeTab === p 
-                  ? "bg-foreground text-background shadow-sm" 
+                  ? "bg-white text-[#14121F] shadow-sm" 
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >

@@ -90,7 +90,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         <Button 
           onClick={handleSave} 
           disabled={loading} 
-          className="w-full sm:w-auto gap-2 h-10 px-6 font-semibold text-xs shadow-lg shadow-primary/20 transition-all active:scale-95 rounded-xl"
+          className="w-full sm:w-auto gap-2 h-10 px-6 font-semibold text-xs shadow-lg transition-all active:scale-95 rounded-xl"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Enregistrer
@@ -99,7 +99,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
 
       <div className="grid gap-8 pb-20">
         {/* NOTIFICATIONS SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2.5 rounded-xl">
@@ -111,7 +111,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-10">
-            <div className="flex items-center justify-between p-6 bg-muted/30 rounded-[24px] border border-border/20">
+            <div className="flex items-center justify-between p-6 bg-muted/30 rounded-2xl border border-border/20">
               <div className="space-y-1">
                 <Label className="text-sm font-semibold leading-none">Notifications par email</Label>
                 <p className="text-sm text-muted-foreground font-medium">Recevez des mises à jour importantes sur votre compte et la plateforme par email.</p>
@@ -165,7 +165,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         </Card>
 
         {/* PREFERENCES SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-primary/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2.5 rounded-xl">
@@ -262,7 +262,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
         </Card>
 
         {/* DATA MANAGEMENT SECTION */}
-        <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-destructive/10">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden bg-card transition-all hover:border-destructive/10">
           <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
             <div className="flex items-center gap-3">
               <div className="bg-destructive/10 p-2.5 rounded-xl">
@@ -272,7 +272,7 @@ export function SettingsForm({ initialSettings, user, hasData }: SettingsFormPro
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-6">
-            <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-[24px] border border-destructive/10">
+            <div className="flex items-center justify-between p-6 bg-destructive/5 rounded-2xl border border-destructive/10">
               <div className="space-y-1">
                 <Label className="text-sm font-bold text-destructive">Exporter vos données personnelles</Label>
                 <p className="text-xs text-muted-foreground font-medium max-w-md">Téléchargez une archive complète de vos posts, analytics et paramètres de compte au format JSON.</p>

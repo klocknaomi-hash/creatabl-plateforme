@@ -3,7 +3,7 @@ import { History, Receipt } from "lucide-react";
 
 export function InvoiceHistory() {
   return (
-    <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/10 transition-colors">
+    <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/10 transition-colors">
       <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
         <div className="flex items-center gap-2">
           <div className="bg-primary/10 p-2 rounded-lg">

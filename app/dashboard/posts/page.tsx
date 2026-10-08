@@ -171,7 +171,7 @@ export default function PostsPage() {
 
             return (
               <Link key={post.id} href={`/dashboard/posts/${post.id}`} className="block group flex flex-col h-full">
-                <Card className="w-full overflow-hidden border-border/50 group-hover:border-primary/40 group-hover:shadow-2xl group-hover:shadow-primary/5 transition-all duration-500 rounded-[32px] bg-card flex flex-col h-full">
+                <Card className="w-full overflow-hidden border-border/50 group-hover:border-primary/40 group-hover:shadow-2xl group-hover:shadow-primary/5 transition-all duration-500 rounded-2xl bg-card flex flex-col h-full">
                   <div className="relative aspect-[16/10] bg-muted/20 overflow-hidden">
                     {post.mediaUrls?.[0] ? (
                       <img src={post.mediaUrls[0]} alt="" className="size-full object-cover transition-transform group-hover:scale-105 duration-700" />

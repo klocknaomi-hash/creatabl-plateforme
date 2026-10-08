@@ -15,7 +15,7 @@ export function SubscriptionCard({ usageData, plan }: SubscriptionCardProps) {
   const planFullName = plan === 'starter' ? 'Plan Starter' : `Payant (${planDisplayName})`;
 
   return (
-    <Card className="rounded-[32px] border-border/50 shadow-sm overflow-hidden flex flex-col h-full">
+    <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden flex flex-col h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-8 border-b border-border/40 bg-muted/20">
         <div className="flex items-center gap-4">
           <div className="bg-primary/10 p-3 rounded-2xl">

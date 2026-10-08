@@ -122,10 +122,10 @@ export default function PostDetailPage() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
           <div className="space-y-6">
-            <Card className="rounded-[2.5rem] border-muted/50 h-[300px] bg-muted/10" />
-            <Card className="rounded-[2.5rem] border-muted/50 h-[250px] bg-muted/10" />
+            <Card className="rounded-2xl border-muted/50 h-[300px] bg-muted/10" />
+            <Card className="rounded-2xl border-muted/50 h-[250px] bg-muted/10" />
           </div>
-          <Card className="rounded-[2.5rem] border-muted/50 h-[500px] bg-muted/10" />
+          <Card className="rounded-2xl border-muted/50 h-[500px] bg-muted/10" />
         </div>
       </div>
     );
@@ -239,7 +239,7 @@ export default function PostDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
         <div className="space-y-8 min-w-0 flex-1">
           {/* Post Content & Media */}
-          <Card className="rounded-[2.5rem] border border-border/50 shadow-sm overflow-hidden bg-card">
+          <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card">
             <CardContent className="p-8 space-y-6">
               <div className="space-y-3">
                 <h3 className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest">Message</h3>
@@ -275,7 +275,7 @@ export default function PostDetailPage() {
 
           {/* Performance metrics (only for published) */}
           {post.status === 'published' && (
-            <Card className="rounded-[2.5rem] border border-border/50 shadow-sm overflow-hidden bg-card">
+            <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-lg font-bold flex items-center gap-2">
                   <BarChart3 className="size-5 text-violet-500" />
@@ -405,7 +405,7 @@ export default function PostDetailPage() {
 
         {/* Right Column: Live Mockup Preview */}
         <aside className="w-full sticky top-24 space-y-4">
-          <Card className="rounded-[2.5rem] border border-border/50 shadow-sm overflow-hidden bg-card p-6">
+          <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card p-6">
             <h3 className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest mb-4 px-1">Aperçu visuel</h3>
             <PostPreview 
               content={post.content} 

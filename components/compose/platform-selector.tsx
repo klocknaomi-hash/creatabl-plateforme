@@ -66,9 +66,9 @@ export function PlatformSelector({ selectedPlatforms, onToggle }: PlatformSelect
             key={account.id}
             onClick={() => onToggle(account.platform)}
             className={cn(
-              "relative flex items-center gap-3 p-2.5 pr-4 rounded-xl border-2 cursor-pointer transition-all hover:bg-muted/5 select-none group",
+              "relative flex items-center gap-3 p-1.5 pr-4 rounded-full border cursor-pointer transition-all hover:bg-muted/5 select-none group",
               isSelected 
-                ? "bg-foreground text-background border-foreground shadow-md ring-1 ring-foreground/20" 
+                ? "bg-[#F3EEFD] text-[#5B1BB8] border-[#7225E3]" 
                 : "bg-background border-border/60 hover:border-border"
             )}
           >

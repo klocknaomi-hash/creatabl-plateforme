@@ -53,7 +53,7 @@ export function PlatformSelector({
               className={cn(
                 "group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-[10px] font-black transition-all border-2",
                 isActive 
-                  ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/10" 
+                  ? "bg-primary border-primary text-primary-foreground shadow-lg" 
                   : "bg-background border-border/40 hover:border-primary/20 text-muted-foreground",
                 !isConnected && "opacity-30 cursor-not-allowed grayscale border-dashed"
               )}

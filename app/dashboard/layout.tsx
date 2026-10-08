@@ -151,7 +151,7 @@ export default async function DashboardLayout({
           </ErrorBoundary>
           <CancellationBanner cancelsAt={dbUser?.cancelsAt} />
           <TrialBanner />
-          <main className="relative flex flex-1 flex-col p-4 md:p-6 lg:p-8">
+          <main className="relative flex flex-1 flex-col bg-[#F8F7FC] p-4 md:p-6 lg:p-8 dark:bg-transparent">
             <PaywallProvider isLocked={false} selectedPlan={dbUser?.selectedPlan || null}>
               <ErrorBoundary>
                 {children}

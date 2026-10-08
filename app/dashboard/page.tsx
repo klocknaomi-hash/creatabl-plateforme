@@ -39,24 +39,24 @@ export default async function DashboardPage() {
       <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
         {/* Left Column: Analytics */}
         <div className="space-y-12">
-          <Suspense fallback={<Skeleton className="h-[450px] w-full rounded-[2.5rem]" />}>
+          <Suspense fallback={<Skeleton className="h-[450px] w-full rounded-2xl" />}>
             <AudienceActivity />
           </Suspense>
         </div>
 
         {/* Right Column: Schedule & Drafts */}
         <div className="space-y-10">
-          <Suspense fallback={<Skeleton className="h-[400px] rounded-[2.5rem]" />}>
+          <Suspense fallback={<Skeleton className="h-[400px] rounded-2xl" />}>
             <UpcomingSchedule />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-[300px] rounded-[2rem]" />}>
+          <Suspense fallback={<Skeleton className="h-[300px] rounded-2xl" />}>
             <RecentDrafts />
           </Suspense>
         </div>
       </div>
 
       {/* ── Top Content ── */}
-      <Suspense fallback={<Skeleton className="h-64 w-full rounded-[2.5rem]" />}>
+      <Suspense fallback={<Skeleton className="h-64 w-full rounded-2xl" />}>
         <TopContent />
       </Suspense>
     </div>
@@ -103,7 +103,7 @@ function StatsRowSkeleton() {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {[1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} className="h-48 rounded-[2rem]" />
+        <Skeleton key={i} className="h-48 rounded-2xl" />
       ))}
     </div>
   );

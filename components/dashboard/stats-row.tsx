@@ -117,7 +117,7 @@ export function StatsRowView({ summary, upcomingCount, hasAccounts, hasPosts, t 
 
         return (
           <Link key={card.id} href={href} className="block group">
-            <Card className="relative overflow-hidden border-none bg-background shadow-sm ring-1 ring-border/50 rounded-[2rem] transition-all hover:shadow-xl hover:shadow-violet-600/5 hover:ring-violet-600/30 h-full cursor-pointer">
+            <Card className="relative overflow-hidden border-none bg-background shadow-sm ring-1 ring-border/50 rounded-2xl transition-all hover:shadow-xl hover:shadow-violet-600/5 hover:ring-violet-600/30 h-full cursor-pointer">
               <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
                 <card.icon className="size-24 -mr-8 -mt-8 rotate-12" />
               </div>

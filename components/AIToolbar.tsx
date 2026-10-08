@@ -162,7 +162,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
       >
         <div className={cn(
           "flex items-center gap-2 p-1.5 rounded-2xl border transition-all duration-300 overflow-x-auto flex-nowrap",
-          "bg-background/80 backdrop-blur-md shadow-lg shadow-primary/5",
+          "bg-background/80 backdrop-blur-md shadow-lg",
           isHovered ? "border-primary/30 ring-4 ring-primary/5" : "border-border/60"
         )}>
           {/* Magic Badge */}
@@ -295,7 +295,7 @@ export function AIToolbar({ content, platform, onResult, postId, tone: propTone 
                 </Tooltip>
                 <DropdownMenuContent 
                   align="start" 
-                  className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl bg-background/95"
+                  className="w-56 p-1.5 rounded-2xl border-border/50 shadow-2xl backdrop-blur-xl bg-background/95"
                 >
                   <div className="px-3 py-2 mb-1">
                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Choisissez une voix</p>

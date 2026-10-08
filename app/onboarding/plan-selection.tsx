@@ -109,7 +109,7 @@ export function PlanSelection() {
               whileHover={{ y: -5 }}
               className={`relative bg-white rounded-3xl p-8 border-2 transition-all flex flex-col ${
                 plan.recommended
-                  ? 'border-[#8A38F5] shadow-xl shadow-purple-100'
+                  ? 'border-[#8A38F5] shadow-xl'
                   : 'border-gray-100 hover:border-gray-200 shadow-sm'
               }`}
             >
@@ -153,7 +153,7 @@ export function PlanSelection() {
                 disabled={loading !== null}
                 className={`w-full py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                   plan.recommended
-                    ? 'bg-[#8A38F5] text-white hover:bg-[#6C64C5] shadow-lg shadow-purple-100'
+                    ? 'bg-[#8A38F5] text-white hover:bg-[#6C64C5] shadow-lg'
                     : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >

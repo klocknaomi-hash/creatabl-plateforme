@@ -1,6 +1,7 @@
 "use client"
 import { useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
+import { Sparkles as SparklesIcon, Timer as TimerIcon } from "lucide-react"
 
 import { isNaomiOrTest } from "@/lib/plans"
 
@@ -40,14 +41,26 @@ export function TrialBanner() {
     ? `Votre essai gratuit se termine dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""}, choisissez votre plan.`
     : `Essai ${trialPlanName} — ${daysLeft} jour${daysLeft > 1 ? "s" : ""} restant${daysLeft > 1 ? "s" : ""}. Choisis ton plan avant la fin de l'essai.`
 
+  const urgent = daysLeft <= 3
+
   return (
-    <div className="w-full bg-[#ef4444] text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-sm shrink-0 font-medium">
-      <span className="text-[13px] leading-snug">
-        ⚠️ <strong>{bannerText}</strong>
+    <div
+      role="status"
+      className={`w-full px-4 py-2.5 md:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3 text-sm shrink-0 border-b ${
+        urgent ? "bg-[#FDF2DF] border-[#F4DDB3] text-[#14121F]" : "bg-[#F3EEFD] border-[#E7DCFC] text-[#14121F]"
+      }`}
+    >
+      <span className="flex items-center gap-2 text-[14px] leading-snug">
+        {urgent ? (
+          <TimerIcon className="size-[18px] shrink-0 text-[#8A4B00]" aria-hidden="true" />
+        ) : (
+          <SparklesIcon className="size-[18px] shrink-0 text-[#7225E3]" aria-hidden="true" />
+        )}
+        <strong className="font-semibold">{bannerText}</strong>
       </span>
       <button
         onClick={() => router.push('/pricing')}
-        className="bg-white text-[#ef4444] font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-white/90 transition-colors whitespace-nowrap shrink-0"
+        className="rounded-full bg-[#7225E3] px-4 h-9 text-sm font-semibold text-white hover:bg-[#5B1BB8] transition-colors whitespace-nowrap shrink-0"
       >
         Mettre à niveau
       </button>

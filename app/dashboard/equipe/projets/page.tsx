@@ -780,7 +780,7 @@ export default function ProjetsPage() {
               <div className="pt-2">
                 <a
                   href="/dashboard/compose"
-                  className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-[#8A38F5]/20"
+                  className="inline-flex items-center gap-2 bg-[#8A38F5] hover:bg-[#6C63D6] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md"
                 >
                   Créer votre premier projet
                 </a>

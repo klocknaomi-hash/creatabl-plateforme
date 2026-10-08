@@ -363,14 +363,14 @@ function ComposePageInner() {
           <p className="text-sm text-muted-foreground">Créez et programmez votre contenu social</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="rounded-xl shadow-sm text-sm" onClick={() => handlePost(true)} disabled={loading}>
+          <Button variant="outline" className="rounded-full h-10 px-5 text-sm" onClick={() => handlePost(true)} disabled={loading}>
             <Save className="size-3.5 mr-1.5" /> Sauvegarder
           </Button>
           <Button 
             onClick={() => handlePost(false)} 
             disabled={loading || !content.trim()} 
             size="sm"
-            className="h-8 px-5 rounded-lg font-semibold bg-foreground text-background shadow-sm transition-all hover:opacity-90 active:scale-95 text-xs"
+            className="h-10 px-5 rounded-full font-semibold bg-[image:var(--gradient-cta)] text-white shadow-sm transition-all hover:opacity-90 active:scale-95 text-sm"
           >
             {loading ? <Loader2 className="size-3.5 mr-1.5 animate-spin" /> : (
               scheduledAt ? <Calendar className="size-3.5 mr-1.5" /> : <Send className="size-3.5 mr-1.5" />
@@ -380,11 +380,11 @@ function ComposePageInner() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6 items-start w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_480px] gap-6 items-start w-full">
         {/* Left Column: Composition Sections */}
         <div className="min-w-0 flex-1 space-y-4">
           {/* Platforms Card */}
-          <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
+          <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
             <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Plateformes</h3>
             <PlatformSelector 
               selectedPlatforms={selectedPlatforms} 
@@ -395,7 +395,7 @@ function ComposePageInner() {
           </div>
 
           {/* Caption Card */}
-          <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
+          <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Caption</h3>
               
@@ -430,7 +430,7 @@ function ComposePageInner() {
           </div>
 
           {/* Media Card */}
-          <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
+          <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
             <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Médias</h3>
             <MediaUploader 
               mediaFiles={mediaFiles} 
@@ -443,7 +443,7 @@ function ComposePageInner() {
           </div>
 
           {/* Schedule Card */}
-          <div className="bg-background rounded-xl border border-border/60 shadow-sm p-5 space-y-4">
+          <div className="bg-white rounded-xl border border-[#E8E6F0] p-6 space-y-4">
             <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest">Scheduling</h3>
             <SchedulePicker 
               scheduledAt={scheduledAt} 
@@ -453,7 +453,7 @@ function ComposePageInner() {
 
           {/* Bottom Smart Action Button */}
           <div className="flex justify-end pt-2">
-             <Button className="rounded-xl shadow-lg shadow-primary/20 text-sm font-bold bg-foreground text-background" onClick={() => handlePost(false)} disabled={loading || !content.trim()}>
+             <Button className="rounded-full h-10 px-5 shadow-sm text-sm font-semibold bg-[image:var(--gradient-cta)] text-white" onClick={() => handlePost(false)} disabled={loading || !content.trim()}>
             {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
             {scheduledAt ? "Programmer" : "Publier maintenant"}
           </Button>
@@ -461,7 +461,7 @@ function ComposePageInner() {
         </div>
 
         {/* Right Column: Live Preview */}
-        <aside className="hidden lg:block w-[400px] flex-shrink-0 sticky top-20 space-y-3">
+        <aside className="hidden lg:block w-[480px] flex-shrink-0 sticky top-20 space-y-3 rounded-xl border border-[#E8E6F0] bg-[#F8F7FC] p-5">
           <h3 className="text-[11px] font-bold text-foreground/50 uppercase tracking-widest px-2">Preview</h3>
           <PostPreview 
             content={content} 
@@ -503,7 +503,7 @@ function ComposePageInner() {
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all text-left",
                       selectedTone === tone.value 
-                        ? "bg-foreground text-background border-foreground shadow-sm" 
+                        ? "bg-[#F3EEFD] text-[#5B1BB8] border-[#7225E3]" 
                         : "bg-background border-border hover:border-foreground/30 text-muted-foreground hover:text-foreground"
                     )}
                   >
@@ -515,8 +515,8 @@ function ComposePageInner() {
             </div>
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" size="sm" onClick={() => setIsAiDialogOpen(false)} className="rounded-lg text-xs">Annuler</Button>
-            <Button onClick={handleGeneratePost} size="sm" disabled={generating || !aiPrompt} className="rounded-lg px-6 bg-foreground text-background text-xs">
+            <Button variant="outline" size="sm" onClick={() => setIsAiDialogOpen(false)} className="rounded-full text-xs">Annuler</Button>
+            <Button onClick={handleGeneratePost} size="sm" disabled={generating || !aiPrompt} className="rounded-full px-6 bg-[#7225E3] hover:bg-[#5B1BB8] text-white text-xs">
               {generating ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
               Générer le post
             </Button>

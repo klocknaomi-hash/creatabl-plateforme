@@ -93,7 +93,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       {/* ── Logo ── */}
-      <SidebarHeader className="h-14 flex flex-row items-center justify-between px-4">
+      <SidebarHeader className="h-16 flex flex-row items-center justify-between px-4">
         <Link
           href="/dashboard"
           className="flex items-center gap-2 overflow-hidden rounded-md py-1"
@@ -109,11 +109,11 @@ export function AppSidebar() {
           />
           {/* Brand name — hidden when sidebar is icon-only */}
           <span className="flex items-baseline gap-0 leading-none group-data-[collapsible=icon]:hidden">
-            <span className="text-[17px] font-semibold tracking-tight">
+            <span className="font-heading text-[18px] font-semibold tracking-[-0.01em] text-[#14121F]">
               Creatabl.
             </span>
             <span
-              className="text-[17px] font-normal italic text-primary"
+              className="text-[18px] font-medium italic text-[#7225E3]"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               ia
@@ -137,8 +137,8 @@ export function AppSidebar() {
             elements: {
               rootBox: 'flex w-full items-center shrink-0',
               organizationSwitcherTrigger:
-                'flex w-full items-center justify-between gap-2 px-3 py-2 rounded-xl border border-border/60 bg-muted/30 hover:bg-muted/70 text-xs font-semibold text-foreground transition-all truncate',
-              organizationPreviewAvatarBox: 'size-5 rounded-md shrink-0',
+                'flex h-11 w-full items-center justify-between gap-2 pl-1.5 pr-3 rounded-full border border-[#E8E6F0] bg-white hover:border-[#878399] text-sm font-semibold text-[#14121F] transition-all truncate',
+              organizationPreviewAvatarBox: 'size-8 rounded-full shrink-0',
               organizationSwitcherTriggerIcon: 'size-3.5 text-muted-foreground shrink-0',
             },
           }}
@@ -146,12 +146,11 @@ export function AppSidebar() {
       </div>
 
       {/* ── New Post CTA ── */}
-      <div className="px-2 pb-2 group-data-[collapsible=icon]:px-1">
+      <div className="px-3 pb-3 group-data-[collapsible=icon]:px-1">
         <Button
           id="sidebar-new-post-btn"
-          className="w-full justify-start gap-2 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
+          className="h-11 w-full justify-center gap-2 bg-[image:var(--gradient-cta)] text-sm shadow-sm hover:bg-[#7225E3] hover:bg-none group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
           render={<Link href="/dashboard/compose" />}
-          size="sm"
         >
           <PenSquare className="size-4 shrink-0" />
           <span className="group-data-[collapsible=icon]:hidden">{t.newPost}</span>

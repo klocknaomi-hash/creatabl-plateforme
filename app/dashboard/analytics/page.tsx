@@ -114,7 +114,7 @@ export default async function AnalyticsPage(props: {
           </p>
         </div>
         <Link href="/dashboard/settings/connections">
-          <Button size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20">
+          <Button size="lg" className="rounded-full px-8 shadow-lg">
             <Plus className="mr-2 size-5" />
             Connecter votre premier compte
           </Button>
@@ -154,7 +154,7 @@ export default async function AnalyticsPage(props: {
 
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Total posts</CardTitle>
             <TrendingUp className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
@@ -166,7 +166,7 @@ export default async function AnalyticsPage(props: {
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Portée totale</CardTitle>
             <Users className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
@@ -177,7 +177,7 @@ export default async function AnalyticsPage(props: {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-primary/20 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/50">Taux d'engagement</CardTitle>
             <MousePointer2 className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
@@ -188,7 +188,7 @@ export default async function AnalyticsPage(props: {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-border/50 shadow-sm overflow-hidden group hover:border-violet-500/20 transition-colors bg-violet-500/[0.02]">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-violet-500/20 transition-colors bg-violet-500/[0.02]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-[11px] font-bold uppercase tracking-widest text-violet-500/50">Support IA</CardTitle>
             <Sparkles className="h-3.5 w-3.5 text-violet-500/40 group-hover:text-violet-500 transition-colors fill-violet-500/10" />
@@ -204,7 +204,7 @@ export default async function AnalyticsPage(props: {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* Line Chart: Reach over time */}
-        <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-4 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-bold text-sm">Performance</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
@@ -224,7 +224,7 @@ export default async function AnalyticsPage(props: {
         </Card>
 
         {/* Donut Chart: Platform Distribution */}
-        <Card className="col-span-3 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-3 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-bold text-sm">Réseaux</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Posts publiés par Plateforme</CardDescription>
@@ -244,7 +244,7 @@ export default async function AnalyticsPage(props: {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* Bar Chart: Posts per day */}
-        <Card className="col-span-3 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-3 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-bold text-sm">Croissance</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Nombre de posts publiés par jour</CardDescription>
@@ -262,7 +262,7 @@ export default async function AnalyticsPage(props: {
         </Card>
 
         {/* Post Performance Table */}
-        <Card className="col-span-4 rounded-[32px] border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
+        <Card className="col-span-4 rounded-2xl border-border/50 shadow-sm overflow-hidden hover:border-primary/10 transition-colors">
           <CardHeader>
             <CardTitle className="font-black text-sm">Meilleurs posts</CardTitle>
             <CardDescription className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Détail de vos posts récents</CardDescription>

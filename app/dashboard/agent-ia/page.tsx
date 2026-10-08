@@ -1146,7 +1146,7 @@ function AgentIADashboard() {
             <div className="bg-[#F3EEFD]/40 border border-[#7225E3]/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden shadow-sm">
               <div className="flex items-center gap-5">
                 {/* Illustration placeholder */}
-                <div className="size-14 rounded-2xl bg-gradient-to-br from-[#7225E3] to-purple-400 flex items-center justify-center shadow-md shadow-purple-100 shrink-0">
+                <div className="size-14 rounded-2xl bg-gradient-to-br from-[#7225E3] to-purple-400 flex items-center justify-center shadow-md shrink-0">
                   <Bot className="size-7 text-white" />
                 </div>
                 <div>

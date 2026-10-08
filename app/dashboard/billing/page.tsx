@@ -49,7 +49,7 @@ export default async function BillingPage() {
 
       {/* SECTION TRIAL */}
       {isTrial && (
-        <Card className="border-none shadow-2xl shadow-primary/10 bg-white overflow-hidden rounded-[2rem] ring-1 ring-gray-100">
+        <Card className="border-none shadow-2xl bg-white overflow-hidden rounded-2xl ring-1 ring-gray-100">
           <CardContent className="p-8 md:p-10 flex flex-col md:flex-row items-center gap-12">
             <div className="relative flex items-center justify-center flex-shrink-0">
               <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
