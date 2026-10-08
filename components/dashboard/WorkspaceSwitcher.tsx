@@ -102,7 +102,7 @@ export function WorkspaceSwitcher() {
           className="w-full appearance-none bg-white/5 border border-white/10 rounded-lg px-3 py-2 pr-9 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all cursor-pointer font-medium hover:bg-white/10"
         >
           {workspaces.map(ws => (
-            <option key={ws.id} value={ws.id} className="bg-neutral-900 text-white py-1">
+            <option key={ws.id} value={ws.id} className="bg-[#14121F] text-white py-1">
               {ws.name}
             </option>
           ))}
@@ -156,10 +156,10 @@ export function WorkspaceSwitcher() {
         )
       )}
 
-      <div className="flex justify-between items-center text-[10px] text-white/30 pt-0.5">
+      <div className="flex justify-between items-center text-xs text-white/30 pt-0.5">
         <span>{workspaces.length}/5 workspaces utilisés</span>
         {workspaces.length >= 5 && (
-          <span className="text-yellow-500/80 font-medium">Limite atteinte</span>
+          <span className="text-[#8A4B00]/80 font-medium">Limite atteinte</span>
         )}
       </div>
     </div>

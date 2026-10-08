@@ -1,51 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, ArrowRight, Loader2 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Check, Loader2 } from 'lucide-react'
+import NetworkLogo, { type NetworkName } from '@/components/ds/NetworkLogo'
 
 interface PlanCardsProps {
-  currentPlan?: string;
-  selectedPlan?: string;
+  currentPlan?: string
+  selectedPlan?: string
+  /** « expired » : écran de fin d'essai (pas de nouvel essai annoncé, retour au tableau de bord après Free). */
+  variant?: 'billing' | 'expired'
 }
 
-const SOCIAL_ICONS = {
-  linkedin: (
-    <svg className="w-5 h-5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-    </svg>
-  ),
-  instagram: (
-    <svg className="w-5 h-5 text-[#E4405F]" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.735.079-2.92.353-3.956 1.389-1.036 1.036-1.31 2.221-1.389 3.956-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.079 1.735.353 2.92 1.389 3.956 1.036 1.036 2.221 1.31 3.956 1.389 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.735-.079 2.92-.353 3.956-1.389 1.036-1.036 1.31-2.221 1.389-3.956.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.079-1.735-.353-2.92-1.389-3.956-1.036-1.036-2.221-1.31-3.956-1.389-1.28-.058-1.688-.072-4.947-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-    </svg>
-  ),
-  facebook: (
-    <svg className="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-    </svg>
-  ),
-  twitter: (
-    <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  ),
-  tiktok: (
-    <svg className="w-5 h-5 text-zinc-400" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.03 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-3.33 2.76-6.13 6.13-6.49 1.17-.12 2.35.06 3.44.53V9.07c-1.38-.45-2.88-.51-4.27-.12-1.52.41-2.81 1.47-3.51 2.87-.51.98-.71 2.09-.64 3.19.12 2.1 1.57 4 3.52 4.79 1.17.49 2.5.56 3.72.19 1.75-.52 3.19-1.92 3.73-3.63.15-.46.22-.93.24-1.41.04-3.58.02-7.16.03-10.74z" />
-    </svg>
-  ),
-  youtube: (
-    <svg className="w-5 h-5 text-zinc-400" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-    </svg>
-  ),
-  pinterest: (
-    <svg className="w-5 h-5 text-zinc-400" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.966 1.406-5.966s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.259 7.929-7.259 4.164 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592 0 12.017 0z" />
-    </svg>
-  ),
-}
+const NETWORKS: { id: NetworkName; label: string }[] = [
+  { id: 'linkedin', label: 'LinkedIn' },
+  { id: 'instagram', label: 'Instagram' },
+  { id: 'facebook', label: 'Facebook' },
+  { id: 'x', label: 'X' },
+]
 
 const PLANS = [
   {
@@ -54,17 +25,11 @@ const PLANS = [
     tagline: 'Pour découvrir Creatabl sans engagement',
     monthlyPrice: 0,
     yearlyMonthly: 0,
-    subtext: 'POUR TOUJOURS',
-    postsPerMonth: '20 posts / mois',
+    subtext: 'Pour toujours',
+    credits: '20 crédits / mois',
     socials: ['linkedin', 'instagram'],
-    features: [
-      'Assistant IA de rédaction (basique)',
-      'Calendrier éditorial',
-    ],
+    features: ['Assistant IA de rédaction (basique)', 'Calendrier éditorial'],
     recommended: false,
-    buttonStyle: 'border-2 border-[#7C3AED] text-[#7C3AED] bg-white hover:bg-[#7C3AED]/5',
-    ctaText: 'Commencer gratuitement →',
-    ctaSubtext: 'Sans engagement',
   },
   {
     id: 'starter',
@@ -72,38 +37,23 @@ const PLANS = [
     tagline: 'Pour les solopreneurs qui démarrent',
     monthlyPrice: 49,
     yearlyMonthly: 39,
-    subtext: 'PAR UTILISATEUR ET PAR MOIS',
-    postsPerMonth: '50 posts / mois',
-    socials: ['linkedin', 'instagram', 'facebook', 'twitter'],
-    features: [
-      'Assistant IA de rédaction (limité)',
-      'Calendrier éditorial',
-      'Analytics essentiels',
-    ],
+    subtext: 'Par utilisateur et par mois',
+    credits: '50 crédits / mois',
+    socials: ['linkedin', 'instagram', 'facebook', 'x'],
+    features: ['Assistant IA de rédaction (limité)', 'Calendrier éditorial', 'Analytics essentiels'],
     recommended: false,
-    buttonStyle: 'border-2 border-[#7C3AED] text-[#7C3AED] bg-white hover:bg-[#7C3AED]/5',
-    ctaText: 'Essayer Starter — 14j gratuits →',
-    ctaSubtext: 'Avec engagement',
   },
   {
     id: 'pro',
     name: 'Pro',
-    tagline: 'Pour les créateurs actifs qui veulent scaler',
+    tagline: 'Pour les créateurs actifs qui veulent grandir',
     monthlyPrice: 99,
     yearlyMonthly: 79,
-    subtext: 'PAR UTILISATEUR ET PAR MOIS',
-    postsPerMonth: '120 posts / mois',
-    socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
-    features: [
-      'Tout du Starter',
-      'Assistant IA de rédaction (illimité)',
-      'Suggestions d\'idées IA',
-      'Analytics avancés',
-    ],
+    subtext: 'Par utilisateur et par mois',
+    credits: '120 crédits / mois',
+    socials: ['linkedin', 'instagram', 'facebook', 'x'],
+    features: ['Tout le plan Starter', 'Assistant IA de rédaction (illimité)', "Suggestions d'idées IA", 'Analytics avancés'],
     recommended: true,
-    buttonStyle: 'bg-[#8A38F5] text-white hover:bg-[#7C3AED] border-transparent',
-    ctaText: 'Essayer Pro — 14j gratuits →',
-    ctaSubtext: 'Avec engagement',
   },
   {
     id: 'business',
@@ -111,177 +61,140 @@ const PLANS = [
     tagline: 'Pour les agences et équipes marketing',
     monthlyPrice: 199,
     yearlyMonthly: 159,
-    subtext: 'PAR UTILISATEUR ET PAR MOIS',
-    postsPerMonth: '300 posts / mois',
-    socials: ['linkedin', 'instagram', 'facebook', 'twitter', 'tiktok', 'youtube', 'pinterest'],
-    features: [
-      'Tout le plan Pro',
-      'Multi-comptes (jusqu\'à 5)',
-      'Gestion équipe + rôles',
-      'Agent IA (Tendances)',
-    ],
+    subtext: 'Par utilisateur et par mois',
+    credits: '300 crédits / mois',
+    socials: ['linkedin', 'instagram', 'facebook', 'x'],
+    features: ['Tout le plan Pro', "Multi-comptes (jusqu'à 5)", 'Gestion équipe + rôles', 'Agent IA (Tendances)'],
     recommended: false,
-    buttonStyle: 'bg-[#14121F] text-white hover:bg-black border-transparent',
-    ctaText: 'Essayer Business — 14j gratuits →',
-    ctaSubtext: 'Avec engagement',
   },
 ]
 
-export function PlanCards({ currentPlan = 'starter', selectedPlan }: PlanCardsProps) {
+// Cartes de plans du design system (PricingCard) : fond blanc, bordure, plan
+// recommandé en violet, bouton primaire ou secondaire.
+export function PlanCards({ currentPlan = 'starter', variant = 'billing' }: PlanCardsProps) {
   const [loading, setLoading] = useState<string | null>(null)
   const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly')
-
-  const normalizedCurrent = currentPlan.toLowerCase()
+  const normalizedCurrent = variant === 'expired' ? '' : currentPlan.toLowerCase()
 
   const handleSelectPlan = async (planId: string) => {
-    if (planId === normalizedCurrent) return;
-
+    if (planId === normalizedCurrent) return
     setLoading(planId)
 
     if (planId === 'free') {
       try {
-        await fetch('/api/user/init-free', { method: 'POST' })
-        window.location.reload()
-      } catch (err) {
-        console.error('Downgrade error:', err)
+        const res = await fetch('/api/user/init-free', { method: 'POST' })
+        if (!res.ok) throw new Error('init-free')
+        if (variant === 'expired') window.location.href = '/dashboard'
+        else window.location.reload()
+      } catch {
         window.location.href = '/api/stripe/downgrade-free'
       }
-      return;
+      return
     }
 
     window.location.href = `/api/stripe/create-checkout?plan=${planId}&billing=${billing}`
   }
 
+  const ctaLabel = (plan: (typeof PLANS)[number]) => {
+    if (plan.id === 'free') return 'Continuer avec Free'
+    if (variant === 'expired') return `Choisir ${plan.name}`
+    return `Essayer ${plan.name} · 14 jours gratuits`
+  }
+
   return (
-    <div className="space-y-12 w-full">
-      {/* Toggle mensuel / annuel */}
+    <div className="w-full space-y-10">
       <div className="flex justify-center">
-        <div className="bg-[#110c1d] p-1.5 rounded-full flex items-center gap-1">
-          <button
-            onClick={() => setBilling('monthly')}
-            className={`px-8 py-2.5 rounded-full text-sm font-bold transition-all ${
-              billing === 'monthly' ? 'bg-white text-black shadow-lg' : 'text-zinc-400 hover:text-white'
-            }`}
-          >
+        <div className="cr-segment" role="tablist" aria-label="Facturation">
+          <button type="button" role="tab" className="cr-tab" aria-selected={billing === 'monthly'} onClick={() => setBilling('monthly')}>
             Mensuel
           </button>
-          <button
-            onClick={() => setBilling('yearly')}
-            className={`px-8 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
-              billing === 'yearly' ? 'bg-white text-black shadow-lg' : 'text-zinc-400 hover:text-white'
-            }`}
-          >
+          <button type="button" role="tab" className="cr-tab" aria-selected={billing === 'yearly'} onClick={() => setBilling('yearly')}>
             Annuel
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-              billing === 'yearly' ? 'bg-zinc-100 text-black' : 'bg-zinc-800 text-zinc-400'
-            }`}>
-              -20%
-            </span>
+            <span className="cr-badge cr-badge--success cr-badge--plain">-20 %</span>
           </button>
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch">
-          {PLANS.map((plan) => {
-            const isCurrent = plan.id === normalizedCurrent
-            const displayPrice = billing === 'monthly' ? plan.monthlyPrice : plan.yearlyMonthly
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {PLANS.map((plan) => {
+          const isCurrent = plan.id === normalizedCurrent
+          const price = billing === 'monthly' ? plan.monthlyPrice : plan.yearlyMonthly
 
-            return (
-              <motion.div
-                key={plan.id}
-                whileHover={{ y: -6 }}
-                className={`h-full flex flex-col p-8 bg-white rounded-2xl border transition-all ${
-                  plan.recommended
-                    ? 'border-[3px] border-[#8A38F5] scale-105 z-10 shadow-2xl relative'
-                    : 'border-gray-100 shadow-sm hover:shadow-lg'
-                }`}
-              >
-                {plan.recommended && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8A38F5] text-white text-xs font-semibold px-6 py-1.5 rounded-full whitespace-nowrap shadow-xl">
-                    Le plus populaire
-                  </div>
+          return (
+            <article
+              key={plan.id}
+              className={`relative flex h-full flex-col rounded-[12px] bg-white p-8 ${
+                plan.recommended ? 'border-2 border-[#7225E3] shadow-[0_12px_32px_rgba(20,18,31,0.10)]' : 'border border-[#E8E6F0]'
+              }`}
+            >
+              {plan.recommended && (
+                <span className="cr-badge cr-badge--violet absolute -top-3 left-1/2 -translate-x-1/2 bg-[#7225E3] text-white">
+                  Le plus populaire
+                </span>
+              )}
+
+              <div className="mb-8">
+                <h3 className="font-heading text-2xl font-semibold text-[#14121F]">{plan.name}</h3>
+                <p className="mb-6 mt-1 text-sm text-[#4B4B63]">{plan.tagline}</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="font-heading text-4xl font-semibold tracking-[-0.01em] text-[#14121F]">{price} €</span>
+                  <span className="text-sm text-[#6B6780]">/mois</span>
+                </div>
+                {billing === 'yearly' && plan.id !== 'free' && (
+                  <p className="mt-1 text-xs text-[#4B4B63]">soit {plan.yearlyMonthly * 12} € par an</p>
                 )}
+                <p className="mt-1 text-xs text-[#6B6780]">{plan.subtext}</p>
+              </div>
 
-                <div className="mb-8">
-                  <h3 className="text-3xl font-bold text-black mb-1">{plan.name}</h3>
-                  <p className="text-sm italic text-[#8A38F5] mb-6 font-playfair leading-tight">
-                    {plan.tagline}
-                  </p>
-                  
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-5xl font-bold text-black tracking-tight">{displayPrice}€</span>
-                    <span className="text-zinc-400 font-semibold text-base">/mois</span>
-                  </div>
-                  {billing === 'yearly' && plan.id !== 'free' && (
-                    <p className="text-xs text-gray-500 font-semibold mb-2">
-                      soit {plan.yearlyMonthly * 12}€/an
-                    </p>
-                  )}
-                  <p className="text-xs text-zinc-400 font-medium">
-                    {plan.subtext}
+              <div className="flex-1 space-y-6">
+                <div>
+                  <h4 className="mb-3 text-xs font-semibold text-[#6B6780]">Publication</h4>
+                  <p className="flex items-center gap-2 text-sm font-medium text-[#14121F]">
+                    <Check className="size-4 shrink-0 text-[#0E7445]" aria-hidden="true" />
+                    {plan.credits}
                   </p>
                 </div>
-
-                <div className="space-y-6 flex-1">
-                  {/* Posts Section */}
-                  <div>
-                    <h4 className="text-xs font-semibold text-zinc-400 mb-3">
-                      Génération de posts
-                    </h4>
-                    <div className="flex items-center gap-2.5 text-black font-semibold text-sm">
-                      <Check className="w-4 h-4 text-green-500 stroke-[3]" />
-                      {plan.postsPerMonth}
-                    </div>
+                <div>
+                  <h4 className="mb-3 text-xs font-semibold text-[#6B6780]">Réseaux et fonctionnalités</h4>
+                  <div className="mb-4 flex gap-2">
+                    {NETWORKS.map((n) => {
+                      const on = plan.socials.includes(n.id)
+                      return (
+                        <span key={n.id} className="cr-net-dot" style={on ? undefined : { opacity: 0.35, filter: 'grayscale(1)' }} title={on ? n.label : `${n.label} non inclus`}>
+                          <NetworkLogo name={n.id} size={14} />
+                        </span>
+                      )
+                    })}
                   </div>
-
-                  {/* Features Section */}
-                  <div>
-                    <h4 className="text-xs font-semibold text-zinc-400 mb-3">
-                      Fonctionnalités
-                    </h4>
-                    
-                    <div className="flex gap-2 mb-4">
-                      {Object.entries(SOCIAL_ICONS).map(([key, icon]) => (
-                        <div key={key} className={plan.socials.includes(key) ? '' : 'opacity-20'}>
-                          {icon}
-                        </div>
-                      ))}
-                    </div>
-
-                    <ul className="space-y-3">
-                      {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2.5 text-black text-sm font-semibold">
-                          <Check className="w-4 h-4 text-green-500 stroke-[3] mt-0.5 flex-shrink-0" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-sm text-[#14121F]">
+                        <Check className="mt-0.5 size-4 shrink-0 text-[#0E7445]" aria-hidden="true" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              </div>
 
-                <div className="mt-auto pt-8 space-y-2 text-center">
-                  <button
-                    disabled={isCurrent || loading !== null}
-                    onClick={() => handleSelectPlan(plan.id)}
-                    className={`w-full py-4 px-4 rounded-full font-black text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 ${plan.buttonStyle} border-2 disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {loading === plan.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : isCurrent ? (
-                      'Plan actuel'
-                    ) : (
-                      plan.ctaText
-                    )}
-                  </button>
-                  <p className="text-xs text-zinc-400 font-medium">
-                    {plan.id === 'free' || billing === 'monthly' ? 'Sans engagement' : 'Avec engagement — 12 mois'}
-                  </p>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
+              <div className="mt-auto space-y-2 pt-8 text-center">
+                <button
+                  type="button"
+                  disabled={isCurrent || loading !== null}
+                  aria-busy={loading === plan.id || undefined}
+                  onClick={() => handleSelectPlan(plan.id)}
+                  className={`cr-btn w-full ${plan.recommended || plan.id === 'business' ? 'cr-btn--primary' : 'cr-btn--secondary'}`}
+                >
+                  {loading === plan.id && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
+                  {isCurrent ? 'Plan actuel' : ctaLabel(plan)}
+                </button>
+                <p className="text-xs text-[#6B6780]">
+                  {plan.id === 'free' || billing === 'monthly' ? 'Sans engagement' : 'Engagement 12 mois'}
+                </p>
+              </div>
+            </article>
+          )
+        })}
       </div>
     </div>
   )

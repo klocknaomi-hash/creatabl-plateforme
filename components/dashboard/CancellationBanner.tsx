@@ -44,9 +44,9 @@ export function CancellationBanner({ cancelsAt: initialCancelsAt }: Cancellation
   }
 
   return (
-    <div className="w-full bg-amber-50 border-b border-amber-200 text-amber-950 px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-sm shrink-0">
+    <div className="w-full bg-[#FDF2DF] border-b border-[#F4DDB3] text-[#8A4B00] px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-sm shrink-0">
       <div className="flex items-center gap-2.5">
-        <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+        <AlertTriangle className="w-4 h-4 text-[#8A4B00] flex-shrink-0" />
         <span>
           Votre abonnement se termine le <strong>{formattedDate}</strong>. Vous conservez l'accès jusqu'à cette date.
         </span>
@@ -54,7 +54,7 @@ export function CancellationBanner({ cancelsAt: initialCancelsAt }: Cancellation
       <button
         onClick={handleReactivate}
         disabled={loading}
-        className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-1.5 rounded-lg text-xs transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 flex items-center gap-1.5"
+        className="bg-[#8A4B00] hover:bg-[#8A4B00] text-white font-semibold px-4 py-1.5 rounded-lg text-xs transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 flex items-center gap-1.5"
       >
         {loading ? (
           <>

@@ -41,7 +41,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           className="transition-all duration-500 ease-out"
         />
       </svg>
-      <span className="absolute text-[10px] font-semibold text-[#7C3AED]">
+      <span className="absolute text-xs font-semibold text-[#7C3AED]">
         {Math.round(percentage)}%
       </span>
     </div>

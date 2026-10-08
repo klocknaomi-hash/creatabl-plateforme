@@ -125,31 +125,31 @@ export function NotificationsPopover({ className }: { className?: string }) {
     switch (type) {
       case "news":
         return {
-          bg: "bg-purple-50 dark:bg-purple-950/30",
-          border: "border-purple-100 dark:border-purple-900/40",
-          text: "text-[#5B1BB8] dark:text-purple-400",
+          bg: "bg-[#F3EEFD] dark:bg-[#5B1BB8]/30",
+          border: "border-[#E7DCFC] dark:border-[#5B1BB8]/40",
+          text: "text-[#5B1BB8] dark:text-[#8A38F5]",
           icon: Sparkles
         };
       case "alert":
         return {
-          bg: "bg-amber-50 dark:bg-amber-950/20",
-          border: "border-amber-100 dark:border-amber-900/30",
-          text: "text-[#8A4B00] dark:text-amber-400",
+          bg: "bg-[#FDF2DF] dark:bg-[#8A4B00]/20",
+          border: "border-[#FDF2DF] dark:border-[#8A4B00]/30",
+          text: "text-[#8A4B00] dark:text-[#8A4B00]",
           icon: AlertTriangle
         };
       case "update":
         return {
-          bg: "bg-emerald-50 dark:bg-emerald-950/20",
-          border: "border-emerald-100 dark:border-emerald-900/30",
-          text: "text-[#0E7445] dark:text-emerald-400",
+          bg: "bg-[#E7F6EE] dark:bg-[#0E7445]/20",
+          border: "border-[#E7F6EE] dark:border-[#0E7445]/30",
+          text: "text-[#0E7445] dark:text-[#0E7445]",
           icon: RefreshCw
         };
       case "platform":
       default:
         return {
-          bg: "bg-blue-50 dark:bg-blue-950/20",
-          border: "border-blue-100 dark:border-blue-900/30",
-          text: "text-[#1F5BB8] dark:text-blue-400",
+          bg: "bg-[#E9F0FC] dark:bg-[#1F5BB8]/20",
+          border: "border-[#E9F0FC] dark:border-[#1F5BB8]/30",
+          text: "text-[#1F5BB8] dark:text-[#1F5BB8]",
           icon: Globe
         };
     }
@@ -172,7 +172,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
 
       <PopoverContent className="w-85 p-0 bg-popover border border-border/80 shadow-xl rounded-2xl overflow-hidden z-50 mr-4" align="end">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 bg-gray-50/50 dark:bg-muted/30 border-b border-border/80">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#F8F7FC]/50 dark:bg-muted/30 border-b border-border/80">
           <div className="flex items-center gap-1.5">
             <span className="font-semibold text-sm text-foreground">Notifications</span>
             {unreadCount > 0 && (
@@ -199,7 +199,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
                 <Info className="size-5" />
               </div>
               <p className="text-xs font-semibold text-foreground">Aucune notification</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Nous vous préviendrons des nouveautés et alertes.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Nous vous préviendrons des nouveautés et alertes.</p>
             </div>
           ) : (
             SYSTEM_NOTIFICATIONS.map((item) => {
@@ -231,12 +231,12 @@ export function NotificationsPopover({ className }: { className?: string }) {
                         <span className="size-1.5 bg-[#7225E3] rounded-full shrink-0 mt-1" />
                       )}
                     </div>
-                    <p className="text-[11px] text-muted-foreground leading-normal mt-1 break-words font-medium">
+                    <p className="text-xs text-muted-foreground leading-normal mt-1 break-words font-medium">
                       {item.description}
                     </p>
                     
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="text-[10px] text-muted-foreground font-semibold">
+                      <span className="text-xs text-muted-foreground font-semibold">
                         {item.timestamp}
                       </span>
                       {item.link && (
@@ -267,8 +267,8 @@ export function NotificationsPopover({ className }: { className?: string }) {
         </div>
 
         {/* Footer */}
-        <div className="p-2 border-t border-border/80 bg-gray-50/50 dark:bg-muted/30 text-center">
-          <div className="text-[10px] text-muted-foreground font-semibold flex items-center justify-center gap-1">
+        <div className="p-2 border-t border-border/80 bg-[#F8F7FC]/50 dark:bg-muted/30 text-center">
+          <div className="text-xs text-muted-foreground font-semibold flex items-center justify-center gap-1">
             <Info className="size-3 text-muted-foreground" />
             <span>Actualités et alertes en temps réel</span>
           </div>

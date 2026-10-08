@@ -98,7 +98,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
               );
             })()
           ) : (
-            <div className="text-[10px] font-medium text-[#6B6780] italic">
+            <div className="text-xs font-medium text-[#6B6780] italic">
               Sélectionnez une plateforme pour voir la limite de caractères
             </div>
           )}
@@ -120,13 +120,13 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
       <div className="p-3.5 rounded-xl border border-dashed border-border bg-muted/5 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-            Générer avec l'IA <Sparkles className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+            Générer avec l'IA <Sparkles className="w-3.5 h-3.5 text-[#8A4B00] fill-[#8A4B00]" />
           </span>
           <Button 
             variant="link" 
             size="sm" 
             onClick={onOpenAiDialog}
-            className="h-auto p-0 text-[10px] font-semibold text-muted-foreground hover:text-foreground transition-colors"
+            className="h-auto p-0 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
           >
             Ouvrir le Studio
           </Button>
@@ -151,7 +151,7 @@ export function CaptionEditor({ content, onChange, selectedPlatforms, onOpenAiDi
         </div>
       </div>
       {error && (
-        <p className="text-sm text-red-500 mt-2">{error}</p>
+        <p className="text-sm text-[#B42318] mt-2">{error}</p>
       )}
     </div>
   );

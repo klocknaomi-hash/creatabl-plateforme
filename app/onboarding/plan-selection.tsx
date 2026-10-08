@@ -75,13 +75,13 @@ export function PlanSelection() {
     <div>
       {/* Toggle mensuel / annuel */}
       <div className="flex items-center justify-center gap-3 mb-10">
-        <span className={`text-sm font-medium ${billing === 'monthly' ? 'text-gray-900' : 'text-gray-400'}`}>
+        <span className={`text-sm font-medium ${billing === 'monthly' ? 'text-[#14121F]' : 'text-[#6B6780]'}`}>
           Mensuel
         </span>
         <button
           onClick={() => setBilling(billing === 'monthly' ? 'yearly' : 'monthly')}
           className={`relative w-12 h-6 rounded-full transition-colors ${
-            billing === 'yearly' ? 'bg-[#8A38F5]' : 'bg-gray-200'
+            billing === 'yearly' ? 'bg-[#8A38F5]' : 'bg-[#E8E6F0]'
           }`}
           aria-label="Basculer entre mensuel et annuel"
         >
@@ -91,9 +91,9 @@ export function PlanSelection() {
             }`}
           />
         </button>
-        <span className={`text-sm font-medium ${billing === 'yearly' ? 'text-gray-900' : 'text-gray-400'}`}>
+        <span className={`text-sm font-medium ${billing === 'yearly' ? 'text-[#14121F]' : 'text-[#6B6780]'}`}>
           Annuel
-          <span className="ml-1.5 text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-semibold">
+          <span className="ml-1.5 text-xs bg-[#E7F6EE] text-[#0E7445] px-1.5 py-0.5 rounded-full font-semibold">
             −20%
           </span>
         </span>
@@ -110,7 +110,7 @@ export function PlanSelection() {
               className={`relative bg-white rounded-3xl p-8 border-2 transition-all flex flex-col ${
                 plan.recommended
                   ? 'border-[#8A38F5] shadow-xl'
-                  : 'border-gray-100 hover:border-gray-200 shadow-sm'
+                  : 'border-[#E8E6F0] hover:border-[#E8E6F0] shadow-sm'
               }`}
             >
               {plan.recommended && (
@@ -121,17 +121,17 @@ export function PlanSelection() {
               )}
 
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                <h3 className="text-xl font-bold text-[#14121F] mb-3">{plan.name}</h3>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-gray-900">{displayPrice}€</span>
-                  <span className="text-gray-500 font-medium">/mois</span>
+                  <span className="text-4xl font-bold text-[#14121F]">{displayPrice}€</span>
+                  <span className="text-[#6B6780] font-medium">/mois</span>
                 </div>
                 {billing === 'yearly' ? (
-                  <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
+                  <p className="text-xs text-[#6B6780] mt-1.5 leading-relaxed">
                     soit {plan.yearlyTotal}€ facturés en une fois · Économisez {plan.yearlySavings}€
                   </p>
                 ) : (
-                  <p className="text-xs text-gray-400 mt-1.5">
+                  <p className="text-xs text-[#6B6780] mt-1.5">
                     Passez à l&apos;annuel et économisez {plan.yearlySavings}€/an
                   </p>
                 )}
@@ -139,7 +139,7 @@ export function PlanSelection() {
 
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-600 text-sm">
+                  <li key={i} className="flex items-start gap-3 text-[#4B4B63] text-sm">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#F3EEFD] flex items-center justify-center mt-0.5">
                       <Check className="w-3 h-3 text-[#8A38F5]" />
                     </div>
@@ -154,7 +154,7 @@ export function PlanSelection() {
                 className={`w-full py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                   plan.recommended
                     ? 'bg-[#8A38F5] text-white hover:bg-[#6C64C5] shadow-lg'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                    : 'bg-[#F8F7FC] text-[#14121F] hover:bg-[#E8E6F0]'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {loading === plan.id ? (
@@ -173,7 +173,7 @@ export function PlanSelection() {
 
       {/* Bandeau sécurité */}
       <div className="mt-10 text-center">
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[#6B6780]">
           🔒 Paiement sécurisé · Annulez à tout moment · Données hébergées en Europe
         </p>
       </div>

@@ -98,7 +98,8 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
-            enableSystem
+            forcedTheme="light"
+            enableSystem={false}
             disableTransitionOnChange
           >
             <UrlCleaner />

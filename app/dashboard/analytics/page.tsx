@@ -188,13 +188,13 @@ export default async function AnalyticsPage(props: {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-violet-500/20 transition-colors bg-violet-500/[0.02]">
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:border-[#7225E3]/20 transition-colors bg-[#7225E3]/[0.02]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-bold text-violet-500/50">Support IA</CardTitle>
-            <Sparkles className="h-3.5 w-3.5 text-violet-500/40 group-hover:text-violet-500 transition-colors fill-violet-500/10" />
+            <CardTitle className="text-xs font-bold text-[#7225E3]/50">Support IA</CardTitle>
+            <Sparkles className="h-3.5 w-3.5 text-[#7225E3]/40 group-hover:text-[#7225E3] transition-colors fill-[#7225E3]/10" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight text-violet-600">{(displaySummary as any).aiActions || 0}</div>
+            <div className="text-2xl font-bold tracking-tight text-[#7225E3]">{(displaySummary as any).aiActions || 0}</div>
             <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">Générations de contenu</p>
           </CardContent>
         </Card>
@@ -305,7 +305,7 @@ export default async function AnalyticsPage(props: {
                       </TableCell>
                       <TableCell className="text-right text-xs font-semibold">{post.likes}</TableCell>
                       <TableCell className="text-right text-xs font-semibold">{Number(post.reach).toLocaleString()}</TableCell>
-                      <TableCell className="text-right tabular-nums text-xs font-semibold text-emerald-600">
+                      <TableCell className="text-right tabular-nums text-xs font-semibold text-[#0E7445]">
                         {er.toFixed(1)}%
                       </TableCell>
                     </TableRow>

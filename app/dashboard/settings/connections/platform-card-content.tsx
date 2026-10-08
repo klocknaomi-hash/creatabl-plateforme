@@ -96,7 +96,7 @@ export function PlatformCardContent({
             <div className="space-y-4 w-full">
               {/* Tabs selector if multiple accounts connected */}
               {initialAccounts.length > 1 && (
-                <div className="flex bg-muted p-1 rounded-xl text-[11px] border border-border/20 shadow-inner">
+                <div className="flex bg-muted p-1 rounded-xl text-xs border border-border/20 shadow-inner">
                   {initialAccounts.map((acc, idx) => {
                     const accActive = idx < maxAccounts;
                     const cleanUsername = acc.username
@@ -116,7 +116,7 @@ export function PlatformCardContent({
                       >
                         <span className="truncate">{cleanUsername}</span>
                         {!accActive && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 animate-pulse" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#8A4B00] flex-shrink-0 animate-pulse" />
                         )}
                       </button>
                     );
@@ -128,7 +128,7 @@ export function PlatformCardContent({
               {activeAccount && (
                 <div className={cn(
                   'flex flex-col items-center text-center p-5 rounded-2xl border border-border/30 bg-muted/5 transition-all duration-300 relative overflow-hidden',
-                  !isActive && 'border-amber-500/20 bg-amber-500/[0.02] opacity-75'
+                  !isActive && 'border-[#8A4B00]/20 bg-[#8A4B00]/[0.02] opacity-75'
                 )}>
                   <Avatar className="h-14 w-14 border-4 border-background shadow-md flex-shrink-0 mb-3 animate-in zoom-in-50 duration-300">
                     {activeAccount.isCanva ? (
@@ -149,18 +149,18 @@ export function PlatformCardContent({
                         {username}
                       </p>
                       {!isActive && (
-                        <Badge variant="outline" className="text-xs h-4 py-0 border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5 font-semibold">
+                        <Badge variant="outline" className="text-xs h-4 py-0 border-[#8A4B00]/30 text-[#8A4B00] dark:text-[#8A4B00] bg-[#8A4B00]/5 font-semibold">
                           Suspendu
                         </Badge>
                       )}
                     </div>
-                    <p className={cn('text-xs truncate', !isActive ? 'text-amber-600 dark:text-amber-400 font-semibold' : 'text-muted-foreground')}>
+                    <p className={cn('text-xs truncate', !isActive ? 'text-[#8A4B00] dark:text-[#8A4B00] font-semibold' : 'text-muted-foreground')}>
                       {subtitle}
                     </p>
                   </div>
 
                   {!isActive && (
-                    <div className="mt-3 text-[10px] text-amber-600 dark:text-amber-400 font-medium bg-amber-500/5 px-3 py-1.5 rounded-xl border border-amber-500/10 leading-normal w-full">
+                    <div className="mt-3 text-xs text-[#8A4B00] dark:text-[#8A4B00] font-medium bg-[#8A4B00]/5 px-3 py-1.5 rounded-xl border border-[#8A4B00]/10 leading-normal w-full">
                       Passez au plan Business pour réactiver ce compte
                     </div>
                   )}

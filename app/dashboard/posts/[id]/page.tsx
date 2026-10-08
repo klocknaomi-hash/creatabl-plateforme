@@ -71,9 +71,9 @@ import { useConfirm } from "@/components/ds/confirm";
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const STATUS_CONFIG: Record<string, { label: string, icon: any, color: string, badge: string }> = {
-  draft: { label: "Brouillon", icon: FileText, color: "text-slate-500", badge: "bg-slate-100 text-slate-700 border-slate-200" },
-  scheduled: { label: "Programmé", icon: Clock, color: "text-blue-600", badge: "bg-blue-600 text-white border-transparent" },
-  published: { label: "Publié", icon: CheckCircle2, color: "text-emerald-600", badge: "bg-emerald-500 text-white border-transparent" },
+  draft: { label: "Brouillon", icon: FileText, color: "text-[#6B6780]", badge: "bg-[#F8F7FC] text-[#4B4B63] border-[#E8E6F0]" },
+  scheduled: { label: "Programmé", icon: Clock, color: "text-[#1F5BB8]", badge: "bg-[#1F5BB8] text-white border-transparent" },
+  published: { label: "Publié", icon: CheckCircle2, color: "text-[#0E7445]", badge: "bg-[#0E7445] text-white border-transparent" },
   failed: { label: "Échec", icon: XCircle, color: "text-destructive", badge: "bg-destructive text-white border-transparent" },
 };
 
@@ -212,7 +212,7 @@ export default function PostDetailPage() {
               onClick={() => router.push(`/dashboard/compose?duplicate=${post.id}`)}
               className="rounded-xl shadow-sm gap-2 font-semibold text-xs"
             >
-              <Copy className="size-4 text-indigo-500" />
+              <Copy className="size-4 text-[#7225E3]" />
               <span>Réutiliser</span>
             </Button>
           ) : (
@@ -221,7 +221,7 @@ export default function PostDetailPage() {
               onClick={() => router.push(`/dashboard/compose?id=${post.id}`)}
               className="rounded-xl shadow-sm gap-2 font-semibold text-xs"
             >
-              <Edit3 className="size-4 text-blue-500" />
+              <Edit3 className="size-4 text-[#1F5BB8]" />
               <span>Modifier</span>
             </Button>
           )}
@@ -280,7 +280,7 @@ export default function PostDetailPage() {
             <Card className="rounded-2xl border border-border/50 shadow-sm overflow-hidden bg-card">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-lg font-bold flex items-center gap-2">
-                  <BarChart3 className="size-5 text-violet-500" />
+                  <BarChart3 className="size-5 text-[#7225E3]" />
                   Performances globales du post
                 </CardTitle>
                 <CardDescription className="text-xs text-[#6B6780]">Statistiques cumulées sur l'ensemble des réseaux</CardDescription>
@@ -288,32 +288,32 @@ export default function PostDetailPage() {
               <CardContent className="p-8 pt-2 space-y-8">
                 {/* Aggregated KPIs */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="p-5 rounded-3xl border border-border/50 bg-red-500/5 space-y-2">
-                    <div className="flex items-center gap-2 text-red-500">
+                  <div className="p-5 rounded-3xl border border-border/50 bg-[#B42318]/5 space-y-2">
+                    <div className="flex items-center gap-2 text-[#B42318]">
                       <Heart className="size-4" />
                       <span className="text-xs font-semibold leading-none">J'aime</span>
                     </div>
                     <p className="text-2xl font-bold">{metrics.likes.toLocaleString()}</p>
                   </div>
 
-                  <div className="p-5 rounded-3xl border border-border/50 bg-blue-500/5 space-y-2">
-                    <div className="flex items-center gap-2 text-blue-500">
+                  <div className="p-5 rounded-3xl border border-border/50 bg-[#1F5BB8]/5 space-y-2">
+                    <div className="flex items-center gap-2 text-[#1F5BB8]">
                       <MessageCircle className="size-4" />
                       <span className="text-xs font-semibold leading-none">Commentaires</span>
                     </div>
                     <p className="text-2xl font-bold">{metrics.comments.toLocaleString()}</p>
                   </div>
 
-                  <div className="p-5 rounded-3xl border border-border/50 bg-violet-500/5 space-y-2">
-                    <div className="flex items-center gap-2 text-violet-500">
+                  <div className="p-5 rounded-3xl border border-border/50 bg-[#7225E3]/5 space-y-2">
+                    <div className="flex items-center gap-2 text-[#7225E3]">
                       <Repeat2 className="size-4" />
                       <span className="text-xs font-semibold leading-none">Partages</span>
                     </div>
                     <p className="text-2xl font-bold">{metrics.shares.toLocaleString()}</p>
                   </div>
 
-                  <div className="p-5 rounded-3xl border border-border/50 bg-slate-500/5 space-y-2">
-                    <div className="flex items-center gap-2 text-slate-500">
+                  <div className="p-5 rounded-3xl border border-border/50 bg-[#6B6780]/5 space-y-2">
+                    <div className="flex items-center gap-2 text-[#6B6780]">
                       <Eye className="size-4" />
                       <span className="text-xs font-semibold leading-none">Portée</span>
                     </div>
@@ -332,7 +332,7 @@ export default function PostDetailPage() {
                         return (
                           <div 
                             key={result.id} 
-                            className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border border-border/40 hover:border-violet-500/20 hover:bg-muted/10 transition-all duration-300 gap-4"
+                            className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border border-border/40 hover:border-[#7225E3]/20 hover:bg-muted/10 transition-all duration-300 gap-4"
                           >
                             <div className="flex items-center gap-3">
                               <div className={cn("size-9 rounded-xl flex items-center justify-center border border-border/20", brand.bg, brand.color)}>
@@ -340,9 +340,9 @@ export default function PostDetailPage() {
                               </div>
                               <div>
                                 <p className="text-sm font-semibold capitalize">{brand.label}</p>
-                                <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                   {result.status === 'success' ? (
-                                    <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                                    <span className="text-[#0E7445] font-semibold flex items-center gap-1">
                                       <CheckCircle2 className="size-3" />
                                       Publié
                                     </span>
@@ -352,7 +352,7 @@ export default function PostDetailPage() {
                                       Échec
                                     </span>
                                   ) : (
-                                    <span className="text-yellow-500 font-semibold flex items-center gap-1">
+                                    <span className="text-[#8A4B00] font-semibold flex items-center gap-1">
                                       <Clock className="size-3" />
                                       En attente
                                     </span>
@@ -368,25 +368,25 @@ export default function PostDetailPage() {
                             {result.status === 'success' && (
                               <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-foreground/80">
                                 <div className="flex items-center gap-1.5">
-                                  <Heart className="size-3.5 text-red-500" />
+                                  <Heart className="size-3.5 text-[#B42318]" />
                                   <span>{result.likes}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                  <MessageCircle className="size-3.5 text-blue-500" />
+                                  <MessageCircle className="size-3.5 text-[#1F5BB8]" />
                                   <span>{result.comments}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                  <Repeat2 className="size-3.5 text-violet-500" />
+                                  <Repeat2 className="size-3.5 text-[#7225E3]" />
                                   <span>{result.shares}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                  <Eye className="size-3.5 text-slate-500" />
+                                  <Eye className="size-3.5 text-[#6B6780]" />
                                   <span>{result.reach || result.impressions}</span>
                                 </div>
                                 {result.platformPostId && (
                                   <a 
                                     href={`#`} // Ideally would point to direct link, or placeholder
-                                    className="text-xs text-violet-600 hover:underline flex items-center gap-1 font-semibold pl-2"
+                                    className="text-xs text-[#7225E3] hover:underline flex items-center gap-1 font-semibold pl-2"
                                   >
                                     <ExternalLink className="size-3" />
                                     Voir

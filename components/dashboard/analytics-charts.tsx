@@ -15,7 +15,7 @@ import {
   Cell,
 } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
+const COLORS = ["#7225E3", "#1F5BB8", "#0E7445", "#8A4B00", "#8A38F5"];
 
 export function ReachLineChart({ data }: { data: any[] }) {
   return (
@@ -42,7 +42,7 @@ export function ReachLineChart({ data }: { data: any[] }) {
         <Line 
           type="monotone" 
           dataKey="reach" 
-          stroke="#8884d8" 
+          stroke="#7225E3" 
           strokeWidth={2}
           dot={false}
           name="Portée totale"
@@ -50,7 +50,7 @@ export function ReachLineChart({ data }: { data: any[] }) {
         <Line 
           type="monotone" 
           dataKey="impressions" 
-          stroke="#82ca9d" 
+          stroke="#1F5BB8" 
           strokeWidth={2}
           dot={false}
           name="Impressions totales"

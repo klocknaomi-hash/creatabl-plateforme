@@ -83,20 +83,20 @@ export function SubscriptionManager({
   }
 
   return (
-    <Card className="border border-gray-200 shadow-sm rounded-2xl bg-white overflow-hidden">
+    <Card className="border border-[#E8E6F0] shadow-sm rounded-2xl bg-white overflow-hidden">
       <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#E7DCFC] text-[#5B1BB8]">
               Abonnement actuel : {plan.toUpperCase()}
             </span>
             {isCanceling ? (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 flex items-center gap-1">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#FDF2DF] text-[#8A4B00] flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" />
                 Se termine prochainement
               </span>
             ) : (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#E7F6EE] text-[#0E7445] flex items-center gap-1">
                 <CheckCircle className="w-3.5 h-3.5" />
                 Actif
               </span>
@@ -104,12 +104,12 @@ export function SubscriptionManager({
           </div>
 
           {isCanceling ? (
-            <p className="text-sm text-gray-600 leading-relaxed pt-1">
-              Votre abonnement <strong className="text-gray-900">{plan.toUpperCase()}</strong> se termine le{' '}
-              <strong className="text-gray-900">{formattedDate || 'la fin de la période'}</strong>. Vous continuerez à utiliser Creatabl jusqu'à cette date.
+            <p className="text-sm text-[#4B4B63] leading-relaxed pt-1">
+              Votre abonnement <strong className="text-[#14121F]">{plan.toUpperCase()}</strong> se termine le{' '}
+              <strong className="text-[#14121F]">{formattedDate || 'la fin de la période'}</strong>. Vous continuerez à utiliser Creatabl jusqu'à cette date.
             </p>
           ) : (
-            <p className="text-sm text-gray-600 leading-relaxed pt-1">
+            <p className="text-sm text-[#4B4B63] leading-relaxed pt-1">
               Vous avez un abonnement actif. Vous pouvez le résilier à tout moment. Vous continuerez à utiliser Creatabl jusqu'à la fin de votre période de facturation.
             </p>
           )}
@@ -136,7 +136,7 @@ export function SubscriptionManager({
               onClick={handleCancel}
               disabled={loading}
               variant="outline"
-              className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold px-6 py-2.5 rounded-xl text-sm transition-all"
+              className="border-[#FDECEA] text-[#B42318] hover:bg-[#FDECEA] hover:text-[#96190F] font-semibold px-6 py-2.5 rounded-xl text-sm transition-all"
             >
               {loading ? (
                 <>

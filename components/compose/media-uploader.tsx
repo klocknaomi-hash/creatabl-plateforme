@@ -54,13 +54,13 @@ function MediaItem({
   const [isOpen, setIsOpen] = useState(false);
 
   const transformations = [
-    { id: "bg-remove", label: "Remove Background", value: "e-removedotbg", icon: Scissors, color: "text-purple-500", desc: "AI background removal" },
-    { id: "upscale", label: "AI Upscale", value: "e-upscale", icon: Maximize, color: "text-blue-500", desc: "Boost resolution" },
-    { id: "retouch", label: "AI Retouch", value: "e-retouch", icon: Sparkles, color: "text-amber-500", desc: "AI skin & color retouch" },
-    { id: "genvar", label: "AI Variations", value: "e-genvar", icon: RefreshCcw, color: "text-emerald-500", desc: "Generate variations" },
+    { id: "bg-remove", label: "Remove Background", value: "e-removedotbg", icon: Scissors, color: "text-[#7225E3]", desc: "AI background removal" },
+    { id: "upscale", label: "AI Upscale", value: "e-upscale", icon: Maximize, color: "text-[#1F5BB8]", desc: "Boost resolution" },
+    { id: "retouch", label: "AI Retouch", value: "e-retouch", icon: Sparkles, color: "text-[#8A4B00]", desc: "AI skin & color retouch" },
+    { id: "genvar", label: "AI Variations", value: "e-genvar", icon: RefreshCcw, color: "text-[#0E7445]", desc: "Generate variations" },
     { id: "change-bg", label: "Change Background", value: "e-changebg-prompt-", icon: Layers, color: "text-pink-500", desc: "Swap background with AI", hasPrompt: true, placeholder: "e.g. sunset beach, minimal office" },
-    { id: "ai-edit", label: "AI Edit", value: "e-edit-prompt-", icon: Wand2, color: "text-indigo-500", desc: "Modify with text prompt", hasPrompt: true, placeholder: "e.g. add a coffee cup, make it vintage" },
-    { id: "smart-crop", label: "Smart Crop", value: "fo-auto,w-1000,h-1000,cm-extract", icon: Crop, color: "text-slate-500", desc: "AI-powered focus" },
+    { id: "ai-edit", label: "AI Edit", value: "e-edit-prompt-", icon: Wand2, color: "text-[#7225E3]", desc: "Modify with text prompt", hasPrompt: true, placeholder: "e.g. add a coffee cup, make it vintage" },
+    { id: "smart-crop", label: "Smart Crop", value: "fo-auto,w-1000,h-1000,cm-extract", icon: Crop, color: "text-[#6B6780]", desc: "AI-powered focus" },
   ];
 
   const [activeTransformation, setActiveTransformation] = useState<string | null>(null);
@@ -140,7 +140,7 @@ function MediaItem({
                   <div className="w-full md:w-[320px] flex flex-col bg-muted/20 p-5 border-r border-border/40 overflow-y-auto custom-scrollbar">
                     <div className="mb-4">
                       <h4 className="text-xs font-semibold text-[#6B6780] mb-1">Améliorations IA</h4>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">Sélectionnez une fonctionnalité pour améliorer votre média.</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">Sélectionnez une fonctionnalité pour améliorer votre média.</p>
                     </div>
                     
                     <div className="space-y-2">
@@ -160,7 +160,7 @@ function MediaItem({
                               </div>
                               {activeTransformation === t.id && !t.hasPrompt && <Check className="w-3.5 h-3.5 text-primary" />}
                             </div>
-                            <span className="text-[10px] text-muted-foreground leading-tight">{t.desc}</span>
+                            <span className="text-xs text-muted-foreground leading-tight">{t.desc}</span>
                           </button>
 
                           {/* Prompt Input for specific transformations */}
@@ -219,7 +219,7 @@ function MediaItem({
                     
                     <div className="flex flex-col items-center gap-1">
                       <p className="text-xs font-semibold text-muted-foreground">Aperçu</p>
-                      <p className="text-[9px] text-[#6B6780] italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
+                      <p className="text-xs text-[#6B6780] italic">Les transformations IA peuvent prendre jusqu'à 30s la première fois</p>
                     </div>
                   </div>
                 </div>

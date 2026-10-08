@@ -30,9 +30,9 @@ export function CanvaConnectModal({ children, onConnect }: CanvaConnectModalProp
                 {/* Mock UI */}
                 <div className="flex items-center gap-2 border-b pb-2">
                   <div className="flex gap-1">
-                    <div className="size-2.5 rounded-full bg-red-400"></div>
-                    <div className="size-2.5 rounded-full bg-yellow-400"></div>
-                    <div className="size-2.5 rounded-full bg-green-400"></div>
+                    <div className="size-2.5 rounded-full bg-[#B42318]"></div>
+                    <div className="size-2.5 rounded-full bg-[#8A4B00]"></div>
+                    <div className="size-2.5 rounded-full bg-[#0E7445]"></div>
                   </div>
                   <div className="h-3 w-32 bg-muted rounded"></div>
                 </div>

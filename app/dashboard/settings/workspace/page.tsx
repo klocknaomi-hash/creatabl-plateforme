@@ -25,14 +25,14 @@ export default function WorkspacePage() {
           routing="hash"
           appearance={{
             variables: {
-              colorPrimary: '#7C3AED',
+              colorPrimary: '#7225E3',
               colorBackground: '#ffffff',
-              colorText: '#18181b',
-              colorTextSecondary: '#71717a',
+              colorText: '#14121F',
+              colorTextSecondary: '#4B4B63',
               colorInputBackground: '#ffffff',
-              colorInputText: '#18181b',
-              colorBorder: '#e4e4e7',
-              borderRadius: '1rem',
+              colorInputText: '#14121F',
+              colorBorder: '#878399',
+              borderRadius: '12px',
               fontFamily: 'inherit',
             },
             elements: {

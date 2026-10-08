@@ -23,12 +23,10 @@ export default function TermsPage() {
   ]
 
   return (
-    <div className="dark min-h-screen bg-[#0A0A0F] text-foreground flex flex-col relative selection:bg-[#8A38F5]/30 selection:text-white">
-      {/* Decorative Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#8A38F5]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+    <div className="min-h-screen bg-[#F8F7FC] text-foreground flex flex-col relative selection:bg-[#8A38F5]/30 selection:text-white">
 
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0F]/80 border-b border-white/5">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-[#E8E6F0]">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" id="header-logo-link" className="flex items-center gap-2 group">
             {/* Logo Mark - Exact SVG rendered inline to control fill color */}
@@ -52,11 +50,11 @@ export default function TermsPage() {
             
             {/* Brand Name - Matching Sidebar Font and Style */}
             <span className="flex items-baseline gap-0 leading-none">
-              <span className="text-[17px] font-semibold tracking-tight text-white">
+              <span className="text-base font-semibold tracking-tight text-[#14121F]">
                 Creatabl.
               </span>
               <span
-                className="text-[17px] font-normal italic text-[#8A38F5]"
+                className="text-base font-normal italic text-[#7225E3]"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 ia
@@ -67,7 +65,7 @@ export default function TermsPage() {
           <Link
             href="/dashboard"
             id="back-to-app-header-btn"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-white/5 hover:border-[#8A38F5]/30 bg-white/5 hover:bg-[#8A38F5]/10 transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-[#E8E6F0] hover:border-[#8A38F5]/30 bg-white hover:bg-[#8A38F5]/10 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to app
@@ -78,12 +76,12 @@ export default function TermsPage() {
       {/* Main Content Area */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-16">
         {/* Title / Hero */}
-        <div className="space-y-4 mb-16 border-b border-white/5 pb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8A38F5]/10 border border-[#8A38F5]/20 text-[#8A38F5] text-xs font-bold uppercase tracking-wider">
+        <div className="space-y-4 mb-16 border-b border-[#E8E6F0] pb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8A38F5]/10 border border-[#8A38F5]/20 text-[#7225E3] text-xs font-bold uppercase tracking-wider">
             <Scale className="w-3.5 h-3.5" />
             Legal Agreement
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground">
             Terms of Service
           </h1>
           <p className="text-muted-foreground text-sm font-medium">
@@ -94,7 +92,7 @@ export default function TermsPage() {
         {/* Two Column Layout: TOC & Detailed Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 items-start">
           {/* Table of Contents - Hidden on Mobile, Sticky on Desktop */}
-          <aside className="hidden lg:block sticky top-32 bg-white/[0.02] border border-white/5 rounded-2xl p-6">
+          <aside className="hidden lg:block sticky top-32 bg-white border border-[#E8E6F0] rounded-2xl p-6">
             <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
               Table of Contents
             </h2>
@@ -104,7 +102,7 @@ export default function TermsPage() {
                   key={section.id}
                   href={`#${section.id}`}
                   id={`toc-link-${section.id}`}
-                  className="block text-sm text-muted-foreground hover:text-[#8A38F5] hover:translate-x-1 transition-all duration-150 py-1"
+                  className="block text-sm text-muted-foreground hover:text-[#7225E3] hover:translate-x-1 transition-all duration-150 py-1"
                 >
                   {section.title}
                 </a>
@@ -117,7 +115,7 @@ export default function TermsPage() {
             {/* Section 1: Acceptance of Terms */}
             <section id="acceptance" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">1.</span> Acceptance of Terms
+                <span className="text-[#7225E3]">1.</span> Acceptance of Terms
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -132,7 +130,7 @@ export default function TermsPage() {
             {/* Section 2: Description of Service */}
             <section id="description" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">2.</span> Description of Service
+                <span className="text-[#7225E3]">2.</span> Description of Service
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -153,7 +151,7 @@ export default function TermsPage() {
             {/* Section 3: Account Registration */}
             <section id="registration" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">3.</span> Account Registration
+                <span className="text-[#7225E3]">3.</span> Account Registration
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -168,7 +166,7 @@ export default function TermsPage() {
             {/* Section 4: User Responsibilities */}
             <section id="responsibilities" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">4.</span> User Responsibilities
+                <span className="text-[#7225E3]">4.</span> User Responsibilities
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -186,7 +184,7 @@ export default function TermsPage() {
             {/* Section 5: Third-Party Integrations */}
             <section id="integrations" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">5.</span> Third-Party Integrations
+                <span className="text-[#7225E3]">5.</span> Third-Party Integrations
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -201,7 +199,7 @@ export default function TermsPage() {
             {/* Section 6: AI-Generated Content */}
             <section id="ai-content" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">6.</span> AI-Generated Content
+                <span className="text-[#7225E3]">6.</span> AI-Generated Content
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -216,7 +214,7 @@ export default function TermsPage() {
             {/* Section 7: Subscription and Billing */}
             <section id="billing" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">7.</span> Subscription and Billing
+                <span className="text-[#7225E3]">7.</span> Subscription and Billing
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -231,7 +229,7 @@ export default function TermsPage() {
             {/* Section 8: Termination */}
             <section id="termination" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">8.</span> Termination
+                <span className="text-[#7225E3]">8.</span> Termination
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -243,7 +241,7 @@ export default function TermsPage() {
             {/* Section 9: Limitation of Liability */}
             <section id="liability" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">9.</span> Limitation of Liability
+                <span className="text-[#7225E3]">9.</span> Limitation of Liability
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -260,7 +258,7 @@ export default function TermsPage() {
             {/* Section 10: Governing Law */}
             <section id="governing-law" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">10.</span> Governing Law
+                <span className="text-[#7225E3]">10.</span> Governing Law
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -270,9 +268,9 @@ export default function TermsPage() {
             </section>
 
             {/* Section 11: Contact Information */}
-            <section id="contact" className="scroll-mt-32 space-y-4 border-t border-white/5 pt-8">
+            <section id="contact" className="scroll-mt-32 space-y-4 border-t border-[#E8E6F0] pt-8">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">11.</span> Contact Information
+                <span className="text-[#7225E3]">11.</span> Contact Information
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 For questions, clarifications, or disputes regarding these Terms of Service, please contact us:
@@ -281,7 +279,7 @@ export default function TermsPage() {
                 <a
                   href="mailto:businessesonlinemail@gmail.com"
                   id="contact-email-link"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#8A38F5] hover:text-foreground border border-[#8A38F5]/20 hover:border-[#8A38F5] bg-[#8A38F5]/5 hover:bg-[#8A38F5]/10 transition-all duration-200 text-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#7225E3] hover:text-foreground border border-[#8A38F5]/20 hover:border-[#8A38F5] bg-[#8A38F5]/5 hover:bg-[#8A38F5]/10 transition-all duration-200 text-sm font-semibold"
                 >
                   <Mail className="w-4 h-4" />
                   businessesonlinemail@gmail.com
@@ -293,7 +291,7 @@ export default function TermsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 bg-[#08080C] py-10 mt-20 text-center text-xs text-muted-foreground font-medium">
+      <footer className="border-t border-[#E8E6F0] bg-white py-10 mt-20 text-center text-xs text-muted-foreground font-medium">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>© 2026 Creatabl.ia. Tous droits réservés.</p>
           <div className="flex gap-6">

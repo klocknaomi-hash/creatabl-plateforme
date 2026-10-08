@@ -152,19 +152,19 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
       case 0:
         return (
           <div className="text-center space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Bienvenue 🎉</h1>
-            <p className="text-gray-600 text-lg">
+            <h1 className="text-3xl font-bold text-[#14121F]">Bienvenue 🎉</h1>
+            <p className="text-[#4B4B63] text-lg">
               Quelques questions pour paramétrer l'IA avec votre style d'écriture et vos objectifs.
             </p>
-            <p className="text-gray-400 text-sm">Durée estimée : 45 secondes.</p>
+            <p className="text-[#6B6780] text-sm">Durée estimée : 45 secondes.</p>
           </div>
         );
       case 1:
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 1/6</p>
-              <h2 className="text-2xl font-bold text-gray-900">Quel profil te correspond le mieux ?</h2>
+              <p className="text-xs font-semibold text-[#6B6780] mb-1">STEP 1/6</p>
+              <h2 className="text-2xl font-bold text-[#14121F]">Quel profil te correspond le mieux ?</h2>
             </div>
             <div className="grid grid-cols-1 gap-3">
               {[
@@ -179,10 +179,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   className={`flex items-center p-4 rounded-xl border-2 transition-all text-left ${
                     formData.clientType === opt.id
                       ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
-                      : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
+                      : "border-[#E8E6F0] hover:border-[#E8E6F0] bg-white text-[#4B4B63]"
                   }`}
                 >
-                  <div className={`p-2 rounded-lg mr-4 ${formData.clientType === opt.id ? "bg-[#7225E3] text-white" : "bg-gray-100 text-gray-500"}`}>
+                  <div className={`p-2 rounded-lg mr-4 ${formData.clientType === opt.id ? "bg-[#7225E3] text-white" : "bg-[#F8F7FC] text-[#6B6780]"}`}>
                     <opt.icon size={20} />
                   </div>
                   <div>
@@ -198,10 +198,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 2/6</p>
-              <h2 className="text-2xl font-bold text-gray-900">Personnalise l'IA</h2>
+              <p className="text-xs font-semibold text-[#6B6780] mb-1">STEP 2/6</p>
+              <h2 className="text-2xl font-bold text-[#14121F]">Personnalise l'IA</h2>
             </div>
-            <p className="text-gray-600">
+            <p className="text-[#4B4B63]">
               Connectez vos réseaux sociaux pour importer votre style d'écriture, planifier vos posts et suivre vos statistiques.
             </p>
             <div className="space-y-4 pt-4">
@@ -213,7 +213,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               </button>
               <button 
                 onClick={handleSkip}
-                className="w-full text-gray-500 underline text-sm hover:text-gray-700 transition-colors"
+                className="w-full text-[#6B6780] underline text-sm hover:text-[#4B4B63] transition-colors"
               >
                 Le faire plus tard
               </button>
@@ -224,12 +224,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 3/6</p>
-              <h2 className="text-2xl font-bold text-gray-900">Ton workspace</h2>
+              <p className="text-xs font-semibold text-[#6B6780] mb-1">STEP 3/6</p>
+              <h2 className="text-2xl font-bold text-[#14121F]">Ton workspace</h2>
             </div>
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-[#4B4B63]">
                   Comment s'appelle votre espace de travail ?
                 </label>
                 <input
@@ -237,19 +237,19 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   placeholder="Ex : Mon agence, Studio Léa, Marque perso..."
                   value={formData.workspaceName}
                   onChange={(e) => setFormData({ ...formData, workspaceName: e.target.value })}
-                  className="w-full p-4 rounded-xl border border-gray-200 focus:border-[#7225E3] focus:ring-1 focus:ring-[#7225E3] outline-none transition-all"
+                  className="w-full p-4 rounded-xl border border-[#E8E6F0] focus:border-[#7225E3] focus:ring-1 focus:ring-[#7225E3] outline-none transition-all"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-[#4B4B63]">
                   Ajoutez un logo (facultatif)
                 </label>
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 rounded-xl bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                  <div className="w-16 h-16 rounded-xl bg-[#F8F7FC] border-2 border-dashed border-[#878399] flex items-center justify-center overflow-hidden">
                     {formData.logoUrl ? (
                       <img src={formData.logoUrl} className="w-full h-full object-cover" alt="Logo" />
                     ) : (
-                      <Upload size={20} className="text-gray-300" />
+                      <Upload size={20} className="text-[#878399]" />
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
@@ -283,7 +283,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                         const input = document.getElementById('logo-upload') as HTMLInputElement;
                         if (input) input.value = "";
                       }}
-                      className="text-xs text-gray-400 hover:text-gray-600 text-left"
+                      className="text-xs text-[#6B6780] hover:text-[#4B4B63] text-left"
                     >
                       Passer
                     </button>
@@ -297,11 +297,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 4/6</p>
-              <h2 className="text-2xl font-bold text-gray-900">Ton style d'écriture</h2>
+              <p className="text-xs font-semibold text-[#6B6780] mb-1">STEP 4/6</p>
+              <h2 className="text-2xl font-bold text-[#14121F]">Ton style d'écriture</h2>
             </div>
             <div className="grid grid-cols-1 gap-3">
-              <label className="text-sm font-medium text-gray-700">Quel ton utilisez-vous dans vos posts ?</label>
+              <label className="text-sm font-medium text-[#4B4B63]">Quel ton utilisez-vous dans vos posts ?</label>
               {[
                 { id: "professional", title: "Professionnel", subtitle: "Sérieux, structuré, crédible" },
                 { id: "inspiring", title: "Inspirant", subtitle: "Motivant, positif, humain" },
@@ -314,7 +314,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                   className={`flex items-center p-4 rounded-xl border-2 transition-all text-left ${
                     formData.writingTone === opt.id
                       ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
-                      : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
+                      : "border-[#E8E6F0] hover:border-[#E8E6F0] bg-white text-[#4B4B63]"
                   }`}
                 >
                   <div className="flex-1">
@@ -331,11 +331,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 5/6</p>
-              <h2 className="text-2xl font-bold text-gray-900">Paramètres des posts</h2>
+              <p className="text-xs font-semibold text-[#6B6780] mb-1">STEP 5/6</p>
+              <h2 className="text-2xl font-bold text-[#14121F]">Paramètres des posts</h2>
             </div>
             <div className="space-y-4">
-              <label className="text-sm font-medium text-gray-700">Quel accord de genre souhaitez-vous employer dans vos posts ?</label>
+              <label className="text-sm font-medium text-[#4B4B63]">Quel accord de genre souhaitez-vous employer dans vos posts ?</label>
               <div className="space-y-2">
                 {[
                   { id: "female", title: "Féminin" },
@@ -348,7 +348,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                       formData.genderAgreement === opt.id
                         ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
-                        : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
+                        : "border-[#E8E6F0] hover:border-[#E8E6F0] bg-white text-[#4B4B63]"
                     }`}
                   >
                     <p className="font-semibold">{opt.title}</p>
@@ -362,11 +362,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold text-gray-400 mb-1">STEP 6/6</p>
-              <h2 className="text-2xl font-bold text-gray-900">Paramètres des posts</h2>
+              <p className="text-xs font-semibold text-[#6B6780] mb-1">STEP 6/6</p>
+              <h2 className="text-2xl font-bold text-[#14121F]">Paramètres des posts</h2>
             </div>
             <div className="space-y-4">
-              <label className="text-sm font-medium text-gray-700">Combien d'émojis souhaitez-vous par post ?</label>
+              <label className="text-sm font-medium text-[#4B4B63]">Combien d'émojis souhaitez-vous par post ?</label>
               <div className="space-y-2">
                 {[
                   { id: "none", title: "Aucun" },
@@ -379,7 +379,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                       formData.emojiPreference === opt.id
                         ? "border-[#7225E3] bg-[#7225E3]/5 text-[#7225E3]"
-                        : "border-gray-100 hover:border-gray-200 bg-white text-gray-700"
+                        : "border-[#E8E6F0] hover:border-[#E8E6F0] bg-white text-[#4B4B63]"
                     }`}
                   >
                     <p className="font-semibold">{opt.title}</p>
@@ -392,12 +392,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
       case "final":
         return (
           <div className="text-center space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Paramétrage terminé</h1>
-            <p className="text-gray-600 text-lg">
+            <h1 className="text-3xl font-bold text-[#14121F]">Paramétrage terminé</h1>
+            <p className="text-[#4B4B63] text-lg">
               Vous pourrez modifier vos paramètres d'écriture à tout moment.
             </p>
             <div className="flex justify-center py-4">
-               <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
+               <div className="w-20 h-20 bg-[#E7F6EE] text-[#0E7445] rounded-full flex items-center justify-center">
                   <Check size={40} />
                </div>
             </div>
@@ -426,8 +426,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
               exit={{ opacity: 0 }}
               className="absolute inset-0 z-[110] bg-white/90 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center"
             >
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Voulez-vous vraiment quitter ?</h3>
-              <p className="text-gray-600 mb-8">
+              <h3 className="text-2xl font-bold text-[#14121F] mb-4">Voulez-vous vraiment quitter ?</h3>
+              <p className="text-[#4B4B63] mb-8">
                 Prendre 45 secondes pour paramétrer vos préférences permet à l'IA de générer du contenu qui vous ressemble vraiment. Ne passez pas à côté de cette personnalisation !
               </p>
               <div className="flex flex-col w-full gap-3">
@@ -439,7 +439,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                 </button>
                 <button 
                   onClick={() => completeOnboarding().then(() => router.refresh())}
-                  className="w-full py-4 text-gray-400 font-medium hover:text-gray-600"
+                  className="w-full py-4 text-[#6B6780] font-medium hover:text-[#4B4B63]"
                 >
                   Quitter quand même
                 </button>
@@ -452,7 +452,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
         <div className="px-8 pt-8 flex justify-between items-start">
           <div>
             {step !== 0 && step !== "final" && (
-              <p className="text-xs font-semibold text-gray-400">
+              <p className="text-xs font-semibold text-[#6B6780]">
                 STEP {step}/6
               </p>
             )}
@@ -464,7 +464,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
             {step !== 0 && (
               <button 
                 onClick={() => setShowConfirmClose(true)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-[#6B6780] hover:text-[#4B4B63] transition-colors"
               >
                 <X size={24} />
               </button>
@@ -495,7 +495,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                 <button
                   onClick={handleBack}
                   disabled={loading}
-                  className="flex-1 py-4 rounded-xl font-semibold text-lg border-2 border-gray-100 text-gray-400 hover:bg-gray-50 transition-all"
+                  className="flex-1 py-4 rounded-xl font-semibold text-lg border-2 border-[#E8E6F0] text-[#6B6780] hover:bg-[#F8F7FC] transition-all"
                 >
                   Précédent
                 </button>
@@ -505,7 +505,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ initialStep = 
                 disabled={loading || isNextDisabled()}
                 className={`${(step === 0 || step === "final") ? "w-full" : "flex-[2]"} flex items-center justify-center py-4 rounded-full font-bold text-lg transition-all ${
                   isNextDisabled()
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    ? "bg-[#F8F7FC] text-[#6B6780] cursor-not-allowed"
                     : "bg-[#7225E3] text-white hover:bg-[#5B1BB8] shadow-lg shadow-[#7225E3]/20"
                 }`}
               >

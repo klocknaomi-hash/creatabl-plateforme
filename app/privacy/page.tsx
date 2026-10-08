@@ -19,12 +19,10 @@ export default function PrivacyPage() {
   ]
 
   return (
-    <div className="dark min-h-screen bg-[#0A0A0F] text-foreground flex flex-col relative selection:bg-[#8A38F5]/30 selection:text-white">
-      {/* Decorative Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#8A38F5]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+    <div className="min-h-screen bg-[#F8F7FC] text-foreground flex flex-col relative selection:bg-[#8A38F5]/30 selection:text-white">
 
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0F]/80 border-b border-white/5">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-[#E8E6F0]">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" id="header-logo-link" className="flex items-center gap-2 group">
             {/* Logo Mark - Exact SVG rendered inline to control fill color */}
@@ -48,11 +46,11 @@ export default function PrivacyPage() {
             
             {/* Brand Name - Matching Sidebar Font and Style */}
             <span className="flex items-baseline gap-0 leading-none">
-              <span className="text-[17px] font-semibold tracking-tight text-white">
+              <span className="text-base font-semibold tracking-tight text-[#14121F]">
                 Creatabl.
               </span>
               <span
-                className="text-[17px] font-normal italic text-[#8A38F5]"
+                className="text-base font-normal italic text-[#7225E3]"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 ia
@@ -63,7 +61,7 @@ export default function PrivacyPage() {
           <Link
             href="/dashboard"
             id="back-to-app-header-btn"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-white/5 hover:border-[#8A38F5]/30 bg-white/5 hover:bg-[#8A38F5]/10 transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground border border-[#E8E6F0] hover:border-[#8A38F5]/30 bg-white hover:bg-[#8A38F5]/10 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to app
@@ -74,12 +72,12 @@ export default function PrivacyPage() {
       {/* Main Content Area */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-16">
         {/* Title / Hero */}
-        <div className="space-y-4 mb-16 border-b border-white/5 pb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8A38F5]/10 border border-[#8A38F5]/20 text-[#8A38F5] text-xs font-bold uppercase tracking-wider">
+        <div className="space-y-4 mb-16 border-b border-[#E8E6F0] pb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8A38F5]/10 border border-[#8A38F5]/20 text-[#7225E3] text-xs font-bold uppercase tracking-wider">
             <Shield className="w-3.5 h-3.5" />
             Privacy Protection
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground">
             Privacy Policy
           </h1>
           <p className="text-muted-foreground text-sm font-medium">
@@ -90,7 +88,7 @@ export default function PrivacyPage() {
         {/* Two Column Layout: TOC & Detailed Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 items-start">
           {/* Table of Contents - Hidden on Mobile, Sticky on Desktop */}
-          <aside className="hidden lg:block sticky top-32 bg-white/[0.02] border border-white/5 rounded-2xl p-6">
+          <aside className="hidden lg:block sticky top-32 bg-white border border-[#E8E6F0] rounded-2xl p-6">
             <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
               Table of Contents
             </h2>
@@ -100,7 +98,7 @@ export default function PrivacyPage() {
                   key={section.id}
                   href={`#${section.id}`}
                   id={`toc-link-${section.id}`}
-                  className="block text-sm text-muted-foreground hover:text-[#8A38F5] hover:translate-x-1 transition-all duration-150 py-1"
+                  className="block text-sm text-muted-foreground hover:text-[#7225E3] hover:translate-x-1 transition-all duration-150 py-1"
                 >
                   {section.title}
                 </a>
@@ -113,7 +111,7 @@ export default function PrivacyPage() {
             {/* Section 1: What Data We Collect */}
             <section id="data-collection" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">1.</span> What Data We Collect
+                <span className="text-[#7225E3]">1.</span> What Data We Collect
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -131,7 +129,7 @@ export default function PrivacyPage() {
             {/* Section 2: How We Use Your Data */}
             <section id="data-usage" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">2.</span> How We Use Your Data
+                <span className="text-[#7225E3]">2.</span> How We Use Your Data
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -150,7 +148,7 @@ export default function PrivacyPage() {
             {/* Section 3: Third-Party Services */}
             <section id="third-parties" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">3.</span> Third-Party Services
+                <span className="text-[#7225E3]">3.</span> Third-Party Services
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -169,7 +167,7 @@ export default function PrivacyPage() {
             {/* Section 4: Data Storage & Security */}
             <section id="data-storage" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">4.</span> Data Storage & Security
+                <span className="text-[#7225E3]">4.</span> Data Storage & Security
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -184,7 +182,7 @@ export default function PrivacyPage() {
             {/* Section 5: OAuth Token Retention */}
             <section id="oauth-tokens" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">5.</span> OAuth Token Retention
+                <span className="text-[#7225E3]">5.</span> OAuth Token Retention
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -199,7 +197,7 @@ export default function PrivacyPage() {
             {/* Section 6: Your User Rights */}
             <section id="user-rights" className="scroll-mt-32 space-y-4">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">6.</span> Your User Rights
+                <span className="text-[#7225E3]">6.</span> Your User Rights
               </h2>
               <div className="text-muted-foreground space-y-3 leading-relaxed text-sm">
                 <p>
@@ -215,9 +213,9 @@ export default function PrivacyPage() {
             </section>
 
             {/* Section 7: Contact Information */}
-            <section id="contact" className="scroll-mt-32 space-y-4 border-t border-white/5 pt-8">
+            <section id="contact" className="scroll-mt-32 space-y-4 border-t border-[#E8E6F0] pt-8">
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-[#8A38F5]">7.</span> Contact Information
+                <span className="text-[#7225E3]">7.</span> Contact Information
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 For questions regarding data processing, requests to delete your personal profile, or other privacy concerns, please contact our data team:
@@ -226,7 +224,7 @@ export default function PrivacyPage() {
                 <a
                   href="mailto:businessesonlinemail@gmail.com"
                   id="contact-email-link"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#8A38F5] hover:text-foreground border border-[#8A38F5]/20 hover:border-[#8A38F5] bg-[#8A38F5]/5 hover:bg-[#8A38F5]/10 transition-all duration-200 text-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#7225E3] hover:text-foreground border border-[#8A38F5]/20 hover:border-[#8A38F5] bg-[#8A38F5]/5 hover:bg-[#8A38F5]/10 transition-all duration-200 text-sm font-semibold"
                 >
                   <Mail className="w-4 h-4" />
                   businessesonlinemail@gmail.com
@@ -238,7 +236,7 @@ export default function PrivacyPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 bg-[#08080C] py-10 mt-20 text-center text-xs text-muted-foreground font-medium">
+      <footer className="border-t border-[#E8E6F0] bg-white py-10 mt-20 text-center text-xs text-muted-foreground font-medium">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>© 2026 Creatabl.ia. Tous droits réservés.</p>
           <div className="flex gap-6">

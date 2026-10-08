@@ -100,16 +100,16 @@ const PLATFORM_BRANDING: Record<string, { color: string, icon: any, label: strin
 };
 
 const STATUS_CONFIG: Record<string, { label: string, icon: any, color: string, badge: string }> = {
-  draft: { label: "Draft", icon: FileText, color: "text-slate-500", badge: "bg-slate-100 text-slate-700 border-slate-200" },
-  scheduled: { label: "Scheduled", icon: Clock, color: "text-blue-600", badge: "bg-blue-600 text-white border-transparent" },
-  published: { label: "Published", icon: CheckCircle2, color: "text-emerald-600", badge: "bg-emerald-500 text-white border-transparent" },
+  draft: { label: "Draft", icon: FileText, color: "text-[#6B6780]", badge: "bg-[#F8F7FC] text-[#4B4B63] border-[#E8E6F0]" },
+  scheduled: { label: "Scheduled", icon: Clock, color: "text-[#1F5BB8]", badge: "bg-[#1F5BB8] text-white border-transparent" },
+  published: { label: "Published", icon: CheckCircle2, color: "text-[#0E7445]", badge: "bg-[#0E7445] text-white border-transparent" },
 };
 
 // Heatmap Intensity colors
 const getHeatmapColor = (intensity: number) => {
   if (intensity >= 80) return "bg-[#5B1BB8]"; // Dark Violet
   if (intensity >= 50) return "bg-[#8A38F5]"; // Medium Violet
-  if (intensity > 0) return "bg-[#C4B5FD]"; // Light Violet
+  if (intensity > 0) return "bg-[#E7DCFC]"; // Light Violet
   return "bg-transparent";
 };
 
@@ -426,7 +426,7 @@ export default function CalendarPage() {
                 
                 <div className="mt-10 text-center space-y-1">
                    <p className="text-xs font-semibold text-muted-foreground">Platform View: {selectedPost.platforms[0]}</p>
-                   <p className="text-[9px] text-[#6B6780] font-medium">This is exactly how your post will appear on social media.</p>
+                   <p className="text-xs text-[#6B6780] font-medium">This is exactly how your post will appear on social media.</p>
                 </div>
               </div>
 
@@ -591,32 +591,32 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
     return (
       <div className="w-full max-w-[480px] bg-black text-white p-6 rounded-3xl shadow-2xl border border-white/10 font-sans">
         <div className="flex gap-3">
-          <div className="size-12 rounded-full bg-zinc-800 border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
+          <div className="size-12 rounded-full bg-[#2E2B3D] border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
              {account.profileUrl ? <img src={account.profileUrl} alt="" className="size-full object-cover" /> : <Twitter className="size-6 text-white/20" />}
           </div>
           <div className="flex-1 min-w-0">
              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 min-w-0">
                    <span className="font-semibold truncate">Creatabl User</span>
-                   <span className="text-zinc-500 text-sm truncate">@{account.username}</span>
-                   <span className="text-zinc-500 text-sm">· {format(new Date(post.scheduledAt), "MMM d")}</span>
+                   <span className="text-[#6B6780] text-sm truncate">@{account.username}</span>
+                   <span className="text-[#6B6780] text-sm">· {format(new Date(post.scheduledAt), "MMM d")}</span>
                 </div>
-                <MoreHorizontal className="size-5 text-zinc-500" />
+                <MoreHorizontal className="size-5 text-[#6B6780]" />
              </div>
-             <p className="text-[15px] mt-1 leading-normal whitespace-pre-wrap">{content}</p>
+             <p className="text-base mt-1 leading-normal whitespace-pre-wrap">{content}</p>
              
              {post.mediaUrls?.[0] && (
-               <div className="mt-3 rounded-2xl overflow-hidden border border-zinc-800">
+               <div className="mt-3 rounded-2xl overflow-hidden border border-[#2E2B3D]">
                   <img src={post.mediaUrls[0]} alt="" className="w-full aspect-video object-cover" />
                </div>
              )}
 
-             <div className="mt-4 flex items-center justify-between text-zinc-500 max-w-[360px]">
-                <div className="flex items-center gap-2 hover:text-sky-500 transition-colors">
+             <div className="mt-4 flex items-center justify-between text-[#6B6780] max-w-[360px]">
+                <div className="flex items-center gap-2 hover:text-[#1F5BB8] transition-colors">
                   <MessageSquare className="size-4.5" />
                   <span className="text-xs font-medium">0</span>
                 </div>
-                <div className="flex items-center gap-2 hover:text-emerald-500 transition-colors">
+                <div className="flex items-center gap-2 hover:text-[#0E7445] transition-colors">
                   <Repeat2 className="size-4.5" />
                   <span className="text-xs font-medium">0</span>
                 </div>
@@ -624,7 +624,7 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
                   <Heart className="size-4.5" />
                   <span className="text-xs font-medium">0</span>
                 </div>
-                <div className="flex items-center gap-2 hover:text-sky-500 transition-colors">
+                <div className="flex items-center gap-2 hover:text-[#1F5BB8] transition-colors">
                   <Share className="size-4.5" />
                   <span className="text-xs font-medium">0</span>
                 </div>
@@ -721,7 +721,7 @@ function MonthView({ currentDate, posts, onPostClick }: any) {
                       key={p.id} 
                       className={cn(
                         "p-1.5 rounded-lg bg-background border text-xs font-semibold truncate cursor-pointer hover:border-primary/50 shadow-sm transition-all flex items-center gap-1.5",
-                        brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
+                        brand?.color === 'text-foreground' ? "bg-[#14121F] text-white border-[#2E2B3D]" : ""
                       )} 
                       onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
                     >
@@ -813,7 +813,7 @@ function WeekView({ currentDate, posts, onPostClick, selectedPlatform, isConnect
                           key={p.id} 
                           className={cn(
                             "p-1 rounded-md bg-card border shadow-sm text-xs font-semibold truncate cursor-pointer z-10 relative hover:border-primary/50 flex items-center gap-1 transition-all",
-                            brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
+                            brand?.color === 'text-foreground' ? "bg-[#14121F] text-white border-[#2E2B3D]" : ""
                           )} 
                           onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
                         >
@@ -903,7 +903,7 @@ function DayView({ currentDate, posts, onPostClick, selectedPlatform, isConnecte
                         key={p.id} 
                         className={cn(
                           "min-w-[140px] max-w-[300px] p-2 rounded-xl bg-card border shadow-sm text-xs font-semibold cursor-pointer z-10 hover:border-primary/50 flex items-center gap-2 transition-all",
-                          brand?.color === 'text-foreground' ? "bg-zinc-950 text-white border-zinc-800" : ""
+                          brand?.color === 'text-foreground' ? "bg-[#14121F] text-white border-[#2E2B3D]" : ""
                         )} 
                         onClick={(e) => { e.stopPropagation(); onPostClick(p); }}
                       >

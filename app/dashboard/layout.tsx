@@ -11,8 +11,6 @@ import { Topbar } from "@/components/dashboard/topbar";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { getTrialStatus } from "@/lib/trial";
 import { TrialBanner, type TrialInfo } from "@/components/dashboard/TrialBanner";
-import { PaywallOverlay } from "@/components/PaywallOverlay";
-import { PaywallBanner } from "@/components/dashboard/PaywallBanner"
 import { PaywallProvider } from "@/lib/paywall-context"
 import { isNaomiOrTest } from "@/lib/plans"
 import { CancellationBanner } from '@/components/dashboard/CancellationBanner';
@@ -155,7 +153,7 @@ export default async function DashboardLayout({
       return (
         <DashboardProviders>
           <ErrorBoundary>
-            <main className="min-h-screen w-full bg-[#05010d] flex items-center justify-center">
+            <main className="min-h-screen w-full bg-[#F8F7FC] flex items-center justify-center">
               {children}
             </main>
           </ErrorBoundary>
