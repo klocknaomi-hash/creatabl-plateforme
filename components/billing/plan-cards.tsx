@@ -97,8 +97,7 @@ export function PlanCards({ currentPlan = 'starter', variant = 'billing' }: Plan
 
   const ctaLabel = (plan: (typeof PLANS)[number]) => {
     if (plan.id === 'free') return 'Continuer avec Free'
-    if (variant === 'expired') return `Choisir ${plan.name}`
-    return `Essayer ${plan.name} · 14 jours gratuits`
+    return `Choisir ${plan.name}`
   }
 
   return (
