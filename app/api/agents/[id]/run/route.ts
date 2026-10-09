@@ -3,7 +3,7 @@ import { findAgent, getAgentContext, runAgent } from "@/lib/agents/server";
 
 export const dynamic = "force-dynamic";
 // Recherche + lecture + rédaction : laisser le temps à l'exécution de se terminer.
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const ctx = await getAgentContext();

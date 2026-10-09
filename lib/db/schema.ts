@@ -327,6 +327,7 @@ export const aiAgentRuns = pgTable('ai_agent_runs', {
   // Appels Browserbase consommés par l'exécution (quota mensuel de la plateforme).
   bbSearchCalls: integer('bb_search_calls').default(0).notNull(),
   bbFetchCalls: integer('bb_fetch_calls').default(0).notNull(),
+  bbBrowserSeconds: integer('bb_browser_seconds').default(0).notNull(),
   startedAt: timestamp('started_at').defaultNow().notNull(),
   finishedAt: timestamp('finished_at'),
 });
