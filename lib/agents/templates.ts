@@ -1,13 +1,14 @@
 // Modèles d'agents proposés dans « Créer un agent » et « Modèles ». Partagé entre
 // l'interface et l'API : aucune dépendance serveur ici.
 
-export type AgentSource = 'google_trends' | 'google_news' | 'reddit' | 'youtube' | 'web'
+export type AgentSource = 'web_search' | 'google_trends' | 'google_news' | 'reddit' | 'youtube' | 'web'
 export type AgentOutput = 'drafts' | 'ideas'
 export type AgentSchedule = 'manual' | 'daily' | 'weekly'
 
 export const MAX_AGENTS = 3
 
 export const SOURCE_LABELS: Record<AgentSource, string> = {
+  web_search: 'Recherche web',
   google_trends: 'Google Trends',
   google_news: 'Google Actualités',
   reddit: 'Reddit',
@@ -49,13 +50,13 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     id: 'veille-secteur',
     chip: 'Veille de mon secteur',
     title: 'Veille de mon secteur',
-    description: "Les actualités de votre secteur, transformées en idées de posts.",
+    description: "Recherche web et actualités de votre secteur, transformées en posts.",
     icon: 'radar',
     prompt: "Fais la veille de l'actualité de mon secteur et propose 3 posts à partir des sujets les plus intéressants.",
     config: {
       name: 'Veille de mon secteur',
       goal: "Repérer les actualités récentes de mon secteur et en tirer des posts utiles pour ma communauté.",
-      sources: ['google_news', 'google_trends'],
+      sources: ['web_search', 'google_news'],
       keywords: [],
       urls: [],
       platforms: ['linkedin'],
@@ -74,7 +75,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     config: {
       name: 'Surveiller un concurrent',
       goal: "Analyser ce que publie un concurrent et proposer des posts qui montrent notre différence, sans le citer.",
-      sources: ['web', 'google_news'],
+      sources: ['web', 'web_search'],
       keywords: [],
       urls: [],
       platforms: ['linkedin', 'instagram'],
@@ -150,7 +151,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     config: {
       name: 'Planifier ma semaine',
       goal: "Préparer 5 posts variés (conseil, coulisses, question, preuve sociale, actualité) pour la semaine.",
-      sources: ['google_news', 'google_trends'],
+      sources: ['web_search', 'google_news', 'google_trends'],
       keywords: [],
       urls: [],
       platforms: ['linkedin', 'instagram'],
@@ -161,5 +162,5 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
   },
 ]
 
-export const SOURCES: AgentSource[] = ['google_news', 'google_trends', 'reddit', 'youtube', 'web']
+export const SOURCES: AgentSource[] = ['web_search', 'google_news', 'google_trends', 'reddit', 'youtube', 'web']
 export const PLATFORMS = ['linkedin', 'instagram', 'facebook', 'twitter'] as const

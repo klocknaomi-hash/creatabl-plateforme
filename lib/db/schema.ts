@@ -323,6 +323,9 @@ export const aiAgentRuns = pgTable('ai_agent_runs', {
   sourcesUsed: jsonb('sources_used').$type<{ title: string; url?: string; source: string }[]>().default([]).notNull(),
   result: jsonb('result').$type<{ ideas: { title: string; content: string; platform?: string; hashtags?: string[] }[]; draftIds: string[] }>(),
   error: text('error'),
+  // Appels Browserbase consommés par l'exécution (quota mensuel de la plateforme).
+  bbSearchCalls: integer('bb_search_calls').default(0).notNull(),
+  bbFetchCalls: integer('bb_fetch_calls').default(0).notNull(),
   startedAt: timestamp('started_at').defaultNow().notNull(),
   finishedAt: timestamp('finished_at'),
 });

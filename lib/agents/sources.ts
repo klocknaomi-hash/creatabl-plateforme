@@ -216,7 +216,7 @@ export async function fetchPage(url: string): Promise<SourceItem | null> {
     const html = (await res.text()).slice(0, 600_000)
     const title = decode(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || url)
     const body = html
-      .replace(/<(script|style|noscript|svg|nav|footer|header)[\s\S]*?<\/\1>/gi, ' ')
+      .replace(/<(head|script|style|noscript|svg|nav|footer|header)[\s\S]*?<\/\1>/gi, ' ')
       .replace(/<[^>]+>/g, ' ')
       .replace(/&nbsp;/g, ' ')
       .replace(/\s+/g, ' ')
