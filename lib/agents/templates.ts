@@ -18,8 +18,8 @@ export const SOURCE_LABELS: Record<AgentSource, string> = {
 
 export const SCHEDULE_LABELS: Record<AgentSchedule, string> = {
   manual: 'Lancement manuel',
-  daily: 'Chaque jour',
-  weekly: 'Chaque lundi',
+  daily: 'Chaque jour à 7 h',
+  weekly: 'Chaque lundi à 7 h',
 }
 
 export type AgentConfig = {
@@ -33,6 +33,8 @@ export type AgentConfig = {
   output: AgentOutput
   postCount: number
   schedule: AgentSchedule
+  /** Résumé par e-mail après chaque lancement automatique. */
+  notifyEmail?: boolean
 }
 
 export type AgentTemplate = {

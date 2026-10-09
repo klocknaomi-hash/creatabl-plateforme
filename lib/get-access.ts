@@ -4,7 +4,11 @@ import { getPlanAccess, PlanAccess, isNaomiOrTest } from '@/lib/plans'
 export async function getAccess(): Promise<PlanAccess> {
   const { userId } = await auth()
   if (!userId) return getPlanAccess('starter')
+  return getAccessForClerkId(userId)
+}
 
+// Même calcul sans session (tâches planifiées) : plan lu dans les métadonnées Clerk.
+export async function getAccessForClerkId(userId: string): Promise<PlanAccess> {
   const client = await clerkClient()
   const user = await client.users.getUser(userId)
   

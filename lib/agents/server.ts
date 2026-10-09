@@ -105,6 +105,7 @@ export function normalizeConfig(input: Partial<Record<keyof AgentConfig, unknown
     output,
     postCount,
     schedule,
+    notifyEmail: input.notifyEmail !== false,
   };
 }
 

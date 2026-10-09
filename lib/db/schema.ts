@@ -306,6 +306,7 @@ export const aiAgents = pgTable('ai_agents', {
   output: text('output').default('drafts').notNull(),
   postCount: integer('post_count').default(3).notNull(),
   schedule: text('schedule').default('manual').notNull(),
+  notifyEmail: boolean('notify_email').default(true).notNull(),
   status: text('status').default('active').notNull(),
   lastRunAt: timestamp('last_run_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
