@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq, gte, isNull, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { aiAgentRuns, aiAgents, posts, userSettings, users } from "@/lib/db/schema";
 import { getAccess } from "@/lib/get-access";
@@ -9,6 +9,7 @@ import { recordAiGeneration } from "@/lib/plans/credits";
 import { generateRaw } from "@/lib/ai-provider";
 import { ensureAgentTables } from "./ensure-tables";
 import { fetchGoogleNews, fetchGoogleTrends, fetchPage, fetchReddit, fetchYoutube, type SourceItem } from "./sources";
+import { browserbaseEnabled, browserbaseFetch, browserbaseSearch, MONTHLY_LIMITS, PER_RUN } from "./browserbase";
 import {
   AGENT_TEMPLATES,
   MAX_AGENTS,
@@ -141,7 +142,7 @@ export async function draftConfigFromDescription(ctx: AgentContext, description:
     if (/reddit/.test(lower)) sources.push("reddit");
     if (/youtube|vidéo/.test(lower)) sources.push("youtube");
     if (/tendance|trend/.test(lower)) sources.push("google_trends");
-    if (sources.length === 0 || /actu|veille|news/.test(lower)) sources.push("google_news");
+    if (sources.length === 0 || /actu|veille|news|recherche|web/.test(lower)) sources.push("web_search", "google_news");
     return {
       name: description.replace(/https?:\/\/\S+/g, "").trim().split(/[.!?\n]/)[0].slice(0, 60) || "Mon agent",
       goal: description.slice(0, 1000),
@@ -159,8 +160,8 @@ export async function draftConfigFromDescription(ctx: AgentContext, description:
   const system = [
     "Tu configures un agent IA de Creatabl.ia, une plateforme de gestion des réseaux sociaux.",
     "À partir de la demande de l'utilisateur, réponds UNIQUEMENT avec un objet JSON :",
-    '{"name": string (max 40 caractères, en français), "goal": string (1 à 2 phrases), "sources": array parmi ["google_news","google_trends","reddit","youtube","web"], "keywords": array de 0 à 5 mots-clés de recherche, "platforms": array parmi ["linkedin","instagram","facebook","twitter"], "output": "drafts" ou "ideas", "postCount": entier de 1 à 5, "schedule": "manual" | "daily" | "weekly"}',
-    "Utilise \"web\" seulement si la demande contient une adresse de page. Par défaut : output \"drafts\", postCount 3, schedule \"manual\".",
+    '{"name": string (max 40 caractères, en français), "goal": string (1 à 2 phrases), "sources": array parmi ["web_search","google_news","google_trends","reddit","youtube","web"], "keywords": array de 0 à 5 mots-clés de recherche, "platforms": array parmi ["linkedin","instagram","facebook","twitter"], "output": "drafts" ou "ideas", "postCount": entier de 1 à 5, "schedule": "manual" | "daily" | "weekly"}',
+    "\"web_search\" = recherche sur tout le web (à privilégier pour la veille et les sujets de niche). Utilise \"web\" seulement si la demande contient une adresse de page. Par défaut : output \"drafts\", postCount 3, schedule \"manual\".",
     brand.brandName ? `Marque de l'utilisateur : ${brand.brandName}.` : "",
     brand.description ? `Activité : ${brand.description}.` : "",
   ].filter(Boolean).join("\n");
@@ -175,6 +176,25 @@ export async function draftConfigFromDescription(ctx: AgentContext, description:
     console.error("[agents] draft config failed:", err);
     return fallback();
   }
+}
+
+// Appels Browserbase consommés ce mois-ci par toute la plateforme.
+export async function browserbaseMonthlyUsage() {
+  const now = new Date();
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const [row] = await db
+    .select({
+      search: sql<number>`coalesce(sum(${aiAgentRuns.bbSearchCalls}), 0)`,
+      fetch: sql<number>`coalesce(sum(${aiAgentRuns.bbFetchCalls}), 0)`,
+    })
+    .from(aiAgentRuns)
+    .where(gte(aiAgentRuns.startedAt, start));
+  return {
+    search: Number(row?.search ?? 0),
+    fetch: Number(row?.fetch ?? 0),
+    limits: MONTHLY_LIMITS,
+    enabled: browserbaseEnabled(),
+  };
 }
 
 // ─── Exécution d'un agent ───
@@ -198,34 +218,80 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
   const found: SourceItem[] = [];
   const brand = await brandContext(ctx.user.id);
   const query = agent.keywords.length ? agent.keywords.join(" ") : brand.description || agent.goal.slice(0, 120);
+  let bbSearchCalls = 0;
+  let bbFetchCalls = 0;
 
   try {
+    // Budget Browserbase de cette exécution, dans la limite du quota mensuel.
+    const usage = browserbaseEnabled() ? await browserbaseMonthlyUsage() : null;
+    let searchBudget = usage ? Math.min(PER_RUN.searches, Math.max(0, MONTHLY_LIMITS.search - usage.search)) : 0;
+    let fetchBudget = usage ? Math.min(PER_RUN.fetches, Math.max(0, MONTHLY_LIMITS.fetch - usage.fetch)) : 0;
+
     // 1. Recherche dans les sources choisies, en parallèle.
     const tasks: [string, Promise<SourceItem[]>][] = [];
+    let webSearchFallback = false;
     for (const s of agent.sources) {
+      if (s === "web_search") {
+        if (searchBudget > 0) {
+          searchBudget--;
+          bbSearchCalls++;
+          tasks.push(["Recherche web", browserbaseSearch(query, 6)]);
+        } else if (!agent.sources.includes("google_news")) {
+          webSearchFallback = true;
+          tasks.push(["Google Actualités", fetchGoogleNews(query, 6)]);
+        } else {
+          webSearchFallback = true;
+        }
+      }
       if (s === "google_news") tasks.push(["Google Actualités", fetchGoogleNews(query, 6)]);
       if (s === "reddit") tasks.push(["Reddit", fetchReddit({ query: agent.keywords.length ? query : undefined, max: 6 })]);
       if (s === "youtube") tasks.push(["YouTube", fetchYoutube({ query: agent.keywords.length ? query : undefined, max: 4 })]);
       if (s === "google_trends")
         tasks.push(["Google Trends", fetchGoogleTrends().then((t) => t.map((x) => ({ title: x.title, url: x.url, source: "Google Trends" })))]);
     }
+    if (webSearchFallback) {
+      steps.push({
+        label: "Recherche web",
+        status: "skipped",
+        detail: browserbaseEnabled() ? "quota du mois atteint : Google Actualités utilisé" : "non configurée : Google Actualités utilisé",
+      });
+    }
     const results = await Promise.all(tasks.map(([, p]) => p.catch(() => [] as SourceItem[])));
+    const webResults: SourceItem[] = [];
     tasks.forEach(([label], i) => {
       const n = results[i].length;
       steps.push({ label: `Recherche : ${label}`, status: n ? "done" : "failed", detail: n ? `${n} résultat${n > 1 ? "s" : ""}` : "aucun résultat" });
-      found.push(...results[i]);
+      if (label === "Recherche web") webResults.push(...results[i]);
+      else found.push(...results[i]);
     });
 
-    // 2. Lecture des pages web demandées.
-    if (agent.sources.includes("web") && agent.urls.length) {
-      const pages = await Promise.all(agent.urls.slice(0, 5).map((u) => fetchPage(u)));
+    // 2. Lecture des pages : adresses données par l'utilisateur, puis meilleurs
+    //    résultats de la recherche web. Browserbase d'abord, lecture simple en repli.
+    const toRead = [
+      ...(agent.sources.includes("web") ? agent.urls.slice(0, 5) : []),
+      ...webResults.slice(0, 3).map((r) => r.url!).filter(Boolean),
+    ].filter((u, i, a) => a.indexOf(u) === i);
+    if (toRead.length) {
+      const read = async (url: string): Promise<SourceItem | null> => {
+        if (fetchBudget > 0) {
+          fetchBudget--;
+          bbFetchCalls++;
+          const page = await browserbaseFetch(url).catch(() => null);
+          if (page) return page;
+        }
+        return fetchPage(url);
+      };
+      const pages = await Promise.all(toRead.map(read));
       const ok = pages.filter((p): p is SourceItem => Boolean(p));
       steps.push({
-        label: "Lecture des pages web",
+        label: "Lecture des pages",
         status: ok.length ? "done" : "failed",
-        detail: `${ok.length} page${ok.length > 1 ? "s" : ""} lue${ok.length > 1 ? "s" : ""} sur ${agent.urls.length}`,
+        detail: `${ok.length} page${ok.length > 1 ? "s" : ""} lue${ok.length > 1 ? "s" : ""} sur ${toRead.length}`,
       });
-      found.unshift(...ok);
+      const readUrls = new Set(ok.map((p) => p.url));
+      found.unshift(...ok, ...webResults.filter((r) => !readUrls.has(r.url)));
+    } else {
+      found.unshift(...webResults);
     }
 
     if (found.length === 0) throw new Error("Aucune source n'a renvoyé de contenu. Essayez d'autres mots-clés ou une autre source.");
@@ -292,6 +358,8 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
       .set({
         status: "succeeded",
         steps,
+        bbSearchCalls,
+        bbFetchCalls,
         sourcesUsed: found.slice(0, 14).map((s) => ({ title: s.title, url: s.url, source: s.source })),
         result: { ideas, draftIds },
         finishedAt: new Date(),
@@ -308,6 +376,8 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
       .set({
         status: "failed",
         steps,
+        bbSearchCalls,
+        bbFetchCalls,
         sourcesUsed: found.slice(0, 14).map((s) => ({ title: s.title, url: s.url, source: s.source })),
         error: message,
         finishedAt: new Date(),
