@@ -1,3 +1,4 @@
+import { agentsScheduler, runScheduledAgentFn } from "./agents";
 import { inngest } from "./client";
 import { db } from "@/lib/db";
 import { posts, postPlatformResults, socialAccounts } from "@/lib/db/schema";
@@ -118,5 +119,5 @@ export const createOrEditPost = inngest.createFunction(
 import { commentMonitor } from "./workers/comment-monitor";
 import { syncAllMetrics } from "./metrics-syncer";
 
-export const functions = [createOrEditPost, commentMonitor, syncAllMetrics];
+export const functions = [createOrEditPost, commentMonitor, syncAllMetrics, agentsScheduler, runScheduledAgentFn];
 

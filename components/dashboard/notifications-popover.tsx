@@ -29,44 +29,48 @@ export interface NotificationItem {
   link?: string;
 }
 
-const SYSTEM_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: "news-threads",
-    title: "L'intégration Threads est disponible !",
-    description: "Vous pouvez désormais connecter votre compte Threads (Meta) et planifier vos publications automatiquement depuis Creatabl.",
-    type: "news",
-    timestamp: "Il y a 2 heures",
-    link: "/dashboard/settings/connections"
-  },
-  {
-    id: "alert-meta-reels",
-    title: "Incident API Instagram Reels",
-    description: "Meta signale des perturbations sur l'API de publication des Reels. Certaines publications planifiées peuvent subir des retards.",
-    type: "alert",
-    timestamp: "Il y a 5 heures"
-  },
-  {
-    id: "update-gen-ia",
-    title: "Génération de posts IA optimisée",
-    description: "Le moteur de suggestions d'idées IA intègre désormais les dernières tendances YouTube et Reddit avec plus de précision.",
-    type: "update",
-    timestamp: "Hier",
-    link: "/dashboard/agent-ia"
-  },
-  {
-    id: "platform-tiktok",
-    title: "Limites temporaires de l'API TikTok",
-    description: "TikTok impose de nouvelles limites de fréquence de publication pour les comptes professionnels créés récemment. Pensez à valider vos informations.",
-    type: "platform",
-    timestamp: "Il y a 3 jours"
-  }
-];
+// Délai lisible : « À l'instant », « Il y a 3 h », « Hier », « Il y a 4 jours ».
+function relative(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const min = Math.round(diff / 60000);
+  if (min < 1) return "À l'instant";
+  if (min < 60) return `Il y a ${min} min`;
+  const h = Math.round(min / 60);
+  if (h < 24) return `Il y a ${h} h`;
+  const d = Math.round(h / 24);
+  return d === 1 ? "Hier" : `Il y a ${d} jours`;
+}
 
 export function NotificationsPopover({ className }: { className?: string }) {
   const router = useRouter();
   const [readIds, setReadIds] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [items, setItems] = useState<NotificationItem[]>([]);
+
+  // Vraies notifications du compte : exécutions d'agents et publications en échec.
+  useEffect(() => {
+    let cancelled = false;
+    const load = () =>
+      fetch("/api/notifications")
+        .then((r) => (r.ok ? r.json() : { items: [] }))
+        .then((d) => {
+          if (cancelled) return;
+          setItems(
+            (d.items ?? []).map((n: { id: string; title: string; description: string; type: NotificationItem["type"]; at: string; link?: string }) => ({
+              ...n,
+              timestamp: relative(n.at),
+            }))
+          );
+        })
+        .catch(() => {});
+    load();
+    const t = setInterval(load, 5 * 60 * 1000);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+    };
+  }, [open]);
 
   useEffect(() => {
     setMounted(true);
@@ -105,7 +109,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
   };
 
   const markAllAsRead = () => {
-    const allIds = SYSTEM_NOTIFICATIONS.map(n => n.id);
+    const allIds = items.map(n => n.id);
     saveReadIds(allIds);
   };
 
@@ -118,7 +122,7 @@ export function NotificationsPopover({ className }: { className?: string }) {
   };
 
   const unreadCount = mounted 
-    ? SYSTEM_NOTIFICATIONS.filter(n => !readIds.includes(n.id)).length 
+    ? items.filter(n => !readIds.includes(n.id)).length 
     : 0;
 
   const getTypeStyles = (type: NotificationItem["type"]) => {
@@ -193,16 +197,16 @@ export function NotificationsPopover({ className }: { className?: string }) {
 
         {/* List */}
         <div className="max-h-[360px] overflow-y-auto divide-y divide-border/60">
-          {SYSTEM_NOTIFICATIONS.length === 0 ? (
+          {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
               <div className="size-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground mb-2">
                 <Info className="size-5" />
               </div>
               <p className="text-xs font-semibold text-foreground">Aucune notification</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Nous vous préviendrons des nouveautés et alertes.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Les résultats de vos agents et les alertes de publication apparaîtront ici.</p>
             </div>
           ) : (
-            SYSTEM_NOTIFICATIONS.map((item) => {
+            items.map((item) => {
               const isRead = readIds.includes(item.id);
               const styles = getTypeStyles(item.type);
               const Icon = styles.icon;

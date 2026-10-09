@@ -47,6 +47,7 @@ export function ensureAgentTables() {
       )`;
       await sql`ALTER TABLE ai_agent_runs ADD COLUMN IF NOT EXISTS bb_search_calls integer NOT NULL DEFAULT 0`;
       await sql`ALTER TABLE ai_agent_runs ADD COLUMN IF NOT EXISTS bb_fetch_calls integer NOT NULL DEFAULT 0`;
+      await sql`ALTER TABLE ai_agents ADD COLUMN IF NOT EXISTS notify_email boolean NOT NULL DEFAULT true`;
       await sql`CREATE INDEX IF NOT EXISTS ai_agents_user_idx ON ai_agents(user_id)`;
       await sql`CREATE INDEX IF NOT EXISTS ai_agent_runs_agent_idx ON ai_agent_runs(agent_id, started_at DESC)`;
     })().catch((err) => {

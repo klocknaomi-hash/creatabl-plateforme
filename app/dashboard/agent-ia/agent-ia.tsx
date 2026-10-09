@@ -79,6 +79,18 @@ const TEMPLATE_ICONS: Record<AgentTemplate["icon"], React.ComponentType<{ size?:
   calendar: CalendarDays,
 }
 
+// Prochain lancement automatique (7 h, heure de Paris), pour l'affichage.
+function nextRunLabel(schedule: string) {
+  if (schedule === "manual") return null
+  const now = new Date()
+  const parisHour = Number(new Intl.DateTimeFormat("fr-FR", { hour: "numeric", hour12: false, timeZone: "Europe/Paris" }).format(now))
+  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: "Europe/Paris" }).format(now)
+  if (schedule === "daily") return parisHour < 7 ? "Aujourd'hui à 7 h" : "Demain à 7 h"
+  if (weekday === "Mon" && parisHour < 7) return "Aujourd'hui à 7 h"
+  if (weekday === "Sun") return "Demain à 7 h"
+  return "Lundi à 7 h"
+}
+
 const iconFor = (templateId?: string | null) => {
   const t = AGENT_TEMPLATES.find((x) => x.id === templateId)
   return t ? TEMPLATE_ICONS[t.icon] : Bot
@@ -468,6 +480,9 @@ function AgentsTab({
               <div>
                 <dt className="text-xs text-[#6B6780]">Fréquence</dt>
                 <dd className="mt-1 text-[#14121F]">{SCHEDULE_LABELS[a.schedule as AgentSchedule]}</dd>
+                {a.status === "active" && nextRunLabel(a.schedule) && (
+                  <dd className="text-xs text-[#6B6780]">Prochain : {nextRunLabel(a.schedule)}</dd>
+                )}
               </div>
               <div>
                 <dt className="text-xs text-[#6B6780]">Résultat</dt>
@@ -555,7 +570,10 @@ function RunRow({ run, open, onToggle }: { run: Run; open: boolean; onToggle: ()
       <button type="button" className="flex w-full items-center gap-3 p-4 text-left" onClick={onToggle} aria-expanded={open}>
         <Badge tone={s.tone}>{s.label}</Badge>
         <span className="min-w-0 flex-1">
-          <span className="block truncate font-semibold text-[#14121F]">{run.agentName}</span>
+          <span className="flex items-center gap-2">
+            <span className="truncate font-semibold text-[#14121F]">{run.agentName}</span>
+            {run.trigger === "schedule" && <Badge plain>Automatique</Badge>}
+          </span>
           <span className={`block truncate text-sm ${run.status === "failed" ? "text-[#B42318]" : "text-[#4B4B63]"}`}>{summary}</span>
         </span>
         <span className="hidden text-sm text-[#6B6780] sm:block">{formatPostDate(run.startedAt)}</span>

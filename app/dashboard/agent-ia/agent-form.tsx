@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { X } from "lucide-react"
 import NetworkLogo, { toNetwork } from "@/components/ds/NetworkLogo"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import {
   PLATFORMS,
   SCHEDULE_LABELS,
@@ -66,10 +67,10 @@ export function AgentForm({
   }
 
   return (
-    <div className="cr-modal-scrim fixed inset-0 z-[90] overflow-y-auto" onClick={() => !saving && onClose()}>
+    <div className="cr-modal-scrim fixed inset-0 z-[90] overflow-y-auto" style={{ placeItems: "start center" }} onClick={() => !saving && onClose()}>
       <form
         className="cr-modal"
-        style={{ maxWidth: 640 }}
+        style={{ maxWidth: 640, margin: "auto 0" }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="agent-form-title"
@@ -173,9 +174,18 @@ export function AgentForm({
             </div>
           </div>
           {config.schedule !== "manual" && (
-            <p className="cr-help -mt-2">
-              Les lancements automatiques arrivent bientôt. En attendant, lancez l&apos;agent avec « Lancer maintenant ».
-            </p>
+            <>
+              <p className="cr-help -mt-2">
+                L&apos;agent se lance tout seul à 7 h (heure de Paris){config.schedule === "weekly" ? ", chaque lundi" : ", chaque jour"}. Vous pouvez aussi le lancer à tout moment.
+              </p>
+              <label className="flex items-center justify-between gap-4 rounded-[12px] border border-[#E8E6F0] p-4">
+                <span>
+                  <span className="block text-sm font-semibold text-[#14121F]">Résumé par e-mail</span>
+                  <span className="block text-xs text-[#6B6780]">Recevoir les posts préparés après chaque lancement automatique.</span>
+                </span>
+                <Switch checked={config.notifyEmail !== false} onCheckedChange={(v: boolean) => set("notifyEmail", v)} />
+              </label>
+            </>
           )}
 
           {error && <p className="cr-help cr-help--error" role="alert">{error}</p>}
