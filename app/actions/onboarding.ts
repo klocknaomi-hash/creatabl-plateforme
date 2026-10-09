@@ -197,6 +197,21 @@ export async function completeOnboarding(selectedPlan?: string, selectedBilling?
 
     const client = await clerkClient();
     const now = new Date();
+
+    // Plan Free (inscription sans carte) ou abonnement Stripe déjà souscrit :
+    // l'onboarding se termine sans démarrer d'essai ni toucher au plan.
+    const dbUser = await db.query.users.findFirst({ where: eq(users.clerkId, userId) });
+    const isFree = selectedPlan === "free" || (dbUser?.plan === "free" && dbUser?.selectedPlan === "free");
+    if (dbUser?.stripeSubscriptionId || isFree) {
+      await client.users.updateUserMetadata(userId, { publicMetadata: { onboardingStep: "done" } });
+      await db
+        .update(users)
+        .set({ onboardingCompletedAt: now, onboardingCompleted: true })
+        .where(eq(users.clerkId, userId));
+      revalidatePath("/dashboard");
+      return { success: true };
+    }
+
     const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
 
     const plan = selectedPlan || "starter";
