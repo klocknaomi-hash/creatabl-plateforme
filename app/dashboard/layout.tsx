@@ -1,5 +1,5 @@
 import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
+import { redirect, unstable_rethrow } from 'next/navigation'
 import { db } from '@/lib/db'
 import { users, posts } from '@/lib/db/schema'
 import { and, count, eq } from 'drizzle-orm'
@@ -185,7 +185,19 @@ export default async function DashboardLayout({
       </DashboardProviders>
     );
   } catch (error) {
+    // Les redirections de Next (connexion, essai terminé) passent par une exception :
+    // elles doivent sortir du try. Une vraie erreur ne renvoie plus vers /sign-in,
+    // qui renvoyait aussitôt ici : la page clignotait entre les deux sans fin.
+    unstable_rethrow(error)
     console.error('Dashboard layout error:', error)
-    redirect('/sign-in')
+    return (
+      <main className="flex min-h-screen w-full items-center justify-center bg-[#F8F7FC] p-6">
+        <div className="max-w-md rounded-2xl border border-[#E8E6F0] bg-white p-8 text-center">
+          <h1 className="text-xl font-semibold text-[#14121F]">Le tableau de bord n&apos;a pas pu se charger</h1>
+          <p className="mt-2 text-sm text-[#4B4B63]">Une erreur temporaire est survenue. Réessayez dans un instant.</p>
+          <a href="/dashboard" className="cr-btn cr-btn--primary mt-6 inline-flex">Réessayer</a>
+        </div>
+      </main>
+    )
   }
 }
