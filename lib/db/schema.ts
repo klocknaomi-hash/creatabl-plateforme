@@ -288,3 +288,41 @@ export const workspaceMembers = pgTable(
 
 
 
+
+// ─── Agents IA automatiques (plan Business) ───
+// Un agent = un objectif, des sources et un résultat attendu ; chaque lancement
+// crée une exécution avec ses étapes, ses sources et ce qu'elle a produit.
+export const aiAgents = pgTable('ai_agents', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  organizationId: text('organization_id'),
+  name: text('name').notNull(),
+  goal: text('goal').notNull(),
+  template: text('template'),
+  sources: jsonb('sources').$type<string[]>().default([]).notNull(),
+  keywords: jsonb('keywords').$type<string[]>().default([]).notNull(),
+  urls: jsonb('urls').$type<string[]>().default([]).notNull(),
+  platforms: jsonb('platforms').$type<string[]>().default([]).notNull(),
+  output: text('output').default('drafts').notNull(),
+  postCount: integer('post_count').default(3).notNull(),
+  schedule: text('schedule').default('manual').notNull(),
+  status: text('status').default('active').notNull(),
+  lastRunAt: timestamp('last_run_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const aiAgentRuns = pgTable('ai_agent_runs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  agentId: uuid('agent_id').references(() => aiAgents.id, { onDelete: 'cascade' }).notNull(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  organizationId: text('organization_id'),
+  status: text('status').default('running').notNull(),
+  trigger: text('trigger').default('manual').notNull(),
+  steps: jsonb('steps').$type<{ label: string; status: 'done' | 'failed' | 'skipped'; detail?: string }[]>().default([]).notNull(),
+  sourcesUsed: jsonb('sources_used').$type<{ title: string; url?: string; source: string }[]>().default([]).notNull(),
+  result: jsonb('result').$type<{ ideas: { title: string; content: string; platform?: string; hashtags?: string[] }[]; draftIds: string[] }>(),
+  error: text('error'),
+  startedAt: timestamp('started_at').defaultNow().notNull(),
+  finishedAt: timestamp('finished_at'),
+});

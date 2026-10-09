@@ -276,3 +276,10 @@ export async function generatePost(options: GeneratePostOptions): Promise<Genera
       throw new Error(`Unknown provider: ${provider}`);
   }
 }
+
+// Génération libre (consigne système fournie par l'appelant), pour les usages qui
+// attendent une réponse structurée, comme les agents IA (JSON).
+export async function generateRaw(content: string, systemPrompt: string): Promise<GeneratePostResult> {
+  if (!content?.trim()) throw new Error("Content cannot be empty");
+  return generateWithGemini(content, systemPrompt);
+}
