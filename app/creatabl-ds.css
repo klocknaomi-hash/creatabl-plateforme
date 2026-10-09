@@ -429,3 +429,8 @@ a.cr-net { text-decoration: none; }
 .cr-alert { flex-wrap: wrap; }
 .cr-alert > div.flex-1 { flex: 1 1 220px; }
 .cr-trial > div.flex-1 { flex: 1 1 240px; }
+/* Onglets : pas de retour à la ligne ; défilement horizontal si l'écran est étroit. */
+.cr-tabs > .cr-tab { flex: none; white-space: nowrap; }
+.cr-tabs.overflow-x-auto { scrollbar-width: none; }
+.cr-tabs.overflow-x-auto .cr-tab[aria-selected="true"]::after { bottom: 0; }
+@media (max-width: 639px) { .cr-tabs { gap: 16px; } }
