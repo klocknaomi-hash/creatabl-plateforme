@@ -25,7 +25,9 @@ export default async function OnboardingPage() {
           <Check className="w-10 h-10 text-[#0E7445]" />
         </div>
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-[#14121F]">Abonnement activé !</h1>
+          <h1 className="text-3xl font-bold text-[#14121F]">
+            {user?.stripeSubscriptionId ? "Abonnement activé !" : "Compte créé !"}
+          </h1>
           <p className="text-xl text-[#4B4B63]">
             Préparation de votre espace de travail...
           </p>
