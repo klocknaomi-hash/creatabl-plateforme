@@ -94,3 +94,76 @@ export async function browserbaseFetch(url: string): Promise<SourceItem | null> 
   } catch {}
   return { title: title.slice(0, 200), url, source: host, excerpt: text.slice(0, 3000) };
 }
+
+// ─── Navigation complète (vrai navigateur dans le cloud) ───
+// Pour les pages que la lecture simple ne sait pas lire : contenu chargé en
+// JavaScript, bandeau de cookies, chargement au défilement. Nécessite aussi
+// BROWSERBASE_PROJECT_ID. Le plan gratuit donne 1 heure de navigateur par mois :
+// chaque session est courte (25 s max) et limitée à 2 par exécution.
+export const browserEnabled = () => browserbaseEnabled() && Boolean(process.env.BROWSERBASE_PROJECT_ID);
+
+export const BROWSER_LIMITS = {
+  monthlyMinutes: Number(process.env.BROWSERBASE_MONTHLY_BROWSER_MINUTES) || 50,
+  perRun: 2,
+};
+
+const COOKIE_BUTTONS = [
+  "Tout accepter",
+  "Accepter tout",
+  "Accepter",
+  "J'accepte",
+  "Accept all",
+  "Accept",
+  "I agree",
+  "OK",
+];
+
+type SessionResponse = { id: string; connectUrl: string };
+
+export async function browserbaseRender(url: string): Promise<{ page: SourceItem | null; seconds: number }> {
+  const started = Date.now();
+  const projectId = process.env.BROWSERBASE_PROJECT_ID;
+  const session = await call<SessionResponse>("/sessions", { projectId, timeout: 60 }, 15000);
+  const { chromium } = await import("playwright-core");
+  const browser = await chromium.connectOverCDP(session.connectUrl, { timeout: 15000 });
+  try {
+    const context = browser.contexts()[0] ?? (await browser.newContext());
+    const page = context.pages()[0] ?? (await context.newPage());
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
+
+    // Bandeau de cookies : un clic sur le bouton d'acceptation s'il existe.
+    for (const label of COOKIE_BUTTONS) {
+      const btn = page.getByRole("button", { name: label, exact: true }).first();
+      if (await btn.isVisible({ timeout: 300 }).catch(() => false)) {
+        await btn.click({ timeout: 2000 }).catch(() => {});
+        break;
+      }
+    }
+    // Défilement pour charger le contenu paresseux.
+    for (let i = 0; i < 3; i++) {
+      await page.mouse.wheel(0, 1600);
+      await page.waitForTimeout(600);
+    }
+
+    const title = (await page.title().catch(() => "")) || url;
+    const text = await page
+      .evaluate(() => {
+        const root = document.querySelector("article, main, [role=main]") ?? document.body;
+        return (root as HTMLElement).innerText || "";
+      })
+      .catch(() => "");
+    let host = "web";
+    try {
+      host = new URL(url).hostname.replace(/^www\./, "");
+    } catch {}
+    const clean = text.replace(/\n{3,}/g, "\n\n").trim();
+    return {
+      page: clean.length > 80 ? { title: title.slice(0, 200), url, source: `${host} · navigateur`, excerpt: clean.slice(0, 3000) } : null,
+      seconds: Math.ceil((Date.now() - started) / 1000),
+    };
+  } finally {
+    await browser.close().catch(() => {});
+    // Libère la session tout de suite pour ne pas consommer de minutes inutiles.
+    await call("/sessions/" + session.id, { projectId, status: "REQUEST_RELEASE" }, 8000).catch(() => {});
+  }
+}

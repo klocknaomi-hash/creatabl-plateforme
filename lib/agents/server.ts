@@ -9,7 +9,7 @@ import { recordAiGeneration } from "@/lib/plans/credits";
 import { generateRaw } from "@/lib/ai-provider";
 import { ensureAgentTables } from "./ensure-tables";
 import { fetchGoogleNews, fetchGoogleTrends, fetchPage, fetchReddit, fetchYoutube, type SourceItem } from "./sources";
-import { browserbaseEnabled, browserbaseFetch, browserbaseSearch, MONTHLY_LIMITS, PER_RUN } from "./browserbase";
+import { BROWSER_LIMITS, browserbaseEnabled, browserbaseFetch, browserbaseRender, browserbaseSearch, browserEnabled, MONTHLY_LIMITS, PER_RUN } from "./browserbase";
 import {
   AGENT_TEMPLATES,
   MAX_AGENTS,
@@ -187,12 +187,14 @@ export async function browserbaseMonthlyUsage() {
     .select({
       search: sql<number>`coalesce(sum(${aiAgentRuns.bbSearchCalls}), 0)`,
       fetch: sql<number>`coalesce(sum(${aiAgentRuns.bbFetchCalls}), 0)`,
+      browserSeconds: sql<number>`coalesce(sum(${aiAgentRuns.bbBrowserSeconds}), 0)`,
     })
     .from(aiAgentRuns)
     .where(gte(aiAgentRuns.startedAt, start));
   return {
     search: Number(row?.search ?? 0),
     fetch: Number(row?.fetch ?? 0),
+    browserSeconds: Number(row?.browserSeconds ?? 0),
     limits: MONTHLY_LIMITS,
     enabled: browserbaseEnabled(),
   };
@@ -221,12 +223,17 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
   const query = agent.keywords.length ? agent.keywords.join(" ") : brand.description || agent.goal.slice(0, 120);
   let bbSearchCalls = 0;
   let bbFetchCalls = 0;
+  let bbBrowserSeconds = 0;
 
   try {
     // Budget Browserbase de cette exécution, dans la limite du quota mensuel.
     const usage = browserbaseEnabled() ? await browserbaseMonthlyUsage() : null;
     let searchBudget = usage ? Math.min(PER_RUN.searches, Math.max(0, MONTHLY_LIMITS.search - usage.search)) : 0;
     let fetchBudget = usage ? Math.min(PER_RUN.fetches, Math.max(0, MONTHLY_LIMITS.fetch - usage.fetch)) : 0;
+    // Navigateur complet : seulement s'il reste plus d'une minute sur le quota du mois.
+    let browserBudget =
+      usage && browserEnabled() && BROWSER_LIMITS.monthlyMinutes * 60 - usage.browserSeconds > 60 ? BROWSER_LIMITS.perRun : 0;
+    let rendered = 0;
 
     // 1. Recherche dans les sources choisies, en parallèle.
     const tasks: [string, Promise<SourceItem[]>][] = [];
@@ -274,20 +281,33 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
     ].filter((u, i, a) => a.indexOf(u) === i);
     if (toRead.length) {
       const read = async (url: string): Promise<SourceItem | null> => {
+        let page: SourceItem | null = null;
         if (fetchBudget > 0) {
           fetchBudget--;
           bbFetchCalls++;
-          const page = await browserbaseFetch(url).catch(() => null);
-          if (page) return page;
+          page = await browserbaseFetch(url).catch(() => null);
         }
-        return fetchPage(url);
+        if (!page) page = await fetchPage(url);
+        // Page vide ou presque (contenu chargé en JavaScript) : vrai navigateur.
+        if ((!page || (page.excerpt?.length ?? 0) < 400) && browserBudget > 0) {
+          browserBudget--;
+          const r = await browserbaseRender(url).catch(() => null);
+          if (r) {
+            bbBrowserSeconds += r.seconds;
+            if (r.page) {
+              rendered++;
+              return r.page;
+            }
+          }
+        }
+        return page;
       };
       const pages = await Promise.all(toRead.map(read));
       const ok = pages.filter((p): p is SourceItem => Boolean(p));
       steps.push({
         label: "Lecture des pages",
         status: ok.length ? "done" : "failed",
-        detail: `${ok.length} page${ok.length > 1 ? "s" : ""} lue${ok.length > 1 ? "s" : ""} sur ${toRead.length}`,
+        detail: `${ok.length} page${ok.length > 1 ? "s" : ""} lue${ok.length > 1 ? "s" : ""} sur ${toRead.length}${rendered ? ` (dont ${rendered} avec navigateur)` : ""}`,
       });
       const readUrls = new Set(ok.map((p) => p.url));
       found.unshift(...ok, ...webResults.filter((r) => !readUrls.has(r.url)));
@@ -361,6 +381,7 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
         steps,
         bbSearchCalls,
         bbFetchCalls,
+        bbBrowserSeconds,
         sourcesUsed: found.slice(0, 14).map((s) => ({ title: s.title, url: s.url, source: s.source })),
         result: { ideas, draftIds },
         finishedAt: new Date(),
@@ -379,6 +400,7 @@ export async function runAgent(ctx: AgentContext, agent: AgentRow, trigger: "man
         steps,
         bbSearchCalls,
         bbFetchCalls,
+        bbBrowserSeconds,
         sourcesUsed: found.slice(0, 14).map((s) => ({ title: s.title, url: s.url, source: s.source })),
         error: message,
         finishedAt: new Date(),
