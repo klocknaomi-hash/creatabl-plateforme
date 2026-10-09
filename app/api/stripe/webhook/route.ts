@@ -136,6 +136,13 @@ export async function POST(req: NextRequest) {
         updateData.trialEndsAt = new Date(subscription.trial_end * 1000);
       }
 
+      // Paiement définitivement refusé : retour au plan Free.
+      const lapsed = subscription.status === 'unpaid' || subscription.status === 'incomplete_expired';
+      if (lapsed) {
+        updateData.plan = 'free';
+        updateData.isSubscribed = false;
+      }
+
       await db.update(users)
         .set(updateData)
         .where(userQuery);
@@ -143,7 +150,7 @@ export async function POST(req: NextRequest) {
       if (targetClerkId) {
         await (await clerkClient()).users.updateUserMetadata(targetClerkId, {
           publicMetadata: {
-            plan: plan,
+            plan: lapsed ? 'free' : plan,
             billing: billing,
             cancelAtPeriodEnd: isCanceling,
             cancelsAt: cancelsAtDate ? cancelsAtDate.toISOString() : null,
@@ -159,14 +166,14 @@ export async function POST(req: NextRequest) {
     const invoice = event.data.object as Stripe.Invoice;
     const customerId = invoice.customer as string;
 
+    // Stripe relance automatiquement le paiement pendant quelques jours : l'accès
+    // est conservé. Le passage au plan Free se fait quand Stripe abandonne
+    // (abonnement « unpaid » ou supprimé, gérés plus bas).
     await db.update(users)
-      .set({ 
-        subscriptionStatus: 'past_due',
-        plan: 'free',
-      })
+      .set({ subscriptionStatus: 'past_due' })
       .where(eq(users.stripeCustomerId, customerId));
 
-    console.log(`⚠️ Payment failed for customer ${customerId} — fallback to free plan`);
+    console.log(`⚠️ Payment failed for customer ${customerId} — Stripe will retry`);
   }
 
   // Handle subscription canceled / deleted — fallback to free plan

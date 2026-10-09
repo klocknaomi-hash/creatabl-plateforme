@@ -23,6 +23,25 @@ export function SubscriptionManager({
   hasStripeSubscription,
 }: SubscriptionManagerProps) {
   const [loading, setLoading] = useState(false)
+  const [portalLoading, setPortalLoading] = useState(false)
+  const confirmDialog = useConfirm()
+
+  // Portail Stripe : carte bancaire, factures, adresse de facturation.
+  const openPortal = async () => {
+    setPortalLoading(true)
+    try {
+      const res = await fetch('/api/stripe/portal', { method: 'POST' })
+      const data = await res.json().catch(() => ({}))
+      if (res.ok && data.url) {
+        window.location.href = data.url
+        return
+      }
+      toast.error(data.message || "Impossible d'ouvrir l'espace de facturation.")
+    } catch {
+      toast.error("Impossible d'ouvrir l'espace de facturation.")
+    }
+    setPortalLoading(false)
+  }
 
   if (!hasStripeSubscription || plan === 'free') {
     return null
@@ -38,7 +57,6 @@ export function SubscriptionManager({
       })
     : null
 
-  const confirmDialog = useConfirm()
 
   const handleCancel = async () => {
     const confirmCancel = await confirmDialog({
@@ -103,7 +121,11 @@ export function SubscriptionManager({
             )}
           </div>
 
-          {isCanceling ? (
+          {subscriptionStatus === 'past_due' ? (
+            <p className="text-sm text-[#8A4B00] leading-relaxed pt-1">
+              Le dernier paiement a échoué. Stripe va réessayer automatiquement dans les prochains jours : mettez à jour votre carte dans « Moyen de paiement et factures » pour garder votre plan.
+            </p>
+          ) : isCanceling ? (
             <p className="text-sm text-[#4B4B63] leading-relaxed pt-1">
               Votre abonnement <strong className="text-[#14121F]">{plan.toUpperCase()}</strong> se termine le{' '}
               <strong className="text-[#14121F]">{formattedDate || 'la fin de la période'}</strong>. Vous continuerez à utiliser Creatabl jusqu'à cette date.
@@ -115,7 +137,10 @@ export function SubscriptionManager({
           )}
         </div>
 
-        <div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="outline" loading={portalLoading} onClick={openPortal}>
+            Moyen de paiement et factures
+          </Button>
           {isCanceling ? (
             <Button
               onClick={handleReactivate}

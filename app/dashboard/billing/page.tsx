@@ -6,8 +6,10 @@ import { Lock, Clock, CheckCircle2 } from "lucide-react";
 import { getTrialStatus } from "@/lib/trial";
 import { BillingPlans } from "./billing-plans";
 import { SubscriptionManager } from "@/components/billing/SubscriptionManager";
+import { Alert } from "@/components/ds";
 
-export default async function BillingPage() {
+export default async function BillingPage({ searchParams }: { searchParams: Promise<{ changement?: string }> }) {
+  const { changement } = await searchParams;
   const user = await getCurrentUser();
   if (!user) redirect("/sign-in");
 
@@ -37,6 +39,12 @@ export default async function BillingPage() {
           <p className="text-sm text-muted-foreground">Gérez votre plan et consultez vos jours d'essai.</p>
         </div>
       </header>
+
+      {changement === "ok" && (
+        <Alert tone="success" title="Votre plan a été modifié">
+          Le changement est immédiat. La différence est calculée au prorata sur votre prochaine facture.
+        </Alert>
+      )}
 
       {/* SECTION MANAGED SUBSCRIPTION (RESILIER / REACTIVER) */}
       <SubscriptionManager
