@@ -48,7 +48,7 @@ export async function runScheduledAgent(agentId: string) {
   const run = await runAgent({ clerkId: user.clerkId, orgId: agent.organizationId, user }, agent, "schedule");
   if (agent.notifyEmail && user.email) {
     try {
-      await sendAgentRunEmail(user.email, agent.name, run);
+      await sendAgentRunEmail(user.email, agent.name, run, user.name?.split(" ")[0]);
     } catch (err) {
       console.error("[agents] e-mail de résumé non envoyé :", err);
     }
