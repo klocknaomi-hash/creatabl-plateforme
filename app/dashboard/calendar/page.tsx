@@ -599,7 +599,7 @@ function SocialPreview({ post, accounts, editedContent }: { post: any, accounts:
                 <div className="flex items-center gap-1 min-w-0">
                    <span className="font-semibold truncate">Creatabl User</span>
                    <span className="text-[#6B6780] text-sm truncate">@{account.username}</span>
-                   <span className="text-[#6B6780] text-sm">· {format(new Date(post.scheduledAt), "MMM d")}</span>
+                   <span className="text-[#6B6780] text-sm">· {format(new Date(post.scheduledAt), "d MMM", { locale: fr })}</span>
                 </div>
                 <MoreHorizontal className="size-5 text-[#6B6780]" />
              </div>

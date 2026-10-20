@@ -97,6 +97,7 @@ export function AudienceActivityChart({
               backgroundColor: "hsl(var(--popover))",
               padding: "12px 16px",
             }}
+            formatter={(value) => [`${Number(value).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} %`, "Engagement"]}
           />
           <Area
             type="monotone"

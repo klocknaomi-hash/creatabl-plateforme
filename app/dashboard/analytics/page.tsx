@@ -172,7 +172,7 @@ export default async function AnalyticsPage(props: {
             <Users className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight">{Number(displaySummary.totalReach).toLocaleString()}</div>
+            <div className="text-2xl font-bold tracking-tight">{Number(displaySummary.totalReach).toLocaleString("fr-FR").replace(/\u202f/g, "\u00a0")}</div>
             <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">Utilisateurs uniques atteints</p>
           </CardContent>
         </Card>
@@ -183,7 +183,7 @@ export default async function AnalyticsPage(props: {
             <MousePointer2 className="h-3.5 w-3.5 text-primary/40 group-hover:text-primary transition-colors" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold tracking-tight">{displaySummary.avgEngagementRate.toFixed(2)}%</div>
+            <div className="text-2xl font-bold tracking-tight">{displaySummary.avgEngagementRate.toLocaleString("fr-FR", { maximumFractionDigits: 2 })} %</div>
             <p className="text-xs text-muted-foreground font-semibold uppercase mt-1">Taux moyen par impression</p>
           </CardContent>
         </Card>
@@ -304,7 +304,7 @@ export default async function AnalyticsPage(props: {
                         {post.content}
                       </TableCell>
                       <TableCell className="text-right text-xs font-semibold">{post.likes}</TableCell>
-                      <TableCell className="text-right text-xs font-semibold">{Number(post.reach).toLocaleString()}</TableCell>
+                      <TableCell className="text-right text-xs font-semibold">{Number(post.reach).toLocaleString("fr-FR").replace(/\u202f/g, "\u00a0")}</TableCell>
                       <TableCell className="text-right tabular-nums text-xs font-semibold text-[#0E7445]">
                         {er.toFixed(1)}%
                       </TableCell>
