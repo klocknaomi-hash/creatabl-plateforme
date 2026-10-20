@@ -44,7 +44,7 @@ export function AnalyticsNavigation() {
       <div className="flex items-center gap-2 px-3 h-8 border-x border-border/40">
         <CalendarIcon className="size-3.5 text-primary/60" />
         <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-          {format(weekStart, "MMM d", { locale: fr })} - {format(weekEnd, "MMM d, yyyy", { locale: fr })}
+          {format(weekStart, "d MMM", { locale: fr })} – {format(weekEnd, "d MMM yyyy", { locale: fr })}
         </span>
       </div>
 

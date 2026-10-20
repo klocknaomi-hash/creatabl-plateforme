@@ -3,6 +3,7 @@ import { users, posts, postPlatformResults, socialAccounts, userSettings } from 
 import { eq, and, desc, sql } from "drizzle-orm";
 import { getAnalyticsData } from "@/lib/analytics";
 import { subDays, format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 export async function getDashboardData(userId: string) {
   try {
@@ -206,7 +207,7 @@ export async function getEngagementData(userId: string) {
     const analytics = await getAnalyticsData(user.id, subDays(new Date(), 30));
     
     return (analytics.timeSeries || []).reduce((acc: any[], curr: any) => {
-      const dateStr = format(new Date(curr.date), "MMM d");
+      const dateStr = format(new Date(curr.date), "d MMM", { locale: fr });
       let existing = acc.find(a => a.date === dateStr);
       
       if (!existing) {
